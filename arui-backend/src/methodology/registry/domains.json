@@ -1,0 +1,68 @@
+[
+  {
+    "code": "D01",
+    "name": "Institutional Strategy, Foresight & AI Direction",
+    "purpose": "Future sensing, strategic translation, programme portfolio foresight, experimentation and institutional learning.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D02",
+    "name": "Governance, Responsible AI & Institutional Risk",
+    "purpose": "Decision rights, responsible AI, data, integrity, oversight, risk, incidents, vendors and governance adaptation.",
+    "provisionalWeight": 0.12
+  },
+  {
+    "code": "D03",
+    "name": "Human Capability, Cognitive Readiness & AI-Ready Education",
+    "purpose": "What students must know, think, question, create, judge, verify and demonstrate in an AI-rich environment.",
+    "provisionalWeight": 0.12
+  },
+  {
+    "code": "D04",
+    "name": "Curriculum & Programme Future Resilience",
+    "purpose": "Whether programmes continuously translate changing disciplinary/work realities into relevant learning architecture.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D05",
+    "name": "Faculty Capability & Academic Workforce Transformation",
+    "purpose": "Whether faculty can adapt teaching, assessment, research and academic roles as AI changes work.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D06",
+    "name": "Student Capability, Agency & Future Readiness",
+    "purpose": "Whether students build agency, AI literacy, judgement, adaptability, practical capability and equitable access.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D07",
+    "name": "Learning, Assessment & Evidence of Capability",
+    "purpose": "How learning and assessment produce trustworthy evidence of actual student capability.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D08",
+    "name": "Digital, Data & Institutional Intelligence",
+    "purpose": "Digital/data foundations and institutional intelligence needed for responsible AI-enabled operations.",
+    "provisionalWeight": 0.08
+  },
+  {
+    "code": "D09",
+    "name": "Employability, Industry & Economic Relevance",
+    "purpose": "Alignment with changing work, employers, industry pathways and economic relevance.",
+    "provisionalWeight": 0.09
+  },
+  {
+    "code": "D10",
+    "name": "Research, Innovation & Knowledge Creation",
+    "purpose": "AI-enabled research, innovation, IP, entrepreneurship and knowledge creation.",
+    "provisionalWeight": 0.05
+  },
+  {
+    "code": "D11",
+    "name": "Institutional Adaptability & AI Resilience",
+    "purpose": "Ability to sense disruption, respond, learn, redeploy and remain institutionally viable.",
+    "provisionalWeight": 0.04
+  }
+]

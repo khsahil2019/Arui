@@ -1,0 +1,506 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "How is AI currently positioned in institutional decision-making?",
+    "inputType": "Single",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "Which institutional decisions have actually changed in the last 18 months because of AI or anticipated AI-driven changes?",
+    "inputType": "Multi-select + records",
+    "role": "Reality"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "Which assumptions underlying the current institutional model could be materially affected by AI in the next 3\u20135 years?",
+    "inputType": "Top 5",
+    "role": "Foresight"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q04",
+    "cardCode": "A05",
+    "prompt": "When a significant external change is detected, what normally happens from detection to institutional action?",
+    "inputType": "Process map",
+    "role": "Process"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q05",
+    "cardCode": "A06",
+    "prompt": "How many AI pilots were conducted, evaluated, scaled or stopped in the last 24 months?",
+    "inputType": "Numbers",
+    "role": "Data"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q06",
+    "cardCode": "A08",
+    "prompt": "A major AI development threatens a major programme within three years. What would the institution do first, who initiates it, and through what mechanism?",
+    "inputType": "Scenario",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D01",
+    "code": "Q07",
+    "cardCode": "A09",
+    "prompt": "What distinctive institutional value does the university intend to strengthen as AI makes information and routine content increasingly abundant?",
+    "inputType": "Structured + rationale",
+    "role": "Strategic reflection"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "A new AI system processing student information is proposed. Who can authorise institutional deployment?",
+    "inputType": "Single + authority",
+    "role": "Scenario"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "What steps actually occur before a consequential AI system is approved?",
+    "inputType": "Multi-select + order",
+    "role": "Process"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "Which AI governance policies are approved, implemented and reviewed?",
+    "inputType": "Matrix",
+    "role": "Inventory"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q04",
+    "cardCode": "A04",
+    "prompt": "An AI system produces a harmful or discriminatory outcome affecting a student. What happens next?",
+    "inputType": "Scenario + process",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q05",
+    "cardCode": "A05",
+    "prompt": "For approved AI tools, how many process personal/student data and how many have undergone defined privacy/data review?",
+    "inputType": "Numbers",
+    "role": "Data"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q06",
+    "cardCode": "A06",
+    "prompt": "How does the institution determine whether student generative-AI use is appropriate?",
+    "inputType": "Scenario + evidence",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q07",
+    "cardCode": "A07",
+    "prompt": "For consequential AI-assisted decisions, where can a human review or override the output?",
+    "inputType": "Matrix",
+    "role": "Process"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q08",
+    "cardCode": "A08",
+    "prompt": "For the three most consequential external AI systems, what due diligence and monitoring has occurred?",
+    "inputType": "Structured records",
+    "role": "Data/evidence"
+  },
+  {
+    "domainCode": "D02",
+    "code": "Q09",
+    "cardCode": "A09",
+    "prompt": "Has the institution tested its AI governance process? What changed as a result?",
+    "inputType": "Single + evidence",
+    "role": "Effectiveness"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "Which graduate capabilities does the institution explicitly intend students to develop in the AI era?",
+    "inputType": "Multi-select",
+    "role": "Capability architecture"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "For representative programmes, where is each selected capability intended, developed, demonstrated and assessed?",
+    "inputType": "Matrix",
+    "role": "Capability mapping"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "Provide one representative student activity/work sample demonstrating each of 3\u20135 selected capabilities.",
+    "inputType": "Evidence",
+    "role": "Validation"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q04",
+    "cardCode": "A04",
+    "prompt": "How are students required to demonstrate capability rather than simply produce an answer?",
+    "inputType": "Matrix",
+    "role": "Assessment"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q05",
+    "cardCode": "A05",
+    "prompt": "Where are students expected to verify, challenge or contextualise AI-generated output?",
+    "inputType": "Multi-select + evidence",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q06",
+    "cardCode": "A06",
+    "prompt": "How often do students work on unfamiliar or ambiguous problems with no single prepared answer?",
+    "inputType": "Single + evidence",
+    "role": "Frequency"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q07",
+    "cardCode": "A07",
+    "prompt": "Where available, what proportion of students meet defined competency thresholds for selected capabilities?",
+    "inputType": "Number/NA",
+    "role": "Outcome"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q08",
+    "cardCode": "A08",
+    "prompt": "For non-technical disciplines, how are students developing AI capability relevant to their discipline?",
+    "inputType": "Discipline matrix + sample",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D03",
+    "code": "Q09",
+    "cardCode": "A10",
+    "prompt": "Which three graduate capabilities are least convincingly demonstrated today, and what evidence led to that conclusion?",
+    "inputType": "Top 3 + rationale",
+    "role": "Leadership diagnostic"
+  },
+  {
+    "domainCode": "D04",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "When a programme changes because the discipline or work environment is changing, what most often triggers the change?",
+    "inputType": "Single + examples",
+    "role": "Reality"
+  },
+  {
+    "domainCode": "D04",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "For a representative programme, where are the capabilities students will need in five years deliberately developed and where are they actually demonstrated?",
+    "inputType": "Matrix",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D04",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "A core task taught in a programme can now be performed reliably by AI. How would the institution decide whether to retain it, redesign it, or remove it from the learning experience?",
+    "inputType": "Scenario + decision path",
+    "role": "Foresight"
+  },
+  {
+    "domainCode": "D04",
+    "code": "Q04",
+    "cardCode": "A04",
+    "prompt": "How quickly can a programme respond when external evidence shows that a major graduate capability or learning component needs to change?",
+    "inputType": "Single + process",
+    "role": "Process"
+  },
+  {
+    "domainCode": "D04",
+    "code": "Q05",
+    "cardCode": "A05",
+    "prompt": "Select 3\u20135 programmes and identify one meaningful change made because of AI, changing professional practice, or changing learner/work requirements. What evidence shows the change is real?",
+    "inputType": "Structured records + evidence",
+    "role": "Reality"
+  },
+  {
+    "domainCode": "D05",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "Where are faculty currently using AI in their actual academic work, and what is the most meaningful change it has produced?",
+    "inputType": "Multi-select + examples",
+    "role": "Reality"
+  },
+  {
+    "domainCode": "D05",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "After faculty receive AI-related development, what usually happens to the practice they were expected to change?",
+    "inputType": "Single + numbers",
+    "role": "Implementation"
+  },
+  {
+    "domainCode": "D05",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "If an AI system can perform a significant part of an activity faculty currently teach, what would you expect the faculty member to change in the learning experience?",
+    "inputType": "Scenario",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D05",
+    "code": "Q04",
+    "cardCode": "A04",
+    "prompt": "Which parts of academic work are changing because of AI, and how is the institution supporting faculty through those changes?",
+    "inputType": "Multi-select + evidence",
+    "role": "Workforce"
+  },
+  {
+    "domainCode": "D05",
+    "code": "Q05",
+    "cardCode": "A05",
+    "prompt": "Provide a representative example of faculty practice where AI has improved, challenged or changed teaching, assessment or research\u2014and show how the institution learned from it.",
+    "inputType": "Structured example + evidence",
+    "role": "Reality"
+  },
+  {
+    "domainCode": "D06",
+    "code": "Q01",
+    "cardCode": "A01",
+    "prompt": "When students use AI for learning, what does the institution expect them to be able to do themselves before the work can be considered credible?",
+    "inputType": "Multi-select + examples",
+    "role": "Capability"
+  },
+  {
+    "domainCode": "D06",
+    "code": "Q02",
+    "cardCode": "A02",
+    "prompt": "A student submits a polished AI-generated answer. What would you need to see to determine whether the student actually understands and can defend the work?",
+    "inputType": "Scenario + evidence",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D06",
+    "code": "Q03",
+    "cardCode": "A03",
+    "prompt": "How often are students required to apply knowledge to unfamiliar, ambiguous or real situations where AI can assist but cannot simply supply the finished answer?",
+    "inputType": "Frequency + examples",
+    "role": "Transfer"
+  },
+  {
+    "domainCode": "D06",
+    "code": "Q04",
+    "cardCode": "A04",
+    "prompt": "How is the institution helping students understand changing work requirements and build credible evidence of capability for employers, further study or entrepreneurship?",
+    "inputType": "Multi-select + evidence",
+    "role": "Transition"
+  },
+  {
+    "domainCode": "D06",
+    "code": "Q05",
+    "cardCode": "A05",
+    "prompt": "Which student groups are least able to access or benefit from AI-enabled learning, and what has the institution actually done in response?",
+    "inputType": "Structured comparison + evidence",
+    "role": "Equity"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.1",
+    "cardCode": "Assessment Reality Test",
+    "prompt": "Across representative programmes, what do students actually have to demonstrate to complete major assessments?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.2",
+    "cardCode": "AI Substitution Test",
+    "prompt": "If generative AI could produce a plausible answer to a major assessment today, what would still make the assessment academically meaningful?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.3",
+    "cardCode": "Capability Proof Test",
+    "prompt": "How does the institution know that students possess the capabilities its programmes say they develop?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.4",
+    "cardCode": "Unfamiliar Problem Test",
+    "prompt": "How often are students asked to solve unfamiliar or ambiguous problems where there is no prepared model answer?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.5",
+    "cardCode": "Assessment Learning Loop",
+    "prompt": "When assessment evidence shows students are weak in an important capability, what normally happens?",
+    "inputType": "Structured card response",
+    "role": "Diagnostic"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.1",
+    "cardCode": "Data Reality Test",
+    "prompt": "If leadership needs a reliable answer about students, programmes, faculty, placements or research today, how quickly can the institution produce it?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.2",
+    "cardCode": "Data Journey Test",
+    "prompt": "What normally happens to an important institutional data point from its creation to its use in a decision?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.3",
+    "cardCode": "AI Infrastructure Test",
+    "prompt": "Which institutional capabilities are currently sufficient to support responsible AI-enabled academic or administrative use?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.4",
+    "cardCode": "Decision Intelligence Test",
+    "prompt": "Give one recent leadership decision where institutional data or analytics materially changed the decision.",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.1",
+    "cardCode": "Employer Signal Test",
+    "prompt": "How does the institution identify what employers and professional sectors will expect from graduates over the next 3\u20135 years?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.2",
+    "cardCode": "Capability-to-Career Test",
+    "prompt": "For a representative programme, how clearly can the institution connect intended graduate capabilities to actual occupational or professional requirements?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.3",
+    "cardCode": "AI Work Redesign Test",
+    "prompt": "Where AI is changing entry-level work in a major sector relevant to the institution, what has the institution changed for students?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.4",
+    "cardCode": "Recruiter Confidence Test",
+    "prompt": "What evidence does the institution use to determine whether recruiters trust the capabilities of its graduates?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.1",
+    "cardCode": "Research Direction Test",
+    "prompt": "What research questions or themes does the institution believe will matter most to its disciplines, region or society over the next 5\u201310 years?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.2",
+    "cardCode": "Research-to-Value Test",
+    "prompt": "Take one significant research activity. What happened after the research generated a meaningful finding?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.3",
+    "cardCode": "Interdisciplinary Collision Test",
+    "prompt": "When a major problem crosses disciplinary boundaries, how does the institution bring the required expertise together?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.4",
+    "cardCode": "AI Research Judgement Test",
+    "prompt": "Where AI is used in research, how does the institution protect research quality, provenance, integrity and human judgement?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.5",
+    "cardCode": "Student Creator Test",
+    "prompt": "How are students enabled to move from consuming existing knowledge to creating new knowledge, prototypes, evidence or solutions?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.1",
+    "cardCode": "Change-to-Action Test",
+    "prompt": "When a development could materially affect the institution, what normally happens between first awareness and an institutional response?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.2",
+    "cardCode": "Resource Reallocation Test",
+    "prompt": "If leadership decides that an emerging capability has become strategically important, how can resources actually be redirected?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.3",
+    "cardCode": "Failure Learning Test",
+    "prompt": "When an important institutional experiment does not work, what usually happens?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.4",
+    "cardCode": "Future Shock Test",
+    "prompt": "Imagine that within five years AI materially changes 20\u201330% of entry-level tasks across several major sectors relevant to your institution. Which five institutional responses would leadership prioritise first?",
+    "inputType": "Structured card response",
+    "role": "Scenario"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.5",
+    "cardCode": "Adaptation Reality Test",
+    "prompt": "Which statement best describes the institution today?",
+    "inputType": "Structured card response",
+    "role": "Reality/Diagnostic"
+  }
+]

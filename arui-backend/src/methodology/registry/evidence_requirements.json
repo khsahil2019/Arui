@@ -1,0 +1,146 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "E01",
+    "title": "Strategic plan/AI strategy",
+    "quantity": "1-2",
+    "requirement": "If exists",
+    "metricLink": "I01/I02"
+  },
+  {
+    "domainCode": "D01",
+    "code": "E02",
+    "title": "Material strategic decision influenced by AI",
+    "quantity": "Up to 3",
+    "requirement": "Full assessment",
+    "metricLink": "I03"
+  },
+  {
+    "domainCode": "D01",
+    "code": "E03",
+    "title": "Programme review showing future/AI consideration",
+    "quantity": "1-2",
+    "requirement": "Sample",
+    "metricLink": "I04"
+  },
+  {
+    "domainCode": "D01",
+    "code": "E04",
+    "title": "Foresight/scenario process",
+    "quantity": "1",
+    "requirement": "If exists",
+    "metricLink": "I02/I06"
+  },
+  {
+    "domainCode": "D01",
+    "code": "E05",
+    "title": "Pilot evaluation/scaling decision",
+    "quantity": "Up to 3",
+    "requirement": "If pilots exist",
+    "metricLink": "I09"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E01",
+    "title": "AI governance framework/policy",
+    "quantity": "1-3",
+    "requirement": "If exists",
+    "metricLink": "I01/I03"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E02",
+    "title": "AI approval/review workflow",
+    "quantity": "1",
+    "requirement": "Full assessment",
+    "metricLink": "I02"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E03",
+    "title": "Data/privacy control evidence",
+    "quantity": "1",
+    "requirement": "Representative system",
+    "metricLink": "I04"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E04",
+    "title": "Academic integrity/AI guidance",
+    "quantity": "1",
+    "requirement": "If exists",
+    "metricLink": "I05"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E05",
+    "title": "AI-affected assessment example",
+    "quantity": "1",
+    "requirement": "Representative",
+    "metricLink": "I06"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E06",
+    "title": "Incident/test evidence",
+    "quantity": "1",
+    "requirement": "If exists",
+    "metricLink": "I08/I14"
+  },
+  {
+    "domainCode": "D02",
+    "code": "E07",
+    "title": "Vendor/tool review",
+    "quantity": "Up to 3",
+    "requirement": "Representative",
+    "metricLink": "I10"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E01",
+    "title": "Graduate capability framework",
+    "quantity": "1",
+    "requirement": "If claimed",
+    "metricLink": "I01"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E02",
+    "title": "Representative assessment/activity",
+    "quantity": "3-5",
+    "requirement": "Full assessment",
+    "metricLink": "I02/I04/I07"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E03",
+    "title": "Rubric/capability criteria",
+    "quantity": "1-3",
+    "requirement": "If used",
+    "metricLink": "I02/I04"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E04",
+    "title": "AI verification activity",
+    "quantity": "1",
+    "requirement": "If claimed",
+    "metricLink": "I08"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E05",
+    "title": "Non-technical discipline sample",
+    "quantity": "Up to 3",
+    "requirement": "Where applicable",
+    "metricLink": "I17"
+  },
+  {
+    "domainCode": "D03",
+    "code": "E06",
+    "title": "Capability outcome evidence",
+    "quantity": "1",
+    "requirement": "If available",
+    "metricLink": "I07"
+  }
+]

@@ -1,0 +1,860 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "C01",
+    "fullCode": "D01-C01",
+    "name": "Institutional AI Awareness"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C02",
+    "fullCode": "D01-C02",
+    "name": "Future-of-Institution Thinking"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C03",
+    "fullCode": "D01-C03",
+    "name": "Strategic Translation"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C04",
+    "fullCode": "D01-C04",
+    "name": "Programme Portfolio Foresight"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C05",
+    "fullCode": "D01-C05",
+    "name": "Institutional Value Proposition"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C06",
+    "fullCode": "D01-C06",
+    "name": "Scenario & Foresight Capability"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C07",
+    "fullCode": "D01-C07",
+    "name": "Strategic Investment Alignment"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C08",
+    "fullCode": "D01-C08",
+    "name": "Leadership Alignment"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C09",
+    "fullCode": "D01-C09",
+    "name": "Strategic Experimentation"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C10",
+    "fullCode": "D01-C10",
+    "name": "Institutional Learning Loop"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C01",
+    "fullCode": "D02-C01",
+    "name": "Governance Ownership"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C02",
+    "fullCode": "D02-C02",
+    "name": "Decision Architecture"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C03",
+    "fullCode": "D02-C03",
+    "name": "Responsible AI Framework"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C04",
+    "fullCode": "D02-C04",
+    "name": "Data Governance"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C05",
+    "fullCode": "D02-C05",
+    "name": "Academic Integrity Governance"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C06",
+    "fullCode": "D02-C06",
+    "name": "Assessment Governance"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C07",
+    "fullCode": "D02-C07",
+    "name": "AI Risk Management"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C08",
+    "fullCode": "D02-C08",
+    "name": "Incident Response"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C09",
+    "fullCode": "D02-C09",
+    "name": "Human Oversight"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C10",
+    "fullCode": "D02-C10",
+    "name": "Vendor/Tool Governance"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C11",
+    "fullCode": "D02-C11",
+    "name": "Intellectual Property"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C12",
+    "fullCode": "D02-C12",
+    "name": "Research Governance"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C13",
+    "fullCode": "D02-C13",
+    "name": "Governance Review"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C14",
+    "fullCode": "D02-C14",
+    "name": "Governance Effectiveness"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C01",
+    "fullCode": "D03-C01",
+    "name": "Foundational Knowledge"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C02",
+    "fullCode": "D03-C02",
+    "name": "Critical Thinking"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C03",
+    "fullCode": "D03-C03",
+    "name": "Question Formulation"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C04",
+    "fullCode": "D03-C04",
+    "name": "Analytical Reasoning"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C05",
+    "fullCode": "D03-C05",
+    "name": "Problem Formulation"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C06",
+    "fullCode": "D03-C06",
+    "name": "Creativity & Originality"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C07",
+    "fullCode": "D03-C07",
+    "name": "Judgement & Decision-Making"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C08",
+    "fullCode": "D03-C08",
+    "name": "Verification & Epistemic Discipline"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C09",
+    "fullCode": "D03-C09",
+    "name": "Metacognition"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C10",
+    "fullCode": "D03-C10",
+    "name": "Human-AI Collaboration"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C11",
+    "fullCode": "D03-C11",
+    "name": "Communication"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C12",
+    "fullCode": "D03-C12",
+    "name": "Collaboration"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C13",
+    "fullCode": "D03-C13",
+    "name": "Practical/Embodied Capability"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C14",
+    "fullCode": "D03-C14",
+    "name": "Ethical & Social Judgement"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C15",
+    "fullCode": "D03-C15",
+    "name": "Independent Intellectual Agency"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C16",
+    "fullCode": "D03-C16",
+    "name": "Transfer Capability"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C17",
+    "fullCode": "D03-C17",
+    "name": "Non-Technical Discipline AI Capability"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C01",
+    "fullCode": "D04-C01",
+    "name": "Curriculum Environmental Scanning"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C02",
+    "fullCode": "D04-C02",
+    "name": "Future Learning Outcome Design"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C03",
+    "fullCode": "D04-C03",
+    "name": "Programme Review Discipline"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C04",
+    "fullCode": "D04-C04",
+    "name": "Disciplinary AI Integration"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C05",
+    "fullCode": "D04-C05",
+    "name": "Content Obsolescence Management"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C06",
+    "fullCode": "D04-C06",
+    "name": "Experiential Learning Architecture"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C07",
+    "fullCode": "D04-C07",
+    "name": "Interdisciplinary Flexibility"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C08",
+    "fullCode": "D04-C08",
+    "name": "Programme Agility & Modularity"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C09",
+    "fullCode": "D04-C09",
+    "name": "Industry/Professional Validation"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C10",
+    "fullCode": "D04-C10",
+    "name": "External Learning Ecosystem"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C11",
+    "fullCode": "D04-C11",
+    "name": "Student Transfer & Application"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C12",
+    "fullCode": "D04-C12",
+    "name": "Programme Portfolio Foresight"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C01",
+    "fullCode": "D05-C01",
+    "name": "Faculty AI Literacy"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C02",
+    "fullCode": "D05-C02",
+    "name": "Discipline-Specific AI Practice"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C03",
+    "fullCode": "D05-C03",
+    "name": "AI-Enhanced Pedagogy"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C04",
+    "fullCode": "D05-C04",
+    "name": "Assessment Redesign Capability"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C05",
+    "fullCode": "D05-C05",
+    "name": "Faculty Learning & Development"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C06",
+    "fullCode": "D05-C06",
+    "name": "Peer Learning & Communities"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C07",
+    "fullCode": "D05-C07",
+    "name": "Research/Knowledge Creation with AI"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C08",
+    "fullCode": "D05-C08",
+    "name": "Academic Role Redesign"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C09",
+    "fullCode": "D05-C09",
+    "name": "Workload & Workflow Transformation"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C10",
+    "fullCode": "D05-C10",
+    "name": "Faculty Support Infrastructure"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C11",
+    "fullCode": "D05-C11",
+    "name": "Academic Leadership for AI"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C12",
+    "fullCode": "D05-C12",
+    "name": "Faculty Adoption & Learning Loop"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C01",
+    "fullCode": "D06-C01",
+    "name": "Student AI Literacy"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C02",
+    "fullCode": "D06-C02",
+    "name": "Critical AI Evaluation"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C03",
+    "fullCode": "D06-C03",
+    "name": "Learning Agency"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C04",
+    "fullCode": "D06-C04",
+    "name": "Independent Intellectual Agency"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C05",
+    "fullCode": "D06-C05",
+    "name": "Communication & Defence"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C06",
+    "fullCode": "D06-C06",
+    "name": "Collaboration"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C07",
+    "fullCode": "D06-C07",
+    "name": "Practical/Experiential Capability"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C08",
+    "fullCode": "D06-C08",
+    "name": "Career Adaptability"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C09",
+    "fullCode": "D06-C09",
+    "name": "Portfolio & Capability Signalling"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C10",
+    "fullCode": "D06-C10",
+    "name": "Problem Solving & Transfer"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C11",
+    "fullCode": "D06-C11",
+    "name": "Creator/Entrepreneurial Agency"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C12",
+    "fullCode": "D06-C12",
+    "name": "Digital Citizenship & Responsible Use"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C13",
+    "fullCode": "D06-C13",
+    "name": "Equitable AI Access"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C14",
+    "fullCode": "D06-C14",
+    "name": "Student Voice & Feedback Loop"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C01",
+    "fullCode": "D07-C01",
+    "name": "Assessment Architecture"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C02",
+    "fullCode": "D07-C02",
+    "name": "Cognitive Demonstration"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C03",
+    "fullCode": "D07-C03",
+    "name": "Authentic Assessment"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C04",
+    "fullCode": "D07-C04",
+    "name": "AI-Aware Assessment"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C05",
+    "fullCode": "D07-C05",
+    "name": "Oral/Defence"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C06",
+    "fullCode": "D07-C06",
+    "name": "Feedback"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C07",
+    "fullCode": "D07-C07",
+    "name": "Learning Evidence"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C08",
+    "fullCode": "D07-C08",
+    "name": "Outcome Measurement"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C09",
+    "fullCode": "D07-C09",
+    "name": "Assessment Equity"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C10",
+    "fullCode": "D07-C10",
+    "name": "Assessment Governance"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C11",
+    "fullCode": "D07-C11",
+    "name": "Assessment Innovation"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C12",
+    "fullCode": "D07-C12",
+    "name": "Learning Analytics"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C01",
+    "fullCode": "D08-C01",
+    "name": "Digital Foundation"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C02",
+    "fullCode": "D08-C02",
+    "name": "Data Architecture"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C03",
+    "fullCode": "D08-C03",
+    "name": "Data Quality"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C04",
+    "fullCode": "D08-C04",
+    "name": "Interoperability"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C05",
+    "fullCode": "D08-C05",
+    "name": "Analytics"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C06",
+    "fullCode": "D08-C06",
+    "name": "AI Enablement"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C07",
+    "fullCode": "D08-C07",
+    "name": "Cybersecurity"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C08",
+    "fullCode": "D08-C08",
+    "name": "Privacy"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C09",
+    "fullCode": "D08-C09",
+    "name": "Access"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C10",
+    "fullCode": "D08-C10",
+    "name": "Technology Governance"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C11",
+    "fullCode": "D08-C11",
+    "name": "Digital Operations"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C12",
+    "fullCode": "D08-C12",
+    "name": "Institutional Intelligence"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C01",
+    "fullCode": "D09-C01",
+    "name": "Employer Intelligence"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C02",
+    "fullCode": "D09-C02",
+    "name": "Graduate Capability"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C03",
+    "fullCode": "D09-C03",
+    "name": "Industry Curriculum"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C04",
+    "fullCode": "D09-C04",
+    "name": "Practical Exposure"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C05",
+    "fullCode": "D09-C05",
+    "name": "Recruiter Ecosystem"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C06",
+    "fullCode": "D09-C06",
+    "name": "Placement Quality"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C07",
+    "fullCode": "D09-C07",
+    "name": "Career Resilience"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C08",
+    "fullCode": "D09-C08",
+    "name": "AI Workforce"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C09",
+    "fullCode": "D09-C09",
+    "name": "Portfolio Evidence"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C10",
+    "fullCode": "D09-C10",
+    "name": "Industry Co-Creation"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C11",
+    "fullCode": "D09-C11",
+    "name": "Economic Relevance"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C12",
+    "fullCode": "D09-C12",
+    "name": "Alumni Intelligence"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C01",
+    "fullCode": "D10-C01",
+    "name": "Research Direction"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C02",
+    "fullCode": "D10-C02",
+    "name": "Research Portfolio"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C03",
+    "fullCode": "D10-C03",
+    "name": "Interdisciplinarity"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C04",
+    "fullCode": "D10-C04",
+    "name": "AI in Research"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C05",
+    "fullCode": "D10-C05",
+    "name": "Research Infrastructure"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C06",
+    "fullCode": "D10-C06",
+    "name": "Research Talent"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C07",
+    "fullCode": "D10-C07",
+    "name": "External Funding"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C08",
+    "fullCode": "D10-C08",
+    "name": "Knowledge Translation"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C09",
+    "fullCode": "D10-C09",
+    "name": "Industry Research"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C10",
+    "fullCode": "D10-C10",
+    "name": "Innovation Pipeline"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C11",
+    "fullCode": "D10-C11",
+    "name": "IP"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C12",
+    "fullCode": "D10-C12",
+    "name": "Research Integrity"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C13",
+    "fullCode": "D10-C13",
+    "name": "Research Outcomes"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C14",
+    "fullCode": "D10-C14",
+    "name": "Student Research"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C01",
+    "fullCode": "D11-C01",
+    "name": "Environmental Sensing"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C02",
+    "fullCode": "D11-C02",
+    "name": "Strategic Agility"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C03",
+    "fullCode": "D11-C03",
+    "name": "Decision Rights"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C04",
+    "fullCode": "D11-C04",
+    "name": "Resource Reallocation"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C05",
+    "fullCode": "D11-C05",
+    "name": "Experimentation"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C06",
+    "fullCode": "D11-C06",
+    "name": "Learning from Failure"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C07",
+    "fullCode": "D11-C07",
+    "name": "Change Capacity"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C08",
+    "fullCode": "D11-C08",
+    "name": "Leadership Alignment"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C09",
+    "fullCode": "D11-C09",
+    "name": "Student Voice"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C10",
+    "fullCode": "D11-C10",
+    "name": "Industry Signals"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C11",
+    "fullCode": "D11-C11",
+    "name": "Scenario Capability"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C12",
+    "fullCode": "D11-C12",
+    "name": "Continuity"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C13",
+    "fullCode": "D11-C13",
+    "name": "Learning Loop"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C14",
+    "fullCode": "D11-C14",
+    "name": "Future Transformation"
+  }
+]

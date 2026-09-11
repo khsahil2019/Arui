@@ -1,0 +1,163 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "D01-D01",
+    "label": "Active programmes",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D02",
+    "label": "Programmes reviewed in last 3 years",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D03",
+    "label": "Programmes where AI/future implications considered",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D04",
+    "label": "Programmes modified due to AI/employment changes",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D05",
+    "label": "Material AI/future strategic decisions in last 18 months",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D06",
+    "label": "AI pilots conducted in last 24 months",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D07",
+    "label": "AI pilots formally evaluated",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D08",
+    "label": "AI pilots scaled",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-D09",
+    "label": "AI pilots stopped after evaluation",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D01",
+    "label": "Approved AI tools",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D02",
+    "label": "Approved tools processing personal/student data",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D03",
+    "label": "Data/privacy reviewed tools",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D04",
+    "label": "Consequential AI use cases with named human override",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D05",
+    "label": "Approved AI governance policies/guidelines",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-D06",
+    "label": "Governance policies reviewed in last 12 months",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D01",
+    "label": "Programmes with explicit graduate capability framework",
+    "inputType": "Number",
+    "requirement": "Required"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D02",
+    "label": "Programmes using project/case/practical learning",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D03",
+    "label": "Programmes requiring unfamiliar/ambiguous problem solving",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D04",
+    "label": "Programmes with explicit AI verification activity",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D05",
+    "label": "Programmes with interdisciplinary AI learning",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D06",
+    "label": "Non-technical programmes with explicit AI capability outcomes",
+    "inputType": "Number",
+    "requirement": "Required where applicable"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D07",
+    "label": "Students with competency outcome data",
+    "inputType": "Number",
+    "requirement": "Optional"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-D08",
+    "label": "Students meeting defined competency threshold",
+    "inputType": "Number",
+    "requirement": "Optional"
+  }
+]

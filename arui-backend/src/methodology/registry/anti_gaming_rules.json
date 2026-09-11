@@ -1,0 +1,82 @@
+[
+  {
+    "code": "AG01",
+    "riskPattern": "Policy-only inflation",
+    "detectionLogic": "Policy without implementation/outcome",
+    "evidenceSignal": "E1 policy only",
+    "action": "Request operational evidence",
+    "scoringProtection": "No score uplift from policy alone"
+  },
+  {
+    "code": "AG02",
+    "riskPattern": "Self-authored corroboration",
+    "detectionLogic": "Multiple artifacts share one origin",
+    "evidenceSignal": "No independent source",
+    "action": "Count as one source",
+    "scoringProtection": "No double corroboration"
+  },
+  {
+    "code": "AG03",
+    "riskPattern": "Evidence recycling",
+    "detectionLogic": "One artifact reused without construct mapping",
+    "evidenceSignal": "High reuse without distinct fields",
+    "action": "Flag and justify",
+    "scoringProtection": "No automatic confidence increase"
+  },
+  {
+    "code": "AG04",
+    "riskPattern": "Cherry-picked outcomes",
+    "detectionLogic": "Only positive cases supplied",
+    "evidenceSignal": "Missing denominator/failures",
+    "action": "Request complete frame/sample",
+    "scoringProtection": "No representative outcome claim"
+  },
+  {
+    "code": "AG05",
+    "riskPattern": "Post-hoc reconstruction",
+    "detectionLogic": "Artifact created after assessment trigger",
+    "evidenceSignal": "Timestamp mismatch",
+    "action": "Require contemporaneous trace",
+    "scoringProtection": "Not independent evidence"
+  },
+  {
+    "code": "AG06",
+    "riskPattern": "Proxy substitution",
+    "detectionLogic": "Headline number does not answer construct",
+    "evidenceSignal": "Definition mismatch",
+    "action": "Reject as direct evidence",
+    "scoringProtection": "No proxy substitution without rule"
+  },
+  {
+    "code": "AG07",
+    "riskPattern": "Single exemplar inflation",
+    "detectionLogic": "One programme/person represents institution",
+    "evidenceSignal": "Coverage absent",
+    "action": "Apply sampling",
+    "scoringProtection": "No institution-wide inference"
+  },
+  {
+    "code": "AG08",
+    "riskPattern": "Unverifiable attachment",
+    "detectionLogic": "Source/provenance cannot be traced",
+    "evidenceSignal": "Broken provenance",
+    "action": "Reject or low confidence",
+    "scoringProtection": "No E2+ without traceability"
+  },
+  {
+    "code": "AG09",
+    "riskPattern": "Outcome without attribution",
+    "detectionLogic": "Outcome not linked to institutional action",
+    "evidenceSignal": "No implementation linkage",
+    "action": "Context only",
+    "scoringProtection": "Do not count as institution-generated outcome"
+  },
+  {
+    "code": "AG10",
+    "riskPattern": "Contradiction suppression",
+    "detectionLogic": "Conflicting evidence omitted",
+    "evidenceSignal": "Cross-domain/time-series conflict",
+    "action": "Surface conflict",
+    "scoringProtection": "Never silently choose favorable evidence"
+  }
+]

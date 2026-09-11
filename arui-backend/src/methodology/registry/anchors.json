@@ -1,0 +1,344 @@
+[
+  {
+    "scope": "All",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability/mechanism."
+  },
+  {
+    "scope": "All",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "All",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial practices."
+  },
+  {
+    "scope": "All",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and mechanisms used."
+  },
+  {
+    "scope": "All",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "All",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  },
+  {
+    "scope": "D01",
+    "level": 1,
+    "label": "Reactive",
+    "description": "AI addressed by individuals without coherent strategic mechanism."
+  },
+  {
+    "scope": "D01",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Leadership recognises importance; planning/pilots begin."
+  },
+  {
+    "scope": "D01",
+    "level": 3,
+    "label": "Structured",
+    "description": "Future implications enter planning, portfolio review and decisions."
+  },
+  {
+    "scope": "D01",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Foresight influences functions, resources and measurable priorities."
+  },
+  {
+    "scope": "D01",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Institution continuously tests assumptions and redesigns direction."
+  },
+  {
+    "scope": "D02",
+    "level": 1,
+    "label": "Reactive",
+    "description": "AI decisions/incidents handled case-by-case."
+  },
+  {
+    "scope": "D02",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Basic policy, ownership and risk awareness developing."
+  },
+  {
+    "scope": "D02",
+    "level": 3,
+    "label": "Structured",
+    "description": "Formal governance, decision rights, controls and escalation."
+  },
+  {
+    "scope": "D02",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Governance embedded across academic, research, technology and admin decisions."
+  },
+  {
+    "scope": "D02",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Governance learns from incidents, evidence and technology change."
+  },
+  {
+    "scope": "D03",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Some higher-order capability development; fragmented."
+  },
+  {
+    "scope": "D03",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institution recognises capability shift in selected curricula."
+  },
+  {
+    "scope": "D03",
+    "level": 3,
+    "label": "Structured",
+    "description": "Capabilities deliberately mapped into curriculum and assessment."
+  },
+  {
+    "scope": "D03",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Capabilities systematically developed and demonstrated across programmes."
+  },
+  {
+    "scope": "D03",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Institution continuously identifies valuable human capabilities and redesigns learning."
+  },
+  {
+    "scope": "D04-D06",
+    "level": 0,
+    "label": "Absent",
+    "description": "No future review/change mechanism | No meaningful AI capability support | No intentional AI-era capability development"
+  },
+  {
+    "scope": 1,
+    "level": 1,
+    "label": "Reactive",
+    "description": "Isolated faculty/programme changes | Individual enthusiasts | Students use AI mainly informally"
+  },
+  {
+    "scope": 2,
+    "level": 2,
+    "label": "Emerging",
+    "description": "Selected programmes update intentionally | Training and early practice emerging | Guidance and selected capability development"
+  },
+  {
+    "scope": 3,
+    "level": 3,
+    "label": "Structured",
+    "description": "Review and outcome mapping are structured | Faculty practice and support are organised | Capability development is embedded in programmes"
+  },
+  {
+    "scope": 4,
+    "level": 4,
+    "label": "Integrated",
+    "description": "Programme, industry and discipline signals drive integrated change | Teaching, assessment, research and roles evolve together | Students demonstrate capabilities across contexts"
+  },
+  {
+    "scope": 5,
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Portfolio and programmes continuously adapt to future signals | Faculty ecosystem learns, redesigns and scales effective practice | Students demonstrate high agency, transfer and adaptability"
+  },
+  {
+    "scope": "D07",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability or institutional mechanism."
+  },
+  {
+    "scope": "D07",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "D07",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial repeatable practices."
+  },
+  {
+    "scope": "D07",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and representative implementation."
+  },
+  {
+    "scope": "D07",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "D07",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  },
+  {
+    "scope": "D08",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability or institutional mechanism."
+  },
+  {
+    "scope": "D08",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "D08",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial repeatable practices."
+  },
+  {
+    "scope": "D08",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and representative implementation."
+  },
+  {
+    "scope": "D08",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "D08",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  },
+  {
+    "scope": "D09",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability or institutional mechanism."
+  },
+  {
+    "scope": "D09",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "D09",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial repeatable practices."
+  },
+  {
+    "scope": "D09",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and representative implementation."
+  },
+  {
+    "scope": "D09",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "D09",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  },
+  {
+    "scope": "D10",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability or institutional mechanism."
+  },
+  {
+    "scope": "D10",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "D10",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial repeatable practices."
+  },
+  {
+    "scope": "D10",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and representative implementation."
+  },
+  {
+    "scope": "D10",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "D10",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  },
+  {
+    "scope": "D11",
+    "level": 0,
+    "label": "Absent",
+    "description": "No meaningful capability or institutional mechanism."
+  },
+  {
+    "scope": "D11",
+    "level": 1,
+    "label": "Reactive",
+    "description": "Individual/ad-hoc responses."
+  },
+  {
+    "scope": "D11",
+    "level": 2,
+    "label": "Emerging",
+    "description": "Institutional awareness and initial repeatable practices."
+  },
+  {
+    "scope": "D11",
+    "level": 3,
+    "label": "Structured",
+    "description": "Defined processes, ownership and representative implementation."
+  },
+  {
+    "scope": "D11",
+    "level": 4,
+    "label": "Integrated",
+    "description": "Embedded across relevant functions with operational/outcome evidence."
+  },
+  {
+    "scope": "D11",
+    "level": 5,
+    "label": "Adaptive",
+    "description": "Continuously senses, learns and proactively modifies capability."
+  }
+]

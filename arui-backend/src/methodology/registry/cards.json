@@ -1,0 +1,554 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "A01",
+    "name": "Strategic Position",
+    "format": "Single/multi-select",
+    "respondentAction": "Actual AI positioning and participants",
+    "metricLink": "I01/I08"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A02",
+    "name": "Actual Strategic Changes",
+    "format": "Multi-select + 3 decision records",
+    "respondentAction": "What changed in last 18 months",
+    "metricLink": "I01/I03"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A03",
+    "name": "Future Assumptions",
+    "format": "Top 5 + explanations",
+    "respondentAction": "Institutional assumptions exposed",
+    "metricLink": "I02"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A04",
+    "name": "Programme Portfolio Data",
+    "format": "Numerical",
+    "respondentAction": "Review/change coverage",
+    "metricLink": "I04"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A05",
+    "name": "Foresight Mechanism",
+    "format": "Process map",
+    "respondentAction": "Detect\u2192act architecture",
+    "metricLink": "I02/I06"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A06",
+    "name": "Experimentation",
+    "format": "Numbers + 3 pilots",
+    "respondentAction": "Pilot discipline",
+    "metricLink": "I09"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A07",
+    "name": "Resource Alignment",
+    "format": "Bands + mapping",
+    "respondentAction": "Priority/resource consistency",
+    "metricLink": "I07"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A08",
+    "name": "Leadership Scenario",
+    "format": "Scenario + authority",
+    "respondentAction": "Decision behaviour",
+    "metricLink": "I08"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A09",
+    "name": "Differentiation",
+    "format": "Structured + evidence",
+    "respondentAction": "Future institutional value",
+    "metricLink": "I05"
+  },
+  {
+    "domainCode": "D01",
+    "code": "A10",
+    "name": "Evidence",
+    "format": "2\u20133 items",
+    "respondentAction": "Evidence confidence",
+    "metricLink": "All"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A01",
+    "name": "Governance Responsibility Matrix",
+    "format": "Matrix",
+    "respondentAction": "Authority/accountability",
+    "metricLink": "I01"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A02",
+    "name": "Decision Workflow",
+    "format": "Ordered process",
+    "respondentAction": "Approval/review/escalation",
+    "metricLink": "I02"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A03",
+    "name": "Policy Inventory",
+    "format": "Matrix + dates",
+    "respondentAction": "Existence/implementation/review",
+    "metricLink": "I03/I13"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A04",
+    "name": "Harm Scenario",
+    "format": "Scenario + process",
+    "respondentAction": "Incident response",
+    "metricLink": "I08"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A05",
+    "name": "Data Governance Inventory",
+    "format": "Numbers + 1 tool",
+    "respondentAction": "Data controls",
+    "metricLink": "I04"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A06",
+    "name": "Academic Integrity",
+    "format": "Scenario + guidance + sample",
+    "respondentAction": "AI integrity governance",
+    "metricLink": "I05/I06"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A07",
+    "name": "Human Oversight",
+    "format": "Process matrix",
+    "respondentAction": "Review/override",
+    "metricLink": "I09"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A08",
+    "name": "Vendor Governance",
+    "format": "Top 3 systems",
+    "respondentAction": "Due diligence",
+    "metricLink": "I10"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A09",
+    "name": "Governance Testing",
+    "format": "Single + evidence",
+    "respondentAction": "Effectiveness",
+    "metricLink": "I14"
+  },
+  {
+    "domainCode": "D02",
+    "code": "A10",
+    "name": "Evidence",
+    "format": "2\u20134 items",
+    "respondentAction": "Evidence confidence",
+    "metricLink": "All"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A01",
+    "name": "Graduate Capability Architecture",
+    "format": "Multi-select",
+    "respondentAction": "What institution claims to develop",
+    "metricLink": "I01"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A02",
+    "name": "Capability Development Map",
+    "format": "Matrix",
+    "respondentAction": "Intended\u2192developed\u2192demonstrated\u2192assessed",
+    "metricLink": "I01-I17"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A03",
+    "name": "Demonstration Evidence",
+    "format": "3\u20135 samples",
+    "respondentAction": "Actual student capability",
+    "metricLink": "I02/I04/I07/I15/I16"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A04",
+    "name": "Assessment Architecture",
+    "format": "Matrix",
+    "respondentAction": "How capability is proven",
+    "metricLink": "I02/I04/I07"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A05",
+    "name": "AI Verification",
+    "format": "Structured + evidence",
+    "respondentAction": "Verification/challenge of AI",
+    "metricLink": "I08"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A06",
+    "name": "Problem Formulation & Transfer",
+    "format": "Frequency + evidence",
+    "respondentAction": "Unfamiliar/ambiguous work",
+    "metricLink": "I05/I16"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A07",
+    "name": "Capability Outcomes",
+    "format": "Numbers if available",
+    "respondentAction": "Attainment",
+    "metricLink": "I07/I16"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A08",
+    "name": "Non-Technical Pathway",
+    "format": "Discipline matrix + sample",
+    "respondentAction": "History/geography/etc.",
+    "metricLink": "I17"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A09",
+    "name": "Student Reality Sample",
+    "format": "Optional full assessment",
+    "respondentAction": "Reality validation",
+    "metricLink": "All"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A10",
+    "name": "Leadership Challenge",
+    "format": "Top 3 + rationale",
+    "respondentAction": "Institutional self-awareness",
+    "metricLink": "I15/I16"
+  },
+  {
+    "domainCode": "D03",
+    "code": "A11",
+    "name": "Evidence",
+    "format": "2\u20135 items",
+    "respondentAction": "Evidence confidence",
+    "metricLink": "All"
+  },
+  {
+    "domainCode": "D04",
+    "code": "A01",
+    "name": "Programme Change Trigger",
+    "format": "Multi-select + 2 programme examples",
+    "respondentAction": "Show what actually triggers curriculum/programme change.",
+    "metricLink": "I01/I03/I05"
+  },
+  {
+    "domainCode": "D04",
+    "code": "A02",
+    "name": "Future Graduate Outcome Map",
+    "format": "Matrix",
+    "respondentAction": "Map selected future capabilities to intended/developed/demonstrated/assessed locations.",
+    "metricLink": "I02/I04/I11"
+  },
+  {
+    "domainCode": "D04",
+    "code": "A03",
+    "name": "Programme Obsolescence Scenario",
+    "format": "Scenario + decision path",
+    "respondentAction": "Test what happens when a core task/content area becomes less valuable due to AI.",
+    "metricLink": "I05/I08/I12"
+  },
+  {
+    "domainCode": "D04",
+    "code": "A04",
+    "name": "Agility & External Validation",
+    "format": "Process + evidence",
+    "respondentAction": "Assess review cycle, approval speed and external input.",
+    "metricLink": "I07/I08/I09"
+  },
+  {
+    "domainCode": "D04",
+    "code": "A05",
+    "name": "Programme Reality Sample",
+    "format": "3\u20135 programme records",
+    "respondentAction": "Inspect representative programmes for actual implementation and transfer.",
+    "metricLink": "I03/I04/I06/I10/I11"
+  },
+  {
+    "domainCode": "D05",
+    "code": "A01",
+    "name": "Faculty Practice Reality",
+    "format": "Multi-select + samples",
+    "respondentAction": "Capture where faculty actually use AI and for what academic purpose.",
+    "metricLink": "I01/I02/I03"
+  },
+  {
+    "domainCode": "D05",
+    "code": "A02",
+    "name": "Training-to-Practice Conversion",
+    "format": "Numbers + examples",
+    "respondentAction": "Measure whether faculty development changes practice rather than attendance only.",
+    "metricLink": "I05/I06/I12"
+  },
+  {
+    "domainCode": "D05",
+    "code": "A03",
+    "name": "Teaching Redesign Scenario",
+    "format": "Scenario + artefact",
+    "respondentAction": "Test faculty response when AI can perform a taught task.",
+    "metricLink": "I03/I04/I08"
+  },
+  {
+    "domainCode": "D05",
+    "code": "A04",
+    "name": "Academic Workforce Change",
+    "format": "Structured + evidence",
+    "respondentAction": "Assess role/workflow changes, support and leadership response.",
+    "metricLink": "I08/I09/I10/I11"
+  },
+  {
+    "domainCode": "D05",
+    "code": "A05",
+    "name": "Faculty Capability Sample",
+    "format": "Representative sample + evidence",
+    "respondentAction": "Triangulate claims through teaching/research artefacts and support mechanisms.",
+    "metricLink": "I01/I02/I07/I12"
+  },
+  {
+    "domainCode": "D06",
+    "code": "A01",
+    "name": "Student AI Capability Reality",
+    "format": "Multi-select + sample",
+    "respondentAction": "Identify what students can actually do with AI, not merely whether they use it.",
+    "metricLink": "I01/I02/I03"
+  },
+  {
+    "domainCode": "D06",
+    "code": "A02",
+    "name": "Agency & Intellectual Independence",
+    "format": "Scenario + work sample",
+    "respondentAction": "Test whether students retain responsibility for questions, reasoning and decisions.",
+    "metricLink": "I03/I04/I05"
+  },
+  {
+    "domainCode": "D06",
+    "code": "A03",
+    "name": "Transfer & Practical Capability",
+    "format": "Project/experience sample",
+    "respondentAction": "Assess application to unfamiliar/real-world situations.",
+    "metricLink": "I07/I10"
+  },
+  {
+    "domainCode": "D06",
+    "code": "A04",
+    "name": "Future Transition Readiness",
+    "format": "Structured + student evidence",
+    "respondentAction": "Assess career adaptability, portfolios, employer exposure and creator capability.",
+    "metricLink": "I08/I09/I11"
+  },
+  {
+    "domainCode": "D06",
+    "code": "A05",
+    "name": "Equity & Student Voice",
+    "format": "Data + action evidence",
+    "respondentAction": "Assess unequal access and whether student feedback changes institutional action.",
+    "metricLink": "I13/I14"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.1",
+    "name": "Assessment Reality Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Across representative programmes, what do students actually have to demonstrate to complete major assessments?",
+    "metricLink": "I01/I02/I03"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.2",
+    "name": "AI Substitution Test",
+    "format": "Structured assessment card",
+    "respondentAction": "If generative AI could produce a plausible answer to a major assessment today, what would still make the assessment academically meaningful?",
+    "metricLink": "I04/I05"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.3",
+    "name": "Capability Proof Test",
+    "format": "Structured assessment card",
+    "respondentAction": "How does the institution know that students possess the capabilities its programmes say they develop?",
+    "metricLink": "I07/I08"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.4",
+    "name": "Unfamiliar Problem Test",
+    "format": "Structured assessment card",
+    "respondentAction": "How often are students asked to solve unfamiliar or ambiguous problems where there is no prepared model answer?",
+    "metricLink": "I03/I02"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07.5",
+    "name": "Assessment Learning Loop",
+    "format": "Structured assessment card",
+    "respondentAction": "When assessment evidence shows students are weak in an important capability, what normally happens?",
+    "metricLink": "I06/I09/I11"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.1",
+    "name": "Data Reality Test",
+    "format": "Structured assessment card",
+    "respondentAction": "If leadership needs a reliable answer about students, programmes, faculty, placements or research today, how quickly can the institution produce it?",
+    "metricLink": "I02/I05/I12"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.2",
+    "name": "Data Journey Test",
+    "format": "Structured assessment card",
+    "respondentAction": "What normally happens to an important institutional data point from its creation to its use in a decision?",
+    "metricLink": "I02/I03/I04"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.3",
+    "name": "AI Infrastructure Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Which institutional capabilities are currently sufficient to support responsible AI-enabled academic or administrative use?",
+    "metricLink": "I01/I06/I07/I08/I09"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08.4",
+    "name": "Decision Intelligence Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Give one recent leadership decision where institutional data or analytics materially changed the decision.",
+    "metricLink": "I05/I12"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.1",
+    "name": "Employer Signal Test",
+    "format": "Structured assessment card",
+    "respondentAction": "How does the institution identify what employers and professional sectors will expect from graduates over the next 3\u20135 years?",
+    "metricLink": "I01"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.2",
+    "name": "Capability-to-Career Test",
+    "format": "Structured assessment card",
+    "respondentAction": "For a representative programme, how clearly can the institution connect intended graduate capabilities to actual occupational or professional requirements?",
+    "metricLink": "I02/I03/I08"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.3",
+    "name": "AI Work Redesign Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Where AI is changing entry-level work in a major sector relevant to the institution, what has the institution changed for students?",
+    "metricLink": "I03/I04/I07/I10"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09.4",
+    "name": "Recruiter Confidence Test",
+    "format": "Structured assessment card",
+    "respondentAction": "What evidence does the institution use to determine whether recruiters trust the capabilities of its graduates?",
+    "metricLink": "I05/I06/I12"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.1",
+    "name": "Research Direction Test",
+    "format": "Structured assessment card",
+    "respondentAction": "What research questions or themes does the institution believe will matter most to its disciplines, region or society over the next 5\u201310 years?",
+    "metricLink": "I01/I02"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.2",
+    "name": "Research-to-Value Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Take one significant research activity. What happened after the research generated a meaningful finding?",
+    "metricLink": "I08/I10/I13"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.3",
+    "name": "Interdisciplinary Collision Test",
+    "format": "Structured assessment card",
+    "respondentAction": "When a major problem crosses disciplinary boundaries, how does the institution bring the required expertise together?",
+    "metricLink": "I03"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.4",
+    "name": "AI Research Judgement Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Where AI is used in research, how does the institution protect research quality, provenance, integrity and human judgement?",
+    "metricLink": "I04/I12"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10.5",
+    "name": "Student Creator Test",
+    "format": "Structured assessment card",
+    "respondentAction": "How are students enabled to move from consuming existing knowledge to creating new knowledge, prototypes, evidence or solutions?",
+    "metricLink": "I14"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.1",
+    "name": "Change-to-Action Test",
+    "format": "Structured assessment card",
+    "respondentAction": "When a development could materially affect the institution, what normally happens between first awareness and an institutional response?",
+    "metricLink": "I01/I02/I03"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.2",
+    "name": "Resource Reallocation Test",
+    "format": "Structured assessment card",
+    "respondentAction": "If leadership decides that an emerging capability has become strategically important, how can resources actually be redirected?",
+    "metricLink": "I04"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.3",
+    "name": "Failure Learning Test",
+    "format": "Structured assessment card",
+    "respondentAction": "When an important institutional experiment does not work, what usually happens?",
+    "metricLink": "I06/I13"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.4",
+    "name": "Future Shock Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Imagine that within five years AI materially changes 20\u201330% of entry-level tasks across several major sectors relevant to your institution. Which five institutional responses would leadership prioritise first?",
+    "metricLink": "I02/I04/I07/I10/I14"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11.5",
+    "name": "Adaptation Reality Test",
+    "format": "Structured assessment card",
+    "respondentAction": "Which statement best describes the institution today?",
+    "metricLink": "I12/I14"
+  }
+]
