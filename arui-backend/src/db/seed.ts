@@ -199,33 +199,115 @@ export async function seed() {
   );
   const assessmentId = asmRes.rows[0].id;
 
-  // Seed default 25-field profile
+  // Seed exhaustive 25-field profile matching Excel Institution_Profile sheet
   const profileValues = {
+    IP01: 'Apex National University',
+    IP02: 'Comprehensive University',
+    IP03: 'State Private / Autonomous',
+    IP04: 'Karnataka',
+    IP05: 'Bengaluru Urban',
+    IP06: 'Urban / Metro',
+    IP07: 2008,
+    IP08: 24500,
+    IP09: 1150,
+    IP10: 84,
+    IP11: 48,
+    IP12: 36,
+    IP13: 18,
+    IP14: ['Engineering & Technology', 'Computer Science & AI', 'Management & Business', 'Life Sciences', 'Law & Public Policy'],
+    IP15: 'High Research Intensity (Tier 1)',
+    IP16: 'INR 250 Cr – 500 Cr',
+    IP17: 'INR 25 Cr – 50 Cr',
+    IP18: 'INR 30 Cr – 60 Cr',
+    IP19: 'High / Embedded industry co-design & corporate labs',
+    IP20: 'Established Technology Business Incubator (TBI) & AI Center of Excellence',
+    IP21: ['National', 'Regional', 'International'],
+    IP22: ['Residential', 'Day Scholar', 'Hybrid'],
+    IP23: ['Research Excellence', 'Industry Employability', 'Regional Development', 'Global Competitiveness'],
+    IP24: 'Co-educational Residential Campus',
+    IP25: 'Global Collaborations with Top 100 QS Institutions',
+    // Legacy field aliases for backwards compatibility
     IP01_INST_NAME: 'Apex National University',
     IP02_INST_TYPE: 'comprehensive',
     IP03_MANDATE: 'balanced',
     IP04_STATE: 'Karnataka',
     IP05_DISTRICT: 'Bengaluru Urban',
-    IP06_STUDENT_ENROLLMENT: '15000-30000',
-    IP07_FACULTY_COUNT: '800-1500',
-    IP08_ACCREDITATION: 'NAAC A++',
-    IP09_RESEARCH_INTENSITY: 'moderate_high',
-    IP10_AI_EXPOSURE_INDEX: 'high',
-    IP11_DISCIPLINARY_CONSEQUENCE: 'high',
-    IP12_RESOURCE_ENVELOPE: 'tier_1_private',
-    IP13_LEAD_ASSESSOR_NAME: 'Dr. Aris Thorne',
-    IP14_LEAD_ASSESSOR_TITLE: 'Vice-Chancellor / Provost',
-    IP15_LEAD_ASSESSOR_EMAIL: 'lead@apex.edu'
+    IP08_STUDENT_ENROLLMENT: '24500',
+    IP10_AI_EXPOSURE: 'High',
+    IP11_DISCIPLINARY_CONSEQUENCE: 'High',
   };
 
   await query(
     `INSERT INTO institution_profiles (institution_id, assessment_id, status, values_json, completeness_score)
      VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = EXCLUDED.values_json`,
-    [instId, assessmentId, 'in_progress', JSON.stringify(profileValues), 60.0]
+     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = EXCLUDED.values_json, completeness_score = 100.0`,
+    [instId, assessmentId, 'complete', JSON.stringify(profileValues), 100.0]
   );
 
-  console.log(`Created baseline assessment ${assessmentId} with demo profile for Apex National University.`);
+  // Seed sample responses for Pulse & D01-D11 so the entire dashboard is live
+  const sampleResponses = [
+    { prompt_id: 'Q01', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'Q02', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'Q03', state: 'answered', val: { selected: ['governance_framework', 'faculty_development', 'assessment_security'] } },
+    { prompt_id: 'Q04', state: 'answered', val: { choice: 'emerging-school-faculty' } },
+    { prompt_id: 'Q05', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'D01-Q01', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'D01-Q02', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'D02-Q01', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+    { prompt_id: 'D03-Q01', state: 'answered', val: { choice: 'emerging-school-faculty' } },
+    { prompt_id: 'D07-Q01', state: 'answered', val: { choice: 'formal-institutional-priority' } },
+  ];
+
+  for (const resp of sampleResponses) {
+    await query(
+      `INSERT INTO assessment_responses (assessment_id, prompt_id, state, response_value_json, answered_at, updated_at)
+       VALUES ($1, $2, $3, $4, NOW(), NOW())
+       ON CONFLICT (assessment_id, prompt_id) DO UPDATE SET state = EXCLUDED.state, response_value_json = EXCLUDED.response_value_json`,
+      [assessmentId, resp.prompt_id, resp.state, JSON.stringify(resp.val)]
+    );
+  }
+
+  // Seed baseline evidence items
+  await query(`DELETE FROM evidence_items WHERE assessment_id = $1`, [assessmentId]);
+  const ev1 = await query(
+    `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, mime_type, period_covered, description, source_origin, status, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW()) RETURNING id`,
+    [
+      assessmentId,
+      'Institutional AI Governance & Ethics Policy Framework (2025–2028)',
+      'AI_Governance_Ethics_Framework_Apex.pdf',
+      '/uploads/AI_Governance_Ethics_Framework_Apex.pdf',
+      2457600,
+      'application/pdf',
+      '2025-01 – 2028-12',
+      'Approved academic senate policy defining approved GenAI use, ethical guidelines, and risk controls across all faculties.',
+      'policy_or_governance',
+      'SUBMITTED',
+    ]
+  );
+  const ev1Id = ev1.rows[0].id;
+  await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D01-I01', true), ($1, 'D02-I01', false) ON CONFLICT DO NOTHING`, [ev1Id]);
+
+  const ev2 = await query(
+    `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, mime_type, period_covered, description, source_origin, status, created_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW()) RETURNING id`,
+    [
+      assessmentId,
+      'Academic Council Minutes — Authentic Assessment Redesign Mandate',
+      'Academic_Council_Assessment_Resolution_2025.pdf',
+      '/uploads/Academic_Council_Assessment_Resolution_2025.pdf',
+      1843200,
+      'application/pdf',
+      '2025-06 – 2026-06',
+      'Mandate requiring undergraduate modules to incorporate oral defense, process evaluation, and AI-resilient assessment rubrics.',
+      'committee_minutes_or_deliberation',
+      'SUBMITTED',
+    ]
+  );
+  const ev2Id = ev2.rows[0].id;
+  await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D07-I01', true), ($1, 'D07-I02', false) ON CONFLICT DO NOTHING`, [ev2Id]);
+
+  console.log(`Created baseline assessment ${assessmentId} with full 25-field profile and live response data for Apex National University.`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

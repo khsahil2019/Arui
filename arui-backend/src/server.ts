@@ -10,6 +10,7 @@ import evidenceRoutes from './modules/evidence/routes.js';
 import assessorRoutes from './modules/assessor/routes.js';
 import reportRoutes from './modules/reports/routes.js';
 import methodologyRoutes from './modules/methodology/routes.js';
+import dashboardRoutes from './modules/docs/dashboard.js';
 
 dotenv.config();
 
@@ -24,6 +25,10 @@ app.use(
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Interactive API Explorer & Dashboard on root
+app.use('/docs', dashboardRoutes);
+app.get('/', dashboardRoutes);
 
 // Health Check
 app.get('/health', (req, res) => {

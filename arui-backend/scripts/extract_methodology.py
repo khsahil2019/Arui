@@ -202,6 +202,21 @@ def extract_cross_domain_rules(wb):
         })
     return rules
 
+def extract_institution_profile_fields(wb):
+    fields = []
+    ws = wb['Institution_Profile']
+    rows = list(ws.iter_rows(values_only=True))
+    for r in rows[1:]:
+        if not r or not r[0]: continue
+        fields.append({
+            "code": clean_val(r[0]),
+            "label": clean_val(r[1]),
+            "inputType": clean_val(r[2]),
+            "requirement": clean_val(r[3]),
+            "use": clean_val(r[4]) if len(r) > 4 else "Context"
+        })
+    return fields
+
 def main():
     print(f"Loading master workbook from {P0_8_PATH}...")
     wb = openpyxl.load_workbook(P0_8_PATH, data_only=True)
@@ -210,6 +225,7 @@ def main():
     metrics = extract_metrics_and_anchors(wb)
     anchors = extract_anchors(wb)
     inst_data = extract_institutional_data(wb)
+    profile_fields = extract_institution_profile_fields(wb)
     cards, questions = extract_questions_and_cards(wb)
     evidence_reqs = extract_evidence_requirements(wb)
     anti_gaming = extract_anti_gaming_rules(wb)
@@ -225,6 +241,8 @@ def main():
         json.dump(anchors, f, indent=2)
     with open(os.path.join(OUT_DIR, "institutional_data_items.json"), "w") as f:
         json.dump(inst_data, f, indent=2)
+    with open(os.path.join(OUT_DIR, "institution_profile_fields.json"), "w") as f:
+        json.dump(profile_fields, f, indent=2)
     with open(os.path.join(OUT_DIR, "cards.json"), "w") as f:
         json.dump(cards, f, indent=2)
     with open(os.path.join(OUT_DIR, "question_bank.json"), "w") as f:
@@ -241,6 +259,7 @@ def main():
     print(f"  - Capabilities: {len(capabilities)}")
     print(f"  - Metrics: {len(metrics)}")
     print(f"  - Anchors: {len(anchors)}")
+    print(f"  - Institutional Profile Fields: {len(profile_fields)}")
     print(f"  - Institutional Data Items: {len(inst_data)}")
     print(f"  - Assessment Cards: {len(cards)}")
     print(f"  - Question Bank: {len(questions)}")

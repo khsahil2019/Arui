@@ -1,0 +1,177 @@
+[
+  {
+    "code": "IP01",
+    "label": "Institution name",
+    "inputType": "Text",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP02",
+    "label": "Institution type",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP03",
+    "label": "Governance type",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP04",
+    "label": "State",
+    "inputType": "Dropdown",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP05",
+    "label": "District",
+    "inputType": "Dropdown",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP06",
+    "label": "Location",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP07",
+    "label": "Year established",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP08",
+    "label": "Students",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP09",
+    "label": "Faculty",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP10",
+    "label": "Active programmes",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP11",
+    "label": "UG programmes",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP12",
+    "label": "PG programmes",
+    "inputType": "Number",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP13",
+    "label": "Doctoral programmes",
+    "inputType": "Number",
+    "requirement": "Optional",
+    "use": "Context"
+  },
+  {
+    "code": "IP14",
+    "label": "Major disciplines",
+    "inputType": "Multi-select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP15",
+    "label": "Research intensity",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context calibration"
+  },
+  {
+    "code": "IP16",
+    "label": "Annual expenditure band",
+    "inputType": "Range",
+    "requirement": "Required",
+    "use": "Context calibration"
+  },
+  {
+    "code": "IP17",
+    "label": "Technology/IT expenditure band",
+    "inputType": "Range",
+    "requirement": "Required",
+    "use": "Context calibration"
+  },
+  {
+    "code": "IP18",
+    "label": "Research funding band",
+    "inputType": "Range",
+    "requirement": "Optional",
+    "use": "Context calibration"
+  },
+  {
+    "code": "IP19",
+    "label": "Industry engagement",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP20",
+    "label": "Innovation/incubation ecosystem",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP21",
+    "label": "Student catchment",
+    "inputType": "Multi-select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP22",
+    "label": "Student mobility pattern",
+    "inputType": "Multi-select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP23",
+    "label": "Institutional mandate",
+    "inputType": "Multi-select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP24",
+    "label": "Residential model",
+    "inputType": "Single select",
+    "requirement": "Required",
+    "use": "Context"
+  },
+  {
+    "code": "IP25",
+    "label": "International exposure",
+    "inputType": "Single select",
+    "requirement": "Optional",
+    "use": "Context"
+  }
+]
