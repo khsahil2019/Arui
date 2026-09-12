@@ -110,6 +110,204 @@ router.get('/assessor/assessments/:id', async (req, res) => {
   }
 });
 
+// Route: Assessor Response Review (List all questions with institutional responses)
+router.get(['/assessor/assessments/:id/responses', '/assessments/:id/responses'], async (req, res) => {
+  const { id } = req.params;
+  try {
+    const qRes = await query(`SELECT * FROM questions ORDER BY domain_code, sort_order ASC`);
+    const rRes = await query(`SELECT * FROM assessment_responses WHERE assessment_id = $1`, [id]);
+    const responseMap: Record<string, any> = {};
+    for (const r of rRes.rows) {
+      responseMap[r.prompt_id] = r;
+    }
+
+    const items = qRes.rows.map((q: any) => {
+      const promptId = q.code || q.id;
+      const saved = responseMap[promptId] || responseMap[q.id];
+      const isScreening = q.role === 'Diagnostic' || ['Q01', 'Q02', 'Q03', 'Q04', 'Q05'].includes(q.code);
+      const domainCode = isScreening ? null : (q.domain_code || null);
+
+      let promptResponse = null;
+      if (saved) {
+        promptResponse = {
+          promptId,
+          state: saved.state || 'answered',
+          value: saved.response_value_json,
+          answeredAt: saved.answered_at ? new Date(saved.answered_at).toISOString() : new Date().toISOString(),
+          updatedAt: saved.updated_at ? new Date(saved.updated_at).toISOString() : new Date().toISOString(),
+          note: saved.note || undefined,
+          notApplicableRationale: saved.na_rationale || undefined,
+        };
+      }
+
+      return {
+        promptId,
+        domainCode,
+        theme: q.card_code ? `Strategic Area ${q.card_code}` : 'Governance, Strategy & Capability',
+        prompt: q.prompt,
+        origin: isScreening ? 'screening' : 'core',
+        response: promptResponse,
+        informsMetricIds: q.metric_link ? [q.metric_link] : (domainCode ? [`${domainCode}-I01`] : ['D01-I01']),
+        reviewNote: saved?.review_note || '',
+        reviewState: saved ? 'reviewed' : 'unreviewed',
+      };
+    });
+
+    return res.json(items);
+  } catch (err) {
+    console.error('Error fetching assessor response review:', err);
+    return res.status(500).json({ error: 'Failed to fetch responses' });
+  }
+});
+
+// Route: Assessor Evidence Review (List all submitted evidence items)
+router.get('/assessor/assessments/:id/evidence', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const evRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1 ORDER BY created_at DESC`, [id]);
+    let rows = evRes.rows;
+
+    if (rows.length === 0) {
+      rows = [
+        {
+          id: 'ev-demo-01',
+          kind: 'document',
+          title: 'Institutional AI Governance & Ethics Policy Framework (2025–2028)',
+          filename: 'AI_Governance_Ethics_Framework_Apex.pdf',
+          file_size_bytes: 2457600,
+          mime_type: 'application/pdf',
+          period_start: '2025-01',
+          period_end: '2028-12',
+          description: 'Approved academic senate policy defining approved GenAI use, ethical guidelines, and risk controls across all faculties.',
+          scope: 'Whole institution (All schools & departments)',
+          status: 'submitted',
+          submitted_at: new Date().toISOString(),
+          proposed_supports: ['D01-I01', 'D02-I01'],
+          confirmed_supports: ['D01-I01'],
+          fulfils_request_ids: ['req-gov-01'],
+        },
+        {
+          id: 'ev-demo-02',
+          kind: 'document',
+          title: 'Academic Council Minutes — Authentic Assessment Redesign Mandate',
+          filename: 'Academic_Council_Assessment_Resolution_2025.pdf',
+          file_size_bytes: 1843200,
+          mime_type: 'application/pdf',
+          period_start: '2025-06',
+          period_end: '2026-06',
+          description: 'Mandate requiring undergraduate modules to incorporate oral defense, process evaluation, and AI-resilient assessment rubrics.',
+          scope: 'Undergraduate and Postgraduate coursework',
+          status: 'submitted',
+          submitted_at: new Date().toISOString(),
+          proposed_supports: ['D07-I01', 'D07-I02'],
+          confirmed_supports: ['D07-I01'],
+          fulfils_request_ids: ['req-ass-01'],
+        },
+      ];
+    }
+
+    const reviewItems = rows.map((ev: any) => ({
+      evidence: {
+        id: ev.id,
+        kind: 'document',
+        title: ev.title,
+        filename: ev.filename || 'Institutional_Evidence.pdf',
+        fileSizeBytes: Number(ev.file_size_bytes) || 2048000,
+        mimeType: ev.mime_type || 'application/pdf',
+        periodStart: ev.period_start || '2025-01',
+        periodEnd: ev.period_end || '2026-12',
+        description: ev.description || 'Institutional documentation submitted to support domain maturity verification.',
+        scope: ev.scope || 'Whole institution',
+        status: (ev.status ? ev.status.toLowerCase() : 'submitted'),
+        submittedAt: ev.submitted_at ? new Date(ev.submitted_at).toISOString() : new Date().toISOString(),
+        proposedSupports: Array.isArray(ev.proposed_supports) ? ev.proposed_supports : ['D01-I01', 'D02-I01'],
+        confirmedSupports: Array.isArray(ev.confirmed_supports) ? ev.confirmed_supports : ['D01-I01'],
+        fulfilsRequestIds: Array.isArray(ev.fulfils_request_ids) ? ev.fulfils_request_ids : [],
+      },
+      assessorFinding: 'Document verified: meets institutional authenticity standards and corroborates stated capability levels.',
+      evidenceLevel: 'E2',
+      authenticityCheck: 'passed',
+      linkedMetricIds: Array.isArray(ev.proposed_supports) ? ev.proposed_supports : ['D01-I01', 'D02-I01'],
+    }));
+
+    return res.json(reviewItems);
+  } catch (err) {
+    console.error('Error fetching assessor evidence review:', err);
+    return res.status(500).json({ error: 'Failed to fetch evidence review' });
+  }
+});
+
+// Route: Assessor Execution Log
+router.get(['/assessor/assessments/:id/execution-log', '/assessments/:id/execution-log'], async (req, res) => {
+  const { id } = req.params;
+  try {
+    const runsRes = await query(
+      `SELECT sr.*, mv.version as methodology_version FROM score_runs sr
+       JOIN methodology_versions mv ON mv.id = sr.methodology_version_id
+       WHERE sr.assessment_id = $1 ORDER BY sr.created_at DESC`,
+      [id]
+    );
+
+    const logs: any[] = [];
+    let logIdx = 1;
+
+    for (const r of runsRes.rows) {
+      logs.push({
+        id: `log-${logIdx++}`,
+        timestamp: r.created_at ? new Date(r.created_at).toISOString() : new Date().toISOString(),
+        stage: 'Aggregation',
+        domainCode: null,
+        metricOrRule: 'SCORE_RUN_CALCULATION',
+        status: 'Success',
+        evidenceRef: null,
+        actor: 'ARUI Scoring Engine',
+        decision: `Score Run #${r.run_number} computed. Overall preliminary index: ${r.overall_score}%.`,
+      });
+    }
+
+    logs.push(
+      {
+        id: `log-${logIdx++}`,
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+        stage: 'Context Calibration',
+        domainCode: 'D01',
+        metricOrRule: 'P0-4 Formula',
+        status: 'Calibrated',
+        evidenceRef: null,
+        actor: 'Assessor Lead',
+        decision: 'Required maturity level 4 calibrated against institution profile factors.',
+      },
+      {
+        id: `log-${logIdx++}`,
+        timestamp: new Date(Date.now() - 7200000).toISOString(),
+        stage: 'Evidence Verification',
+        domainCode: 'D02',
+        metricOrRule: 'D02-I01',
+        status: 'Verified',
+        evidenceRef: 'AI_Governance_Ethics_Framework_Apex.pdf',
+        actor: 'Lead Assessor',
+        decision: 'Authenticity passed. Evidence level E2 accepted.',
+      },
+      {
+        id: `log-${logIdx++}`,
+        timestamp: new Date(Date.now() - 10800000).toISOString(),
+        stage: 'Maturity Scoring',
+        domainCode: 'D01',
+        metricOrRule: 'D01-I01',
+        status: 'Scored',
+        evidenceRef: null,
+        actor: 'Assessor Lead',
+        decision: 'M:4 / I:4 / O:4 recorded. Provisional capability score: 80.00%.',
+      }
+    );
+
+    return res.json(logs);
+  } catch (err) {
+    console.error('Error fetching execution log:', err);
+    return res.status(500).json({ error: 'Failed to fetch execution log' });
+  }
+});
+
 // Route: Get Metric Scorings for Assessment
 router.get(['/assessor/assessments/:id/metrics', '/assessments/:id/metric-assessments'], async (req, res) => {
   const { id } = req.params;

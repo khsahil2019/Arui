@@ -5,6 +5,12 @@ const router = Router();
 
 // Helper to construct AssessmentStatusView
 export async function getAssessmentStatusView(assessmentId: string) {
+  if (!assessmentId || assessmentId === 'undefined' || assessmentId === 'null') {
+    const defaultAsm = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+    if (defaultAsm.rows.length === 0) return null;
+    assessmentId = defaultAsm.rows[0].id;
+  }
+
   const aRes = await query(
     `SELECT a.*, i.name as institution_name, m.version as methodology_version
      FROM assessments a

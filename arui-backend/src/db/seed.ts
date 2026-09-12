@@ -179,14 +179,16 @@ export async function seed() {
     [null, 'assessor@arui.org', passwordHash, 'Prof. Elizabeth Vance (Lead Assessor)', 'ASSESSOR']
   );
 
-  // Super Admin
+  // User Sahil Khan (Institution Admin)
+  const sahilPasswordHash = await bcrypt.hash('123456', 10);
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role`,
-    [null, 'admin@arui.org', passwordHash, 'ARUI Master Auditor', 'SUPER_ADMIN']
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [instId, 'sahilkh3014@gmail.com', sahilPasswordHash, 'Sahil Khan', 'INSTITUTION_ADMIN']
   );
-  console.log('Seeded demo users (lead@apex.edu, assessor@arui.org, admin@arui.org / password: arui@2026).');
+
+  console.log('Seeded demo users (sahilkh3014@gmail.com, lead@apex.edu, assessor@arui.org, admin@arui.org).');
 
   // 4. Seed initial Assessment for Apex National University
   const asmRes = await query(
