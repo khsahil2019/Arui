@@ -20,7 +20,8 @@ const badge = cva(
   },
 );
 
-interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badge> {
+interface StatusBadgeProps
+  extends React.HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badge> {
   dot?: boolean;
 }
 

@@ -7,9 +7,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "AI Resilient University — Institutional AI Resilience Assessment" },
-      { name: "description", content: "Understand how prepared your institution is for an AI-shaped future. A research-grade assessment for universities across strategy, governance, people, curriculum and more." },
+      {
+        name: "description",
+        content:
+          "Understand how prepared your institution is for an AI-shaped future. A research-grade assessment for universities across strategy, governance, people, curriculum and more.",
+      },
       { property: "og:title", content: "AI Resilient University" },
-      { property: "og:description", content: "Understand how prepared your institution is for an AI-shaped future." },
+      {
+        property: "og:description",
+        content: "Understand how prepared your institution is for an AI-shaped future.",
+      },
     ],
   }),
   component: WelcomePage,
@@ -43,7 +50,10 @@ function WelcomePage() {
     <div className="min-h-screen bg-background">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
         <Wordmark />
-        <Link to="/overview" className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
+        <Link
+          to="/overview"
+          className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        >
           Return to an existing assessment
         </Link>
       </header>
@@ -53,10 +63,14 @@ function WelcomePage() {
           <div>
             <p className="eyebrow mb-6">Institutional AI Resilience Assessment</p>
             <h1 className="max-w-2xl text-[2.75rem] leading-[1.06] text-foreground md:text-[3.75rem] lg:text-[4.25rem]">
-              Understand how prepared your institution is for an <em className="font-normal italic text-navy">AI-shaped</em> future.
+              Understand how prepared your institution is for an{" "}
+              <em className="font-normal italic text-navy">AI-shaped</em> future.
             </h1>
             <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-muted-foreground">
-              AI Resilient University examines the institution as a whole — not a single office, policy or platform. It reads how strategy, governance, people, curriculum, students, learning, technology, employability, research and institutional adaptability hold together under AI-driven change.
+              AI Resilient University examines the institution as a whole — not a single office,
+              policy or platform. It reads how strategy, governance, people, curriculum, students,
+              learning, technology, employability, research and institutional adaptability hold
+              together under AI-driven change.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
@@ -67,7 +81,9 @@ function WelcomePage() {
                 Begin Institutional Assessment
                 <ArrowRight className="size-4" />
               </Link>
-              <span className="text-sm text-muted-foreground">No commitment. Your progress is saved as you go.</span>
+              <span className="text-sm text-muted-foreground">
+                No commitment. Your progress is saved as you go.
+              </span>
             </div>
 
             <div className="mt-16 border-t border-border pt-8">
@@ -75,7 +91,9 @@ function WelcomePage() {
               <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5 text-[15px] text-foreground/85 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
                 {assessmentAreas.map((a, i) => (
                   <li key={a} className="flex items-baseline gap-3">
-                    <span className="font-mono text-[11px] text-muted-foreground">D{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-[11px] text-muted-foreground">
+                      D{String(i + 1).padStart(2, "0")}
+                    </span>
                     {a}
                   </li>
                 ))}
@@ -95,15 +113,21 @@ function WelcomePage() {
                       <f.icon className="size-4" />
                     </span>
                     <div>
-                      <h2 className="font-sans text-[15px] font-semibold tracking-normal text-foreground">{f.title}</h2>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                      <h2 className="font-sans text-[15px] font-semibold tracking-normal text-foreground">
+                        {f.title}
+                      </h2>
+                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
+                        {f.body}
+                      </p>
                     </div>
                   </li>
                 ))}
               </ul>
             </div>
             <p className="mt-5 px-1 text-xs leading-relaxed text-muted-foreground">
-              Designed for Vice-Chancellors, Presidents, Provosts, Registrars, Deans, IQAC leadership and institutional strategy teams. A single institutional lead can complete the assessment; contributors can be invited by area.
+              Designed for Vice-Chancellors, Presidents, Provosts, Registrars, Deans, IQAC
+              leadership and institutional strategy teams. A single institutional lead can complete
+              the assessment; contributors can be invited by area.
             </p>
           </aside>
         </section>

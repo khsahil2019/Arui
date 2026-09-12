@@ -1,6 +1,12 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { ChoiceOption } from "@/lib/catalogue";
 
 interface FieldProps {
@@ -32,7 +38,13 @@ interface SelectFieldProps {
   ariaLabel?: string;
 }
 
-export function SelectField({ options, value, onChange, placeholder = "Select…", ariaLabel }: SelectFieldProps) {
+export function SelectField({
+  options,
+  value,
+  onChange,
+  placeholder = "Select…",
+  ariaLabel,
+}: SelectFieldProps) {
   return (
     <Select {...(value ? { value } : {})} onValueChange={onChange}>
       <SelectTrigger aria-label={ariaLabel} className="h-11 bg-card text-[15px] shadow-card">
@@ -90,16 +102,48 @@ interface ShortTextProps {
 }
 
 /** Bounded text — always shows the remaining allowance. The only free-text control in respondent inputs. */
-export function ShortText({ value, onChange, maxLength, placeholder, ariaLabel, disabled, lines = 1, className }: ShortTextProps) {
+export function ShortText({
+  value,
+  onChange,
+  maxLength,
+  placeholder,
+  ariaLabel,
+  disabled,
+  lines = 1,
+  className,
+}: ShortTextProps) {
   const left = maxLength - value.length;
   return (
     <div className={cn("relative", className)}>
       {lines === 1 ? (
-        <TextInput value={value} maxLength={maxLength} placeholder={placeholder} aria-label={ariaLabel} disabled={disabled} onChange={(e) => onChange(e.target.value)} className="pr-14" />
+        <TextInput
+          value={value}
+          maxLength={maxLength}
+          placeholder={placeholder}
+          aria-label={ariaLabel}
+          disabled={disabled}
+          onChange={(e) => onChange(e.target.value)}
+          className="pr-14"
+        />
       ) : (
-        <TextArea rows={lines} value={value} maxLength={maxLength} placeholder={placeholder} aria-label={ariaLabel} disabled={disabled} onChange={(e) => onChange(e.target.value)} className="pr-14" />
+        <TextArea
+          rows={lines}
+          value={value}
+          maxLength={maxLength}
+          placeholder={placeholder}
+          aria-label={ariaLabel}
+          disabled={disabled}
+          onChange={(e) => onChange(e.target.value)}
+          className="pr-14"
+        />
       )}
-      <span aria-hidden className={cn("pointer-events-none absolute right-3 top-2.5 font-mono text-[10.5px] tabular-nums", left < 20 ? "text-amber" : "text-muted-foreground/70")}>
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute right-3 top-2.5 font-mono text-[10.5px] tabular-nums",
+          left < 20 ? "text-amber" : "text-muted-foreground/70",
+        )}
+      >
         {left}
       </span>
     </div>
@@ -115,7 +159,16 @@ interface MonthInputProps {
 }
 
 export function MonthInput({ value, onChange, ariaLabel, disabled, className }: MonthInputProps) {
-  return <TextInput type="month" value={value} aria-label={ariaLabel} disabled={disabled} onChange={(e) => onChange(e.target.value)} className={cn("w-auto min-w-[11rem]", className)} />;
+  return (
+    <TextInput
+      type="month"
+      value={value}
+      aria-label={ariaLabel}
+      disabled={disabled}
+      onChange={(e) => onChange(e.target.value)}
+      className={cn("w-auto min-w-[11rem]", className)}
+    />
+  );
 }
 
 interface ChipGroupProps {
@@ -129,7 +182,15 @@ interface ChipGroupProps {
 }
 
 /** Multi-select rendered as toggle chips — fast to scan, no typing. */
-export function ChipGroup({ options, value, onChange, max, size = "default", ariaLabel, disabled }: ChipGroupProps) {
+export function ChipGroup({
+  options,
+  value,
+  onChange,
+  max,
+  size = "default",
+  ariaLabel,
+  disabled,
+}: ChipGroupProps) {
   const toggle = (v: string) => {
     if (value.includes(v)) return onChange(value.filter((x) => x !== v));
     if (max !== undefined && value.length >= max) return;
@@ -152,10 +213,14 @@ export function ChipGroup({ options, value, onChange, max, size = "default", ari
             className={cn(
               "inline-flex cursor-pointer items-center gap-1.5 rounded-full border text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
               size === "default" ? "px-3 py-1.5 text-[13px]" : "px-2.5 py-1 text-xs",
-              on ? "border-navy bg-navy text-primary-foreground" : "border-input bg-card text-foreground hover:border-navy/50",
+              on
+                ? "border-navy bg-navy text-primary-foreground"
+                : "border-input bg-card text-foreground hover:border-navy/50",
             )}
           >
-            <span className={cn("size-1.5 rounded-full", on ? "bg-primary-foreground" : "bg-border")} />
+            <span
+              className={cn("size-1.5 rounded-full", on ? "bg-primary-foreground" : "bg-border")}
+            />
             {o.label}
           </button>
         );
@@ -173,13 +238,36 @@ interface SegmentedChoiceProps {
 }
 
 /** Compact single choice for 2–4 short options (Yes / No / Not sure). */
-export function SegmentedChoice({ options, value, onChange, ariaLabel, disabled }: SegmentedChoiceProps) {
+export function SegmentedChoice({
+  options,
+  value,
+  onChange,
+  ariaLabel,
+  disabled,
+}: SegmentedChoiceProps) {
   return (
-    <div role="radiogroup" aria-label={ariaLabel} className="inline-flex rounded-md border border-input bg-card p-0.5 shadow-card">
+    <div
+      role="radiogroup"
+      aria-label={ariaLabel}
+      className="inline-flex rounded-md border border-input bg-card p-0.5 shadow-card"
+    >
       {options.map((o) => {
         const on = value === o.value;
         return (
-          <button key={o.value} type="button" role="radio" aria-checked={on} disabled={disabled} onClick={() => onChange(o.value)} className={cn("cursor-pointer rounded-[5px] px-3 py-1.5 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", on ? "bg-navy text-primary-foreground" : "text-muted-foreground hover:text-foreground")}>
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={on}
+            disabled={disabled}
+            onClick={() => onChange(o.value)}
+            className={cn(
+              "cursor-pointer rounded-[5px] px-3 py-1.5 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              on
+                ? "bg-navy text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
             {o.label}
           </button>
         );

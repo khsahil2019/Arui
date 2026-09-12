@@ -54,21 +54,21 @@ Rules enforced in code: screens call `src/api/hooks.ts` only; `VITE_ARUI_API_BAS
 
 ## A2. Routes
 
-| File | URL | Purpose |
-|---|---|---|
-| `__root.tsx` | — | HTML shell, fonts (Newsreader + IBM Plex Sans), error boundary |
-| `index.tsx` | `/` | Public welcome |
-| `login.tsx` | `/login` | Entry; mock role pick |
-| `_workspace.tsx` | — | Respondent layout + client session guard |
-| `_workspace.overview.tsx` | `/overview` | Stage/domain/evidence status |
-| `_workspace.profile.tsx` | `/profile` | Institution Profile — data-driven multi-step form |
-| `_workspace.orientation.tsx` | `/orientation` | How the assessment works |
-| `_workspace.pulse.tsx` | `/pulse` | Screening prompts (s-01…s-05) |
-| `_workspace.assessment.index.tsx` | `/assessment` | Domain hub; D04–D11 "Not yet assessed" |
-| `_workspace.assessment.$domain.tsx` | `/assessment/D01…D03` | One-prompt-at-a-time runner |
-| `_workspace.evidence.tsx` | `/evidence` | Evidence submission |
-| `_workspace.intelligence.tsx` | `/intelligence` | Preliminary ARUI Assessment (read-only) |
-| `assessor.tsx`, `assessor.index.tsx`, `assessor.$id.*` | `/assessor/**` | Queue, overview, responses, evidence review, M/I/O scoring, context & required maturity, score runs & log |
+| File                                                   | URL                   | Purpose                                                                                                   |
+| ------------------------------------------------------ | --------------------- | --------------------------------------------------------------------------------------------------------- |
+| `__root.tsx`                                           | —                     | HTML shell, fonts (Newsreader + IBM Plex Sans), error boundary                                            |
+| `index.tsx`                                            | `/`                   | Public welcome                                                                                            |
+| `login.tsx`                                            | `/login`              | Entry; mock role pick                                                                                     |
+| `_workspace.tsx`                                       | —                     | Respondent layout + client session guard                                                                  |
+| `_workspace.overview.tsx`                              | `/overview`           | Stage/domain/evidence status                                                                              |
+| `_workspace.profile.tsx`                               | `/profile`            | Institution Profile — data-driven multi-step form                                                         |
+| `_workspace.orientation.tsx`                           | `/orientation`        | How the assessment works                                                                                  |
+| `_workspace.pulse.tsx`                                 | `/pulse`              | Screening prompts (s-01…s-05)                                                                             |
+| `_workspace.assessment.index.tsx`                      | `/assessment`         | Domain hub; D04–D11 "Not yet assessed"                                                                    |
+| `_workspace.assessment.$domain.tsx`                    | `/assessment/D01…D03` | One-prompt-at-a-time runner                                                                               |
+| `_workspace.evidence.tsx`                              | `/evidence`           | Evidence submission                                                                                       |
+| `_workspace.intelligence.tsx`                          | `/intelligence`       | Preliminary ARUI Assessment (read-only)                                                                   |
+| `assessor.tsx`, `assessor.index.tsx`, `assessor.$id.*` | `/assessor/**`        | Queue, overview, responses, evidence review, M/I/O scoring, context & required maturity, score runs & log |
 
 ## A3. Journeys
 
@@ -91,12 +91,12 @@ Assessor: `GET /assessor/queue`, `GET /assessor/assessments/{id}`, `/responses`,
 
 **New endpoints required by this handoff (not yet in `http.ts`):**
 
-| Method | Path | Purpose |
-|---|---|---|
-| GET | `/methodology/reference/states` and `/methodology/reference/states/{state}/districts` | Reference data for IP04/IP05 dependent dropdowns |
-| GET / PUT | `/assessments/{id}/institutional-data/{domainCode}` | The 23 D01–D03 numeric items (Part C) with per-item state |
-| GET | `/assessments/{id}/report/preliminary` | `AssessmentReportPayload` (Part F) |
-| GET | `/assessments/{id}/report/preliminary.pdf` | Rendered PDF if generated server-side |
+| Method    | Path                                                                                  | Purpose                                                   |
+| --------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| GET       | `/methodology/reference/states` and `/methodology/reference/states/{state}/districts` | Reference data for IP04/IP05 dependent dropdowns          |
+| GET / PUT | `/assessments/{id}/institutional-data/{domainCode}`                                   | The 23 D01–D03 numeric items (Part C) with per-item state |
+| GET       | `/assessments/{id}/report/preliminary`                                                | `AssessmentReportPayload` (Part F)                        |
+| GET       | `/assessments/{id}/report/preliminary.pdf`                                            | Rendered PDF if generated server-side                     |
 
 ## A6. Mock data (to be deleted)
 
@@ -117,50 +117,50 @@ Source: workbook sheet `Institution_Profile` (identical in P0-4 and P0-8). Colum
 
 "Engine effect" records only what a workbook sheet states. "—" means no engine consumer is defined in the D01–D03 sheets; the field is stored and reported as institutional context.
 
-| ID | Field | Req. | Workbook input | Options defined? | Engine effect stated in workbooks | Frontend control | Backend / DB |
-|---|---|---|---|---|---|---|---|
-| IP01 | Institution name | Required | Text | n/a | — (identity; printed on report cover) | `text`, maxLength 160 | `text NOT NULL`; identity, versioned with profile |
-| IP02 | Institution type | Required | Single select | **No** (MD-P1) | Informs mandate interpretation and assessor branching; no automatic score effect (`P0-4_Applicability_Rules`) | `single` cards | enum from methodology table |
-| IP03 | Governance type (public/private/autonomous…) | Required | Single select | **No** (MD-P1) | — | `single` | enum |
-| IP04 | State | Required | Dropdown | Reference data, not in workbook | — (geography context; see IP06) | **new `dropdown`**, searchable | FK to `ref_state` |
-| IP05 | District | Required | Dropdown (depends on IP04) | Reference data | — | **new `dropdown`**, dependent on IP04 | FK to `ref_district` |
-| IP06 | Location (rural / semi-urban / urban / metro) | Required | Single select | Values listed in `Context_Calibration` geography examples: rural, semi-urban, urban, metro, aspirational district — confirm set (MD-P1) | Geography → access/industry/infrastructure context; branching and sampling only | `single` | enum |
-| IP07 | Year established | Required | Number | n/a | — | **new `number`**, integer, 4 digits | `smallint` |
-| IP08 | Students (headcount) | Required | Number | n/a | Scale → proportional sampling and evidence design (`Context_Calibration`); band examples `<2k / 2–10k / 10–25k / >25k` — reconciliation with exact count is MD-P4 | **new `number`** with precision flag (exact/approximate) | `integer`; scale band derived server-side |
-| IP09 | Faculty (headcount) | Required | Number | n/a | — | `number` | `integer` |
-| IP10 | Active programmes | Required | Number | n/a | Also D01-D01 denominator (Part C) — single source, do not collect twice | `number` | `integer` |
-| IP11 | UG programmes | Required | Number | n/a | — | `number` | `integer` |
-| IP12 | PG programmes | Required | Number | n/a | — | `number` | `integer` |
-| IP13 | Doctoral programmes | Optional | Number | n/a | — | `number` | `integer NULL` |
-| IP14 | Major disciplines | Required | Multi-select | **No** at profile level; a discipline list exists in `D03_Discipline_Library` — confirm reuse (MD-P1) | Gates the D03 discipline / non-technical pathway (`D03_NonTechnical_Pathway`) | `multi` chips | join table |
-| IP15 | Research intensity | Required | Single select | `Context_Calibration`: teaching-led / balanced / research-intensive; `P0-8_Profile_Form` shows a 1–5 scale — which set applies is MD-P6 | Activates research-related depth; context calibration | `single` (discrete levels, **not** the current `scale5`) | enum; level only, never a factor |
-| IP16 | Annual expenditure band | Required | Range | **Boundaries not defined** (MD-P2) | Resource envelope → evidence-burden multiplier only (`P0-4_Evidence_Burden`); never maturity standards | `band` | enum band |
-| IP17 | Technology / IT expenditure band | Required | Range | **Boundaries not defined** (MD-P2) | As IP16 | `band` | enum band |
-| IP18 | Research funding band | Optional | Range | **Boundaries not defined** (MD-P2) | As IP16 | `band` | enum band NULL |
-| IP19 | Industry engagement | Required | Single select | **No** (MD-P1) | — | `single` | enum |
-| IP20 | Innovation / incubation ecosystem | Required | Single select | **No** (MD-P1) | — | `single` | enum |
-| IP21 | Student catchment | Required | Multi-select | **No** (MD-P1) | Component of Student Profile Complexity (`Context_Calibration`); composition rule MD-P5 | `multi` | join table |
-| IP22 | Student mobility pattern | Required | Multi-select | **No** (MD-P1) | Component of Student Profile Complexity; MD-P5 | `multi` | join table |
-| IP23 | Institutional mandate | Required | Multi-select | Levels in `P0-4_Context_Factors`: Teaching-intensive, Broad teaching + research, Research-intensive, Professional/regulated, Specialist | Required-maturity factor (`P0-4_Context_Factors`); cardinality/factor resolution when multi-valued is MD-P3 | `multi` today; control finalised after MD-P3 | store selected level(s) only; factors live in methodology tables |
-| IP24 | Residential model | Required | Single select | **No** (MD-P1) | Component of Student Profile Complexity; MD-P5 | `single` | enum |
-| IP25 | International exposure | Optional | Single select | **No** (MD-P1) | — | `single` | enum NULL |
+| ID   | Field                                         | Req.     | Workbook input             | Options defined?                                                                                                                        | Engine effect stated in workbooks                                                                                                                                 | Frontend control                                         | Backend / DB                                                     |
+| ---- | --------------------------------------------- | -------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------- |
+| IP01 | Institution name                              | Required | Text                       | n/a                                                                                                                                     | — (identity; printed on report cover)                                                                                                                             | `text`, maxLength 160                                    | `text NOT NULL`; identity, versioned with profile                |
+| IP02 | Institution type                              | Required | Single select              | **No** (MD-P1)                                                                                                                          | Informs mandate interpretation and assessor branching; no automatic score effect (`P0-4_Applicability_Rules`)                                                     | `single` cards                                           | enum from methodology table                                      |
+| IP03 | Governance type (public/private/autonomous…)  | Required | Single select              | **No** (MD-P1)                                                                                                                          | —                                                                                                                                                                 | `single`                                                 | enum                                                             |
+| IP04 | State                                         | Required | Dropdown                   | Reference data, not in workbook                                                                                                         | — (geography context; see IP06)                                                                                                                                   | **new `dropdown`**, searchable                           | FK to `ref_state`                                                |
+| IP05 | District                                      | Required | Dropdown (depends on IP04) | Reference data                                                                                                                          | —                                                                                                                                                                 | **new `dropdown`**, dependent on IP04                    | FK to `ref_district`                                             |
+| IP06 | Location (rural / semi-urban / urban / metro) | Required | Single select              | Values listed in `Context_Calibration` geography examples: rural, semi-urban, urban, metro, aspirational district — confirm set (MD-P1) | Geography → access/industry/infrastructure context; branching and sampling only                                                                                   | `single`                                                 | enum                                                             |
+| IP07 | Year established                              | Required | Number                     | n/a                                                                                                                                     | —                                                                                                                                                                 | **new `number`**, integer, 4 digits                      | `smallint`                                                       |
+| IP08 | Students (headcount)                          | Required | Number                     | n/a                                                                                                                                     | Scale → proportional sampling and evidence design (`Context_Calibration`); band examples `<2k / 2–10k / 10–25k / >25k` — reconciliation with exact count is MD-P4 | **new `number`** with precision flag (exact/approximate) | `integer`; scale band derived server-side                        |
+| IP09 | Faculty (headcount)                           | Required | Number                     | n/a                                                                                                                                     | —                                                                                                                                                                 | `number`                                                 | `integer`                                                        |
+| IP10 | Active programmes                             | Required | Number                     | n/a                                                                                                                                     | Also D01-D01 denominator (Part C) — single source, do not collect twice                                                                                           | `number`                                                 | `integer`                                                        |
+| IP11 | UG programmes                                 | Required | Number                     | n/a                                                                                                                                     | —                                                                                                                                                                 | `number`                                                 | `integer`                                                        |
+| IP12 | PG programmes                                 | Required | Number                     | n/a                                                                                                                                     | —                                                                                                                                                                 | `number`                                                 | `integer`                                                        |
+| IP13 | Doctoral programmes                           | Optional | Number                     | n/a                                                                                                                                     | —                                                                                                                                                                 | `number`                                                 | `integer NULL`                                                   |
+| IP14 | Major disciplines                             | Required | Multi-select               | **No** at profile level; a discipline list exists in `D03_Discipline_Library` — confirm reuse (MD-P1)                                   | Gates the D03 discipline / non-technical pathway (`D03_NonTechnical_Pathway`)                                                                                     | `multi` chips                                            | join table                                                       |
+| IP15 | Research intensity                            | Required | Single select              | `Context_Calibration`: teaching-led / balanced / research-intensive; `P0-8_Profile_Form` shows a 1–5 scale — which set applies is MD-P6 | Activates research-related depth; context calibration                                                                                                             | `single` (discrete levels, **not** the current `scale5`) | enum; level only, never a factor                                 |
+| IP16 | Annual expenditure band                       | Required | Range                      | **Boundaries not defined** (MD-P2)                                                                                                      | Resource envelope → evidence-burden multiplier only (`P0-4_Evidence_Burden`); never maturity standards                                                            | `band`                                                   | enum band                                                        |
+| IP17 | Technology / IT expenditure band              | Required | Range                      | **Boundaries not defined** (MD-P2)                                                                                                      | As IP16                                                                                                                                                           | `band`                                                   | enum band                                                        |
+| IP18 | Research funding band                         | Optional | Range                      | **Boundaries not defined** (MD-P2)                                                                                                      | As IP16                                                                                                                                                           | `band`                                                   | enum band NULL                                                   |
+| IP19 | Industry engagement                           | Required | Single select              | **No** (MD-P1)                                                                                                                          | —                                                                                                                                                                 | `single`                                                 | enum                                                             |
+| IP20 | Innovation / incubation ecosystem             | Required | Single select              | **No** (MD-P1)                                                                                                                          | —                                                                                                                                                                 | `single`                                                 | enum                                                             |
+| IP21 | Student catchment                             | Required | Multi-select               | **No** (MD-P1)                                                                                                                          | Component of Student Profile Complexity (`Context_Calibration`); composition rule MD-P5                                                                           | `multi`                                                  | join table                                                       |
+| IP22 | Student mobility pattern                      | Required | Multi-select               | **No** (MD-P1)                                                                                                                          | Component of Student Profile Complexity; MD-P5                                                                                                                    | `multi`                                                  | join table                                                       |
+| IP23 | Institutional mandate                         | Required | Multi-select               | Levels in `P0-4_Context_Factors`: Teaching-intensive, Broad teaching + research, Research-intensive, Professional/regulated, Specialist | Required-maturity factor (`P0-4_Context_Factors`); cardinality/factor resolution when multi-valued is MD-P3                                                       | `multi` today; control finalised after MD-P3             | store selected level(s) only; factors live in methodology tables |
+| IP24 | Residential model                             | Required | Single select              | **No** (MD-P1)                                                                                                                          | Component of Student Profile Complexity; MD-P5                                                                                                                    | `single`                                                 | enum                                                             |
+| IP25 | International exposure                        | Optional | Single select              | **No** (MD-P1)                                                                                                                          | —                                                                                                                                                                 | `single`                                                 | enum NULL                                                        |
 
 ### B1. The ten P0-8 context concepts and how they relate to IP01–IP25
 
 `P0-8_Profile_Form` lists ten required context concepts. Their relationship to the 25 fields, as the workbooks state it:
 
-| Context concept | Fed by | Engine use stated | Representation issue in current prototype |
-|---|---|---|---|
-| Institution Type | IP02 | Mandate interpretation, branching | Prototype options are provisional |
-| Mandate | IP23 | Required-maturity factor | Multi-select vs graded single level (MD-P3) |
-| AI Exposure | Separate input (levels Low/Moderate/High/Critical in `P0-4_Context_Factors`) | Required-maturity factor | Prototype uses 1–5 scale; cannot be mapped without inventing (MD-05) |
-| Disciplinary Consequence | Separate input (Low/Moderate/High/Critical) | Required-maturity factor | Same |
-| Trajectory | Separate input (Declining/Stable/Transforming/High-growth) | Required-maturity factor | Same; "Declining" absent from prototype |
-| Scale | IP08 | Sampling / evidence design | Bands differ (MD-P4) |
-| Geography | IP04–IP06 | Access/industry/infrastructure context | Prototype captures world region only |
-| Resource Envelope | IP16–IP18 | Evidence burden only | Prototype merges into one band |
-| Research Intensity | IP15 | Research depth | Scale vs 3 levels (MD-P6) |
-| Student Profile Complexity | IP21, IP22, IP24 (+ digital access, first-generation per `Context_Calibration`) | Support-need context | Prototype uses one subjective scale; derivation rule MD-P5 |
+| Context concept            | Fed by                                                                          | Engine use stated                      | Representation issue in current prototype                            |
+| -------------------------- | ------------------------------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------- |
+| Institution Type           | IP02                                                                            | Mandate interpretation, branching      | Prototype options are provisional                                    |
+| Mandate                    | IP23                                                                            | Required-maturity factor               | Multi-select vs graded single level (MD-P3)                          |
+| AI Exposure                | Separate input (levels Low/Moderate/High/Critical in `P0-4_Context_Factors`)    | Required-maturity factor               | Prototype uses 1–5 scale; cannot be mapped without inventing (MD-05) |
+| Disciplinary Consequence   | Separate input (Low/Moderate/High/Critical)                                     | Required-maturity factor               | Same                                                                 |
+| Trajectory                 | Separate input (Declining/Stable/Transforming/High-growth)                      | Required-maturity factor               | Same; "Declining" absent from prototype                              |
+| Scale                      | IP08                                                                            | Sampling / evidence design             | Bands differ (MD-P4)                                                 |
+| Geography                  | IP04–IP06                                                                       | Access/industry/infrastructure context | Prototype captures world region only                                 |
+| Resource Envelope          | IP16–IP18                                                                       | Evidence burden only                   | Prototype merges into one band                                       |
+| Research Intensity         | IP15                                                                            | Research depth                         | Scale vs 3 levels (MD-P6)                                            |
+| Student Profile Complexity | IP21, IP22, IP24 (+ digital access, first-generation per `Context_Calibration`) | Support-need context                   | Prototype uses one subjective scale; derivation rule MD-P5           |
 
 Also required by `P0-4_Context_Profile` / `P0-4_Context_Rationale` and absent from the prototype: **context rationale** for every non-default level (assessor-documented, assessor-approved, second review for overrides) and **context completeness** (server-derived; "missing context cannot be used as a default"; profile precedes scoring — P0-8 gate).
 
@@ -198,31 +198,31 @@ Common to every item:
 - **Backend / DB:** `institutional_data_item(assessment_id, item_id, value integer NULL, state, precision, reason, captured_at, captured_by, reviewed_by, review_decision)`; append-only history.
 - **Evidence:** the workbooks attach evidence to metrics, not to these counts. Where a metric that consumes an item is evidence-gated, the item's supporting document (programme register, tool inventory, policy register, competency dataset) is requested through the normal evidence-request flow. No item-level evidence rule is defined.
 
-| ID | Item | Req. | Domain purpose (as far as the workbook states) | PROPOSED structural check |
-|---|---|---|---|---|
-| D01-D01 | Active programmes | Required | Denominator for programme-coverage ratios; = IP10 | ≥ 0; single source with IP10 |
-| D01-D02 | Programmes reviewed in last 3 years | Required | Programme future-review coverage | ≤ D01-D01 |
-| D01-D03 | Programmes where AI / future implications were considered | Required | Programme future-review coverage | ≤ D01-D02 |
-| D01-D04 | Programmes modified due to AI / employment changes | Optional | Strategic translation | ≤ D01-D01 |
-| D01-D05 | Material AI / future strategic decisions in last 18 months | Required | Strategic translation / decision cadence | ≥ 0 |
-| D01-D06 | AI pilots conducted in last 24 months | Required | Strategic experimentation | ≥ 0 |
-| D01-D07 | AI pilots formally evaluated | Required | Institutional learning rate | ≤ D01-D06 |
-| D01-D08 | AI pilots scaled | Optional | Institutional learning rate | ≤ D01-D07 |
-| D01-D09 | AI pilots stopped after evaluation | Optional | Institutional learning rate | ≤ D01-D07 |
-| D02-D01 | Approved AI tools | Required | Governance coverage denominator | ≥ 0 |
-| D02-D02 | Approved tools processing personal / student data | Required | Data governance readiness | ≤ D02-D01 |
-| D02-D03 | Data / privacy reviewed tools | Optional | Data governance readiness | ≤ D02-D02 |
-| D02-D04 | Consequential AI use cases with named human override | Optional | Human accountability | ≥ 0 |
-| D02-D05 | Approved AI governance policies / guidelines | Required | Governance ownership / effectiveness | ≥ 0 |
-| D02-D06 | Governance policies reviewed in last 12 months | Optional | Governance effectiveness | ≤ D02-D05 |
-| D03-D01 | Programmes with explicit graduate capability framework | Required | Human capability development coverage | ≤ D01-D01 |
-| D03-D02 | Programmes using project / case / practical learning | Optional | Capability demonstration | ≤ D01-D01 |
-| D03-D03 | Programmes requiring unfamiliar / ambiguous problem solving | Optional | Transfer capability | ≤ D01-D01 |
-| D03-D04 | Programmes with explicit AI verification activity | Optional | AI verification capability | ≤ D01-D01 |
-| D03-D05 | Programmes with interdisciplinary AI learning | Optional | Interdisciplinary capability | ≤ D01-D01 |
+| ID      | Item                                                          | Req.                      | Domain purpose (as far as the workbook states)                      | PROPOSED structural check                  |
+| ------- | ------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------- | ------------------------------------------ |
+| D01-D01 | Active programmes                                             | Required                  | Denominator for programme-coverage ratios; = IP10                   | ≥ 0; single source with IP10               |
+| D01-D02 | Programmes reviewed in last 3 years                           | Required                  | Programme future-review coverage                                    | ≤ D01-D01                                  |
+| D01-D03 | Programmes where AI / future implications were considered     | Required                  | Programme future-review coverage                                    | ≤ D01-D02                                  |
+| D01-D04 | Programmes modified due to AI / employment changes            | Optional                  | Strategic translation                                               | ≤ D01-D01                                  |
+| D01-D05 | Material AI / future strategic decisions in last 18 months    | Required                  | Strategic translation / decision cadence                            | ≥ 0                                        |
+| D01-D06 | AI pilots conducted in last 24 months                         | Required                  | Strategic experimentation                                           | ≥ 0                                        |
+| D01-D07 | AI pilots formally evaluated                                  | Required                  | Institutional learning rate                                         | ≤ D01-D06                                  |
+| D01-D08 | AI pilots scaled                                              | Optional                  | Institutional learning rate                                         | ≤ D01-D07                                  |
+| D01-D09 | AI pilots stopped after evaluation                            | Optional                  | Institutional learning rate                                         | ≤ D01-D07                                  |
+| D02-D01 | Approved AI tools                                             | Required                  | Governance coverage denominator                                     | ≥ 0                                        |
+| D02-D02 | Approved tools processing personal / student data             | Required                  | Data governance readiness                                           | ≤ D02-D01                                  |
+| D02-D03 | Data / privacy reviewed tools                                 | Optional                  | Data governance readiness                                           | ≤ D02-D02                                  |
+| D02-D04 | Consequential AI use cases with named human override          | Optional                  | Human accountability                                                | ≥ 0                                        |
+| D02-D05 | Approved AI governance policies / guidelines                  | Required                  | Governance ownership / effectiveness                                | ≥ 0                                        |
+| D02-D06 | Governance policies reviewed in last 12 months                | Optional                  | Governance effectiveness                                            | ≤ D02-D05                                  |
+| D03-D01 | Programmes with explicit graduate capability framework        | Required                  | Human capability development coverage                               | ≤ D01-D01                                  |
+| D03-D02 | Programmes using project / case / practical learning          | Optional                  | Capability demonstration                                            | ≤ D01-D01                                  |
+| D03-D03 | Programmes requiring unfamiliar / ambiguous problem solving   | Optional                  | Transfer capability                                                 | ≤ D01-D01                                  |
+| D03-D04 | Programmes with explicit AI verification activity             | Optional                  | AI verification capability                                          | ≤ D01-D01                                  |
+| D03-D05 | Programmes with interdisciplinary AI learning                 | Optional                  | Interdisciplinary capability                                        | ≤ D01-D01                                  |
 | D03-D06 | Non-technical programmes with explicit AI capability outcomes | Required where applicable | Non-technical AI capability (applicability from IP14 / D03 pathway) | ≤ D01-D01; N/A only via applicability rule |
-| D03-D07 | Students with competency outcome data | Optional | Assessment validity / competency evidence | ≤ IP08 |
-| D03-D08 | Students meeting defined competency threshold | Optional | Assessment validity | ≤ D03-D07 |
+| D03-D07 | Students with competency outcome data                         | Optional                  | Assessment validity / competency evidence                           | ≤ IP08                                     |
+| D03-D08 | Students meeting defined competency threshold                 | Optional                  | Assessment validity                                                 | ≤ D03-D07                                  |
 
 Domain totals: D01 = 9 (6 required, 3 optional), D02 = 6 (3 required, 3 optional), D03 = 8 (2 required, 1 required-where-applicable, 5 optional).
 
@@ -234,15 +234,15 @@ Uses the existing design language (`PageHeader`, `StepList`, `AnswerCardGroup`, 
 
 ## D1. Institution Profile — seven steps
 
-| Step | Fields | Controls |
-|---|---|---|
-| 1 Identity | IP01, IP02, IP03, IP07 | text; single cards; single cards; number |
-| 2 Location | IP04, IP05, IP06 | dropdown; dependent dropdown; single cards |
-| 3 Scale & academic character | IP08, IP09, IP10, IP11, IP12, IP13, IP14 | numbers with precision flag (one compact numeric grid); multi chips |
-| 4 Research & resources | IP15, IP16, IP17, IP18 | single (discrete levels); three band selectors |
-| 5 Engagement & ecosystem | IP19, IP20, IP25 | single cards |
-| 6 Student profile | IP21, IP22, IP24 | multi chips; multi chips; single cards |
-| 7 Mandate & AI context | IP23 + AI exposure, disciplinary consequence, trajectory (discrete levels) | multi/single per MD-P3; single cards with level descriptions |
+| Step                         | Fields                                                                     | Controls                                                            |
+| ---------------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1 Identity                   | IP01, IP02, IP03, IP07                                                     | text; single cards; single cards; number                            |
+| 2 Location                   | IP04, IP05, IP06                                                           | dropdown; dependent dropdown; single cards                          |
+| 3 Scale & academic character | IP08, IP09, IP10, IP11, IP12, IP13, IP14                                   | numbers with precision flag (one compact numeric grid); multi chips |
+| 4 Research & resources       | IP15, IP16, IP17, IP18                                                     | single (discrete levels); three band selectors                      |
+| 5 Engagement & ecosystem     | IP19, IP20, IP25                                                           | single cards                                                        |
+| 6 Student profile            | IP21, IP22, IP24                                                           | multi chips; multi chips; single cards                              |
+| 7 Mandate & AI context       | IP23 + AI exposure, disciplinary consequence, trajectory (discrete levels) | multi/single per MD-P3; single cards with level descriptions        |
 
 Rules: each step shows the existing "context never gives a score advantage or disadvantage" note; a bounded "why this level?" `short_text` (≤200) appears under a field only when the backend flags the selection as non-default; completeness per step is displayed from backend `context_completeness`; the wizard remains fully driven by `GET /methodology/profile-form`, so step composition can change without frontend work.
 
@@ -268,22 +268,22 @@ Reference artefacts in this repository:
 
 ## E1. Section order and content
 
-| # | Section | Content and data binding (Part F field) |
-|---|---|---|
-| 0 | Cover | Product name, "Preliminary ARUI Assessment Report", institution name, identity line (type · governance · district, state · established), status banner chip (`report.statusBanner`), meta grid (assessment id, report id, period, methodology version, score run, status, generated, audience), confidentiality line, "Not a certification engine" line, 11-dot coverage mark (3 filled) |
-| 1 | Report information | `assessment.*`, `report.*`, contributors, assessors, "How to read this report" (current vs required maturity, transformation distance, evidence confidence, cross-domain = diagnostic), coverage callout, contents |
-| 2 | Executive summary | `executiveSummary.headline/narrative`, four tiles (coverage 3 of 11, weighted coverage, average evidence confidence, evidence coverage), domain positions table, key strengths, priority gaps; caption "narrative is assessor-authored" |
-| 3 | Institutional context & profile | `institution.profile` groups in two columns; profile completeness callout; band/option provisionality note |
-| 4 | Scope & coverage | All 11 domains; assessed rows "Assessed", others "Not yet assessed" with no numbers; metrics in scope; weighted coverage; note that weights are provisional |
-| 5 | Overall ARUI position | Current-vs-required maturity chart (0–5 with workbook labels Absent…Adaptive), tiles: overall /100 **withheld** with `withheldReason` (MD-08), weighted coverage, evidence confidence, confidence band **not reported** (MD-06); "reading transformation distance" |
-| 6.n | Domain result (one per assessed domain) | Tiles: current maturity, required maturity + source, distance, domain score + P0-3 status, evidence confidence + coverage; metric summary line; capability positions (Derived_Outputs labels, score bar, status, E-level); strengths; gaps; claims awaiting evidence + the standing evidence sentence; institutional data supplied with states; assessor observation |
-| 7 | Cross-domain dependencies & contradictions | Computable rules (CD01, CD02 in D01–D03 scope), contradictions, dependency gaps, coherence diagnostics, mandatory callout "Score effect: none" |
-| 8 | Validation, evidence & verification | Tiles (items submitted vs 8–12 target, accepted, claims awaiting evidence, verification status); validation flags; N/A decisions; calibration summary; evidence register (type, period, domains, status, E-level, temporal validity) |
-| 9 | Assessor observations & priority areas | Observations (author, date, scope); ranked priority areas with reason |
-| 10 | Recommended actions | Grouped by horizon: next 90 days · within 12 months · longer-term; each with linked gap, domains, suggested owner |
-| 11 | Methodology note | Version, plain-language paragraphs, scoring in brief (no formulas), maturity scale table |
-| 12 | Limitations & provisional status | `limitations[]` incl. partial coverage, preliminary status, withheld overall, confidence band pending, unvalidated claims, pre-pilot methodology, public benchmark blocked |
-| 13 | Reassessment | Recommended window, triggers, next steps, remaining domains for full scope |
+| #   | Section                                    | Content and data binding (Part F field)                                                                                                                                                                                                                                                                                                                                                  |
+| --- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Cover                                      | Product name, "Preliminary ARUI Assessment Report", institution name, identity line (type · governance · district, state · established), status banner chip (`report.statusBanner`), meta grid (assessment id, report id, period, methodology version, score run, status, generated, audience), confidentiality line, "Not a certification engine" line, 11-dot coverage mark (3 filled) |
+| 1   | Report information                         | `assessment.*`, `report.*`, contributors, assessors, "How to read this report" (current vs required maturity, transformation distance, evidence confidence, cross-domain = diagnostic), coverage callout, contents                                                                                                                                                                       |
+| 2   | Executive summary                          | `executiveSummary.headline/narrative`, four tiles (coverage 3 of 11, weighted coverage, average evidence confidence, evidence coverage), domain positions table, key strengths, priority gaps; caption "narrative is assessor-authored"                                                                                                                                                  |
+| 3   | Institutional context & profile            | `institution.profile` groups in two columns; profile completeness callout; band/option provisionality note                                                                                                                                                                                                                                                                               |
+| 4   | Scope & coverage                           | All 11 domains; assessed rows "Assessed", others "Not yet assessed" with no numbers; metrics in scope; weighted coverage; note that weights are provisional                                                                                                                                                                                                                              |
+| 5   | Overall ARUI position                      | Current-vs-required maturity chart (0–5 with workbook labels Absent…Adaptive), tiles: overall /100 **withheld** with `withheldReason` (MD-08), weighted coverage, evidence confidence, confidence band **not reported** (MD-06); "reading transformation distance"                                                                                                                       |
+| 6.n | Domain result (one per assessed domain)    | Tiles: current maturity, required maturity + source, distance, domain score + P0-3 status, evidence confidence + coverage; metric summary line; capability positions (Derived_Outputs labels, score bar, status, E-level); strengths; gaps; claims awaiting evidence + the standing evidence sentence; institutional data supplied with states; assessor observation                     |
+| 7   | Cross-domain dependencies & contradictions | Computable rules (CD01, CD02 in D01–D03 scope), contradictions, dependency gaps, coherence diagnostics, mandatory callout "Score effect: none"                                                                                                                                                                                                                                           |
+| 8   | Validation, evidence & verification        | Tiles (items submitted vs 8–12 target, accepted, claims awaiting evidence, verification status); validation flags; N/A decisions; calibration summary; evidence register (type, period, domains, status, E-level, temporal validity)                                                                                                                                                     |
+| 9   | Assessor observations & priority areas     | Observations (author, date, scope); ranked priority areas with reason                                                                                                                                                                                                                                                                                                                    |
+| 10  | Recommended actions                        | Grouped by horizon: next 90 days · within 12 months · longer-term; each with linked gap, domains, suggested owner                                                                                                                                                                                                                                                                        |
+| 11  | Methodology note                           | Version, plain-language paragraphs, scoring in brief (no formulas), maturity scale table                                                                                                                                                                                                                                                                                                 |
+| 12  | Limitations & provisional status           | `limitations[]` incl. partial coverage, preliminary status, withheld overall, confidence band pending, unvalidated claims, pre-pilot methodology, public benchmark blocked                                                                                                                                                                                                               |
+| 13  | Reassessment                               | Recommended window, triggers, next steps, remaining domains for full scope                                                                                                                                                                                                                                                                                                               |
 
 Mandatory sentences (verbatim): "Missing evidence does not automatically reduce capability. Where the methodology requires evidence for a particular claim, that claim may remain unvalidated until sufficient evidence is available." · "Evidence strengthens confidence in your position." · "Assessment coverage: 3 of 11 domains" · "Preliminary — D01–D03 assessed".
 
@@ -362,43 +362,43 @@ None of these may be resolved by either engineering team. Each needs a written m
 
 **Engine / measurement (from the methodology map and prior handoff)**
 
-| ID | Decision |
-|---|---|
-| MD-01 | Answer-choice → construct (M/I/O) mappings for every provisional catalogue |
-| MD-02 | Blank outcome vs outcome-N/A semantics |
-| MD-03 | Screening / branch thresholds that open targeted follow-up prompts |
-| MD-04 | Evidence trigger threshold — when the engine requests evidence for a claim |
-| MD-05 | Profile level → context-calibration mapping (replaces the prototype 1–5 scales) |
-| MD-06 | Confidence-band formula (E-levels + coverage → low/moderate/high) |
-| MD-07 | Corroboration adjustment rule for multiple evidence items on one claim |
-| MD-08 | Partial-scope overall presentation (whether/how an overall /100 is shown on 3 of 11 domains) |
+| ID    | Decision                                                                                             |
+| ----- | ---------------------------------------------------------------------------------------------------- |
+| MD-01 | Answer-choice → construct (M/I/O) mappings for every provisional catalogue                           |
+| MD-02 | Blank outcome vs outcome-N/A semantics                                                               |
+| MD-03 | Screening / branch thresholds that open targeted follow-up prompts                                   |
+| MD-04 | Evidence trigger threshold — when the engine requests evidence for a claim                           |
+| MD-05 | Profile level → context-calibration mapping (replaces the prototype 1–5 scales)                      |
+| MD-06 | Confidence-band formula (E-levels + coverage → low/moderate/high)                                    |
+| MD-07 | Corroboration adjustment rule for multiple evidence items on one claim                               |
+| MD-08 | Partial-scope overall presentation (whether/how an overall /100 is shown on 3 of 11 domains)         |
 | MD-09 | Response-state semantics — how `not_sure` / `not_answered` enter scoring; unknown never becomes zero |
-| MD-10 | Respondent-facing maturity labels |
-| MD-11 | Pulse equivalence — whether screening answers may substitute for domain responses |
-| MD-12 | Future-exposure scale definition and its use in required maturity |
+| MD-10 | Respondent-facing maturity labels                                                                    |
+| MD-11 | Pulse equivalence — whether screening answers may substitute for domain responses                    |
+| MD-12 | Future-exposure scale definition and its use in required maturity                                    |
 
 **Profile / institutional data (from the completeness audit)**
 
-| ID | Decision |
-|---|---|
-| MD-P1 | Option catalogues for IP02, IP03, IP06, IP14, IP19–IP22, IP24, IP25 |
-| MD-P2 | Band boundaries for IP16, IP17, IP18 |
-| MD-P3 | Mandate cardinality (single graded level vs multi) and factor resolution if multi |
-| MD-P4 | Scale bands (`<2k/2–10k/10–25k/>25k` vs prototype bands) and whether exact IP08 supersedes bands |
-| MD-P5 | Whether Student Profile Complexity is respondent input or derived from IP21/IP22/IP24 (+ digital access, first-generation) |
-| MD-P6 | Research intensity level set (IP15 three levels vs P0-8 1–5) |
-| MD-P7 | Geography representation and whether ARUI is India-scoped or international |
-| MD-P8 | Domain baselines `B_d` and sensitivity coefficients for required maturity |
-| MD-P9 | Whether affiliation / external identifier / accreditation / campus count belong in the profile at all |
-| MD-P10 | Where the 23 institutional-data items are collected (profile, domain entry, assessor) |
+| ID     | Decision                                                                                                                   |
+| ------ | -------------------------------------------------------------------------------------------------------------------------- |
+| MD-P1  | Option catalogues for IP02, IP03, IP06, IP14, IP19–IP22, IP24, IP25                                                        |
+| MD-P2  | Band boundaries for IP16, IP17, IP18                                                                                       |
+| MD-P3  | Mandate cardinality (single graded level vs multi) and factor resolution if multi                                          |
+| MD-P4  | Scale bands (`<2k/2–10k/10–25k/>25k` vs prototype bands) and whether exact IP08 supersedes bands                           |
+| MD-P5  | Whether Student Profile Complexity is respondent input or derived from IP21/IP22/IP24 (+ digital access, first-generation) |
+| MD-P6  | Research intensity level set (IP15 three levels vs P0-8 1–5)                                                               |
+| MD-P7  | Geography representation and whether ARUI is India-scoped or international                                                 |
+| MD-P8  | Domain baselines `B_d` and sensitivity coefficients for required maturity                                                  |
+| MD-P9  | Whether affiliation / external identifier / accreditation / campus count belong in the profile at all                      |
+| MD-P10 | Where the 23 institutional-data items are collected (profile, domain entry, assessor)                                      |
 
 **Report**
 
-| ID | Decision |
-|---|---|
-| MD-R1 | Whether domain weights may be printed while `P0-3` marks them provisional |
+| ID    | Decision                                                                                           |
+| ----- | -------------------------------------------------------------------------------------------------- |
+| MD-R1 | Whether domain weights may be printed while `P0-3` marks them provisional                          |
 | MD-R2 | Whether any institution-facing copy may show metric-level rows (currently: capability labels only) |
-| MD-R3 | Verified-report differences beyond `kind` and status banner |
+| MD-R3 | Verified-report differences beyond `kind` and status banner                                        |
 
 ---
 
@@ -408,12 +408,12 @@ None of these may be resolved by either engineering team. Each needs a written m
 
 Verified: **no** `@supabase/*` dependency, no `src/integrations/`, no `src/routes/api/`, no database, no server functions, no secrets read by the frontend.
 
-| Item | Removal |
-|---|---|
-| `@lovable.dev/vite-tanstack-config` (used in `vite.config.ts`) | Replace with plain Vite config wiring `@tanstack/react-start/plugin/vite`, `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite-tsconfig-paths`, `@` alias; choose a Node deploy target |
-| `src/lib/lovable-error-reporting.ts` + its two references in `__root.tsx` | Delete |
-| `src/lib/error-capture.ts`, `error-page.ts`, `src/server.ts`, `src/start.ts` | Generic TanStack Start code; safe to keep |
-| `.lovable/`, `.workspace/`, `AGENTS.md`, `roadmap.md`, `bunfig.toml` | Delete freely |
+| Item                                                                         | Removal                                                                                                                                                                               |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@lovable.dev/vite-tanstack-config` (used in `vite.config.ts`)               | Replace with plain Vite config wiring `@tanstack/react-start/plugin/vite`, `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite-tsconfig-paths`, `@` alias; choose a Node deploy target |
+| `src/lib/lovable-error-reporting.ts` + its two references in `__root.tsx`    | Delete                                                                                                                                                                                |
+| `src/lib/error-capture.ts`, `error-page.ts`, `src/server.ts`, `src/start.ts` | Generic TanStack Start code; safe to keep                                                                                                                                             |
+| `.lovable/`, `.workspace/`, `AGENTS.md`, `roadmap.md`, `bunfig.toml`         | Delete freely                                                                                                                                                                         |
 
 ## I2. Replacement points (in order)
 
@@ -453,4 +453,4 @@ No automated tests; large throwaway mock files; `PromptResponse.value` is `unkno
 
 ---
 
-*Lovable development phase closed. Frontend baseline frozen. No D04–D11, no production backend, no database, no Cloud dependency, no methodology decisions taken. Methodology remains owned by the ARUI workbooks.*
+_Lovable development phase closed. Frontend baseline frozen. No D04–D11, no production backend, no database, no Cloud dependency, no methodology decisions taken. Methodology remains owned by the ARUI workbooks._

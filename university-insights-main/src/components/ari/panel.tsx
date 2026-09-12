@@ -2,7 +2,12 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /** Base surface used by cards across the product. */
-export function Panel({ className, children, tone = "card", ...props }: React.HTMLAttributes<HTMLDivElement> & { tone?: "card" | "muted" | "navy" | "plain" }) {
+export function Panel({
+  className,
+  children,
+  tone = "card",
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & { tone?: "card" | "muted" | "navy" | "plain" }) {
   return (
     <div
       className={cn(
@@ -20,19 +25,44 @@ export function Panel({ className, children, tone = "card", ...props }: React.HT
   );
 }
 
-export function PanelHeader({ eyebrow, title, aside, className }: { eyebrow?: ReactNode; title?: ReactNode; aside?: ReactNode; className?: string }) {
+export function PanelHeader({
+  eyebrow,
+  title,
+  aside,
+  className,
+}: {
+  eyebrow?: ReactNode;
+  title?: ReactNode;
+  aside?: ReactNode;
+  className?: string;
+}) {
   return (
-    <div className={cn("flex items-start justify-between gap-4 border-b border-border px-6 py-4", className)}>
+    <div
+      className={cn(
+        "flex items-start justify-between gap-4 border-b border-border px-6 py-4",
+        className,
+      )}
+    >
       <div>
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        {title && <h3 className="mt-1 font-sans text-[15px] font-semibold tracking-normal text-foreground">{title}</h3>}
+        {title && (
+          <h3 className="mt-1 font-sans text-[15px] font-semibold tracking-normal text-foreground">
+            {title}
+          </h3>
+        )}
       </div>
       {aside}
     </div>
   );
 }
 
-export function DefinitionList({ items, className }: { items: { term: ReactNode; detail: ReactNode }[]; className?: string }) {
+export function DefinitionList({
+  items,
+  className,
+}: {
+  items: { term: ReactNode; detail: ReactNode }[];
+  className?: string;
+}) {
   return (
     <dl className={cn("divide-y divide-border", className)}>
       {items.map((it, i) => (

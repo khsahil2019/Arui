@@ -12,7 +12,14 @@
  * thresholds or rule names. Assessor payloads may carry metric identities.
  */
 
-import type { AssessmentStatus, Confidence, ChoiceOption, DomainCode, MaturityLevel, Role } from "@/lib/catalogue";
+import type {
+  AssessmentStatus,
+  Confidence,
+  ChoiceOption,
+  DomainCode,
+  MaturityLevel,
+  Role,
+} from "@/lib/catalogue";
 
 export type { AssessmentStatus, Confidence, ChoiceOption, DomainCode, MaturityLevel, Role };
 
@@ -170,10 +177,20 @@ interface FieldBase {
  */
 export type FieldDef =
   | (FieldBase & { type: "select"; options: ChoiceOption[]; allowOther?: boolean })
-  | (FieldBase & { type: "multi_select"; options: ChoiceOption[]; allowOther?: boolean; max?: number })
+  | (FieldBase & {
+      type: "multi_select";
+      options: ChoiceOption[];
+      allowOther?: boolean;
+      max?: number;
+    })
   | (FieldBase & { type: "yes_no_unsure" })
   | (FieldBase & { type: "short_text"; placeholder?: string; maxLength: number })
-  | (FieldBase & { type: "narrative"; placeholder?: string; maxLength: number; justification: string })
+  | (FieldBase & {
+      type: "narrative";
+      placeholder?: string;
+      maxLength: number;
+      justification: string;
+    })
   | (FieldBase & { type: "number"; unit?: string })
   | (FieldBase & { type: "period"; range?: boolean });
 
@@ -215,14 +232,55 @@ export type MatrixRowSource =
  *   evidence_request  { acknowledged: boolean; note?: string }
  */
 export type PromptPresentation =
-  | { kind: "single_choice"; options: ChoiceOption[]; provisionalOptions?: boolean; allowOther?: boolean; nuance?: ShortTextDef }
-  | { kind: "multi_choice"; options: ChoiceOption[]; provisionalOptions?: boolean; allowOther?: boolean; max?: number; nuance?: ShortTextDef }
-  | { kind: "ranked_list"; count: number; itemLabel: string; options: ChoiceOption[]; allowOther?: boolean; provisionalOptions?: boolean; itemFields?: FieldDef[] }
-  | { kind: "process_steps"; stepLabel: string; stepFields: FieldDef[]; min?: number; max?: number; provisionalOptions?: boolean }
+  | {
+      kind: "single_choice";
+      options: ChoiceOption[];
+      provisionalOptions?: boolean;
+      allowOther?: boolean;
+      nuance?: ShortTextDef;
+    }
+  | {
+      kind: "multi_choice";
+      options: ChoiceOption[];
+      provisionalOptions?: boolean;
+      allowOther?: boolean;
+      max?: number;
+      nuance?: ShortTextDef;
+    }
+  | {
+      kind: "ranked_list";
+      count: number;
+      itemLabel: string;
+      options: ChoiceOption[];
+      allowOther?: boolean;
+      provisionalOptions?: boolean;
+      itemFields?: FieldDef[];
+    }
+  | {
+      kind: "process_steps";
+      stepLabel: string;
+      stepFields: FieldDef[];
+      min?: number;
+      max?: number;
+      provisionalOptions?: boolean;
+    }
   | { kind: "numbers"; fields: NumberFieldDef[]; period?: string; precision?: boolean }
   | { kind: "structured_form"; fields: FieldDef[]; provisionalOptions?: boolean }
-  | { kind: "records"; recordLabel: string; fields: FieldDef[]; min?: number; max?: number; noneOption?: string; provisionalOptions?: boolean }
-  | { kind: "matrix"; rows: MatrixRowSource; columns: MatrixColumnDef[]; provisionalOptions?: boolean }
+  | {
+      kind: "records";
+      recordLabel: string;
+      fields: FieldDef[];
+      min?: number;
+      max?: number;
+      noneOption?: string;
+      provisionalOptions?: boolean;
+    }
+  | {
+      kind: "matrix";
+      rows: MatrixRowSource;
+      columns: MatrixColumnDef[];
+      provisionalOptions?: boolean;
+    }
   | { kind: "evidence_request"; items: string[]; note?: string; noteField?: ShortTextDef };
 
 export interface Prompt {
@@ -286,7 +344,8 @@ export interface ScreeningView {
 /* ------------------------------------------------------------------ */
 
 export type EvidenceKind = "document" | "url" | "note";
-export type EvidenceSubmissionStatus = "draft" | "submitted" | "under_review" | "accepted" | "returned";
+export type EvidenceSubmissionStatus =
+  "draft" | "submitted" | "under_review" | "accepted" | "returned";
 
 export interface EvidenceItem {
   id: string;
@@ -516,6 +575,20 @@ export interface AssessorAssessmentView {
   status: AssessmentStatus;
   methodologyVersion: string;
   profileSummary: { label: string; value: string }[];
-  applicability: { domainCode: DomainCode; domainName: string; applicable: boolean | null; rationale: string; accepted: boolean }[];
-  counts: { responses: number; notSure: number; naRequested: number; evidence: number; metricsScored: number; metricsTotal: number; openFlags: number };
+  applicability: {
+    domainCode: DomainCode;
+    domainName: string;
+    applicable: boolean | null;
+    rationale: string;
+    accepted: boolean;
+  }[];
+  counts: {
+    responses: number;
+    notSure: number;
+    naRequested: number;
+    evidence: number;
+    metricsScored: number;
+    metricsTotal: number;
+    openFlags: number;
+  };
 }

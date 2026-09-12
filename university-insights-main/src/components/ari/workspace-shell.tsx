@@ -1,7 +1,18 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Building2, Check, ClipboardList, Compass, FolderOpen, LayoutDashboard, LogOut, Map, Radio, type LucideIcon } from "lucide-react";
+import {
+  Building2,
+  Check,
+  ClipboardList,
+  Compass,
+  FolderOpen,
+  LayoutDashboard,
+  LogOut,
+  Map,
+  Radio,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { assessmentStatusLabels, roleLabels } from "@/lib/catalogue";
 import type { AssessmentStatusView, Session, StageId } from "@/api/types";
@@ -34,12 +45,33 @@ export const workspaceNav: NavItem[] = [
 export function Wordmark({ className, inverse }: { className?: string; inverse?: boolean }) {
   return (
     <Link to="/" className={cn("group inline-flex items-center gap-3", className)}>
-      <span className={cn("flex size-8 items-center justify-center rounded-[5px] border font-serif text-[15px] font-medium leading-none", inverse ? "border-sidebar-border bg-sidebar-accent text-sidebar-foreground" : "border-navy bg-navy text-primary-foreground")}>
+      <span
+        className={cn(
+          "flex size-8 items-center justify-center rounded-[5px] border font-serif text-[15px] font-medium leading-none",
+          inverse
+            ? "border-sidebar-border bg-sidebar-accent text-sidebar-foreground"
+            : "border-navy bg-navy text-primary-foreground",
+        )}
+      >
         AR
       </span>
       <span className="leading-tight">
-        <span className={cn("block font-serif text-[15px] font-medium tracking-[-0.005em]", inverse ? "text-sidebar-primary" : "text-foreground")}>AI Resilient University</span>
-        <span className={cn("block text-[10px] uppercase tracking-[0.14em]", inverse ? "text-sidebar-foreground/60" : "text-muted-foreground")}>Institutional AI Resilience Assessment</span>
+        <span
+          className={cn(
+            "block font-serif text-[15px] font-medium tracking-[-0.005em]",
+            inverse ? "text-sidebar-primary" : "text-foreground",
+          )}
+        >
+          AI Resilient University
+        </span>
+        <span
+          className={cn(
+            "block text-[10px] uppercase tracking-[0.14em]",
+            inverse ? "text-sidebar-foreground/60" : "text-muted-foreground",
+          )}
+        >
+          Institutional AI Resilience Assessment
+        </span>
       </span>
     </Link>
   );
@@ -56,7 +88,14 @@ interface WorkspaceShellProps {
   identity?: { title: string; subtitle: string; badge?: ReactNode };
 }
 
-export function WorkspaceShell({ children, session, nav, navLabel, status, identity }: WorkspaceShellProps) {
+export function WorkspaceShell({
+  children,
+  session,
+  nav,
+  navLabel,
+  status,
+  identity,
+}: WorkspaceShellProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const qc = useQueryClient();
@@ -64,9 +103,14 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
 
   const items = nav.map((item) => ({
     ...item,
-    status: item.status ?? (item.stage && status ? (status.stages.find((s) => s.id === item.stage)?.state as NavStatus | undefined) : undefined),
+    status:
+      item.status ??
+      (item.stage && status
+        ? (status.stages.find((s) => s.id === item.stage)?.state as NavStatus | undefined)
+        : undefined),
   }));
-  const resolve = (item: NavItem) => Object.entries(item.params ?? {}).reduce((acc, [k, v]) => acc.replace(`$${k}`, v), item.to);
+  const resolve = (item: NavItem) =>
+    Object.entries(item.params ?? {}).reduce((acc, [k, v]) => acc.replace(`$${k}`, v), item.to);
   const isActive = (to: string) => pathname === to || pathname.startsWith(`${to}/`);
   const current = [...items].reverse().find((n) => isActive(resolve(n)))?.label ?? navLabel;
 
@@ -105,7 +149,9 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
                     params={item.params ?? {}}
                     className={cn(
                       "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[13.5px] transition-colors",
-                      active ? "bg-sidebar-primary text-sidebar-primary-foreground" : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                      active
+                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                        : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
                     )}
                   >
                     <Icon className="size-4 shrink-0 opacity-80" />
@@ -118,7 +164,9 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
           </ul>
         </nav>
         <div className="border-t border-sidebar-border px-6 py-5">
-          <p className="eyebrow text-sidebar-foreground/50">{identity ? "Signed in as" : "Institution"}</p>
+          <p className="eyebrow text-sidebar-foreground/50">
+            {identity ? "Signed in as" : "Institution"}
+          </p>
           <p className="mt-1.5 text-sm font-medium text-sidebar-primary">{id.title}</p>
           <p className="text-xs text-sidebar-foreground/60">{id.subtitle}</p>
           {id.badge && <div className="mt-3 flex items-center gap-2">{id.badge}</div>}
@@ -141,7 +189,12 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
               <span className="hidden text-xs text-muted-foreground sm:inline">
                 {session.user.name} · {roleLabels[session.user.role]}
               </span>
-              <button type="button" onClick={signOut} className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-ivory-deep" aria-label="Sign out">
+              <button
+                type="button"
+                onClick={signOut}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:bg-ivory-deep"
+                aria-label="Sign out"
+              >
                 <LogOut className="size-3.5" />
                 <span className="hidden sm:inline">Sign out</span>
               </button>
@@ -158,7 +211,9 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
                       params={item.params ?? {}}
                       className={cn(
                         "block border-b-2 px-3 py-2.5 text-[13px] font-medium transition-colors",
-                        active ? "border-navy text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
+                        active
+                          ? "border-navy text-foreground"
+                          : "border-transparent text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {item.label}
@@ -178,7 +233,12 @@ export function WorkspaceShell({ children, session, nav, navLabel, status, ident
 function NavStatusDot({ status, active }: { status: NavStatus; active: boolean }) {
   if (status === "complete") {
     return (
-      <span className={cn("flex size-4 items-center justify-center rounded-full", active ? "bg-teal/15 text-teal" : "bg-sidebar-accent text-teal")}>
+      <span
+        className={cn(
+          "flex size-4 items-center justify-center rounded-full",
+          active ? "bg-teal/15 text-teal" : "bg-sidebar-accent text-teal",
+        )}
+      >
         <Check className="size-2.5" strokeWidth={3} />
       </span>
     );
@@ -186,13 +246,33 @@ function NavStatusDot({ status, active }: { status: NavStatus; active: boolean }
   if (status === "current") {
     return <span className={cn("size-1.5 rounded-full", active ? "bg-blue" : "bg-blue/80")} />;
   }
-  return <span className={cn("size-1.5 rounded-full", active ? "bg-navy/30" : "bg-sidebar-foreground/20")} />;
+  return (
+    <span
+      className={cn("size-1.5 rounded-full", active ? "bg-navy/30" : "bg-sidebar-foreground/20")}
+    />
+  );
 }
 
 /** Standard content container for workspace pages. */
-export function PageContainer({ children, className, width = "default" }: { children: ReactNode; className?: string; width?: "default" | "narrow" | "wide" }) {
+export function PageContainer({
+  children,
+  className,
+  width = "default",
+}: {
+  children: ReactNode;
+  className?: string;
+  width?: "default" | "narrow" | "wide";
+}) {
   return (
-    <div className={cn("mx-auto w-full px-5 py-8 md:px-8 md:py-10 lg:px-12", width === "default" && "max-w-6xl", width === "narrow" && "max-w-4xl", width === "wide" && "max-w-7xl", className)}>
+    <div
+      className={cn(
+        "mx-auto w-full px-5 py-8 md:px-8 md:py-10 lg:px-12",
+        width === "default" && "max-w-6xl",
+        width === "narrow" && "max-w-4xl",
+        width === "wide" && "max-w-7xl",
+        className,
+      )}
+    >
       {children}
     </div>
   );
@@ -202,7 +282,11 @@ export function PageContainer({ children, className, width = "default" }: { chil
 export function PagePending({ label = "Loading…" }: { label?: string }) {
   return (
     <PageContainer>
-      <div className="flex h-64 items-center justify-center text-sm text-muted-foreground" role="status" aria-live="polite">
+      <div
+        className="flex h-64 items-center justify-center text-sm text-muted-foreground"
+        role="status"
+        aria-live="polite"
+      >
         {label}
       </div>
     </PageContainer>

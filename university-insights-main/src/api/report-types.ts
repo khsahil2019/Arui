@@ -20,7 +20,13 @@
  *    the workbooks and must not be silently resolved by either side.
  */
 
-import type { AssessmentStatus, Confidence, DomainCode, EvidenceLevel, MaturityLevel } from "./types";
+import type {
+  AssessmentStatus,
+  Confidence,
+  DomainCode,
+  EvidenceLevel,
+  MaturityLevel,
+} from "./types";
 
 /* ------------------------------------------------------------------ */
 /* Envelope                                                            */
@@ -211,13 +217,23 @@ export interface ReportDomainSection {
    * e.g. "Strategic AI Integration", "Governance Ownership". Leadership-facing
    * labels; metric IDs are not printed in the institution copy.
    */
-  capabilities: { label: string; score: number | null; status: DomainScoreStatus; evidenceLevel: EvidenceLevel | null }[];
+  capabilities: {
+    label: string;
+    score: number | null;
+    status: DomainScoreStatus;
+    evidenceLevel: EvidenceLevel | null;
+  }[];
   strengths: ReportFinding[];
   gaps: ReportFinding[];
   /** Claims the methodology gates on evidence that remain unvalidated. */
   unvalidatedClaims: { claim: string; evidenceRequired: string }[];
   /** Institutional Data items for the domain (Institutional_Data sheet), as collected. */
-  institutionalData: { id: string; item: string; value: number | null; state: "provided" | "not_provided" | "not_applicable_accepted" | "not_sure" }[];
+  institutionalData: {
+    id: string;
+    item: string;
+    value: number | null;
+    state: "provided" | "not_provided" | "not_applicable_accepted" | "not_sure";
+  }[];
   assessorObservation: string | null;
 }
 
@@ -252,9 +268,26 @@ export interface ReportCrossDomainFinding {
 
 export interface ReportValidation {
   /** P0-3 validation flags aggregated per domain. */
-  flags: { domainCode: DomainCode; flag: "OK" | "REVIEW" | "CORROBORATION REVIEW" | "INCOMPLETE" | "N/A"; count: number; note: string }[];
-  notApplicableDecisions: { domainCode: DomainCode; item: string; reason: string; decision: "accepted" | "rejected" | "pending" }[];
-  overrides: { domainCode: DomainCode; item: string; reason: string; assessor: string; date: string; secondReview: "pending" | "complete" }[];
+  flags: {
+    domainCode: DomainCode;
+    flag: "OK" | "REVIEW" | "CORROBORATION REVIEW" | "INCOMPLETE" | "N/A";
+    count: number;
+    note: string;
+  }[];
+  notApplicableDecisions: {
+    domainCode: DomainCode;
+    item: string;
+    reason: string;
+    decision: "accepted" | "rejected" | "pending";
+  }[];
+  overrides: {
+    domainCode: DomainCode;
+    item: string;
+    reason: string;
+    assessor: string;
+    date: string;
+    secondReview: "pending" | "complete";
+  }[];
   /** Assessor calibration outcome where double scoring was applied (P0-7). */
   calibration: { doubleScoredMetrics: number; agreed: number; adjudicated: number };
   verificationStatus: "not_started" | "in_progress" | "complete";

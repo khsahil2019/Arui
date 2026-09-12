@@ -10,14 +10,22 @@ import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_workspace/assessment/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
       { title: "Assessment — AI Resilient University" },
-      { name: "description", content: "Work through the assessed domains — strategy, governance and human capability — in any order, at your own pace." },
+      {
+        name: "description",
+        content:
+          "Work through the assessed domains — strategy, governance and human capability — in any order, at your own pace.",
+      },
       { property: "og:title", content: "Assessment — AI Resilient University" },
-      { property: "og:description", content: "The assessed domains of the institutional AI resilience assessment." },
+      {
+        property: "og:description",
+        content: "The assessed domains of the institutional AI resilience assessment.",
+      },
     ],
   }),
   component: AssessmentHub,
@@ -51,14 +59,20 @@ function AssessmentHub() {
               key={d.code}
               to="/assessment/$domain"
               params={{ domain: d.code }}
-              className={cn("group grid gap-5 rounded-xl border bg-card px-6 py-6 shadow-card transition-colors hover:border-navy/40 md:grid-cols-[4rem_1fr_14rem_auto] md:items-center", next?.code === d.code ? "border-navy/40" : "border-border")}
+              className={cn(
+                "group grid gap-5 rounded-xl border bg-card px-6 py-6 shadow-card transition-colors hover:border-navy/40 md:grid-cols-[4rem_1fr_14rem_auto] md:items-center",
+                next?.code === d.code ? "border-navy/40" : "border-border",
+              )}
             >
               <span className="font-mono text-sm text-muted-foreground">{d.code}</span>
               <span>
-                <span className="block font-serif text-xl leading-snug text-foreground">{d.name}</span>
+                <span className="block font-serif text-xl leading-snug text-foreground">
+                  {d.name}
+                </span>
                 <span className="mt-1 block text-[13px] text-muted-foreground">
                   {d.state === "not_started" && "Not started"}
-                  {d.state === "in_progress" && `Exploring theme ${Math.min(d.themesExplored + 1, d.themesTotal)} of ${d.themesTotal}`}
+                  {d.state === "in_progress" &&
+                    `Exploring theme ${Math.min(d.themesExplored + 1, d.themesTotal)} of ${d.themesTotal}`}
                   {d.state === "complete" && `All ${d.themesTotal} themes explored`}
                   {d.targetedFollowUp && " · targeted follow-up added"}
                 </span>

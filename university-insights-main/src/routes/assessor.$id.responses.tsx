@@ -13,12 +13,17 @@ import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/assessor/$id/responses")({
-  loader: ({ context, params }) => context.queryClient.ensureQueryData(queries.responseReview(params.id)).then(() => undefined),
+  loader: ({ context, params }) =>
+    context.queryClient.ensureQueryData(queries.responseReview(params.id)).then(() => undefined),
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
       { title: "Response review — ARUI Assessor" },
-      { name: "description", content: "Read institutional responses by domain and theme, with the metrics each response informs." },
+      {
+        name: "description",
+        content:
+          "Read institutional responses by domain and theme, with the metrics each response informs.",
+      },
       { property: "og:title", content: "Response review — ARUI Assessor" },
       { property: "og:description", content: "Assessor response review." },
     ],
@@ -26,7 +31,10 @@ export const Route = createFileRoute("/assessor/$id/responses")({
   component: ResponseReview,
 });
 
-const stateTone: Record<ResponseState, { tone: "teal" | "blue" | "amber" | "neutral"; label: string }> = {
+const stateTone: Record<
+  ResponseState,
+  { tone: "teal" | "blue" | "amber" | "neutral"; label: string }
+> = {
   answered: { tone: "teal", label: "Answered" },
   not_sure: { tone: "blue", label: "Not sure" },
   not_applicable_requested: { tone: "amber", label: "N/A requested" },
@@ -39,12 +47,29 @@ function ResponseReview() {
   const [domain, setDomain] = useState<string | null>("screening");
   const [open, setOpen] = useState<string | null>(null);
 
-  const filtered = items.filter((i) => (domain === "screening" ? i.domainCode === null : i.domainCode === domain));
-  const options = [{ value: "screening", label: "Screening" }, ...inScopeDomains.map((d) => ({ value: d, label: d }))];
+  const filtered = items.filter((i) =>
+    domain === "screening" ? i.domainCode === null : i.domainCode === domain,
+  );
+  const options = [
+    { value: "screening", label: "Screening" },
+    ...inScopeDomains.map((d) => ({ value: d, label: d })),
+  ];
 
   return (
     <PageContainer width="wide">
-      <PageHeader eyebrow="Response review" title="Institutional responses" lede="Responses are inputs for assessor interpretation. Nothing here scores automatically; the metrics listed are those each response may inform." meta={<SegmentedControl options={options} value={domain} onChange={setDomain} ariaLabel="Domain" />} />
+      <PageHeader
+        eyebrow="Response review"
+        title="Institutional responses"
+        lede="Responses are inputs for assessor interpretation. Nothing here scores automatically; the metrics listed are those each response may inform."
+        meta={
+          <SegmentedControl
+            options={options}
+            value={domain}
+            onChange={setDomain}
+            ariaLabel="Domain"
+          />
+        }
+      />
 
       <Panel className="mt-8">
         <ul className="divide-y divide-border">
@@ -53,8 +78,14 @@ function ResponseReview() {
             const expanded = open === r.promptId;
             return (
               <li key={r.promptId}>
-                <button type="button" onClick={() => setOpen(expanded ? null : r.promptId)} className="flex w-full cursor-pointer items-start gap-4 px-6 py-4 text-left hover:bg-ivory-deep/40">
-                  <span className="w-20 shrink-0 font-mono text-[11px] text-muted-foreground">{r.promptId}</span>
+                <button
+                  type="button"
+                  onClick={() => setOpen(expanded ? null : r.promptId)}
+                  className="flex w-full cursor-pointer items-start gap-4 px-6 py-4 text-left hover:bg-ivory-deep/40"
+                >
+                  <span className="w-20 shrink-0 font-mono text-[11px] text-muted-foreground">
+                    {r.promptId}
+                  </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-xs text-muted-foreground">
                       {r.theme}
@@ -71,13 +102,20 @@ function ResponseReview() {
                     <div>
                       <p className="eyebrow">Recorded response</p>
                       {r.response?.state === "answered" ? (
-                        <pre className="mt-2 max-h-80 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-card p-4 font-sans text-[13px] leading-relaxed text-foreground">{formatValue(r.response.value)}</pre>
+                        <pre className="mt-2 max-h-80 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-card p-4 font-sans text-[13px] leading-relaxed text-foreground">
+                          {formatValue(r.response.value)}
+                        </pre>
                       ) : r.response?.state === "not_applicable_requested" ? (
                         <p className="mt-2 text-sm text-foreground">
-                          Not-applicable requested. Rationale: <em>{r.response.notApplicableRationale}</em>
+                          Not-applicable requested. Rationale:{" "}
+                          <em>{r.response.notApplicableRationale}</em>
                         </p>
                       ) : (
-                        <p className="mt-2 text-sm text-muted-foreground">{r.response ? "Institution indicated it is not sure / needs to check." : "No response recorded."}</p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          {r.response
+                            ? "Institution indicated it is not sure / needs to check."
+                            : "No response recorded."}
+                        </p>
                       )}
                     </div>
                     <div className="space-y-4">
@@ -89,13 +127,28 @@ function ResponseReview() {
                               {m}
                             </Chip>
                           ))}
-                          {r.informsMetricIds.length === 0 && <span className="text-xs text-muted-foreground">Screening — informs routing only</span>}
+                          {r.informsMetricIds.length === 0 && (
+                            <span className="text-xs text-muted-foreground">
+                              Screening — informs routing only
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div>
                         <p className="eyebrow">Review state</p>
-                        <p className={cn("mt-1 text-sm capitalize", r.reviewState === "unreviewed" ? "text-muted-foreground" : "text-foreground")}>{r.reviewState.replace("_", " ")}</p>
-                        {r.reviewNote && <p className="mt-1 text-xs text-muted-foreground">{r.reviewNote}</p>}
+                        <p
+                          className={cn(
+                            "mt-1 text-sm capitalize",
+                            r.reviewState === "unreviewed"
+                              ? "text-muted-foreground"
+                              : "text-foreground",
+                          )}
+                        >
+                          {r.reviewState.replace("_", " ")}
+                        </p>
+                        {r.reviewNote && (
+                          <p className="mt-1 text-xs text-muted-foreground">{r.reviewNote}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -103,7 +156,11 @@ function ResponseReview() {
               </li>
             );
           })}
-          {filtered.length === 0 && <li className="px-6 py-10 text-center text-sm text-muted-foreground">No prompts served for {domain as DomainCode} yet.</li>}
+          {filtered.length === 0 && (
+            <li className="px-6 py-10 text-center text-sm text-muted-foreground">
+              No prompts served for {domain as DomainCode} yet.
+            </li>
+          )}
         </ul>
       </Panel>
     </PageContainer>

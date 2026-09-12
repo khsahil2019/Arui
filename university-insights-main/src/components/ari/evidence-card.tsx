@@ -4,10 +4,21 @@ import type { EvidenceItem, EvidenceKind, EvidenceSubmissionStatus } from "@/api
 import { StatusBadge } from "./status-badge";
 import { Chip } from "./insight-card";
 
-const kindIcon: Record<EvidenceKind, typeof FileText> = { document: FileText, url: Link2, note: StickyNote };
-const kindLabel: Record<EvidenceKind, string> = { document: "Document", url: "Link", note: "Description" };
+const kindIcon: Record<EvidenceKind, typeof FileText> = {
+  document: FileText,
+  url: Link2,
+  note: StickyNote,
+};
+const kindLabel: Record<EvidenceKind, string> = {
+  document: "Document",
+  url: "Link",
+  note: "Description",
+};
 
-export const evidenceStatusTone: Record<EvidenceSubmissionStatus, { tone: "neutral" | "blue" | "teal" | "amber" | "rose"; label: string }> = {
+export const evidenceStatusTone: Record<
+  EvidenceSubmissionStatus,
+  { tone: "neutral" | "blue" | "teal" | "amber" | "rose"; label: string }
+> = {
   draft: { tone: "neutral", label: "Draft" },
   submitted: { tone: "blue", label: "Submitted" },
   under_review: { tone: "amber", label: "Under review" },
@@ -64,28 +75,46 @@ export function EvidenceCard({ item, selected, onSelect, actions, className }: E
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="font-sans text-[15px] font-semibold tracking-normal text-foreground">{item.title}</h3>
+            <h3 className="font-sans text-[15px] font-semibold tracking-normal text-foreground">
+              {item.title}
+            </h3>
             <StatusBadge tone={st.tone} dot>
               {st.label}
             </StatusBadge>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
             {kindLabel[item.kind]}
-            {item.fileName && <> · {item.fileName}{formatSize(item.fileSize) ? ` (${formatSize(item.fileSize)})` : ""}</>}
+            {item.fileName && (
+              <>
+                {" "}
+                · {item.fileName}
+                {formatSize(item.fileSize) ? ` (${formatSize(item.fileSize)})` : ""}
+              </>
+            )}
             {" · "}
             {item.scope}
             {period && <> · {period}</>}
-            {item.demo && <span className="ml-2 uppercase tracking-[0.1em] text-[10.5px] text-muted-foreground">Demo item</span>}
+            {item.demo && (
+              <span className="ml-2 uppercase tracking-[0.1em] text-[10.5px] text-muted-foreground">
+                Demo item
+              </span>
+            )}
           </p>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">{item.description}</p>
+          <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+            {item.description}
+          </p>
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-[11px] uppercase tracking-[0.1em] text-muted-foreground">{confirmed ? "Supports" : "May support"}</span>
+            <span className="mr-1 text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
+              {confirmed ? "Supports" : "May support"}
+            </span>
             {supports.map((s) => (
               <Chip key={s} tone={confirmed ? "teal" : "navy"}>
                 {s}
               </Chip>
             ))}
-            {supports.length === 0 && <span className="text-xs text-muted-foreground">Mapping to be confirmed</span>}
+            {supports.length === 0 && (
+              <span className="text-xs text-muted-foreground">Mapping to be confirmed</span>
+            )}
           </div>
           {actions && <div className="mt-3 flex flex-wrap items-center gap-2">{actions}</div>}
         </div>

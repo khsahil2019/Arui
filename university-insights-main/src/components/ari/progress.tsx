@@ -13,7 +13,14 @@ interface SignalProgressProps {
 }
 
 /** Meaningful progress: segments per signal, never "Question X of 143". */
-export function SignalProgress({ label, caption, current, total, className, align = "left" }: SignalProgressProps) {
+export function SignalProgress({
+  label,
+  caption,
+  current,
+  total,
+  className,
+  align = "left",
+}: SignalProgressProps) {
   return (
     <div className={cn("flex flex-col gap-2", align === "right" && "items-end", className)}>
       <div className={cn("flex items-baseline gap-3", align === "right" && "flex-row-reverse")}>
@@ -22,7 +29,13 @@ export function SignalProgress({ label, caption, current, total, className, alig
       </div>
       <div className="flex w-full max-w-[16rem] gap-1" aria-hidden>
         {Array.from({ length: total }).map((_, i) => (
-          <span key={i} className={cn("h-[3px] flex-1 rounded-full transition-colors duration-500", i < current ? "bg-navy" : i === current ? "bg-blue/50" : "bg-border")} />
+          <span
+            key={i}
+            className={cn(
+              "h-[3px] flex-1 rounded-full transition-colors duration-500",
+              i < current ? "bg-navy" : i === current ? "bg-blue/50" : "bg-border",
+            )}
+          />
         ))}
       </div>
     </div>
@@ -59,14 +72,29 @@ export function StepList({ steps, currentIndex, completed, onSelect, className }
               <span
                 className={cn(
                   "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold",
-                  isDone ? "border-teal bg-teal text-primary-foreground" : isCurrent ? "border-navy text-navy" : "border-border text-muted-foreground",
+                  isDone
+                    ? "border-teal bg-teal text-primary-foreground"
+                    : isCurrent
+                      ? "border-navy text-navy"
+                      : "border-border text-muted-foreground",
                 )}
               >
                 {isDone ? <Check className="size-3" strokeWidth={3} /> : i + 1}
               </span>
               <span className="min-w-0">
-                <span className={cn("block text-sm font-medium", isCurrent ? "text-foreground" : "text-muted-foreground")}>{s.label}</span>
-                {s.description && isCurrent && <span className="mt-0.5 block text-xs text-muted-foreground">{s.description}</span>}
+                <span
+                  className={cn(
+                    "block text-sm font-medium",
+                    isCurrent ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {s.label}
+                </span>
+                {s.description && isCurrent && (
+                  <span className="mt-0.5 block text-xs text-muted-foreground">
+                    {s.description}
+                  </span>
+                )}
               </span>
             </button>
           </li>
@@ -76,9 +104,20 @@ export function StepList({ steps, currentIndex, completed, onSelect, className }
   );
 }
 
-export function SaveIndicator({ state, time, className }: { state: "saved" | "saving" | "idle"; time?: string; className?: string }) {
+export function SaveIndicator({
+  state,
+  time,
+  className,
+}: {
+  state: "saved" | "saving" | "idle";
+  time?: string;
+  className?: string;
+}) {
   return (
-    <span className={cn("inline-flex items-center gap-1.5 text-xs text-muted-foreground", className)} aria-live="polite">
+    <span
+      className={cn("inline-flex items-center gap-1.5 text-xs text-muted-foreground", className)}
+      aria-live="polite"
+    >
       {state === "saving" ? (
         <>
           <Loader2 className="size-3.5 animate-spin" /> Saving…
@@ -96,10 +135,32 @@ export function SaveIndicator({ state, time, className }: { state: "saved" | "sa
   );
 }
 
-export function CoverageBar({ value, className, tone = "navy" }: { value: number; className?: string; tone?: "navy" | "teal" | "blue" }) {
+export function CoverageBar({
+  value,
+  className,
+  tone = "navy",
+}: {
+  value: number;
+  className?: string;
+  tone?: "navy" | "teal" | "blue";
+}) {
   return (
-    <div className={cn("h-1.5 w-full overflow-hidden rounded-full bg-border/80", className)} role="progressbar" aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
-      <div className={cn("h-full rounded-full transition-[width] duration-700", tone === "navy" && "bg-navy", tone === "teal" && "bg-teal", tone === "blue" && "bg-blue")} style={{ width: `${Math.round(value * 100)}%` }} />
+    <div
+      className={cn("h-1.5 w-full overflow-hidden rounded-full bg-border/80", className)}
+      role="progressbar"
+      aria-valuenow={Math.round(value * 100)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      <div
+        className={cn(
+          "h-full rounded-full transition-[width] duration-700",
+          tone === "navy" && "bg-navy",
+          tone === "teal" && "bg-teal",
+          tone === "blue" && "bg-blue",
+        )}
+        style={{ width: `${Math.round(value * 100)}%` }}
+      />
     </div>
   );
 }

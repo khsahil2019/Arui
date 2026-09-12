@@ -12,7 +12,8 @@ export const Route = createFileRoute("/_workspace")({
   beforeLoad: async ({ context, location }) => {
     const session = await context.queryClient.ensureQueryData(queries.session());
     if (!session) throw redirect({ to: "/login", search: { redirect: location.href } });
-    if (session.user.role === "assessor" || !session.assessmentId) throw redirect({ to: "/assessor" });
+    if (session.user.role === "assessor" || !session.assessmentId)
+      throw redirect({ to: "/assessor" });
     return { session, assessmentId: session.assessmentId };
   },
   component: WorkspaceLayout,
@@ -22,7 +23,12 @@ function WorkspaceLayout() {
   const { session, assessmentId } = Route.useRouteContext();
   const status = useQuery(queries.status(assessmentId));
   return (
-    <WorkspaceShell session={session} nav={workspaceNav} navLabel="Workspace" status={status.data ?? null}>
+    <WorkspaceShell
+      session={session}
+      nav={workspaceNav}
+      navLabel="Workspace"
+      status={status.data ?? null}
+    >
       <Outlet />
     </WorkspaceShell>
   );

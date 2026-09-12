@@ -11,14 +11,22 @@ import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_workspace/overview")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
       { title: "Overview — AI Resilient University" },
-      { name: "description", content: "Your institution's assessment workspace: progress across profile, orientation, pulse, assessment, evidence and preliminary results." },
+      {
+        name: "description",
+        content:
+          "Your institution's assessment workspace: progress across profile, orientation, pulse, assessment, evidence and preliminary results.",
+      },
       { property: "og:title", content: "Assessment Overview — AI Resilient University" },
-      { property: "og:description", content: "Progress across the institutional AI resilience assessment." },
+      {
+        property: "og:description",
+        content: "Progress across the institutional AI resilience assessment.",
+      },
     ],
   }),
   component: OverviewPage,
@@ -51,7 +59,10 @@ function OverviewPage() {
         }
         actions={
           nextStage && (
-            <Link to={stageLinks[nextStage.id]} className="inline-flex h-10 items-center gap-2 rounded-md bg-navy px-4 text-sm font-medium text-primary-foreground shadow-raised hover:bg-navy-deep">
+            <Link
+              to={stageLinks[nextStage.id]}
+              className="inline-flex h-10 items-center gap-2 rounded-md bg-navy px-4 text-sm font-medium text-primary-foreground shadow-raised hover:bg-navy-deep"
+            >
               Continue · {nextStage.label} <ArrowRight className="size-4" />
             </Link>
           )
@@ -64,19 +75,36 @@ function OverviewPage() {
           <ol className="divide-y divide-border">
             {status.stages.map((step, i) => (
               <li key={step.id}>
-                <Link to={stageLinks[step.id]} className="group flex items-center gap-5 px-6 py-4 transition-colors hover:bg-ivory-deep/50">
+                <Link
+                  to={stageLinks[step.id]}
+                  className="group flex items-center gap-5 px-6 py-4 transition-colors hover:bg-ivory-deep/50"
+                >
                   <span
                     className={cn(
                       "flex size-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
                       step.state === "complete" && "border-teal bg-teal text-primary-foreground",
                       step.state === "current" && "border-navy text-navy",
-                      (step.state === "upcoming" || step.state === "locked") && "border-border text-muted-foreground",
+                      (step.state === "upcoming" || step.state === "locked") &&
+                        "border-border text-muted-foreground",
                     )}
                   >
-                    {step.state === "complete" ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
+                    {step.state === "complete" ? (
+                      <Check className="size-3.5" strokeWidth={3} />
+                    ) : (
+                      i + 1
+                    )}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className={cn("block text-[15px] font-medium", step.state === "complete" || step.state === "current" ? "text-foreground" : "text-muted-foreground")}>{step.label}</span>
+                    <span
+                      className={cn(
+                        "block text-[15px] font-medium",
+                        step.state === "complete" || step.state === "current"
+                          ? "text-foreground"
+                          : "text-muted-foreground",
+                      )}
+                    >
+                      {step.label}
+                    </span>
                     <span className="block text-[13px] text-muted-foreground">{step.caption}</span>
                   </span>
                   {step.state === "current" && (
@@ -98,8 +126,16 @@ function OverviewPage() {
               className="px-6"
               items={[
                 { term: "Cycle", detail: status.cycle },
-                { term: "Scope", detail: `${status.domains.filter((d) => d.inScope).length} of ${status.domains.length} domains` },
-                { term: "Contributors", detail: status.contributors.length ? status.contributors.map((c) => `${c.name} (${roleLabels[c.role]})`).join(", ") : "None yet invited" },
+                {
+                  term: "Scope",
+                  detail: `${status.domains.filter((d) => d.inScope).length} of ${status.domains.length} domains`,
+                },
+                {
+                  term: "Contributors",
+                  detail: status.contributors.length
+                    ? status.contributors.map((c) => `${c.name} (${roleLabels[c.role]})`).join(", ")
+                    : "None yet invited",
+                },
                 { term: "Methodology", detail: status.methodologyVersion },
                 { term: "Confidentiality", detail: status.confidentiality },
               ]}
@@ -108,7 +144,9 @@ function OverviewPage() {
           <Panel tone="muted" className="px-6 py-5">
             <p className="eyebrow">Evidence</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Most institutions provide {status.evidence.coreTarget.min}–{status.evidence.coreTarget.max} core items.
+              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Most
+              institutions provide {status.evidence.coreTarget.min}–{status.evidence.coreTarget.max}{" "}
+              core items.
             </p>
           </Panel>
         </div>

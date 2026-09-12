@@ -39,29 +39,29 @@ State management: TanStack Query (`@tanstack/react-query`) for all server state;
 
 ## 2. Route / screen inventory
 
-| Route file | URL | Purpose |
-|---|---|---|
-| `src/routes/__root.tsx` | — | HTML shell, fonts, global head metadata, error boundary |
-| `index.tsx` | `/` | Public welcome / product introduction |
-| `login.tsx` | `/login` | Entry. Email + password; mock role pick (Institution Admin / Assessor) |
-| `_workspace.tsx` | — | Respondent layout: session guard + `WorkspaceShell` + `<Outlet />` |
-| `_workspace.overview.tsx` | `/overview` | Assessment status: stages, domain progress, evidence counts, contributors |
-| `_workspace.profile.tsx` | `/profile` | Institution Profile (multi-step, backend-defined form) |
-| `_workspace.orientation.tsx` | `/orientation` | How the assessment works, confidentiality, evidence stance |
-| `_workspace.pulse.tsx` | `/pulse` | Institutional Pulse / screening prompts + backend "early signal" |
-| `_workspace.assessment.index.tsx` | `/assessment` | Domain hub: D01–D03 in scope, D04–D11 "Not yet assessed" |
-| `_workspace.assessment.$domain.tsx` | `/assessment/D01` … `/D03` | Prompt runner (one prompt at a time, backend-sequenced) |
-| `_workspace.evidence.tsx` | `/evidence` | Evidence submission, requests, mapping, status |
-| `_workspace.intelligence.tsx` | `/intelligence` | Preliminary ARUI Assessment (read-only, backend-computed) |
-| `assessor.tsx` | — | Assessor layout + nav |
-| `assessor.index.tsx` | `/assessor` | Review queue |
-| `assessor.$id.tsx` | — | Assessment layout |
-| `assessor.$id.index.tsx` | `/assessor/:id` | Assessment overview: profile summary, applicability, counts |
-| `assessor.$id.responses.tsx` | `/assessor/:id/responses` | Response review, metric linkage, review state |
-| `assessor.$id.evidence.tsx` | `/assessor/:id/evidence` | Evidence review: E-level, authenticity, metric linkage |
-| `assessor.$id.scoring.tsx` | `/assessor/:id/scoring` | M / I / O entry, N/A + rationale, flags, engine outputs |
-| `assessor.$id.context.tsx` | `/assessor/:id/context` | Required maturity, current maturity, transformation distance |
-| `assessor.$id.runs.tsx` | `/assessor/:id/runs` | Score runs + execution log |
+| Route file                          | URL                        | Purpose                                                                   |
+| ----------------------------------- | -------------------------- | ------------------------------------------------------------------------- |
+| `src/routes/__root.tsx`             | —                          | HTML shell, fonts, global head metadata, error boundary                   |
+| `index.tsx`                         | `/`                        | Public welcome / product introduction                                     |
+| `login.tsx`                         | `/login`                   | Entry. Email + password; mock role pick (Institution Admin / Assessor)    |
+| `_workspace.tsx`                    | —                          | Respondent layout: session guard + `WorkspaceShell` + `<Outlet />`        |
+| `_workspace.overview.tsx`           | `/overview`                | Assessment status: stages, domain progress, evidence counts, contributors |
+| `_workspace.profile.tsx`            | `/profile`                 | Institution Profile (multi-step, backend-defined form)                    |
+| `_workspace.orientation.tsx`        | `/orientation`             | How the assessment works, confidentiality, evidence stance                |
+| `_workspace.pulse.tsx`              | `/pulse`                   | Institutional Pulse / screening prompts + backend "early signal"          |
+| `_workspace.assessment.index.tsx`   | `/assessment`              | Domain hub: D01–D03 in scope, D04–D11 "Not yet assessed"                  |
+| `_workspace.assessment.$domain.tsx` | `/assessment/D01` … `/D03` | Prompt runner (one prompt at a time, backend-sequenced)                   |
+| `_workspace.evidence.tsx`           | `/evidence`                | Evidence submission, requests, mapping, status                            |
+| `_workspace.intelligence.tsx`       | `/intelligence`            | Preliminary ARUI Assessment (read-only, backend-computed)                 |
+| `assessor.tsx`                      | —                          | Assessor layout + nav                                                     |
+| `assessor.index.tsx`                | `/assessor`                | Review queue                                                              |
+| `assessor.$id.tsx`                  | —                          | Assessment layout                                                         |
+| `assessor.$id.index.tsx`            | `/assessor/:id`            | Assessment overview: profile summary, applicability, counts               |
+| `assessor.$id.responses.tsx`        | `/assessor/:id/responses`  | Response review, metric linkage, review state                             |
+| `assessor.$id.evidence.tsx`         | `/assessor/:id/evidence`   | Evidence review: E-level, authenticity, metric linkage                    |
+| `assessor.$id.scoring.tsx`          | `/assessor/:id/scoring`    | M / I / O entry, N/A + rationale, flags, engine outputs                   |
+| `assessor.$id.context.tsx`          | `/assessor/:id/context`    | Required maturity, current maturity, transformation distance              |
+| `assessor.$id.runs.tsx`             | `/assessor/:id/runs`       | Score runs + execution log                                                |
 
 `src/routeTree.gen.ts` is generated — never edit it.
 
@@ -73,7 +73,7 @@ State management: TanStack Query (`@tanstack/react-query`) for all server state;
 2. `/profile` — institution context, form definition supplied by `GET /methodology/profile-form`.
 3. `/orientation` — static explanation of process, confidentiality and evidence stance.
 4. `/pulse` — screening prompts; backend may return an `earlySignal`.
-5. `/assessment` → `/assessment/D01|D02|D03` — one prompt at a time. The UI asks the backend for the **next** prompt and renders whichever `PromptPresentation` it receives. Progress is expressed as *"D01 · Institutional Strategy · Foresight · Exploring 2 of 4 signals"* — never "17 of 143".
+5. `/assessment` → `/assessment/D01|D02|D03` — one prompt at a time. The UI asks the backend for the **next** prompt and renders whichever `PromptPresentation` it receives. Progress is expressed as _"D01 · Institutional Strategy · Foresight · Exploring 2 of 4 signals"_ — never "17 of 143".
 6. `/evidence` — 8–12 core items; upload/link/note, type, period, scope, proposed mapping, submit.
 7. `/intelligence` — Preliminary ARUI Assessment; only shown when the backend returns results.
 
@@ -93,18 +93,18 @@ Assessor screens are the **only** place methodology internals are visible.
 
 ## 5. Component structure (`src/components/ari/`)
 
-| Component | Role |
-|---|---|
-| `workspace-shell.tsx` | Respondent chrome: nav, stage rail, session, confidentiality note |
-| `page-header.tsx`, `panel.tsx` | Layout primitives |
-| `question-card.tsx` | Prompt frame: prompt text, help, evidence hints, targeted reason |
-| `prompt-input.tsx` (539 lines) | **Renderer for every `PromptPresentation` kind.** The single place presentation logic lives |
-| `response-controls.tsx` | Save / Not sure / Does not apply (reason + bounded note) |
-| `form-field.tsx` | Field controls: `ShortText` with counter, `MonthInput`, `ChipGroup`, `SegmentedChoice`, Yes/No/Not sure |
-| `answer-card.tsx`, `segmented-control.tsx` | Selection controls |
-| `progress.tsx` | Theme-based, respondent-safe progress |
-| `evidence-card.tsx` | Evidence item display/status |
-| `domain-viz.tsx`, `insight-card.tsx`, `status-badge.tsx` | Results and status presentation |
+| Component                                                | Role                                                                                                    |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `workspace-shell.tsx`                                    | Respondent chrome: nav, stage rail, session, confidentiality note                                       |
+| `page-header.tsx`, `panel.tsx`                           | Layout primitives                                                                                       |
+| `question-card.tsx`                                      | Prompt frame: prompt text, help, evidence hints, targeted reason                                        |
+| `prompt-input.tsx` (539 lines)                           | **Renderer for every `PromptPresentation` kind.** The single place presentation logic lives             |
+| `response-controls.tsx`                                  | Save / Not sure / Does not apply (reason + bounded note)                                                |
+| `form-field.tsx`                                         | Field controls: `ShortText` with counter, `MonthInput`, `ChipGroup`, `SegmentedChoice`, Yes/No/Not sure |
+| `answer-card.tsx`, `segmented-control.tsx`               | Selection controls                                                                                      |
+| `progress.tsx`                                           | Theme-based, respondent-safe progress                                                                   |
+| `evidence-card.tsx`                                      | Evidence item display/status                                                                            |
+| `domain-viz.tsx`, `insight-card.tsx`, `status-badge.tsx` | Results and status presentation                                                                         |
 
 Underneath: shadcn/ui + Radix primitives in `src/components/ui/`, Tailwind v4 tokens in `src/styles.css`.
 
@@ -126,17 +126,17 @@ All contracts live in **`src/api/types.ts` (521 lines)** — treat that file as 
 
 ### Presentation kinds and their value shapes
 
-| Kind | Value written back in `PromptResponse.value` |
-|---|---|
-| `single_choice` | `string` or `{ choice, other?, nuance? }` |
-| `multi_choice` | `{ selected: string[]; other?; nuance? }` |
-| `ranked_list` | `{ items: ({ value; other? } & Record<string, unknown>)[] }` (order = rank) |
-| `process_steps` | `Record<string, unknown>[]` (order = sequence) |
-| `numbers` | `{ values: Record<string, number \| null>; precision? }` |
-| `structured_form` | `Record<string, unknown>` |
-| `records` | `{ none: boolean; rows: Record<string, unknown>[] }` |
-| `matrix` | `{ rows: { id; label; other?; cells: Record<string, unknown> }[] }` |
-| `evidence_request` | `{ acknowledged: boolean; note? }` |
+| Kind               | Value written back in `PromptResponse.value`                                |
+| ------------------ | --------------------------------------------------------------------------- |
+| `single_choice`    | `string` or `{ choice, other?, nuance? }`                                   |
+| `multi_choice`     | `{ selected: string[]; other?; nuance? }`                                   |
+| `ranked_list`      | `{ items: ({ value; other? } & Record<string, unknown>)[] }` (order = rank) |
+| `process_steps`    | `Record<string, unknown>[]` (order = sequence)                              |
+| `numbers`          | `{ values: Record<string, number \| null>; precision? }`                    |
+| `structured_form`  | `Record<string, unknown>`                                                   |
+| `records`          | `{ none: boolean; rows: Record<string, unknown>[] }`                        |
+| `matrix`           | `{ rows: { id; label; other?; cells: Record<string, unknown> }[] }`         |
+| `evidence_request` | `{ acknowledged: boolean; note? }`                                          |
 
 `provisionalOptions: true` marks any option catalogue not defined by the workbooks; the UI tells respondents so.
 
@@ -147,42 +147,45 @@ All contracts live in **`src/api/types.ts` (521 lines)** — treat that file as 
 Interface: `ArUiApi` in `src/api/client.ts`. Paths below are the **proposal** implemented in `src/api/http.ts`; if your backend differs, change only that file. `{id}` is URL-encoded. Base = `VITE_ARUI_API_BASE_URL`. Auth = `Authorization: Bearer <session.token>`, `content-type: application/json`.
 
 ### Session
-| Method | Path | Request | Response |
-|---|---|---|---|
-| POST | `/auth/login` | `LoginRequest` | `Session` |
-| POST | `/auth/logout` | — | 204 |
+
+| Method | Path           | Request        | Response  |
+| ------ | -------------- | -------------- | --------- |
+| POST   | `/auth/login`  | `LoginRequest` | `Session` |
+| POST   | `/auth/logout` | —              | 204       |
 
 `getSession()` is client-local (reads `localStorage["arui.session"]`); there is currently **no** `GET /auth/session` call.
 
 ### Respondent
-| Method | Path | Request | Response |
-|---|---|---|---|
-| GET | `/assessments/{id}/status` | — | `AssessmentStatusView` |
-| GET | `/methodology/profile-form` | — | `ProfileFormDefinition` |
-| GET | `/assessments/{id}/profile` | — | `InstitutionProfile` |
-| PUT | `/assessments/{id}/profile` | `{ values: ProfileValues }` | `InstitutionProfile` |
-| GET | `/assessments/{id}/screening` | — | `ScreeningView` |
-| GET | `/assessments/{id}/domains/{code}/next?after={promptId}` | — | `NextPromptResponse` |
-| GET | `/assessments/{id}/domains/{code}/prompts/{promptId}` | — | `NextPromptResponse` |
-| PUT | `/assessments/{id}/responses/{promptId}` | `SaveResponseInput` = `{ promptId, state, value?, note?, notApplicableRationale? }` | `PromptResponse` |
-| GET | `/assessments/{id}/evidence` | — | `EvidenceView` |
-| POST | `/assessments/{id}/evidence` | `CreateEvidenceInput` | `EvidenceItem` |
-| POST | `/assessments/{id}/evidence/{evidenceId}/submit` | — | `EvidenceItem` |
-| GET | `/assessments/{id}/results/preliminary` | — | `PreliminaryResults \| null` |
+
+| Method | Path                                                     | Request                                                                             | Response                     |
+| ------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------- |
+| GET    | `/assessments/{id}/status`                               | —                                                                                   | `AssessmentStatusView`       |
+| GET    | `/methodology/profile-form`                              | —                                                                                   | `ProfileFormDefinition`      |
+| GET    | `/assessments/{id}/profile`                              | —                                                                                   | `InstitutionProfile`         |
+| PUT    | `/assessments/{id}/profile`                              | `{ values: ProfileValues }`                                                         | `InstitutionProfile`         |
+| GET    | `/assessments/{id}/screening`                            | —                                                                                   | `ScreeningView`              |
+| GET    | `/assessments/{id}/domains/{code}/next?after={promptId}` | —                                                                                   | `NextPromptResponse`         |
+| GET    | `/assessments/{id}/domains/{code}/prompts/{promptId}`    | —                                                                                   | `NextPromptResponse`         |
+| PUT    | `/assessments/{id}/responses/{promptId}`                 | `SaveResponseInput` = `{ promptId, state, value?, note?, notApplicableRationale? }` | `PromptResponse`             |
+| GET    | `/assessments/{id}/evidence`                             | —                                                                                   | `EvidenceView`               |
+| POST   | `/assessments/{id}/evidence`                             | `CreateEvidenceInput`                                                               | `EvidenceItem`               |
+| POST   | `/assessments/{id}/evidence/{evidenceId}/submit`         | —                                                                                   | `EvidenceItem`               |
+| GET    | `/assessments/{id}/results/preliminary`                  | —                                                                                   | `PreliminaryResults \| null` |
 
 ### Assessor
-| Method | Path | Response |
-|---|---|---|
-| GET | `/assessor/queue` | `AssessorQueueItem[]` |
-| GET | `/assessor/assessments/{id}` | `AssessorAssessmentView` |
-| GET | `/assessor/assessments/{id}/responses` | `ResponseReviewItem[]` |
-| GET | `/assessor/assessments/{id}/evidence` | `EvidenceReviewItem[]` |
-| GET | `/assessor/assessments/{id}/metrics` | `MetricScoring[]` |
-| PATCH | `/assessor/assessments/{id}/metrics/{metricId}` (body `MetricScoringInput`) | `MetricScoring` |
-| GET | `/assessor/assessments/{id}/context` | `ContextCalibration[]` |
-| GET | `/assessor/assessments/{id}/score-runs` | `ScoreRun[]` |
-| POST | `/assessor/assessments/{id}/score-runs` (body `{ kind: "preliminary" \| "verification" }`) | `ScoreRun` |
-| GET | `/assessor/assessments/{id}/execution-log` | `ExecutionLogEntry[]` |
+
+| Method | Path                                                                                       | Response                 |
+| ------ | ------------------------------------------------------------------------------------------ | ------------------------ |
+| GET    | `/assessor/queue`                                                                          | `AssessorQueueItem[]`    |
+| GET    | `/assessor/assessments/{id}`                                                               | `AssessorAssessmentView` |
+| GET    | `/assessor/assessments/{id}/responses`                                                     | `ResponseReviewItem[]`   |
+| GET    | `/assessor/assessments/{id}/evidence`                                                      | `EvidenceReviewItem[]`   |
+| GET    | `/assessor/assessments/{id}/metrics`                                                       | `MetricScoring[]`        |
+| PATCH  | `/assessor/assessments/{id}/metrics/{metricId}` (body `MetricScoringInput`)                | `MetricScoring`          |
+| GET    | `/assessor/assessments/{id}/context`                                                       | `ContextCalibration[]`   |
+| GET    | `/assessor/assessments/{id}/score-runs`                                                    | `ScoreRun[]`             |
+| POST   | `/assessor/assessments/{id}/score-runs` (body `{ kind: "preliminary" \| "verification" }`) | `ScoreRun`               |
+| GET    | `/assessor/assessments/{id}/execution-log`                                                 | `ExecutionLogEntry[]`    |
 
 Error handling in `http.ts`: `204` → `undefined`; non-2xx → thrown `Error` with method, path, status and body text. There is currently **no** 401-triggered re-authentication, no retry policy and no refresh-token flow — see Known limitations.
 
@@ -244,6 +247,7 @@ D04–D11 must be returned as `inScope: false` / `not_in_scope` and are rendered
 Current UI captures: title, kind (`document | url | note`), evidence type, file name + size **(metadata only — no bytes are transmitted)**, url, `periodStart`/`periodEnd` (YYYY-MM), bounded description (≤240 chars), scope, `proposedSupports[]`, `fulfilsRequestIds[]`.
 
 Backend must add:
+
 - A real upload path — signed-URL PUT (preferred; `http.ts` then needs an "obtain upload URL → PUT → confirm" sequence) or multipart POST.
 - Accepted MIME types, max file size, virus scanning, retention and deletion.
 - Status transitions `draft → submitted → under_review → accepted | returned`, and `confirmedSupports[]` written by the assessor/engine (respondent proposals are never authoritative).
@@ -261,8 +265,8 @@ Backend must add:
 
 ## 14. Environment variables
 
-| Variable | Used in | Effect |
-|---|---|---|
+| Variable                 | Used in             | Effect                                                                |
+| ------------------------ | ------------------- | --------------------------------------------------------------------- |
 | `VITE_ARUI_API_BASE_URL` | `src/api/client.ts` | Unset → mock API. Set (e.g. `https://api.example.org/v1`) → HTTP API. |
 
 That is the only application env var. No secrets are read by the frontend; there is no `.env` committed.
@@ -284,13 +288,13 @@ No analytics, telemetry, payment, auth or AI SDK is present. Fonts are loaded vi
 
 Lovable-specific items that exist and how to remove them if you leave the platform:
 
-| Item | What it is | Removal |
-|---|---|---|
-| `@lovable.dev/vite-tanstack-config` (devDependency, used in `vite.config.ts`) | Preset bundling tanstackStart, viteReact, tailwindcss, tsconfig-paths, nitro (Cloudflare target), path alias, dev error plugins | Replace `vite.config.ts` with a plain `defineConfig` from `vite` wiring `@tanstack/react-start/plugin/vite`, `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite-tsconfig-paths`, and the `@` alias. Choose your own deploy target (Node adapter for a Node.js host). |
-| `src/lib/lovable-error-reporting.ts`, imported by `src/routes/__root.tsx` | Reports render errors to the Lovable preview harness when present; a no-op otherwise | Delete the file and the two references in `__root.tsx` |
-| `src/lib/error-capture.ts`, `src/lib/error-page.ts`, `src/server.ts`, `src/start.ts` | SSR error wrapper, h3 error normalisation, CSRF middleware for server functions | Generic TanStack Start code, safe to keep. `src/start.ts`'s CSRF middleware is inert while no server functions exist |
-| Build target | The preset defaults to Cloudflare Workers via nitro | Switch to a Node preset if hosting alongside your Node.js API |
-| `.lovable/`, `.workspace/`, `AGENTS.md`, `roadmap.md`, `bunfig.toml` | Platform/workflow metadata, not application code | Delete freely |
+| Item                                                                                 | What it is                                                                                                                      | Removal                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@lovable.dev/vite-tanstack-config` (devDependency, used in `vite.config.ts`)        | Preset bundling tanstackStart, viteReact, tailwindcss, tsconfig-paths, nitro (Cloudflare target), path alias, dev error plugins | Replace `vite.config.ts` with a plain `defineConfig` from `vite` wiring `@tanstack/react-start/plugin/vite`, `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite-tsconfig-paths`, and the `@` alias. Choose your own deploy target (Node adapter for a Node.js host). |
+| `src/lib/lovable-error-reporting.ts`, imported by `src/routes/__root.tsx`            | Reports render errors to the Lovable preview harness when present; a no-op otherwise                                            | Delete the file and the two references in `__root.tsx`                                                                                                                                                                                                               |
+| `src/lib/error-capture.ts`, `src/lib/error-page.ts`, `src/server.ts`, `src/start.ts` | SSR error wrapper, h3 error normalisation, CSRF middleware for server functions                                                 | Generic TanStack Start code, safe to keep. `src/start.ts`'s CSRF middleware is inert while no server functions exist                                                                                                                                                 |
+| Build target                                                                         | The preset defaults to Cloudflare Workers via nitro                                                                             | Switch to a Node preset if hosting alongside your Node.js API                                                                                                                                                                                                        |
+| `.lovable/`, `.workspace/`, `AGENTS.md`, `roadmap.md`, `bunfig.toml`                 | Platform/workflow metadata, not application code                                                                                | Delete freely                                                                                                                                                                                                                                                        |
 
 Nothing in `src/api/`, `src/components/`, `src/lib/catalogue.ts` or `src/routes/` (other than the error-reporting import) is Lovable-specific.
 
@@ -411,4 +415,4 @@ Additionally open from the input redesign: confirmation of the provisional catal
 
 ---
 
-*Baseline frozen. No D04–D11, no production backend, no database, no Cloud dependency. Methodology remains owned by the ARUI workbooks.*
+_Baseline frozen. No D04–D11, no production backend, no database, no Cloud dependency. Methodology remains owned by the ARUI workbooks._

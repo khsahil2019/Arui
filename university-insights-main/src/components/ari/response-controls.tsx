@@ -21,8 +21,17 @@ interface ResponsePanelProps {
 }
 
 /** Renders the prompt's presentation with a local draft. Selections save on the spot; typed text is saved explicitly. */
-export function ResponsePanel({ prompt, existing, saving, onSave, autosaveChoices, priorRows }: ResponsePanelProps) {
-  const [draft, setDraft] = useState<unknown>(existing?.state === "answered" ? existing.value : null);
+export function ResponsePanel({
+  prompt,
+  existing,
+  saving,
+  onSave,
+  autosaveChoices,
+  priorRows,
+}: ResponsePanelProps) {
+  const [draft, setDraft] = useState<unknown>(
+    existing?.state === "answered" ? existing.value : null,
+  );
   const [dirty, setDirty] = useState(false);
   useEffect(() => {
     setDraft(existing?.state === "answered" ? existing.value : null);
@@ -42,7 +51,13 @@ export function ResponsePanel({ prompt, existing, saving, onSave, autosaveChoice
 
   return (
     <div className={cn("space-y-4", declined && "opacity-60")}>
-      <PromptInput presentation={pres} value={draft} onChange={change} priorRows={priorRows} disabled={saving} />
+      <PromptInput
+        presentation={pres}
+        value={draft}
+        onChange={change}
+        priorRows={priorRows}
+        disabled={saving}
+      />
       {!(autosaveChoices && plainChoice) && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           <span className="text-xs text-muted-foreground" aria-live="polite">
@@ -58,8 +73,21 @@ export function ResponsePanel({ prompt, existing, saving, onSave, autosaveChoice
               "Complete what you can — partial responses are fine."
             )}
           </span>
-          <Button type="button" variant={dirty ? "default" : "outline"} className="h-9 px-4" disabled={!dirty || saving || draft === null} onClick={() => { onSave({ state: "answered", value: draft }); setDirty(false); }}>
-            {saving ? "Saving…" : existing?.state === "answered" ? "Update response" : "Save response"}
+          <Button
+            type="button"
+            variant={dirty ? "default" : "outline"}
+            className="h-9 px-4"
+            disabled={!dirty || saving || draft === null}
+            onClick={() => {
+              onSave({ state: "answered", value: draft });
+              setDirty(false);
+            }}
+          >
+            {saving
+              ? "Saving…"
+              : existing?.state === "answered"
+                ? "Update response"
+                : "Save response"}
           </Button>
         </div>
       )}
@@ -70,8 +98,14 @@ export function ResponsePanel({ prompt, existing, saving, onSave, autosaveChoice
 /** Provisional N/A reason categories — genuine inapplicability only (METHODOLOGY DECISION REQUIRED #1). */
 const naReasons: ChoiceOption[] = [
   { value: "no-mandate", label: "The institution has no mandate for this activity" },
-  { value: "no-structure", label: "The practice concerns a structure or function the institution does not have" },
-  { value: "external-constraint", label: "A regulatory or legal constraint removes this from the institution's control" },
+  {
+    value: "no-structure",
+    label: "The practice concerns a structure or function the institution does not have",
+  },
+  {
+    value: "external-constraint",
+    label: "A regulatory or legal constraint removes this from the institution's control",
+  },
   { value: "other", label: "Another reason (explain briefly)" },
 ];
 
@@ -94,27 +128,48 @@ export function ResponseControls({ prompt, existing, onSave, className }: Respon
   }, [prompt.id]);
   const reasonLabel = naReasons.find((r) => r.value === reason)?.label ?? "";
   const naReady = !!reason && (reason !== "other" || detail.trim().length >= 12);
-  const rationale = reason === "other" ? detail.trim() : detail.trim() ? `${reasonLabel} — ${detail.trim()}` : reasonLabel;
+  const rationale =
+    reason === "other"
+      ? detail.trim()
+      : detail.trim()
+        ? `${reasonLabel} — ${detail.trim()}`
+        : reasonLabel;
 
   if (!prompt.allowNotSure && !prompt.allowNotApplicable) return null;
 
   if (existing?.state === "not_sure") {
     return (
-      <div className={cn("flex flex-wrap items-center justify-between gap-3 rounded-lg border border-dashed border-teal bg-teal-soft/60 px-5 py-3 text-sm", className)}>
+      <div
+        className={cn(
+          "flex flex-wrap items-center justify-between gap-3 rounded-lg border border-dashed border-teal bg-teal-soft/60 px-5 py-3 text-sm",
+          className,
+        )}
+      >
         <span className="inline-flex items-center gap-2 font-medium text-foreground">
           <HelpCircle className="size-4 text-teal" /> Recorded as “Not sure / need to check”
         </span>
-        <span className="text-xs text-muted-foreground">Recorded separately — never treated as “no”. You can return and answer later.</span>
+        <span className="text-xs text-muted-foreground">
+          Recorded separately — never treated as “no”. You can return and answer later.
+        </span>
       </div>
     );
   }
   if (existing?.state === "not_applicable_requested") {
     return (
-      <div className={cn("rounded-lg border border-dashed border-amber bg-amber-soft/50 px-5 py-3 text-sm", className)}>
+      <div
+        className={cn(
+          "rounded-lg border border-dashed border-amber bg-amber-soft/50 px-5 py-3 text-sm",
+          className,
+        )}
+      >
         <span className="inline-flex items-center gap-2 font-medium text-foreground">
-          <Ban className="size-4 text-amber" /> Marked as not applicable — awaiting assessor confirmation
+          <Ban className="size-4 text-amber" /> Marked as not applicable — awaiting assessor
+          confirmation
         </span>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Your reason: “{existing.notApplicableRationale}”. Not-applicable requests are only accepted where the practice genuinely cannot apply to an institution like yours.</p>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+          Your reason: “{existing.notApplicableRationale}”. Not-applicable requests are only
+          accepted where the practice genuinely cannot apply to an institution like yours.
+        </p>
       </div>
     );
   }
@@ -145,16 +200,44 @@ export function ResponseControls({ prompt, existing, onSave, className }: Respon
       {naOpen && (
         <div className="rounded-lg border border-amber/40 bg-amber-soft/40 p-4">
           <p className="text-sm font-medium text-foreground">Why does this not apply?</p>
-          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">“Not applicable” is reserved for practices that genuinely cannot apply to an institution like yours — not for things that are missing, unknown or not yet in place. An assessor reviews every request.</p>
+          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+            “Not applicable” is reserved for practices that genuinely cannot apply to an institution
+            like yours — not for things that are missing, unknown or not yet in place. An assessor
+            reviews every request.
+          </p>
           <div className="mt-3 space-y-3">
-            <SelectField options={naReasons} value={reason} onChange={setReason} placeholder="Choose the reason" ariaLabel="Reason this does not apply" />
-            <ShortText value={detail} maxLength={160} onChange={setDetail} placeholder={reason === "other" ? "Explain briefly (required)" : "Add a brief specific note (optional)"} ariaLabel="Brief note on why this does not apply" />
+            <SelectField
+              options={naReasons}
+              value={reason}
+              onChange={setReason}
+              placeholder="Choose the reason"
+              ariaLabel="Reason this does not apply"
+            />
+            <ShortText
+              value={detail}
+              maxLength={160}
+              onChange={setDetail}
+              placeholder={
+                reason === "other"
+                  ? "Explain briefly (required)"
+                  : "Add a brief specific note (optional)"
+              }
+              ariaLabel="Brief note on why this does not apply"
+            />
           </div>
           <div className="mt-3 flex justify-end gap-2">
             <Button type="button" variant="ghost" className="h-9" onClick={() => setNaOpen(false)}>
               Cancel
             </Button>
-            <Button type="button" className="h-9" disabled={!naReady} onClick={() => { onSave({ state: "not_applicable_requested", notApplicableRationale: rationale }); setNaOpen(false); }}>
+            <Button
+              type="button"
+              className="h-9"
+              disabled={!naReady}
+              onClick={() => {
+                onSave({ state: "not_applicable_requested", notApplicableRationale: rationale });
+                setNaOpen(false);
+              }}
+            >
               Request not applicable
             </Button>
           </div>

@@ -57,8 +57,16 @@ export interface ArUiApi {
   getProfile(assessmentId: string): Promise<InstitutionProfile>;
   saveProfile(assessmentId: string, values: ProfileValues): Promise<InstitutionProfile>;
   getScreening(assessmentId: string): Promise<ScreeningView>;
-  getNextPrompt(assessmentId: string, domainCode: DomainCode, afterPromptId?: string | null): Promise<NextPromptResponse>;
-  getPromptById(assessmentId: string, domainCode: DomainCode, promptId: string): Promise<NextPromptResponse>;
+  getNextPrompt(
+    assessmentId: string,
+    domainCode: DomainCode,
+    afterPromptId?: string | null,
+  ): Promise<NextPromptResponse>;
+  getPromptById(
+    assessmentId: string,
+    domainCode: DomainCode,
+    promptId: string,
+  ): Promise<NextPromptResponse>;
   saveResponse(assessmentId: string, input: SaveResponseInput): Promise<PromptResponse>;
   getEvidence(assessmentId: string): Promise<EvidenceView>;
   createEvidence(assessmentId: string, input: CreateEvidenceInput): Promise<EvidenceItem>;
@@ -71,7 +79,11 @@ export interface ArUiApi {
   getResponseReview(assessmentId: string): Promise<ResponseReviewItem[]>;
   getEvidenceReview(assessmentId: string): Promise<EvidenceReviewItem[]>;
   getMetricScoring(assessmentId: string): Promise<MetricScoring[]>;
-  saveMetricScoring(assessmentId: string, metricId: string, input: MetricScoringInput): Promise<MetricScoring>;
+  saveMetricScoring(
+    assessmentId: string,
+    metricId: string,
+    input: MetricScoringInput,
+  ): Promise<MetricScoring>;
   getContextCalibration(assessmentId: string): Promise<ContextCalibration[]>;
   getScoreRuns(assessmentId: string): Promise<ScoreRun[]>;
   requestScoreRun(assessmentId: string, kind: ScoreRun["kind"]): Promise<ScoreRun>;

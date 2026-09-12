@@ -9,12 +9,17 @@ import { assessmentStatusLabels } from "@/lib/catalogue";
 import { queries } from "@/api/hooks";
 
 export const Route = createFileRoute("/assessor/")({
-  loader: ({ context }) => context.queryClient.ensureQueryData(queries.assessorQueue()).then(() => undefined),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(queries.assessorQueue()).then(() => undefined),
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
       { title: "Review queue — ARUI Assessor" },
-      { name: "description", content: "Institutional assessments awaiting assessor review, scoring and preliminary score runs." },
+      {
+        name: "description",
+        content:
+          "Institutional assessments awaiting assessor review, scoring and preliminary score runs.",
+      },
       { property: "og:title", content: "Review queue — ARUI Assessor" },
       { property: "og:description", content: "Assessor review queue." },
     ],
@@ -26,7 +31,11 @@ function QueuePage() {
   const { data: queue } = useSuspenseQuery(queries.assessorQueue());
   return (
     <PageContainer>
-      <PageHeader eyebrow="Assessor" title="Review queue" lede="Institutional assessments assigned for review. Respondent inputs are read and interpreted here; the engine aggregates only what assessors record." />
+      <PageHeader
+        eyebrow="Assessor"
+        title="Review queue"
+        lede="Institutional assessments assigned for review. Respondent inputs are read and interpreted here; the engine aggregates only what assessors record."
+      />
       <Panel className="mt-10">
         <table className="w-full text-sm">
           <thead>
@@ -50,11 +59,23 @@ function QueuePage() {
                     {assessmentStatusLabels[q.status]}
                   </StatusBadge>
                 </td>
-                <td className="px-4 py-4 font-mono text-xs text-muted-foreground">{q.domainsInScope.join(" · ")}</td>
-                <td className="px-4 py-4">{q.openFlags ? <StatusBadge tone="amber">{q.openFlags}</StatusBadge> : <span className="text-muted-foreground">—</span>}</td>
+                <td className="px-4 py-4 font-mono text-xs text-muted-foreground">
+                  {q.domainsInScope.join(" · ")}
+                </td>
+                <td className="px-4 py-4">
+                  {q.openFlags ? (
+                    <StatusBadge tone="amber">{q.openFlags}</StatusBadge>
+                  ) : (
+                    <span className="text-muted-foreground">—</span>
+                  )}
+                </td>
                 <td className="px-4 py-4 text-muted-foreground">{q.assignedTo ?? "Unassigned"}</td>
                 <td className="px-4 py-4 text-right">
-                  <Link to="/assessor/$id" params={{ id: q.assessmentId }} className="inline-flex items-center gap-1.5 text-sm font-medium text-navy hover:underline">
+                  <Link
+                    to="/assessor/$id"
+                    params={{ id: q.assessmentId }}
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-navy hover:underline"
+                  >
                     Open <ArrowRight className="size-3.5" />
                   </Link>
                 </td>

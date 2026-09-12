@@ -9,12 +9,20 @@ import { Button } from "@/components/ui/button";
 import { queries, useRequestScoreRun } from "@/api/hooks";
 
 export const Route = createFileRoute("/assessor/$id/runs")({
-  loader: ({ context, params }) => Promise.all([context.queryClient.ensureQueryData(queries.scoreRuns(params.id)), context.queryClient.ensureQueryData(queries.executionLog(params.id))]).then(() => undefined),
+  loader: ({ context, params }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(queries.scoreRuns(params.id)),
+      context.queryClient.ensureQueryData(queries.executionLog(params.id)),
+    ]).then(() => undefined),
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
       { title: "Score runs & execution log — ARUI Assessor" },
-      { name: "description", content: "Request preliminary score runs and inspect the execution log for an institutional assessment." },
+      {
+        name: "description",
+        content:
+          "Request preliminary score runs and inspect the execution log for an institutional assessment.",
+      },
       { property: "og:title", content: "Score runs — ARUI Assessor" },
       { property: "og:description", content: "Preliminary score runs and execution log." },
     ],
@@ -35,7 +43,11 @@ function RunsPage() {
         title="Preliminary score runs and execution log"
         lede="A run asks the engine to aggregate what assessors have recorded, under the pinned methodology version. Runs are traceable; nothing is computed in this interface."
         actions={
-          <Button className="h-10" disabled={request.isPending} onClick={() => request.mutate("preliminary")}>
+          <Button
+            className="h-10"
+            disabled={request.isPending}
+            onClick={() => request.mutate("preliminary")}
+          >
             <Play /> {request.isPending ? "Requesting…" : "Request preliminary run"}
           </Button>
         }
@@ -45,23 +57,35 @@ function RunsPage() {
         <PanelHeader eyebrow="Runs" title={`${runs.length} run${runs.length === 1 ? "" : "s"}`} />
         <ul className="divide-y divide-border">
           {runs.map((r) => (
-            <li key={r.id} className="grid gap-2 px-6 py-4 md:grid-cols-[10rem_8rem_1fr_auto] md:items-center">
+            <li
+              key={r.id}
+              className="grid gap-2 px-6 py-4 md:grid-cols-[10rem_8rem_1fr_auto] md:items-center"
+            >
               <span className="font-mono text-xs text-foreground">{r.id}</span>
-              <StatusBadge tone={r.status === "complete" ? "teal" : r.status === "failed" ? "rose" : "blue"} dot className="justify-self-start">
+              <StatusBadge
+                tone={r.status === "complete" ? "teal" : r.status === "failed" ? "rose" : "blue"}
+                dot
+                className="justify-self-start"
+              >
                 {r.status}
               </StatusBadge>
               <span className="text-sm text-muted-foreground">
                 {r.kind} · {r.methodologyVersion} · {r.scope.join(", ")} · by {r.triggeredBy}
                 {r.summary && <span className="block text-xs">{r.summary}</span>}
               </span>
-              <span className="text-xs text-muted-foreground">{new Date(r.createdAt).toLocaleString("en-GB")}</span>
+              <span className="text-xs text-muted-foreground">
+                {new Date(r.createdAt).toLocaleString("en-GB")}
+              </span>
             </li>
           ))}
         </ul>
       </Panel>
 
       <Panel className="mt-8">
-        <PanelHeader eyebrow="Execution log" title="Assessment · stage · domain · metric/rule · status · evidence · actor · decision" />
+        <PanelHeader
+          eyebrow="Execution log"
+          title="Assessment · stage · domain · metric/rule · status · evidence · actor · decision"
+        />
         <div className="overflow-x-auto">
           <table className="w-full min-w-[56rem] text-xs">
             <thead>
@@ -79,7 +103,9 @@ function RunsPage() {
             <tbody className="divide-y divide-border">
               {[...log].reverse().map((e) => (
                 <tr key={e.id}>
-                  <td className="whitespace-nowrap px-6 py-2 text-muted-foreground">{new Date(e.timestamp).toLocaleString("en-GB")}</td>
+                  <td className="whitespace-nowrap px-6 py-2 text-muted-foreground">
+                    {new Date(e.timestamp).toLocaleString("en-GB")}
+                  </td>
                   <td className="px-3 py-2">{e.stage}</td>
                   <td className="px-3 py-2 font-mono">{e.domainCode ?? "—"}</td>
                   <td className="px-3 py-2 font-mono">{e.metricOrRule ?? "—"}</td>

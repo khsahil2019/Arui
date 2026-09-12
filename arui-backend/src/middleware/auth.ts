@@ -9,6 +9,7 @@ export interface AuthenticatedUser {
   name: string;
   role: 'INSTITUTION_ADMIN' | 'ASSESSOR' | 'LEAD_AUDITOR' | 'SUPER_ADMIN';
   institutionId: string | null;
+  assessmentId?: string | null;
 }
 
 declare global {

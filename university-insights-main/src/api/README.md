@@ -2,13 +2,13 @@
 
 The frontend talks to the backend **only** through `ArUiApi` (`src/api/client.ts`).
 
-| File | Purpose |
-| --- | --- |
-| `types.ts` | Typed contracts (DTOs) the UI renders. The source of truth for what the backend must return. |
-| `client.ts` | `ArUiApi` interface and `getApi()` factory. |
-| `http.ts` | Fetch implementation for the production Node.js API. Endpoint paths are a proposal; change them here only. |
-| `mock/` | In-browser mock used when `VITE_ARUI_API_BASE_URL` is unset. Sequences and stores; never scores or routes by rule. |
-| `hooks.ts` | TanStack Query bindings used by routes/components. |
+| File        | Purpose                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------ |
+| `types.ts`  | Typed contracts (DTOs) the UI renders. The source of truth for what the backend must return.                       |
+| `client.ts` | `ArUiApi` interface and `getApi()` factory.                                                                        |
+| `http.ts`   | Fetch implementation for the production Node.js API. Endpoint paths are a proposal; change them here only.         |
+| `mock/`     | In-browser mock used when `VITE_ARUI_API_BASE_URL` is unset. Sequences and stores; never scores or routes by rule. |
+| `hooks.ts`  | TanStack Query bindings used by routes/components.                                                                 |
 
 ## Division of responsibility
 

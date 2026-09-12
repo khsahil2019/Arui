@@ -87,7 +87,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "AI Resilient University" },
       {
         property: "og:description",
-        content: "Institutional AI Resilience Assessment for universities and higher-education institutions.",
+        content:
+          "Institutional AI Resilience Assessment for universities and higher-education institutions.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
