@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARUI — Complete Institutional Assessment Executive Showcase</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: #0d121d;
+      --card-border: #1e293b;
+      --accent-blue: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --teal: #14b8a6;
+      --teal-glow: rgba(20, 184, 166, 0.15);
+      --purple: #a855f7;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --sidebar-w: 280px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+      display: flex;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        display: block !important;
+      }
+      .sidebar, .zoom-hint, .lightbox {
+        display: none !important;
+      }
+      .main-wrapper {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+      .step-card {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 30px !important;
+      }
+      .step-header {
+        background: #f1f5f9 !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+      }
+      .step-header h3 {
+        color: #0f172a !important;
+      }
+      .step-pill {
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      .step-desc {
+        color: #334155 !important;
+      }
+      .section-banner {
+        background: #e0f2fe !important;
+        border-left: 5px solid #0284c7 !important;
+        page-break-before: auto !important;
+        page-break-after: avoid !important;
+        break-after: avoid !important;
+      }
+      .section-banner h2 {
+        color: #0369a1 !important;
+      }
+      .section-banner p {
+        color: #475569 !important;
+      }
+      .tag {
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .tag-blue, .tag-teal {
+        background: #e0f2fe !important;
+        color: #0369a1 !important;
+        border: 1px solid #bae6fd !important;
+      }
+      .browser-frame {
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+      }
+      .browser-bar {
+        background: #e2e8f0 !important;
+        border-bottom: 1px solid #cbd5e1 !important;
+      }
+      .browser-url {
+        background: #ffffff !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+      .browser-url-text {
+        color: #0f172a !important;
+      }
+      h1 {
+        background: none !important;
+        -webkit-text-fill-color: initial !important;
+        color: #0f172a !important;
+      }
+    }
+
+
+    /* Left Sticky Nav */
+    .sidebar {
+      width: var(--sidebar-w);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      background: #090e17;
+      border-right: 1px solid var(--card-border);
+      padding: 24px 16px;
+      overflow-y: auto;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #38bdf8 0%, #14b8a6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #000;
+    }
+    .brand-text {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .nav-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin: 16px 8px 8px;
+    }
+    .nav-link {
+      display: block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-link:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .nav-link.active {
+      color: var(--accent-blue);
+      background: var(--accent-glow);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main-wrapper {
+      flex: 1;
+      padding: 40px 48px 100px;
+      max-width: 1200px;
+    }
+    header {
+      margin-bottom: 60px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-glow);
+      color: #38bdf8;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 60%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 17px;
+      max-width: 780px;
+      line-height: 1.6;
+    }
+
+    /* Section Headings */
+    .section-banner {
+      background: linear-gradient(90deg, rgba(56, 189, 248, 0.12) 0%, rgba(20, 184, 166, 0.04) 100%);
+      border-left: 4px solid var(--accent-blue);
+      padding: 20px 24px;
+      border-radius: 12px;
+      margin: 60px 0 35px;
+      scroll-margin-top: 30px;
+    }
+    .section-banner h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+    .section-banner p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* Step Card */
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 50px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      scroll-margin-top: 40px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .step-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 50px rgba(56, 189, 248, 0.08);
+    }
+    .step-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.015);
+    }
+    .step-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #38bdf8;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .step-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .step-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #182234;
+      color: #93c5fd;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(147, 197, 253, 0.2);
+    }
+    .step-body {
+      padding: 28px;
+    }
+    .step-desc {
+      color: var(--text-sub);
+      font-size: 15px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* Tags */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .tag {
+      font-size: 12px;
+      font-weight: 600;
+      background: #151d2c;
+      color: #94a3b8;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tag-blue {
+      background: var(--accent-glow);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+    .tag-teal {
+      background: var(--teal-glow);
+      color: var(--teal);
+      border-color: rgba(20, 184, 166, 0.3);
+    }
+
+    /* Browser Window Mockup Frame */
+    .browser-frame {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+      background: #070a11;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .browser-bar {
+      height: 38px;
+      background: #0f172a;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 14px;
+    }
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+    .browser-url {
+      flex: 1;
+      max-width: 500px;
+      background: #070a11;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #64748b;
+      gap: 6px;
+    }
+    .browser-url-text {
+      color: #94a3b8;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .browser-content {
+      position: relative;
+      cursor: zoom-in;
+    }
+    .browser-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: opacity 0.2s ease;
+    }
+    .zoom-hint {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .browser-content:hover .zoom-hint {
+      opacity: 1;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+      cursor: zoom-out;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 95vw;
+      max-height: 92vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      border: 1px solid #334155;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 24px;
+      right: 30px;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">A</div>
+      <div class="brand-text">ARUI Showcase</div>
+    </div>
+
+    <div class="nav-group-title">Executive Journey</div>
+    <a href="#p1" class="nav-link">1. Authentication</a>
+    <a href="#p2" class="nav-link">2. Overview & Radar</a>
+
+    <div class="nav-group-title">Institutional Profile</div>
+    <a href="#p3-s1" class="nav-link">3.1 Identity & Form</a>
+    <a href="#p3-s2" class="nav-link">3.2 Scale & Students</a>
+    <a href="#p3-s3" class="nav-link">3.3 Governance & Research</a>
+    <a href="#p3-s4" class="nav-link">3.4 Digital Systems</a>
+
+    <div class="nav-group-title">Domain Evaluations</div>
+    <a href="#p4" class="nav-link">4. Domains Matrix (11)</a>
+    <a href="#p5" class="nav-link">5. D01 Strategy</a>
+    <a href="#p6" class="nav-link">6. D02 Governance</a>
+
+    <div class="nav-group-title">D03 Human Capability</div>
+    <a href="#d03-q1" class="nav-link">D03.Q1 Capabilities</a>
+    <a href="#d03-q2" class="nav-link">D03.Q2 Readiness Matrix</a>
+    <a href="#d03-q3" class="nav-link">D03.Q3 Work Samples</a>
+    <a href="#d03-q4" class="nav-link">D03.Q4 Rubrics & Viva</a>
+    <a href="#d03-q5" class="nav-link">D03.Q5 AI Verification</a>
+    <a href="#d03-q6" class="nav-link">D03.Q6 Disciplinary</a>
+    <a href="#d03-q7" class="nav-link">D03.Q7 Student Agency</a>
+    <a href="#d03-q8" class="nav-link">D03.Q8 AI Literacy</a>
+    <a href="#d03-q9" class="nav-link">D03.Q9 Review Cycle</a>
+
+    <div class="nav-group-title">Evidence & Intelligence</div>
+    <a href="#p8" class="nav-link">8. Evidence Locker</a>
+    <a href="#p9" class="nav-link">9. Gap Analysis</a>
+    <a href="#p10" class="nav-link">10. Pulse Tracker</a>
+
+    <div class="nav-group-title">Assessor Certification</div>
+    <a href="#p11" class="nav-link">11. Assessor Queue</a>
+    <a href="#p12" class="nav-link">12. Context Audit</a>
+    <a href="#p13" class="nav-link">13. Anti-Gaming Check</a>
+    <a href="#p14" class="nav-link">14. Evidence Matrix</a>
+    <a href="#p15" class="nav-link">15. Final Scoring</a>
+    <a href="#p16" class="nav-link">16. Audit Runs</a>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <main class="main-wrapper">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span> Full Institutional Assessment Walkthrough
+      </div>
+      <h1>AI Resilience Assessment — Master Showcase</h1>
+      <p class="subtitle">Complete, high-fidelity visual documentation of an institutional assessment cycle. Every screen displays real entered data, active selections, and interactive control states across Institutional Leadership and Independent Assessor panels.</p>
+    </header>
+
+    <!-- PART 1: AUTHENTICATION & OVERVIEW -->
+    <div id="p1" class="section-banner">
+      <h2>Part 1: Institutional Authentication & Executive Overview</h2>
+      <p>Secure login and whole-institution diagnostic reading across 11 methodology dimensions.</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">01</div>
+          <h3>Institutional Administrator Sign-In</h3>
+        </div>
+        <span class="step-pill">sahilkh3014@gmail.com</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">University leadership enters the secure institutional workspace. Dual-role authentication provides separated permissions for Institutional Administrators and Certified External Assessors.</p>
+        <div class="tags">
+          <span class="tag tag-blue">🔑 Email & Password Validated</span>
+          <span class="tag tag-teal">🛡️ Institution ID: Apex National University</span>
+          <span class="tag">Role: institution_admin</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/login</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/02_login_filled.png')">
+            <img src="/screenshots/02_login_filled.png" alt="Institutional Login">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="p2" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">02</div>
+          <h3>Executive Overview Dashboard & Maturity Radar</h3>
+        </div>
+        <span class="step-pill">/overview</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">The executive cockpit delivers a comprehensive reading: overall Institutional AI Resilience Score, domain maturity radar spanning all 11 methodology areas, and assessment stage completion tracker.</p>
+        <div class="tags">
+          <span class="tag tag-blue">📊 Whole-Institution Score</span>
+          <span class="tag tag-teal">🎯 11-Domain Radar Graph</span>
+          <span class="tag">Cycle: 2026 Baseline</span>
+          <span class="tag">Methodology: v4.0</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/overview</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/03_overview_dashboard.png')">
+            <img src="/screenshots/03_overview_dashboard.png" alt="Overview Dashboard">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 2: INSTITUTIONAL PROFILE -->
+    <div id="p3" class="section-banner">
+      <h2>Part 2: Institutional Profile Context Calibration (IP01–IP25)</h2>
+      <p>5-step structured calibration establishing baseline university scale, student body, research intensity, and computing capabilities.</p>
+    </div>
+
+    <!-- Step 3.1 -->
+    <div id="p3-s1" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">3.1</div>
+          <h3>Profile Step 1: Institutional Identity & Legal Structure</h3>
+        </div>
+        <span class="step-pill">Fields IP01–IP08</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Captures the legal form, operational mandate (teaching vs research-intensive), location classification, and multi-campus footprint.</p>
+        <div class="tags">
+          <span class="tag tag-blue">IP01: Apex National University</span>
+          <span class="tag">IP02: Comprehensive University</span>
+          <span class="tag">IP03: Teaching + Research</span>
+          <span class="tag">IP04: Delhi</span>
+          <span class="tag">IP06: Tier 1 Metro</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/profile?step=identity</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/profile_and_questions/profile_step_01_identity_and_structure.png')">
+            <img src="/screenshots/profile_and_questions/profile_step_01_identity_and_structure.png" alt="Profile Step 1">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3.2 -->
+    <div id="p3-s2" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">3.2</div>
+          <h3>Profile Step 2: Scale, Demographics & Student Headcount</h3>
+        </div>
+        <span class="step-pill">Fields IP09–IP14</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Quantifies student enrollment distribution (UG, PG, PhD), international representation, first-generation learner ratio, and full faculty size.</p>
+        <div class="tags">
+          <span class="tag tag-blue">IP09: 18,500 UG</span>
+          <span class="tag">IP10: 4,200 PG</span>
+          <span class="tag">IP11: 850 PhD</span>
+          <span class="tag">IP12: 8.5% International</span>
+          <span class="tag">IP14: 1,120 Faculty</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/profile?step=scale</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/profile_and_questions/profile_step_02_scale_and_student_profile.png')">
+            <img src="/screenshots/profile_and_questions/profile_step_02_scale_and_student_profile.png" alt="Profile Step 2">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3.3 -->
+    <div id="p3-s3" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">3.3</div>
+          <h3>Profile Step 3: Governance, Faculty & Research Intensity</h3>
+        </div>
+        <span class="step-pill">Fields IP15–IP19</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Evaluates full-time faculty tenure, Student-to-Faculty Ratio (SFR), annual sponsored research grants, patent generation, and accreditation tier.</p>
+        <div class="tags">
+          <span class="tag tag-blue">IP15: 88% Full-Time</span>
+          <span class="tag">IP16: 18:1 SFR</span>
+          <span class="tag">IP17: ₹45 Cr Annual Grants</span>
+          <span class="tag">IP18: 34 Patents</span>
+          <span class="tag">IP19: NAAC A++ / NIRF Top 25</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/profile?step=governance</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/profile_and_questions/profile_step_03_governance_and_research.png')">
+            <img src="/screenshots/profile_and_questions/profile_step_03_governance_and_research.png" alt="Profile Step 3">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3.4 -->
+    <div id="p3-s4" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">3.4</div>
+          <h3>Profile Step 4: Digital Systems & Infrastructure Readiness</h3>
+        </div>
+        <span class="step-pill">Fields IP20–IP23</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Measures campus fiber bandwidth, enterprise LMS rollout, High-Performance Computing (HPC/GPU) clusters, and dedicated AI research labs.</p>
+        <div class="tags">
+          <span class="tag tag-blue">IP20: 10 Gbps Backbone</span>
+          <span class="tag">IP21: Canvas LMS Universal</span>
+          <span class="tag">IP22: NVIDIA H100 Cluster</span>
+          <span class="tag">IP23: 4 Dedicated AI Labs</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/profile?step=infrastructure</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/profile_and_questions/profile_step_04_digital_infrastructure.png')">
+            <img src="/screenshots/profile_and_questions/profile_step_04_digital_infrastructure.png" alt="Profile Step 4">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 3: DOMAIN QUESTIONNAIRES & D03 DEEP-DIVE -->
+    <div id="p4" class="section-banner">
+      <h2>Part 3: Methodology Domains Matrix & D03 Question Deep-Dive</h2>
+      <p>11-Domain architecture and exhaustive question-by-question walkthrough (Q01 to Q09) with active interactive controls.</p>
+    </div>
+
+    <!-- Domains Matrix -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">04</div>
+          <h3>Methodology Domains Grid (All 11 Domains)</h3>
+        </div>
+        <span class="step-pill">/assessment</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Unified matrix displaying all 11 methodology domains (D01 Strategy to D11 Adaptability) with capability count and completion progress.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/05_assessment_domains_grid.png')">
+            <img src="/screenshots/05_assessment_domains_grid.png" alt="Assessment Domains">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D01 -->
+    <div id="p5" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">05</div>
+          <h3>Domain D01: Strategy, Foresight & Institutional Direction</h3>
+        </div>
+        <span class="step-pill">/assessment/D01</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Evaluates university-wide strategic plans, executive alignment, foresight models, and dedicated institutional funding allocations.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D01</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/06_domain_d01_assessment.png')">
+            <img src="/screenshots/06_domain_d01_assessment.png" alt="Domain D01">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D02 -->
+    <div id="p6" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">06</div>
+          <h3>Domain D02: Governance, Responsible AI & Institutional Risk</h3>
+        </div>
+        <span class="step-pill">/assessment/D02</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Evaluates university AI risk registers, ethical review committees, student data privacy safeguards, and compliance monitoring.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D02</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/07_domain_d02_governance.png')">
+            <img src="/screenshots/07_domain_d02_governance.png" alt="Domain D02">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q1 -->
+    <div id="d03-q1" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.1</div>
+          <h3>D03 Q01: Graduate Capabilities Architecture</h3>
+        </div>
+        <span class="step-pill">Strategic Area A01 · Q01</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> Which graduate capabilities does the institution explicitly intend students to develop in the AI era?</p>
+        <div class="tags">
+          <span class="tag tag-blue">✅ Multi-Choice Checkboxes Selected</span>
+          <span class="tag tag-teal">🔘 "Response recorded" Verified</span>
+          <span class="tag">🔘 "Update response" Action</span>
+          <span class="tag">🔘 Evidence Hint Attached</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q01</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_01_q01_graduate_capabilities_architecture.png')">
+            <img src="/screenshots/d03_human_capability/d03_01_q01_graduate_capabilities_architecture.png" alt="D03 Q01">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q2 -->
+    <div id="d03-q2" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.2</div>
+          <h3>D03 Q02: Faculty Readiness Matrix Mapping</h3>
+        </div>
+        <span class="step-pill">Strategic Area A02 · Q02</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> Where is each selected capability intended, developed, demonstrated and assessed across representative programmes?</p>
+        <div class="tags">
+          <span class="tag tag-teal">✅ Interactive Matrix Table</span>
+          <span class="tag">🔘 Intended / Developed / Assessed Ticks</span>
+          <span class="tag">🔘 Theme Progress Segment</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q02</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_02_q02_faculty_cognitive_readiness.png')">
+            <img src="/screenshots/d03_human_capability/d03_02_q02_faculty_cognitive_readiness.png" alt="D03 Q02">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q3 -->
+    <div id="d03-q3" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.3</div>
+          <h3>D03 Q03: Authentic Capability Demonstration & Work Samples</h3>
+        </div>
+        <span class="step-pill">Strategic Area A03 · Q03</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> Provide representative student activity/work sample demonstrating 3–5 selected capabilities.</p>
+        <div class="tags">
+          <span class="tag tag-blue">📝 Form Notes Input</span>
+          <span class="tag">🔘 Evidence Linker Button</span>
+          <span class="tag">🔘 Save & Next Action</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q03</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_03_q03_authentic_capability_demonstration.png')">
+            <img src="/screenshots/d03_human_capability/d03_03_q03_authentic_capability_demonstration.png" alt="D03 Q03">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q4 -->
+    <div id="d03-q4" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.4</div>
+          <h3>D03 Q04: Assessment Security, Rubrics & Criteria</h3>
+        </div>
+        <span class="step-pill">Strategic Area A04 · Q04</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> How are students required to demonstrate capability rather than simply produce an answer?</p>
+        <div class="tags">
+          <span class="tag">🔘 Oral Defence / Viva</span>
+          <span class="tag">🔘 Process Working Documentation</span>
+          <span class="tag">🔘 Reflective Commentary</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q04</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_04_q04_assessment_security_and_rubrics.png')">
+            <img src="/screenshots/d03_human_capability/d03_04_q04_assessment_security_and_rubrics.png" alt="D03 Q04">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q5 -->
+    <div id="d03-q5" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.5</div>
+          <h3>D03 Q05: AI Verification Activities & Critical Thinking</h3>
+        </div>
+        <span class="step-pill">Strategic Area A05 · Q05</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> Where are students expected to verify, challenge or contextualise AI-generated output?</p>
+        <div class="tags">
+          <span class="tag tag-blue">📝 Course Lab Records Input</span>
+          <span class="tag">🔘 LLM Hallucination Audit Module</span>
+          <span class="tag">🔘 Save Response</span>
+        </div>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q05</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_05_q05_ai_verification_and_critical_thinking.png')">
+            <img src="/screenshots/d03_human_capability/d03_05_q05_ai_verification_and_critical_thinking.png" alt="D03 Q05">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q6 -->
+    <div id="d03-q6" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.6</div>
+          <h3>D03 Q06: Non-Technical Disciplinary Integration</h3>
+        </div>
+        <span class="step-pill">Strategic Area A06 · Q06</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> How is AI cognitive integration applied in Humanities, Law, Social Sciences, and Creative Arts?</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q06</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_06_q06_non_technical_disciplinary_integration.png')">
+            <img src="/screenshots/d03_human_capability/d03_06_q06_non_technical_disciplinary_integration.png" alt="D03 Q06">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q7 -->
+    <div id="d03-q7" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.7</div>
+          <h3>D03 Q07: Metacognitive Student Agency</h3>
+        </div>
+        <span class="step-pill">Strategic Area A07 · Q07</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> How does the institution evaluate and foster student intellectual agency versus automated dependency?</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q07</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_07_q07_metacognitive_student_agency.png')">
+            <img src="/screenshots/d03_human_capability/d03_07_q07_metacognitive_student_agency.png" alt="D03 Q07">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q8 -->
+    <div id="d03-q8" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.8</div>
+          <h3>D03 Q08: AI Literacy Curriculum Pathways</h3>
+        </div>
+        <span class="step-pill">Strategic Area A08 · Q08</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> Is there a mandatory foundational AI literacy module across all undergraduate programmes?</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q08</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_08_q08_ai_literacy_curriculum_pathways.png')">
+            <img src="/screenshots/d03_human_capability/d03_08_q08_ai_literacy_curriculum_pathways.png" alt="D03 Q08">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D03 Q9 -->
+    <div id="d03-q9" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">D03.9</div>
+          <h3>D03 Q09: Continuous Capability Governance</h3>
+        </div>
+        <span class="step-pill">Strategic Area A10 · Q09</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc"><strong>Prompt:</strong> What is the scheduled frequency for reviewing graduate capability frameworks in response to AI advancements?</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessment/D03?p=Q09</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/d03_human_capability/d03_09_q09_continuous_capability_governance.png')">
+            <img src="/screenshots/d03_human_capability/d03_09_q09_continuous_capability_governance.png" alt="D03 Q09">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 4: EVIDENCE, INTELLIGENCE & PULSE -->
+    <div id="p8" class="section-banner">
+      <h2>Part 4: Evidence Locker, Intelligence Gap Analysis & Longitudinal Pulse</h2>
+      <p>Artifact multi-metric linking, algorithmic vulnerability discovery, and historic trend tracking.</p>
+    </div>
+
+    <!-- Evidence Locker -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">08</div>
+          <h3>Evidence Locker & Multi-Metric Document Linking</h3>
+        </div>
+        <span class="step-pill">/evidence</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Repository of official institutional artifacts (policy documents, council minutes, syllabus rubrics) mapped to claimed capability metrics for assessor verification.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/evidence</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/08_evidence_vault.png')">
+            <img src="/screenshots/08_evidence_vault.png" alt="Evidence Vault">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Intelligence -->
+    <div id="p9" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">09</div>
+          <h3>Institutional Intelligence & Gap Analysis Roadmap</h3>
+        </div>
+        <span class="step-pill">/intelligence</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Diagnostic intelligence engine computes prioritized interventions, capability gaps, and recommended quarterly roadmaps for university leadership.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/intelligence</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/09_intelligence_gap_analysis.png')">
+            <img src="/screenshots/09_intelligence_gap_analysis.png" alt="Intelligence Analysis">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pulse -->
+    <div id="p10" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">10</div>
+          <h3>Longitudinal Pulse & Tracking</h3>
+        </div>
+        <span class="step-pill">/pulse</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Visualizes historical assessment cycles, tracking institutional capability improvements and AI resilience shifts across quarters.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/pulse</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/10_pulse_tracking.png')">
+            <img src="/screenshots/10_pulse_tracking.png" alt="Pulse Tracker">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 5: ASSESSOR AUDIT & CERTIFICATION -->
+    <div id="p11" class="section-banner">
+      <h2>Part 5: Independent Assessor Audit & Certification Workflow</h2>
+      <p>Independent reviewer queue, context audit, anti-gaming validation, evidence matrix, and certified score sign-off.</p>
+    </div>
+
+    <!-- Step 11 -->
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">11</div>
+          <h3>Assessor Workspace & Institutional Queue</h3>
+        </div>
+        <span class="step-pill">assessor@arui.org</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Certified auditor dashboard displaying assigned institutions, review deadlines, and preliminary submission states.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/11_assessor_workspace.png')">
+            <img src="/screenshots/11_assessor_workspace.png" alt="Assessor Queue">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 12 -->
+    <div id="p12" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">12</div>
+          <h3>Assessor Institutional Context Audit</h3>
+        </div>
+        <span class="step-pill">Context Audit</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Auditor confirms self-reported scale, research tier, and demographic profile to calibrate benchmark scoring thresholds.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor/987516bd-f4ac-4bac-8040-5089f586d347/context</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/12_assessor_context_audit.png')">
+            <img src="/screenshots/12_assessor_context_audit.png" alt="Context Audit">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 13 -->
+    <div id="p13" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">13</div>
+          <h3>Domain Response Audit & Anti-Gaming Verification</h3>
+        </div>
+        <span class="step-pill">Anti-Gaming Rules</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Audits capability claims against 10 anti-gaming rules and 413 cross-domain verification algorithms to prevent inflated responses.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor/987516bd-f4ac-4bac-8040-5089f586d347/responses</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/13_assessor_responses_audit.png')">
+            <img src="/screenshots/13_assessor_responses_audit.png" alt="Response Audit">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 14 -->
+    <div id="p14" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">14</div>
+          <h3>Assessor Evidence Verification Matrix</h3>
+        </div>
+        <span class="step-pill">Evidence Matrix</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Assessors inspect uploaded documents against claimed metrics, confirming or rejecting supporting evidence with justification notes.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor/987516bd-f4ac-4bac-8040-5089f586d347/evidence</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/14_assessor_evidence_matrix.png')">
+            <img src="/screenshots/14_assessor_evidence_matrix.png" alt="Evidence Matrix">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 15 -->
+    <div id="p15" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">15</div>
+          <h3>Assessor Final Scoring & Calibration Sign-Off</h3>
+        </div>
+        <span class="step-pill">Certified Sign-Off</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Auditor applies final calibration factors, writes executive sign-off comments, and issues the certified institutional maturity score.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor/987516bd-f4ac-4bac-8040-5089f586d347/scoring</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/15_assessor_scoring_signoff.png')">
+            <img src="/screenshots/15_assessor_scoring_signoff.png" alt="Scoring Signoff">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 16 -->
+    <div id="p16" class="step-card">
+      <div class="step-header">
+        <div class="step-header-left">
+          <div class="step-num">16</div>
+          <h3>Algorithmic Execution Runs & Immutable Audit Log</h3>
+        </div>
+        <span class="step-pill">Audit Trail</span>
+      </div>
+      <div class="step-body">
+        <p class="step-desc">Immutable audit log recording engine calculation runs, status changes, calibration overrides, and timestamps.</p>
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="browser-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+            <div class="browser-url">🔒 <span class="browser-url-text">https://arui.org/assessor/987516bd-f4ac-4bac-8040-5089f586d347/runs</span></div>
+          </div>
+          <div class="browser-content" onclick="openLightbox('/screenshots/16_assessor_execution_runs.png')">
+            <img src="/screenshots/16_assessor_execution_runs.png" alt="Execution Runs">
+            <div class="zoom-hint">🔍 Click to zoom full screen</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Full Screen Lightbox Modal -->
+  <div id="lightboxModal" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="" alt="Full Resolution Screenshot" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    function openLightbox(src) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightboxModal').classList.add('active');
+    }
+    function closeLightbox() {
+      document.getElementById('lightboxModal').classList.remove('active');
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Update active nav link on scroll
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section-banner, .step-card');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach((sec) => {
+        const top = sec.offsetTop - 120;
+        if (pageYOffset >= top) {
+          if (sec.id) current = sec.id;
+        }
+      });
+      navLinks.forEach((link) => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

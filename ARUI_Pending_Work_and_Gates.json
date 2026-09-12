@@ -1,0 +1,224 @@
+{
+  "document": "ARUI Pending Work and Gates",
+  "purpose": "Machine-readable handoff/checklist for the developer. It separates implementation work from methodology decisions that must not be invented.",
+  "source_of_truth": [
+    "ARUI Production Backend and Full System Developer Specification",
+    "ARUI Developer Rectification & Verification Master",
+    "ARUI Code Audit Developer Action List",
+    "Approved/provisional ARUI methodology workbooks"
+  ],
+  "implementation_gates": [
+    {
+      "id": "P01",
+      "area": "Repository",
+      "task": "Keep current snapshot safe and unmerged; implement production changes in a branch/copy.",
+      "done_when": "Clean branch/copy exists and main is untouched until acceptance."
+    },
+    {
+      "id": "P02",
+      "area": "Backend",
+      "task": "Build developer-owned Node.js production API.",
+      "done_when": "Node API runs independently of Lovable/Supabase."
+    },
+    {
+      "id": "P03",
+      "area": "Database",
+      "task": "Create PostgreSQL schema and migrations from empty DB.",
+      "done_when": "Empty DB migrates and seeds successfully."
+    },
+    {
+      "id": "P04",
+      "area": "Methodology",
+      "task": "Import versioned methodology registry from source workbooks; do not manually duplicate methodology in React.",
+      "done_when": "Registry is source for domains, metrics, cards, questions, evidence, institutional data, anchors, scoring config, cross-domain rules and QA metadata."
+    },
+    {
+      "id": "P05",
+      "area": "Methodology completeness",
+      "task": "Load 11 domains, 143 metrics, 69 cards and 63 standard questions when the full methodology package is authorized.",
+      "done_when": "Counts are 11/143/69/63 and D01-D11 exist."
+    },
+    {
+      "id": "P06",
+      "area": "Institution profile",
+      "task": "Implement all 25 methodology profile fields.",
+      "done_when": "Profile captures the full 25-field register with correct four-state handling where specified."
+    },
+    {
+      "id": "P07",
+      "area": "Assessment lifecycle",
+      "task": "Implement create assessment -> screening -> responses -> institutional data -> evidence -> assessor -> maturity -> diagnostics -> score run -> report -> PDF.",
+      "done_when": "One clean end-to-end journey works without manual DB edits."
+    },
+    {
+      "id": "P08",
+      "area": "Adaptive engine",
+      "task": "Server owns screening and routing; initial screening never exceeds 30.",
+      "done_when": "Shown/answered/skipped/hidden execution states are stored and hidden questions are not scored."
+    },
+    {
+      "id": "P09",
+      "area": "Response controls",
+      "task": "Render methodology-defined input types rather than generic option cards.",
+      "done_when": "D03 examples A05 structured+evidence, A06 frequency+evidence, A07 numeric, A08 discipline matrix+sample, A09 optional full assessment, A10 Top-3+rationale are represented correctly."
+    },
+    {
+      "id": "P10",
+      "area": "Response states",
+      "task": "Preserve NOT ANSWERED, NOT SURE/UNKNOWN, N/A and ANSWERED/PROVIDED as distinct states.",
+      "done_when": "No state silently becomes blank, zero or N/A."
+    },
+    {
+      "id": "P11",
+      "area": "Scoring",
+      "task": "Implement server-side M/I/O scoring.",
+      "done_when": "With Outcome: 100*(0.45M+0.30I+0.25O)/5; legitimate Outcome N/A: 100*(0.60M+0.40I)/5; domain score is mean of applicable metric scores."
+    },
+    {
+      "id": "P12",
+      "area": "Scoring integrity",
+      "task": "Keep respondent answers separate from assessor M/I/O; keep evidence confidence separate from capability.",
+      "done_when": "Client cannot determine authoritative score."
+    },
+    {
+      "id": "P13",
+      "area": "N/A/missing",
+      "task": "Implement approved N/A and missing-data behavior.",
+      "done_when": "Missing never silently becomes zero or N/A."
+    },
+    {
+      "id": "P14",
+      "area": "Required maturity",
+      "task": "Implement approved P0-4 context-sensitive required maturity and transformation distance.",
+      "done_when": "Resource envelope changes evidence burden only; no automatic capability bonus/penalty."
+    },
+    {
+      "id": "P15",
+      "area": "Cross-domain",
+      "task": "Implement P0-5 contradiction/dependency diagnostics.",
+      "done_when": "Findings are generated but do not modify scores."
+    },
+    {
+      "id": "P16",
+      "area": "Evidence",
+      "task": "Implement E0-E4 evidence ladder, temporal validity, corroboration/high-score controls and shared-evidence primary-owner control.",
+      "done_when": "Evidence is private, auditable and independently reviewable."
+    },
+    {
+      "id": "P17",
+      "area": "Assessor",
+      "task": "Implement assessor M/I/O/N/A/rationale, evidence review, flags and adjudication/calibration records.",
+      "done_when": "Assessment decisions are auditable and role-controlled."
+    },
+    {
+      "id": "P18",
+      "area": "Score runs",
+      "task": "Freeze methodology version and calculation inputs into immutable score runs.",
+      "done_when": "Same frozen inputs + same methodology version reproduce the same score."
+    },
+    {
+      "id": "P19",
+      "area": "D04-D11",
+      "task": "Enable D04-D11 through the same registry-driven engine, not eight hard-coded apps.",
+      "done_when": "Each domain is assessable through the same generic assessment, evidence, scoring and reporting engine."
+    },
+    {
+      "id": "P20",
+      "area": "Reports",
+      "task": "Freeze report payload and generate PDF server-side.",
+      "done_when": "Partial/full coverage, long names/tables and page breaks render correctly and match the approved sample structure."
+    },
+    {
+      "id": "P21",
+      "area": "Security",
+      "task": "Implement authentication, RBAC, institution isolation, private evidence storage, signed access, audit logging, rate limiting, HTTPS/secrets and backup controls.",
+      "done_when": "Security acceptance tests pass."
+    },
+    {
+      "id": "P22",
+      "area": "Frontend integration",
+      "task": "Connect React to production API and remove mock data from production path.",
+      "done_when": "System works with Lovable unavailable and no production scoring depends on mock fixtures."
+    },
+    {
+      "id": "P23",
+      "area": "Tests",
+      "task": "Add automated unit/API/E2E/security/reproducibility tests.",
+      "done_when": "All mandatory test categories in the verification suite pass."
+    },
+    {
+      "id": "P24",
+      "area": "Final E2E",
+      "task": "Run one clean demo institution from empty DB through PDF.",
+      "done_when": "No manual DB edits; every lifecycle step succeeds."
+    }
+  ],
+  "mandatory_verification_tests": [
+    "M=0,I=0,O=0",
+    "M=5,I=5,O=5",
+    "Outcome present",
+    "Outcome legitimate N/A",
+    "Invalid M/I/O values rejected",
+    "Missing values do not silently become zero",
+    "Accepted N/A excluded according to approved rule",
+    "Four response states remain distinct",
+    "Required maturity lower and upper clamps",
+    "Resource-bias separation",
+    "Cross-domain finding generated without score change",
+    "Evidence temporal validity",
+    "High-score corroboration flag",
+    "Shared evidence primary-owner control",
+    "Initial screening <=30",
+    "Hidden questions are not scored",
+    "Institution A cannot access institution B",
+    "Unauthenticated protected endpoints reject access",
+    "Assessor authorization is enforced",
+    "Same frozen inputs reproduce same score",
+    "Partial and full PDF reports",
+    "Long names/tables/page breaks"
+  ],
+  "methodology_pending_decisions_do_not_invent": [
+    "Answer-choice -> M/I/O mapping",
+    "Blank Outcome versus legitimate N/A treatment where unresolved",
+    "Screening/weak/contradictory thresholds",
+    "Evidence-request threshold",
+    "Profile scale mappings",
+    "Confidence-band formula",
+    "Corroboration/independence adjustment formula",
+    "Partial-coverage overall-score rule",
+    "Respondent-facing maturity labels",
+    "Institutional Pulse relationship",
+    "Future Exposure scale"
+  ],
+  "special_rule": "D03 A09 is an optional Student Reality Sample/full-assessment workflow, not a missing normal question. Do not create a fake Q10.",
+  "143_metric_delay_rule": "If the 143-metric methodology package is intentionally delayed, the developer may build the engine/schema/importer now, but must not fake, invent, duplicate or silently mark the missing D04-D11 methodology as complete. The verification suite can run with ARUI_ALLOW_PARTIAL_METHOD=1 during the interim; production V1 is not fully accepted until the authorized methodology registry is loaded.",
+  "definition_of_done": [
+    "Node backend runs/deploys",
+    "PostgreSQL migrates from empty database",
+    "Methodology registry is versioned",
+    "11 domains loaded",
+    "143 metrics loaded when methodology is authorized",
+    "69 cards loaded when methodology is authorized",
+    "63 standard questions loaded when methodology is authorized",
+    "25-field profile works",
+    "Assessment lifecycle works",
+    "<=30 screening works",
+    "Adaptive routing works",
+    "Evidence works",
+    "Assessor workflow works",
+    "Server-side scoring works",
+    "Required maturity works",
+    "Cross-domain diagnostics work without changing scores",
+    "Calibration/adjudication records work",
+    "Immutable score runs work",
+    "D04-D11 work through the same engine",
+    "Server PDF works",
+    "RBAC/institution isolation passes",
+    "Deterministic rerun passes",
+    "No Lovable/Supabase production dependency",
+    "No production mock-data dependency",
+    "Unresolved methodology decisions remain explicitly pending",
+    "No claim of empirical validation, certification or public ranking"
+  ],
+  "developer_instruction": "Do not report ARUI as complete because screenshots look complete. Implement, run the verification suite, provide migration/seed output, automated test results and one complete E2E run. If any methodology item is pending or provisional, preserve it as pending rather than inventing a rule."
+}

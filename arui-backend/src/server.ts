@@ -30,10 +30,30 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/docs', dashboardRoutes);
 app.get('/', dashboardRoutes);
 
+// Master Full Walkthrough HTML Page & Screenshots & PDF / ZIP Downloads
+app.get('/walkthrough', (req, res) => {
+  res.sendFile('/Users/sahilkhan/FlutterDev/Arui/assessment_master_walkthrough.html');
+});
+app.get('/download/master-guide.pdf', (req, res) => {
+  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Institutional_Assessment_Master_Guide.pdf', 'ARUI_Institutional_Assessment_Master_Guide.pdf');
+});
+app.get('/download/screenshots.zip', (req, res) => {
+  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Assessment_HD_Screenshots.zip', 'ARUI_Assessment_HD_Screenshots.zip');
+});
+app.get('/download/verification-suite.mjs', (req, res) => {
+  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_PRODUCTION_verification_suite.mjs', 'ARUI_PRODUCTION_verification_suite.mjs');
+});
+app.get('/download/pending-work-and-gates.json', (req, res) => {
+  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Pending_Work_and_Gates.json', 'ARUI_Pending_Work_and_Gates.json');
+});
+app.use('/screenshots', express.static('/Users/sahilkhan/FlutterDev/Arui/arui_hd_screenshots'));
+
+
 // Health Check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'arui-production-backend', timestamp: new Date().toISOString() });
 });
+
 
 // Mount Routes
 app.use('/api/v1/auth', authRoutes);
