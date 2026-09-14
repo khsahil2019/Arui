@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
+import { authenticate, requireInstitutionAccess, requireRole } from '../../middleware/auth.js';
 
 const router = Router();
 
 // Route: Get Evidence View
-router.get('/assessments/:id/evidence', async (req, res) => {
+router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -86,7 +87,7 @@ router.get('/assessments/:id/evidence', async (req, res) => {
 });
 
 // Route: Create Evidence Item
-router.post('/assessments/:id/evidence', async (req, res) => {
+router.post('/assessments/:id/evidence', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   const {
     title,
@@ -106,6 +107,7 @@ router.post('/assessments/:id/evidence', async (req, res) => {
   }
 
   try {
+    const cleanFileName = fileName || 'evidence_document.pdf';
     const insRes = await query(
       `INSERT INTO evidence_items (assessment_id, title, description, file_name, file_path, file_size, source_origin, period_covered, status)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'DRAFT')
@@ -114,8 +116,8 @@ router.post('/assessments/:id/evidence', async (req, res) => {
         id,
         title,
         description || '',
-        fileName || 'evidence_document.pdf',
-        `/uploads/evidence/${fileName || 'evidence_document.pdf'}`,
+        cleanFileName,
+        `uploads/evidence/${cleanFileName}`,
         fileSize || 150000,
         evidenceType || 'policy',
         periodStart ? `${periodStart} to ${periodEnd || 'Present'}` : 'Current',
@@ -153,7 +155,7 @@ router.post('/assessments/:id/evidence', async (req, res) => {
 });
 
 // Route: Submit Evidence Item
-router.post('/assessments/:id/evidence/:evidenceId/submit', async (req, res) => {
+router.post('/assessments/:id/evidence/:evidenceId/submit', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, evidenceId } = req.params;
 
   try {
@@ -171,15 +173,16 @@ router.post('/assessments/:id/evidence/:evidenceId/submit', async (req, res) => 
 });
 
 // Route: Assessor Review Evidence (P0-6 Anti-Gaming & Temporal Validity)
-router.post('/evidence/:id/review', async (req, res) => {
+router.post('/evidence/:id/review', authenticate, requireRole(['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN']), async (req, res) => {
   const { id } = req.params;
   const { level, authenticityStatus, temporalValidityStatus, comments, assessorId } = req.body;
 
   try {
+    const activeAssessorId = assessorId || req.user?.id;
     await query(
       `INSERT INTO evidence_reviews (evidence_id, assessor_id, level, authenticity_status, temporal_validity_status, comments)
        VALUES ($1, COALESCE($2, (SELECT id FROM users WHERE role = 'ASSESSOR' LIMIT 1)), $3, $4, $5, $6)`,
-      [id, assessorId || null, level || 'E2', authenticityStatus || 'verified', temporalValidityStatus || 'valid', comments || '']
+      [id, activeAssessorId, level || 'E2', authenticityStatus || 'verified', temporalValidityStatus || 'valid', comments || '']
     );
 
     await query(

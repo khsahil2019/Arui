@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { buildAssessmentReportPayload } from './payload.js';
 import { generateAssessmentPdfStream } from './pdf.js';
+import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 
 const router = Router();
 
 // Route: Get Assessment Report Payload (JSON)
 router.get(
   ['/assessments/:id/report/preliminary', '/assessments/:id/report', '/reports/:id/json', '/reports/:id'],
+  authenticate,
+  requireInstitutionAccess,
   async (req, res) => {
     const id = req.params.id as string;
     try {
@@ -22,15 +25,18 @@ router.get(
 // Route: Stream Server-Generated Assessment Report PDF
 router.get(
   ['/reports/:id/pdf', '/assessments/:id/report/preliminary.pdf', '/assessments/:id/report/pdf', '/assessments/:id/pdf'],
+  authenticate,
+  requireInstitutionAccess,
   async (req, res) => {
     const id = req.params.id as string;
     try {
       const payload = await buildAssessmentReportPayload(id);
 
+      const sanitizedName = (payload.institution?.name || 'Institution').replace(/[^a-zA-Z0-9_-]/g, '_');
       res.setHeader('Content-Type', 'application/pdf');
       res.setHeader(
         'Content-Disposition',
-        `inline; filename="ARUI_Assessment_Report_${payload.institution?.name?.replace(/\s+/g, '_') || 'Report'}.pdf"`
+        `inline; filename="ARUI_Assessment_Report_${sanitizedName}.pdf"`
       );
 
       generateAssessmentPdfStream(payload, res);

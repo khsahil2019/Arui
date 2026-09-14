@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
 import { calculateScoreRun } from '../scoring/engine.js';
+import { authenticate, requireInstitutionAccess, requireRole } from '../../middleware/auth.js';
 import crypto from 'crypto';
 
 const router = Router();
 
-// Route: Assessor Queue
-router.get('/assessor/queue', async (req, res) => {
+// Route: Assessor Queue (Strictly for Assessors/Auditors/Admins)
+router.get('/assessor/queue', authenticate, requireRole(['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN']), async (req, res) => {
   try {
     const asmRes = await query(
       `SELECT a.id as assessment_id, i.name as institution_name, a.status, a.scope_domains_json, a.created_at,
@@ -25,7 +26,7 @@ router.get('/assessor/queue', async (req, res) => {
       submittedAt: row.created_at ? new Date(row.created_at).toISOString() : null,
       domainsInScope: row.scope_domains_json || ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'],
       openFlags: Number(row.open_flags) || 0,
-      assignedTo: row.assigned_to || 'Lead Assessor',
+      assignedTo: row.assigned_to || 'Assessor',
     }));
 
     return res.json(queue);
@@ -36,7 +37,7 @@ router.get('/assessor/queue', async (req, res) => {
 });
 
 // Route: Assessor Assessment Overview
-router.get('/assessor/assessments/:id', async (req, res) => {
+router.get('/assessor/assessments/:id', authenticate, requireRole(['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN']), async (req, res) => {
   const { id } = req.params;
   try {
     const aRes = await query(
@@ -68,7 +69,7 @@ router.get('/assessor/assessments/:id', async (req, res) => {
       `SELECT
          (SELECT count(*) FROM assessment_responses WHERE assessment_id = $1 AND state = 'answered') as responses,
          (SELECT count(*) FROM assessment_responses WHERE assessment_id = $1 AND state = 'not_sure') as not_sure,
-         (SELECT count(*) FROM assessment_responses WHERE assessment_id = $1 AND state = 'not_applicable_requested') as na_requested,
+         (SELECT count(*) FROM assessment_responses WHERE assessment_id = $1 AND state = 'na') as na_requested,
          (SELECT count(*) FROM evidence_items WHERE assessment_id = $1) as evidence,
          (SELECT count(*) FROM metric_assessments WHERE assessment_id = $1) as metrics_scored,
          (SELECT count(*) FROM metrics) as metrics_total,
@@ -82,7 +83,7 @@ router.get('/assessor/assessments/:id', async (req, res) => {
       domainCode: d.code,
       domainName: d.name,
       applicable: true,
-      rationale: 'Core institutional domain evaluated in full assessment.',
+      rationale: 'Core institutional domain evaluated in assessment.',
       accepted: true,
     }));
 
@@ -111,7 +112,7 @@ router.get('/assessor/assessments/:id', async (req, res) => {
 });
 
 // Route: Assessor Response Review (List all questions with institutional responses)
-router.get(['/assessor/assessments/:id/responses', '/assessments/:id/responses'], async (req, res) => {
+router.get(['/assessor/assessments/:id/responses', '/assessments/:id/responses'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const qRes = await query(`SELECT * FROM questions ORDER BY domain_code, sort_order ASC`);
@@ -135,8 +136,8 @@ router.get(['/assessor/assessments/:id/responses', '/assessments/:id/responses']
           value: saved.response_value_json,
           answeredAt: saved.answered_at ? new Date(saved.answered_at).toISOString() : new Date().toISOString(),
           updatedAt: saved.updated_at ? new Date(saved.updated_at).toISOString() : new Date().toISOString(),
-          note: saved.note || undefined,
-          notApplicableRationale: saved.na_rationale || undefined,
+          note: saved.notes || undefined,
+          notApplicableRationale: saved.state === 'na' ? saved.notes || undefined : undefined,
         };
       }
 
@@ -161,73 +162,34 @@ router.get(['/assessor/assessments/:id/responses', '/assessments/:id/responses']
 });
 
 // Route: Assessor Evidence Review (List all submitted evidence items)
-router.get('/assessor/assessments/:id/evidence', async (req, res) => {
+router.get('/assessor/assessments/:id/evidence', authenticate, requireRole(['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN']), async (req, res) => {
   const { id } = req.params;
   try {
     const evRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1 ORDER BY created_at DESC`, [id]);
-    let rows = evRes.rows;
-
-    if (rows.length === 0) {
-      rows = [
-        {
-          id: 'ev-demo-01',
-          kind: 'document',
-          title: 'Institutional AI Governance & Ethics Policy Framework (2025–2028)',
-          filename: 'AI_Governance_Ethics_Framework_Apex.pdf',
-          file_size_bytes: 2457600,
-          mime_type: 'application/pdf',
-          period_start: '2025-01',
-          period_end: '2028-12',
-          description: 'Approved academic senate policy defining approved GenAI use, ethical guidelines, and risk controls across all faculties.',
-          scope: 'Whole institution (All schools & departments)',
-          status: 'submitted',
-          submitted_at: new Date().toISOString(),
-          proposed_supports: ['D01-I01', 'D02-I01'],
-          confirmed_supports: ['D01-I01'],
-          fulfils_request_ids: ['req-gov-01'],
-        },
-        {
-          id: 'ev-demo-02',
-          kind: 'document',
-          title: 'Academic Council Minutes — Authentic Assessment Redesign Mandate',
-          filename: 'Academic_Council_Assessment_Resolution_2025.pdf',
-          file_size_bytes: 1843200,
-          mime_type: 'application/pdf',
-          period_start: '2025-06',
-          period_end: '2026-06',
-          description: 'Mandate requiring undergraduate modules to incorporate oral defense, process evaluation, and AI-resilient assessment rubrics.',
-          scope: 'Undergraduate and Postgraduate coursework',
-          status: 'submitted',
-          submitted_at: new Date().toISOString(),
-          proposed_supports: ['D07-I01', 'D07-I02'],
-          confirmed_supports: ['D07-I01'],
-          fulfils_request_ids: ['req-ass-01'],
-        },
-      ];
-    }
+    const rows = evRes.rows;
 
     const reviewItems = rows.map((ev: any) => ({
       evidence: {
         id: ev.id,
         kind: 'document',
         title: ev.title,
-        filename: ev.filename || 'Institutional_Evidence.pdf',
-        fileSizeBytes: Number(ev.file_size_bytes) || 2048000,
-        mimeType: ev.mime_type || 'application/pdf',
-        periodStart: ev.period_start || '2025-01',
-        periodEnd: ev.period_end || '2026-12',
-        description: ev.description || 'Institutional documentation submitted to support domain maturity verification.',
-        scope: ev.scope || 'Whole institution',
+        filename: ev.file_name || 'Evidence_Document.pdf',
+        fileSizeBytes: Number(ev.file_size) || 2048000,
+        mimeType: 'application/pdf',
+        periodStart: ev.period_covered?.split(' to ')[0] || '2025-01',
+        periodEnd: ev.period_covered?.split(' to ')[1] || 'Present',
+        description: ev.description || '',
+        scope: 'Whole institution',
         status: (ev.status ? ev.status.toLowerCase() : 'submitted'),
-        submittedAt: ev.submitted_at ? new Date(ev.submitted_at).toISOString() : new Date().toISOString(),
-        proposedSupports: Array.isArray(ev.proposed_supports) ? ev.proposed_supports : ['D01-I01', 'D02-I01'],
-        confirmedSupports: Array.isArray(ev.confirmed_supports) ? ev.confirmed_supports : ['D01-I01'],
-        fulfilsRequestIds: Array.isArray(ev.fulfils_request_ids) ? ev.fulfils_request_ids : [],
+        submittedAt: ev.created_at ? new Date(ev.created_at).toISOString() : new Date().toISOString(),
+        proposedSupports: ['D01-I01'],
+        confirmedSupports: ev.status === 'REVIEWED' ? ['D01-I01'] : [],
+        fulfilsRequestIds: [],
       },
       assessorFinding: 'Document verified: meets institutional authenticity standards and corroborates stated capability levels.',
-      evidenceLevel: 'E2',
+      evidenceLevel: ev.evidence_level || 'E2',
       authenticityCheck: 'passed',
-      linkedMetricIds: Array.isArray(ev.proposed_supports) ? ev.proposed_supports : ['D01-I01', 'D02-I01'],
+      linkedMetricIds: ['D01-I01'],
     }));
 
     return res.json(reviewItems);
@@ -238,7 +200,7 @@ router.get('/assessor/assessments/:id/evidence', async (req, res) => {
 });
 
 // Route: Assessor Execution Log
-router.get(['/assessor/assessments/:id/execution-log', '/assessments/:id/execution-log'], async (req, res) => {
+router.get(['/assessor/assessments/:id/execution-log', '/assessments/:id/execution-log'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const runsRes = await query(
@@ -265,42 +227,6 @@ router.get(['/assessor/assessments/:id/execution-log', '/assessments/:id/executi
       });
     }
 
-    logs.push(
-      {
-        id: `log-${logIdx++}`,
-        timestamp: new Date(Date.now() - 3600000).toISOString(),
-        stage: 'Context Calibration',
-        domainCode: 'D01',
-        metricOrRule: 'P0-4 Formula',
-        status: 'Calibrated',
-        evidenceRef: null,
-        actor: 'Assessor Lead',
-        decision: 'Required maturity level 4 calibrated against institution profile factors.',
-      },
-      {
-        id: `log-${logIdx++}`,
-        timestamp: new Date(Date.now() - 7200000).toISOString(),
-        stage: 'Evidence Verification',
-        domainCode: 'D02',
-        metricOrRule: 'D02-I01',
-        status: 'Verified',
-        evidenceRef: 'AI_Governance_Ethics_Framework_Apex.pdf',
-        actor: 'Lead Assessor',
-        decision: 'Authenticity passed. Evidence level E2 accepted.',
-      },
-      {
-        id: `log-${logIdx++}`,
-        timestamp: new Date(Date.now() - 10800000).toISOString(),
-        stage: 'Maturity Scoring',
-        domainCode: 'D01',
-        metricOrRule: 'D01-I01',
-        status: 'Scored',
-        evidenceRef: null,
-        actor: 'Assessor Lead',
-        decision: 'M:4 / I:4 / O:4 recorded. Provisional capability score: 80.00%.',
-      }
-    );
-
     return res.json(logs);
   } catch (err) {
     console.error('Error fetching execution log:', err);
@@ -309,7 +235,7 @@ router.get(['/assessor/assessments/:id/execution-log', '/assessments/:id/executi
 });
 
 // Route: Get Metric Scorings for Assessment
-router.get(['/assessor/assessments/:id/metrics', '/assessments/:id/metric-assessments'], async (req, res) => {
+router.get(['/assessor/assessments/:id/metrics', '/assessments/:id/metric-assessments'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const metricsRes = await query(
@@ -324,7 +250,6 @@ router.get(['/assessor/assessments/:id/metrics', '/assessments/:id/metric-assess
     const scoreMap: Record<string, any> = {};
     for (const s of scoresRes.rows) scoreMap[s.metric_full_code] = s;
 
-    // Get latest score run ID
     const runRes = await query(`SELECT id FROM score_runs WHERE assessment_id = $1 ORDER BY created_at DESC LIMIT 1`, [id]);
     const latestRunId = runRes.rows[0]?.id || 'run-latest';
 
@@ -372,7 +297,7 @@ router.get(['/assessor/assessments/:id/metrics', '/assessments/:id/metric-assess
 });
 
 // Route: Update Metric Scoring (Assessor M/I/O Scoring)
-router.patch(['/assessor/assessments/:id/metrics/:metricId', '/assessments/:id/metric-assessments/:metricId'], async (req, res) => {
+router.patch(['/assessor/assessments/:id/metrics/:metricId', '/assessments/:id/metric-assessments/:metricId'], authenticate, requireRole(['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN']), async (req, res) => {
   const id = req.params.id as string;
   const metricId = req.params.metricId as string;
   const { maturity, implementation, outcome, applicable, notApplicableRationale, rationale } = req.body;
@@ -386,7 +311,7 @@ router.patch(['/assessor/assessments/:id/metrics/:metricId', '/assessments/:id/m
       const I = Number(implementation ?? M);
       if (outcome !== null && outcome !== undefined) {
         const O = Number(outcome);
-        // Formula: 100 * (0.45M + 0.30I + 0.25O) / 5
+        // Standard P0-3 with Outcome: 100 * (0.45M + 0.30I + 0.25O) / 5
         score = (100 * (0.45 * M + 0.30 * I + 0.25 * O)) / 5;
       } else {
         // Outcome N/A formula: 100 * (0.60M + 0.40I) / 5
@@ -421,11 +346,11 @@ router.patch(['/assessor/assessments/:id/metrics/:metricId', '/assessments/:id/m
 });
 
 // Route: Context Calibration View
-router.get('/assessor/assessments/:id/context', async (req, res) => {
+router.get('/assessor/assessments/:id/context', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
-    const calc = await calculateScoreRun(id, mvRes.rows[0]?.id);
+    const calc = await calculateScoreRun(id as string, mvRes.rows[0]?.id);
 
     const domainsRes = await query(`SELECT code, name FROM domains ORDER BY sort_order ASC`);
     const calibrations = domainsRes.rows.map((d: any) => {
@@ -451,7 +376,7 @@ router.get('/assessor/assessments/:id/context', async (req, res) => {
 });
 
 // Route: Trigger Immutable Score Run
-router.post(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs'], async (req, res) => {
+router.post(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs'], authenticate, requireInstitutionAccess, async (req, res) => {
   const id = req.params.id as string;
   try {
     const mvRes = await query(`SELECT id, version FROM methodology_versions WHERE is_active = true LIMIT 1`);
@@ -460,7 +385,7 @@ router.post(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-run
 
     const calculation = await calculateScoreRun(id, versionId);
 
-    // Create input hash
+    // Deterministic input hash
     const inputHash = crypto
       .createHash('sha256')
       .update(JSON.stringify(calculation.metricResults) + versionStr)
@@ -497,7 +422,7 @@ router.post(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-run
       kind: 'preliminary',
       methodologyVersion: versionStr,
       overallScore: calculation.overallScore,
-      summary: `Score run #${runNumber} completed successfully. Overall preliminary index: ${calculation.overallScore}%.`,
+      summary: `Score run #${runNumber} completed successfully. Overall index: ${calculation.overallScore !== null ? calculation.overallScore + '%' : 'Pending (Partial assessment)'}.`,
       calculation,
     });
   } catch (err) {
@@ -507,7 +432,7 @@ router.post(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-run
 });
 
 // Route: Get Score Runs List
-router.get(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs'], async (req, res) => {
+router.get(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const runsRes = await query(
@@ -525,7 +450,7 @@ router.get(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs
       methodologyVersion: r.methodology_version,
       scope: ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'],
       triggeredBy: 'Assessor Lead',
-      summary: `Score run #${r.run_number} (${Number(r.overall_score)}%)`,
+      summary: `Score run #${r.run_number} (${r.overall_score !== null ? Number(r.overall_score) + '%' : 'Partial'})`,
     }));
 
     return res.json(runs);
@@ -535,11 +460,11 @@ router.get(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs
 });
 
 // Route: Preliminary Results (Respondent-Facing)
-router.get('/assessments/:id/results/preliminary', async (req, res) => {
+router.get('/assessments/:id/results/preliminary', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
-    const calc = await calculateScoreRun(id, mvRes.rows[0]?.id);
+    const calc = await calculateScoreRun(id as string, mvRes.rows[0]?.id);
 
     const domainsList = Object.values(calc.domainResults).map((d: any) => ({
       code: d.code,
@@ -549,17 +474,20 @@ router.get('/assessments/:id/results/preliminary', async (req, res) => {
       required: d.requiredMaturity,
       transformationDistance: d.transformationDistance,
       confidence: d.evidenceConfidence,
-      evidenceCoverage: 85,
+      evidenceCoverage: d.assessed ? 85 : 0,
       unvalidatedClaims: 0,
     }));
 
+    const assessedCount = domainsList.filter((d) => d.assessed).length;
+    const isPartial = assessedCount < 11;
+
     return res.json({
       label: 'Preliminary ARUI Assessment',
-      scopeNote: 'D01–D11 Institutional Assessment Baseline',
+      scopeNote: isPartial ? `Partial Assessment Baseline (${assessedCount} of 11 domains assessed)` : 'D01–D11 Comprehensive Assessment Baseline',
       coverage: {
-        assessed: domainsList.filter((d) => d.assessed).length,
+        assessed: assessedCount,
         total: 11,
-        codes: 'D01–D11',
+        codes: isPartial ? `${assessedCount} Domains Assessed` : 'D01–D11',
       },
       scoreRunId: 'sr-latest',
       generatedAt: new Date().toISOString(),
@@ -567,22 +495,20 @@ router.get('/assessments/:id/results/preliminary', async (req, res) => {
         current: calc.overallCurrentMaturity,
         required: calc.overallRequiredMaturity,
         transformationDistance: calc.overallTransformationDistance,
-        confidence: 'high',
-        evidenceCoverage: 85,
-        narrative:
-          'Institutional capability profile demonstrates emerging to structured foresight with key transformation imperatives across assessment security and digital intelligence.',
+        confidence: isPartial ? 'preliminary' : 'high',
+        evidenceCoverage: isPartial ? Math.round((assessedCount / 11) * 100) : 85,
+        narrative: isPartial
+          ? `Assessment coverage is partial (${assessedCount} of 11 domains assessed). An institution-wide ARUI score is finalized once all required domains are completed.`
+          : 'Institutional capability profile demonstrates comprehensive evaluation across all 11 domains with calibrated maturity baselines.',
       },
       domains: domainsList,
       strengths: calc.strengths,
       vulnerabilities: calc.vulnerabilities,
       contradictions: calc.contradictions,
-      attention: [
-        { area: 'Assessment Security (D07)', reason: 'GenAI capability exceeds current verification safeguards.' },
-        { area: 'Faculty AI Capability (D05)', reason: 'Scale of workforce training needs acceleration.' },
-      ],
+      attention: calc.vulnerabilities.map(v => ({ area: v.title, reason: v.body })),
       caveats: [
         'Preliminary results are non-certified and intended for internal strategic decision-making.',
-        'Final institutional index is subject to independent assessor validation.',
+        'Final institutional index is subject to formal lead auditor calibration.',
       ],
     });
   } catch (err) {

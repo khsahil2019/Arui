@@ -353,7 +353,11 @@ async function runVerificationSuite() {
   // --------------------------------------------------------------------------
   console.log(`\n${colors.bold}[SUITE 13] Server-Generated PDF & Integrity Compliance (Action 15, 18)${colors.reset}`);
 
-  const pdfPath = "/Users/sahilkhan/FlutterDev/Arui/ARUI_Institutional_Assessment_Master_Guide.pdf";
+  const possiblePdfPaths = [
+    path.resolve(process.cwd(), 'ARUI_Institutional_Assessment_Master_Guide.pdf'),
+    path.resolve(process.cwd(), '../ARUI_Institutional_Assessment_Master_Guide.pdf'),
+  ];
+  const pdfPath = possiblePdfPaths.find(p => fs.existsSync(p)) || possiblePdfPaths[0];
   const pdfExists = fs.existsSync(pdfPath);
   assert(pdfExists, "Server-generated master assessment walkthrough PDF exists");
 

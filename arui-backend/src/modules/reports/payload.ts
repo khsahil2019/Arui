@@ -3,7 +3,7 @@ import { calculateScoreRun } from '../scoring/engine.js';
 
 export async function buildAssessmentReportPayload(assessmentId: string): Promise<any> {
   const aRes = await query(
-    `SELECT a.*, i.name as institution_name, i.state, i.district, m.version as methodology_version
+    `SELECT a.*, i.name as institution_name, i.state as institution_state, i.district as institution_district, m.version as methodology_version
      FROM assessments a
      JOIN institutions i ON i.id = a.institution_id
      JOIN methodology_versions m ON m.id = a.methodology_version_id
@@ -17,158 +17,257 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
 
   const assessment = aRes.rows[0];
 
+  // 1. Fetch 25-Field Institutional Profile
   const profRes = await query(
     `SELECT values_json FROM institution_profiles WHERE assessment_id = $1 ORDER BY updated_at DESC LIMIT 1`,
     [assessmentId]
   );
   const pValues = profRes.rows[0]?.values_json || {};
 
+  // 2. Calculate Server-Side Scoring & Diagnostics
   const calculation = await calculateScoreRun(assessmentId, assessment.methodology_version_id);
 
-  // Domains list for report
-  const domainsList = Object.values(calculation.domainResults).map((d: any) => ({
-    code: d.code,
-    name: d.name,
-    assessed: d.assessed,
-    domainScore: d.domainScore,
-    currentMaturity: d.currentMaturity,
-    requiredMaturity: d.requiredMaturity,
-    transformationDistance: d.transformationDistance,
-    evidenceConfidence: d.evidenceConfidence,
-    capabilityPositions: [
-      { name: 'Policy & Governance Baseline', level: 'Structured (L3)' },
-      { name: 'Operational Integration', level: 'Emerging (L2)' },
-      { name: 'Authentic Evaluation', level: 'Emerging (L2)' },
-    ],
-    strengths: [
-      'Strategic vision and executive mandate are clearly articulated by university leadership.',
-      'Active cross-disciplinary experimentation in computing and engineering clusters.',
-    ],
-    gaps: [
-      'Authentic student assessment mechanisms require urgent modernization against GenAI capabilities.',
-      'Faculty development pathways need institutional scaling across non-technical disciplines.',
-    ],
-  }));
+  // 3. Fetch Metrics, Capabilities & Evidence Links for 143-Metric Traceability
+  const metricsRes = await query(
+    `SELECT m.*, d.name as domain_name, c.name as capability_name
+     FROM metrics m
+     JOIN domains d ON d.code = m.domain_code
+     LEFT JOIN capabilities c ON c.full_code = CONCAT(m.domain_code, '-', m.code)
+     ORDER BY m.domain_code, m.sort_order ASC`
+  );
+
+  const evidenceRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1`, [assessmentId]);
+  const evidenceItems = evidenceRes.rows;
+
+  const evLinksRes = await query(
+    `SELECT el.metric_full_code, e.title, e.file_name, e.evidence_level, e.status
+     FROM evidence_metric_links el
+     JOIN evidence_items e ON e.id = el.evidence_id
+     WHERE e.assessment_id = $1`,
+    [assessmentId]
+  );
+  const metricEvidenceMap: Record<string, any[]> = {};
+  for (const el of evLinksRes.rows) {
+    if (!metricEvidenceMap[el.metric_full_code]) metricEvidenceMap[el.metric_full_code] = [];
+    metricEvidenceMap[el.metric_full_code].push(el);
+  }
+
+  // Build Full 143-Metric Traceability Appendix
+  const metricAuditAppendix = metricsRes.rows.map((m: any) => {
+    const calc = calculation.metricResults[m.full_code];
+    const evLinks = metricEvidenceMap[m.full_code] || [];
+    const evSummary = evLinks.length > 0 ? evLinks.map((e) => `${e.file_name} (${e.evidence_level || 'E2'})`).join(', ') : 'None submitted';
+
+    let assessorStatus = 'Unscored';
+    if (calc?.isNa) assessorStatus = 'N/A Accepted';
+    else if (calc?.score !== null && calc?.score !== undefined) assessorStatus = 'Scored & Verified';
+
+    return {
+      domainCode: m.domain_code,
+      domainName: m.domain_name,
+      capabilityCode: m.code,
+      capabilityName: m.capability_name || `Capability ${m.code}`,
+      metricCode: m.full_code,
+      metricName: m.name,
+      applicable: !calc?.isNa,
+      maturity: calc?.maturity ?? '—',
+      implementation: calc?.implementation ?? '—',
+      outcomes: calc?.outcomes ?? '—',
+      score: calc?.score !== null && calc?.score !== undefined ? `${calc.score}%` : 'Pending',
+      status: calc?.isNa ? 'N/A' : calc?.score !== null ? 'Assessed' : 'Not Assessed',
+      evidenceReference: evSummary,
+      assessorStatus,
+    };
+  });
+
+  // Build 11-Domain Breakdown
+  const domainsList = Object.values(calculation.domainResults).map((d: any) => {
+    const domainMetrics = metricAuditAppendix.filter((m) => m.domainCode === d.code);
+    const assessedDomainMetrics = domainMetrics.filter((m) => m.status === 'Assessed');
+
+    // Dynamic strengths & vulnerabilities for this specific domain
+    const domainStrengths: string[] = [];
+    const domainGaps: string[] = [];
+
+    if (d.assessed && d.domainScore !== null) {
+      if (d.domainScore >= 60) {
+        domainStrengths.push(`Domain demonstrates established capability (Score: ${d.domainScore}%, Level ${d.currentMaturity}).`);
+      } else {
+        domainGaps.push(`Domain capability requires acceleration (Score: ${d.domainScore}%, Level ${d.currentMaturity} vs Required Level ${d.requiredMaturity}).`);
+      }
+    } else {
+      domainGaps.push('Domain assessment pending full evidence submission and evaluation.');
+    }
+
+    return {
+      code: d.code,
+      name: d.name,
+      assessed: d.assessed,
+      domainScore: d.domainScore,
+      currentMaturity: d.currentMaturity,
+      requiredMaturity: d.requiredMaturity,
+      transformationDistance: d.transformationDistance,
+      evidenceConfidence: d.evidenceConfidence,
+      assessedMetricsCount: assessedDomainMetrics.length,
+      totalMetricsCount: domainMetrics.length,
+      strengths: domainStrengths,
+      gaps: domainGaps,
+    };
+  });
+
+  const assessedCount = calculation.assessedDomainsCount;
+  const isPartial = calculation.isPartial;
+
+  // 4. Construct Dynamic Dynamic Priorities & Transformation Roadmap from Gaps
+  const immediateActions: string[] = [];
+  const nearTermActions: string[] = [];
+  const strategicActions: string[] = [];
+
+  const underperformingDomains = domainsList.filter((d) => d.assessed && d.transformationDistance !== null && d.transformationDistance > 0);
+  underperformingDomains.sort((a, b) => (b.transformationDistance || 0) - (a.transformationDistance || 0));
+
+  if (underperformingDomains.length > 0) {
+    immediateActions.push(`Address highest transformation distance in ${underperformingDomains[0].name} (${underperformingDomains[0].code}) where current maturity lags target by +${underperformingDomains[0].transformationDistance} levels.`);
+    if (underperformingDomains.length > 1) {
+      nearTermActions.push(`Implement operational safeguards and capability upskilling for ${underperformingDomains[1].name} (${underperformingDomains[1].code}).`);
+    }
+  } else {
+    immediateActions.push('Maintain ongoing evidence verification and audit trails for high-stakes capability areas.');
+  }
+
+  // Cross-domain priority actions
+  for (const c of calculation.contradictions) {
+    nearTermActions.push(`Resolve ${c.title}: ${c.body}`);
+  }
+
+  strategicActions.push('Establish institutional AI observatory and annual longitudinal benchmarking cycle.');
+  strategicActions.push('Integrate authentic student capability verification across all graduating cohorts.');
+
+  // 5. Build Comprehensive 25-Field Profile Object
+  const fullProfileGroups = [
+    {
+      group: 'Institutional Identity & Demographics',
+      fields: [
+        { id: 'IP01', label: 'Institution Legal Name', value: pValues.IP01_INST_NAME || assessment.institution_name },
+        { id: 'IP02', label: 'Institutional Form', value: pValues.IP02_INST_TYPE || 'Comprehensive University' },
+        { id: 'IP03', label: 'Institutional Mandate', value: Array.isArray(pValues.IP03_MANDATE) ? pValues.IP03_MANDATE.join(', ') : 'Broad Teaching & Research' },
+        { id: 'IP04', label: 'State / Union Territory', value: pValues.IP04_STATE || assessment.institution_state || 'Karnataka' },
+        { id: 'IP05', label: 'District', value: pValues.IP05_DISTRICT || assessment.institution_district || 'Bengaluru Urban' },
+        { id: 'IP06', label: 'Location Category', value: pValues.IP06_LOCATION || 'Metro / Tier 1' },
+        { id: 'IP07', label: 'Year Established', value: pValues.IP07_YEAR_ESTABLISHED || '1995' },
+      ],
+    },
+    {
+      group: 'Academic Scale & Programme Breadth',
+      fields: [
+        { id: 'IP08', label: 'Total Student Enrolment', value: pValues.IP08_STUDENT_ENROLLMENT || '10,000–25,000' },
+        { id: 'IP09', label: 'Full-Time Faculty Count', value: pValues.IP09_FACULTY_COUNT || '500–1,500' },
+        { id: 'IP10', label: 'Active Degree Programmes', value: pValues.IP10_ACTIVE_PROGRAMMES || '48' },
+        { id: 'IP14', label: 'Major Discipline Clusters', value: Array.isArray(pValues.IP14_MAJOR_DISCIPLINES) ? pValues.IP14_MAJOR_DISCIPLINES.join(', ') : 'Engineering, Sciences, Management, Humanities' },
+      ],
+    },
+    {
+      group: 'Context & Exposure Calibration (P0-4)',
+      fields: [
+        { id: 'IP15', label: 'Research Intensity (1–5)', value: `${pValues.IP15_RESEARCH_INTENSITY || 3} / 5` },
+        { id: 'IP10', label: 'AI Exposure Index', value: pValues.IP10_AI_EXPOSURE || 'Medium' },
+        { id: 'IP11', label: 'Disciplinary Consequence of AI Errors', value: pValues.IP11_DISCIPLINARY_CONSEQUENCE || 'High' },
+        { id: 'IP16', label: 'Resource Envelope', value: pValues.IP16_RESOURCE_ENVELOPE || 'Moderate' },
+      ],
+    },
+    {
+      group: 'Assessment Leadership & Governance',
+      fields: [
+        { id: 'IP13', label: 'Institutional Lead', value: pValues.IP13_LEAD_NAME || 'Designated Institutional Admin' },
+        { id: 'IP14', label: 'Official Designation', value: pValues.IP14_LEAD_TITLE || 'Academic Leadership' },
+        { id: 'IP15', label: 'Official Contact', value: pValues.IP15_LEAD_EMAIL || 'admin@institution.edu' },
+      ],
+    },
+  ];
 
   const payload = {
     report: {
       id: `ARUI-REP-${assessmentId.substring(0, 8).toUpperCase()}`,
-      kind: 'preliminary',
+      kind: isPartial ? 'preliminary' : 'final',
+      isPartial,
+      assessedDomainsCount: assessedCount,
+      totalDomainsCount: 11,
       generatedAt: new Date().toISOString(),
-      methodologyVersion: assessment.methodology_version || 'ARUI v4 P0-8',
+      methodologyVersion: assessment.methodology_version || 'ARUI v4.0 P0-8',
       scoreRunId: `SR-${assessmentId.substring(0, 8)}`,
-      templateVersion: '4.0.1',
-      statusBanner: 'Preliminary Institutional Assessment Report — D01–D11 Coverage',
-      confidentiality: 'Confidential to institutional leadership. Strictly non-ranking / non-certified preliminary benchmark.',
-      audience: 'Vice-Chancellor, Provost, Registrar, Deans, IQAC Leadership',
+      templateVersion: '4.2.0',
+      statusBanner: isPartial
+        ? `Preliminary Assessment Report (${assessedCount} of 11 Domains Evaluated)`
+        : 'Final Institutional AI Resilience Assessment Report (11-Domain Comprehensive)',
+      confidentiality: 'Confidential to institutional leadership. Strictly developmental diagnostic benchmark. Non-ranking / uncertified.',
+      audience: 'Vice-Chancellor, Provost, Registrar, Deans, IQAC Leadership, Academic Council',
     },
     institution: {
       id: assessment.institution_id,
       name: assessment.institution_name,
-      identity: {
-        institutionType: pValues.IP02_INST_TYPE || 'Comprehensive University',
-        governanceType: 'Autonomous Institution',
-        state: pValues.IP04_STATE || assessment.state || 'Karnataka',
-        district: pValues.IP05_DISTRICT || assessment.district || 'Bengaluru Urban',
-        location: pValues.IP06_LOCATION || 'Metro',
-        yearEstablished: Number(pValues.IP07_YEAR_ESTABLISHED) || 1995,
-      },
-      profile: [
-        {
-          group: 'Identity & Scale',
-          fields: [
-            { id: 'IP01', label: 'Institution Name', value: assessment.institution_name },
-            { id: 'IP08', label: 'Total Enrolment', value: pValues.IP08_STUDENT_ENROLLMENT || '15,000–30,000' },
-            { id: 'IP09', label: 'Faculty Count', value: pValues.IP09_FACULTY_COUNT || '800–1,500' },
-            { id: 'IP10', label: 'Active Programmes', value: pValues.IP10_ACTIVE_PROGRAMMES || '48' },
-          ],
-        },
-        {
-          group: 'Context & Exposure Calibration (P0-4)',
-          fields: [
-            { id: 'IP10', label: 'AI Exposure Index', value: pValues.IP10_AI_EXPOSURE || 'High' },
-            { id: 'IP11', label: 'Disciplinary Consequence', value: pValues.IP11_DISCIPLINARY_CONSEQUENCE || 'High' },
-            { id: 'IP15', label: 'Research Intensity', value: `${pValues.IP15_RESEARCH_INTENSITY || 3} / 5` },
-            { id: 'IP16', label: 'Resource Envelope', value: pValues.IP16_RESOURCE_ENVELOPE || 'Substantial' },
-          ],
-        },
-      ],
+      state: pValues.IP04_STATE || assessment.institution_state || '',
+      district: pValues.IP05_DISTRICT || assessment.institution_district || '',
+      profile: fullProfileGroups,
       profileCompleteness: 'complete',
     },
     assessment: {
       id: assessment.id,
       cycle: '2026 Baseline',
-      scope: 'D01–D11 Exhaustive Assessment',
+      scope: isPartial ? `Partial Scope (${assessedCount} Domains)` : 'Comprehensive 11-Domain Scope',
       status: assessment.status,
     },
-    scope: {
-      domainsInScope: ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'],
-      assessedDomainsCount: domainsList.filter((d) => d.assessed).length,
-      totalDomainsCount: 11,
-    },
     executiveSummary: {
-      headline: 'Institutional AI Resilience Assessment — Executive Diagnostic Brief',
-      narrative:
-        'Apex National University demonstrates a forward-looking executive posture with emerging institutional structures for AI resilience. While strategic translation and leadership foresight (D01) are advanced, operational maturity across student assessment security (D07) and faculty workforce scaling (D05) represent critical transformation priorities.',
+      headline: isPartial
+        ? `Institutional AI Resilience Assessment — Preliminary Diagnostic Brief (${assessedCount}/11 Domains)`
+        : 'Institutional AI Resilience Assessment — Executive Diagnostic Report',
+      narrative: isPartial
+        ? `This preliminary assessment evaluates ${assessedCount} of the 11 ARUI domains for ${assessment.institution_name}. An institution-wide overall ARUI score is not reported until full 11-domain assessment coverage is achieved. Individual assessed domains provide baseline operational guidance.`
+        : `${assessment.institution_name} has completed evaluation across all 11 core institutional resilience domains. The evaluation combines institutional profile parameters, adaptive diagnostic probes, verifiable evidence review, and independent rubric calibration.`,
       overallIndex: calculation.overallScore,
+      isPartial,
       currentMaturityLevel: calculation.overallCurrentMaturity,
       requiredMaturityLevel: calculation.overallRequiredMaturity,
       transformationDistance: calculation.overallTransformationDistance,
-      evidenceConfidence: 'high',
+      evidenceConfidence: isPartial ? 'preliminary' : 'high',
     },
     overall: {
       currentMaturity: calculation.overallCurrentMaturity,
       requiredMaturity: calculation.overallRequiredMaturity,
       transformationDistance: calculation.overallTransformationDistance,
       domainScore: calculation.overallScore,
-      evidenceConfidence: 'high',
+      isPartial,
+      evidenceConfidence: isPartial ? 'preliminary' : 'high',
     },
     domains: domainsList,
     crossDomain: {
       ruleCount: 25,
       findings: calculation.crossDomainFindings,
     },
-    validation: {
-      assessorAdjudication: 'Independent Assessor Review & Rubric Calibration Complete',
-      interRaterReliability: '0.84 (High Reliability / Preferred Freeze Band)',
-    },
     evidence: {
-      submittedCount: 10,
-      verifiedCount: 8,
-      guidelineCompliance: 'High',
+      submittedCount: evidenceItems.length,
+      verifiedCount: evidenceItems.filter((e) => e.status === 'REVIEWED').length,
+      guidelineCompliance: evidenceItems.length >= 8 ? 'High' : 'Emerging',
     },
-    assessorObservations: [
-      {
-        topic: 'Executive AI Strategy',
-        observation: 'Strong strategic awareness at the Vice-Chancellor and Senate level with active cross-campus dialogue.',
-      },
-      {
-        topic: 'Assessment Modernization Need',
-        observation: 'Traditional invigilated exams require transition to authentic capability portfolios and oral defenses.',
-      },
-    ],
+    strengths: calculation.strengths,
+    vulnerabilities: calculation.vulnerabilities,
     priorities: {
-      immediateActions: [
-        'Establish an Institutional AI Ethics & Academic Integrity Taskforce.',
-        'Formulate mandatory AI curriculum integration guidelines across all undergraduate programmes.',
-      ],
-      mediumTermActions: [
-        'Roll out faculty AI pedagogical upskilling across all schools.',
-        'Upgrade learning analytics and institutional data integration platforms.',
-      ],
+      immediateActions,
+      mediumTermActions: nearTermActions,
+      strategicActions,
     },
+    metricAuditAppendix,
     methodologyNote: {
       title: 'ARUI Measurement & Scoring Architecture (v4 P0-2 → P0-8)',
       description:
-        'ARUI measures holistic institutional capability across 11 domains and 143 metrics using structured rubric anchors (M/I/O formula), context sensitivity, and cross-domain diagnostic controls.',
+        'ARUI measures holistic institutional capability across 11 domains, 143 capabilities, and 143 metrics using structured rubric anchors (M/I/O formula), context sensitivity, and cross-domain diagnostic controls.',
     },
     limitations: [
-      'Preliminary report is based on submitted institutional self-assessment signals and sampled evidence.',
-      'ARUI is a developmental diagnostic tool, not an accredited ranking or statutory audit.',
+      'Preliminary diagnostic assessment based on verified institutional evidence and self-assessment submissions.',
+      'ARUI is a developmental capability and resilience framework, not an accredited ranking or statutory accreditation.',
     ],
     reassessment: {
       recommendedCycle: '12 Months (2027 Reassessment)',
-      focusAreas: ['D04 Curriculum Future Resilience', 'D07 Learning & Assessment Security'],
+      focusAreas: underperformingDomains.slice(0, 3).map((d) => `${d.code} ${d.name}`),
     },
   };
 

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
+import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 
 const router = Router();
 
 // Route: Get Institutional Data for a Domain
-router.get('/assessments/:id/institutional-data/:domainCode', async (req, res) => {
+router.get('/assessments/:id/institutional-data/:domainCode', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, domainCode } = req.params;
 
   try {
@@ -45,7 +46,7 @@ router.get('/assessments/:id/institutional-data/:domainCode', async (req, res) =
 });
 
 // Route: Update Institutional Data for a Domain
-router.put('/assessments/:id/institutional-data/:domainCode', async (req, res) => {
+router.put('/assessments/:id/institutional-data/:domainCode', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, domainCode } = req.params;
   const { items } = req.body;
 
@@ -63,7 +64,7 @@ router.put('/assessments/:id/institutional-data/:domainCode', async (req, res) =
            value = EXCLUDED.value,
            notes = EXCLUDED.notes,
            updated_at = NOW()`,
-        [id, item.id || item.code, domainCode, item.state || 'provided', item.value || null, item.notes || null]
+        [id, item.id || item.code, domainCode, item.state || 'provided', item.value !== undefined && item.value !== null ? item.value : null, item.notes || null]
       );
     }
 

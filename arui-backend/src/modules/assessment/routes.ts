@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
+import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -33,7 +34,7 @@ export async function getAssessmentStatusView(assessmentId: string) {
   );
   const profileComplete = pRes.rows.length > 0 && Number(pRes.rows[0].completeness_score) >= 80;
 
-  // Check Pulse/Screening responses
+  // Check Responses counts
   const respRes = await query(
     `SELECT count(*) as count FROM assessment_responses WHERE assessment_id = $1 AND state = 'answered'`,
     [assessmentId]
@@ -102,19 +103,30 @@ export async function getAssessmentStatusView(assessmentId: string) {
     const inScope = scopeDomains.includes(d.code);
     let state = 'not_started';
     if (!inScope) state = 'not_in_scope';
-    else if (d.code === 'D01' && answeredCount > 0) state = 'in_progress';
-    else if (d.code === 'D01' && answeredCount > 10) state = 'complete';
+    else if (answeredCount > 0) state = 'in_progress';
+    if (answeredCount >= 20) state = 'complete';
 
     return {
       code: d.code,
       name: d.name,
       inScope,
       state,
-      themesExplored: inScope ? (d.code === 'D01' ? Math.min(answeredCount, 4) : 0) : 0,
+      themesExplored: inScope ? Math.min(answeredCount, 4) : 0,
       themesTotal: 4,
-      targetedFollowUp: d.code === 'D01' && answeredCount > 3,
+      targetedFollowUp: inScope && answeredCount > 3,
     };
   });
+
+  // Contributors from user table
+  const usersRes = await query(
+    `SELECT name, role FROM users WHERE institution_id = $1 OR role IN ('ASSESSOR', 'LEAD_AUDITOR') LIMIT 5`,
+    [assessment.institution_id]
+  );
+  const contributors = usersRes.rows.map((u: any) => ({
+    name: u.name,
+    role: u.role,
+    areas: u.role === 'ASSESSOR' ? ['D01–D11 Review', 'Assessor Calibration'] : ['Institutional Leadership'],
+  }));
 
   return {
     assessmentId: assessment.id,
@@ -129,9 +141,8 @@ export async function getAssessmentStatusView(assessmentId: string) {
       drafts: draftEv,
       coreTarget: { min: 8, max: 12 },
     },
-    contributors: [
-      { name: 'Dr. Aris Thorne', role: 'INSTITUTION_ADMIN', areas: ['Strategy', 'Executive Leadership'] },
-      { name: 'Prof. Elizabeth Vance', role: 'ASSESSOR', areas: ['D01–D11 Review', 'Assessor Calibration'] },
+    contributors: contributors.length > 0 ? contributors : [
+      { name: 'Institutional Assessment Lead', role: 'INSTITUTION_ADMIN', areas: ['Institutional Baseline'] }
     ],
     confidentiality: 'Confidential to institution leadership. Results are uncertified and preliminary.',
     updatedAt: assessment.updated_at ? new Date(assessment.updated_at).toISOString() : new Date().toISOString(),
@@ -139,9 +150,9 @@ export async function getAssessmentStatusView(assessmentId: string) {
 }
 
 // Route: Get Assessment Status
-router.get('/assessments/:id/status', async (req, res) => {
+router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, async (req, res) => {
   try {
-    const statusView = await getAssessmentStatusView(req.params.id);
+    const statusView = await getAssessmentStatusView(req.params.id as string);
     if (!statusView) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
@@ -153,9 +164,15 @@ router.get('/assessments/:id/status', async (req, res) => {
 });
 
 // Route: Get or Create default assessment
-router.get('/assessments/active', async (req, res) => {
+router.get('/assessments/active', authenticate, async (req, res) => {
   try {
-    const aRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+    let aRes;
+    if (req.user?.institutionId) {
+      aRes = await query(`SELECT id FROM assessments WHERE institution_id = $1 ORDER BY created_at DESC LIMIT 1`, [req.user.institutionId]);
+    } else {
+      aRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+    }
+
     if (aRes.rows.length === 0) {
       return res.status(404).json({ error: 'No active assessment found' });
     }
@@ -166,8 +183,14 @@ router.get('/assessments/active', async (req, res) => {
 });
 
 // Route: Create New Assessment
-router.post('/assessments', async (req, res) => {
+router.post('/assessments', authenticate, async (req, res) => {
   const { institutionId, title, scopeDomains } = req.body;
+  const targetInstitutionId = institutionId || req.user?.institutionId;
+
+  if (!targetInstitutionId) {
+    return res.status(400).json({ error: 'Institution ID is required' });
+  }
+
   try {
     const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
     const versionId = mvRes.rows[0]?.id;
@@ -176,16 +199,17 @@ router.post('/assessments', async (req, res) => {
       `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, scope_domains_json)
        VALUES ($1, $2, $3, 'DRAFT', 'profile', $4)
        RETURNING *`,
-      [institutionId, versionId, title || 'Institutional Assessment', JSON.stringify(scopeDomains || ['D01', 'D02', 'D03'])]
+      [targetInstitutionId, versionId, title || 'Institutional Assessment', JSON.stringify(scopeDomains || ['D01', 'D02', 'D03'])]
     );
     return res.status(201).json(insRes.rows[0]);
   } catch (err) {
+    console.error('Failed to create assessment:', err);
     return res.status(500).json({ error: 'Failed to create assessment' });
   }
 });
 
 // Route: Update Assessment Scope
-router.put('/assessments/:id/scope', async (req, res) => {
+router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, async (req, res) => {
   const { scopeDomains } = req.body;
   try {
     const uRes = await query(

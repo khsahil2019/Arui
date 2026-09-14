@@ -2,9 +2,12 @@ import { query } from '../../db/index.js';
 
 export interface ScoreRunCalculationResult {
   overallScore: number | null;
-  overallCurrentMaturity: number;
+  isPartial: boolean;
+  assessedDomainsCount: number;
+  totalDomainsCount: number;
+  overallCurrentMaturity: number | null;
   overallRequiredMaturity: number;
-  overallTransformationDistance: number;
+  overallTransformationDistance: number | null;
   domainResults: Record<string, any>;
   metricResults: Record<string, any>;
   contextResults: Record<string, any>;
@@ -15,7 +18,7 @@ export interface ScoreRunCalculationResult {
   contradictions: any[];
 }
 
-export async function calculateScoreRun(assessmentId: string, methodologyVersionId: string): Promise<ScoreRunCalculationResult> {
+export async function calculateScoreRun(assessmentId: string, methodologyVersionId?: string): Promise<ScoreRunCalculationResult> {
   // 1. Fetch all domains and metrics
   const domainsRes = await query(`SELECT * FROM domains ORDER BY sort_order ASC`);
   const metricsRes = await query(`SELECT * FROM metrics ORDER BY domain_code, sort_order ASC`);
@@ -25,7 +28,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     scoreMap[s.metric_full_code] = s;
   }
 
-  // 2. Fetch Profile for Context Engine (P0-4)
+  // 2. Fetch Profile for Context Engine (P0-4 Context Calibration)
   const profRes = await query(
     `SELECT values_json FROM institution_profiles WHERE assessment_id = $1 ORDER BY updated_at DESC LIMIT 1`,
     [assessmentId]
@@ -33,7 +36,6 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
   const profileValues = profRes.rows[0]?.values_json || {};
 
   // Context calibration factors
-  const mandate = profileValues.IP03_MANDATE || ['broad_teaching_research'];
   const aiExposure = profileValues.IP10_AI_EXPOSURE || 'medium';
   const consequence = profileValues.IP11_DISCIPLINARY_CONSEQUENCE || 'medium';
   const researchInt = Number(profileValues.IP15_RESEARCH_INTENSITY) || 3;
@@ -56,7 +58,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     domainMetricScores[d.code] = [];
   }
 
-  // 3. Compute Metric Scores (P0-3 Formula)
+  // 3. Compute Metric Scores (P0-3 Standard Formula)
   for (const m of metricsRes.rows) {
     const saved = scoreMap[m.full_code];
     let score: number | null = null;
@@ -80,9 +82,6 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
         score = Math.round(score * 100) / 100;
         domainMetricScores[m.domain_code]?.push(score);
       }
-    } else {
-      // Default baseline score for unassessed metrics
-      score = null;
     }
 
     metricResults[m.full_code] = {
@@ -102,29 +101,32 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
   const contextResults: Record<string, any> = {};
   let weightedSum = 0;
   let totalWeightAssessed = 0;
+  let assessedDomainsCount = 0;
 
   for (const d of domainsRes.rows) {
     const scores = domainMetricScores[d.code] || [];
     const assessed = scores.length > 0;
-    const domainScore = assessed ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100 : 0;
-    const currentMaturity = assessed ? Math.min(5, Math.max(0, Math.round(domainScore / 20))) : 0;
+    if (assessed) assessedDomainsCount++;
+
+    const domainScore = assessed ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100 : null;
+    const currentMaturity = assessed && domainScore !== null ? Math.min(5, Math.max(0, Math.round(domainScore / 20))) : null;
 
     // Required Maturity Rd = clamp(round(3 + sum(factor * sensitivity)), 1, 5)
     let rawRd = 3.0 + exposureDelta + consequenceDelta;
     if (d.code === 'D10' && researchInt >= 4) rawRd += 0.5;
     if (d.code === 'D02' && consequence === 'critical') rawRd += 0.5;
     const requiredMaturity = Math.min(5, Math.max(1, Math.round(rawRd)));
-    const transformationDistance = requiredMaturity - currentMaturity;
+    const transformationDistance = currentMaturity !== null ? requiredMaturity - currentMaturity : null;
 
     domainResults[d.code] = {
       code: d.code,
       name: d.name,
       assessed,
-      domainScore: assessed ? domainScore : null,
-      currentMaturity: assessed ? currentMaturity : null,
+      domainScore,
+      currentMaturity,
       requiredMaturity,
-      transformationDistance: assessed ? transformationDistance : null,
-      evidenceConfidence: assessed ? (domainScore >= 60 ? 'high' : 'medium') : 'low',
+      transformationDistance,
+      evidenceConfidence: assessed ? ((domainScore || 0) >= 60 ? 'high' : 'medium') : 'low',
       metricsAssessedCount: scores.length,
       totalMetricsCount: metricsRes.rows.filter((m: any) => m.domain_code === d.code).length,
     };
@@ -136,72 +138,90 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
       transformationDistance,
     };
 
-    if (assessed) {
+    if (assessed && domainScore !== null) {
       weightedSum += domainScore * Number(d.provisional_weight || 0.09);
       totalWeightAssessed += Number(d.provisional_weight || 0.09);
     }
   }
 
-  // 5. Cross-Domain Diagnostic Engine (P0-5: CD01..CD25)
-  // Diagnostic only; zero direct score effect.
+  // 5. Cross-Domain Diagnostic Engine (Diagnostic only; zero score effect)
   const crossDomainFindings: any[] = [];
-  const cdRulesRes = await query(`SELECT * FROM cross_domain_rules WHERE methodology_version_id = $1`, [methodologyVersionId]);
+  let cdRulesQuery = `SELECT * FROM cross_domain_rules`;
+  const cdParams: any[] = [];
+  if (methodologyVersionId) {
+    cdRulesQuery += ` WHERE methodology_version_id = $1`;
+    cdParams.push(methodologyVersionId);
+  }
+  const cdRulesRes = await query(cdRulesQuery, cdParams);
 
   for (const rule of cdRulesRes.rows) {
     const fromM = metricResults[rule.from_metric];
     const toM = metricResults[rule.to_metric];
 
     if (fromM && toM && fromM.score !== null && toM.score !== null) {
-      // Check contradiction pattern (e.g. high strategy score but zero governance/curriculum operational score)
       if (fromM.score >= 70 && toM.score <= 30) {
         crossDomainFindings.push({
           ruleId: rule.rule_id,
           severity: 'CONTRADICTION',
           fromMetric: rule.from_metric,
           toMetric: rule.to_metric,
-          message: `Contradiction detected (${rule.rule_id}): High maturity claimed in ${rule.from_metric} (${fromM.score}%) but foundational mechanism in ${rule.to_metric} is low (${toM.score}%).`,
+          message: `Cross-domain contradiction (${rule.rule_id}): High maturity scored in ${rule.from_metric} (${fromM.score}%) while foundational capability in ${rule.to_metric} is low (${toM.score}%).`,
         });
       }
     }
   }
 
-  // Add default high-level finding if empty
-  if (crossDomainFindings.length === 0) {
-    crossDomainFindings.push({
-      ruleId: 'CD01',
-      severity: 'OBSERVATION',
-      fromMetric: 'D01-I01',
-      toMetric: 'D02-I01',
-      message: 'Strategy and Governance foundations aligned with institutional risk envelope.',
-    });
-  }
-
-  // 6. Anti-Gaming Flags (P0-6)
+  // 6. Anti-Gaming Flags
   const antiGamingFlagsRes = await query(`SELECT * FROM anti_gaming_flags WHERE assessment_id = $1`, [assessmentId]);
   const antiGamingFlags = antiGamingFlagsRes.rows;
 
-  // 7. Overall Score Calculation
-  const overallScore = totalWeightAssessed > 0 ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100 : 0;
-  const overallCurrentMaturity = Math.min(5, Math.max(0, Math.round(overallScore / 20)));
+  // 7. Overall Score Calculation (Partial Assessment Rule)
+  const isPartial = assessedDomainsCount < domainsRes.rows.length;
+  const overallScore = !isPartial && totalWeightAssessed > 0
+    ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100
+    : (totalWeightAssessed > 0 ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100 : null);
+
+  const overallCurrentMaturity = overallScore !== null ? Math.min(5, Math.max(0, Math.round(overallScore / 20))) : null;
   const overallRequiredMaturity = 4;
-  const overallTransformationDistance = overallRequiredMaturity - overallCurrentMaturity;
+  const overallTransformationDistance = overallCurrentMaturity !== null ? overallRequiredMaturity - overallCurrentMaturity : null;
 
-  // Strengths, Vulnerabilities & Contradictions for reporting
-  const strengths = [
-    {
-      title: 'Institutional Foresight & AI Direction',
-      body: 'Executive leadership demonstrates clear strategic translation and awareness of future workforce transitions.',
-      between: ['D01', 'D09'],
-    },
-  ];
+  // 8. Dynamic Strengths and Vulnerabilities Generation from actual scores
+  const assessedDomainEntries = Object.values(domainResults).filter((d: any) => d.assessed && d.domainScore !== null);
+  assessedDomainEntries.sort((a: any, b: any) => (b.domainScore || 0) - (a.domainScore || 0));
 
-  const vulnerabilities = [
-    {
-      title: 'Assessment Security & Capability Verification',
-      body: 'Authentic student assessment mechanisms require redesign to keep pace with generative AI capabilities.',
-      between: ['D03', 'D07'],
-    },
-  ];
+  const strengths: any[] = [];
+  const vulnerabilities: any[] = [];
+
+  if (assessedDomainEntries.length > 0) {
+    // Top performing domain(s)
+    const top = assessedDomainEntries[0];
+    strengths.push({
+      title: `${top.name} (${top.code})`,
+      body: `Demonstrates the highest evaluated capability baseline across assessed areas (${top.domainScore}% score, Level ${top.currentMaturity} maturity).`,
+      between: [top.code],
+    });
+
+    if (assessedDomainEntries.length > 1) {
+      const secondTop = assessedDomainEntries[1];
+      if ((secondTop.domainScore || 0) >= 50) {
+        strengths.push({
+          title: `${secondTop.name} (${secondTop.code})`,
+          body: `Shows structured operational capability with established baseline practices (${secondTop.domainScore}% score).`,
+          between: [secondTop.code],
+        });
+      }
+    }
+
+    // Lowest performing domain(s)
+    const lowest = assessedDomainEntries[assessedDomainEntries.length - 1];
+    if (lowest.code !== top.code) {
+      vulnerabilities.push({
+        title: `${lowest.name} (${lowest.code})`,
+        body: `Represents a key transformation gap where current maturity (Level ${lowest.currentMaturity}) lags required maturity (Level ${lowest.requiredMaturity}, distance: +${lowest.transformationDistance}).`,
+        between: [lowest.code],
+      });
+    }
+  }
 
   const contradictions = crossDomainFindings
     .filter((f) => f.severity === 'CONTRADICTION')
@@ -213,6 +233,9 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
 
   return {
     overallScore,
+    isPartial,
+    assessedDomainsCount,
+    totalDomainsCount: domainsRes.rows.length,
     overallCurrentMaturity,
     overallRequiredMaturity,
     overallTransformationDistance,

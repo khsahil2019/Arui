@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
-import { authenticate } from '../../middleware/auth.js';
+import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -19,7 +19,7 @@ const DOMAIN_NAMES: Record<string, string> = {
   D11: 'Institutional Adaptability & AI Resilience',
 };
 
-// Map database question to frontend Prompt contract
+// Map database question to frontend Prompt contract (strictly registry-driven; respondent never sees internal weights or formulas)
 function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' = 'core', targetedReason?: string) {
   let presentation: any = {
     kind: 'single_choice',
@@ -133,7 +133,7 @@ function computePosition(list: any[], prompt: any, responseMap: Record<string, a
 }
 
 // Route: Get Pulse / Screening Prompts (≤30 prompts)
-router.get('/assessments/:id/screening', async (req, res) => {
+router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const qRes = await query(
@@ -173,7 +173,7 @@ router.get('/assessments/:id/screening', async (req, res) => {
 });
 
 // Route: Next Adaptive Prompt for a Domain
-router.get('/assessments/:id/domains/:code/next', async (req, res) => {
+router.get('/assessments/:id/domains/:code/next', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, code } = req.params;
   const after = req.query.after as string | undefined;
 
@@ -198,7 +198,7 @@ router.get('/assessments/:id/domains/:code/next', async (req, res) => {
 
     // Fetch responses for this assessment
     const rRes = await query(
-      `SELECT prompt_id, state, response_value_json, updated_at FROM assessment_responses WHERE assessment_id = $1`,
+      `SELECT prompt_id, state, response_value_json, notes, updated_at FROM assessment_responses WHERE assessment_id = $1`,
       [id]
     );
     const responseMap: Record<string, any> = {};
@@ -207,6 +207,7 @@ router.get('/assessments/:id/domains/:code/next', async (req, res) => {
         promptId: r.prompt_id,
         state: r.state,
         value: r.response_value_json,
+        note: r.notes || undefined,
         updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
       };
     }
@@ -227,7 +228,6 @@ router.get('/assessments/:id/domains/:code/next', async (req, res) => {
     } else {
       // Find first unanswered prompt
       targetPrompt = mappedPrompts.find((p) => !responseMap[p.id] || responseMap[p.id].state === 'not_answered') || null;
-      // If all answered, targetPrompt is null
     }
 
     const domainComplete = mappedPrompts.every((p) => responseMap[p.id] && responseMap[p.id].state !== 'not_answered');
@@ -248,8 +248,8 @@ router.get('/assessments/:id/domains/:code/next', async (req, res) => {
   }
 });
 
-// Route: Get Prompt By ID for a Domain (handles ?p=Q01 or direct navigation)
-router.get('/assessments/:id/domains/:code/prompts/:promptId', async (req, res) => {
+// Route: Get Prompt By ID for a Domain (handles direct navigation)
+router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, code, promptId } = req.params;
 
   try {
@@ -264,7 +264,7 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', async (req, res) 
     const targetPrompt = mappedPrompts.find((p) => p.id === promptId) || null;
 
     const rRes = await query(
-      `SELECT prompt_id, state, response_value_json, updated_at FROM assessment_responses WHERE assessment_id = $1`,
+      `SELECT prompt_id, state, response_value_json, notes, updated_at FROM assessment_responses WHERE assessment_id = $1`,
       [id]
     );
     const responseMap: Record<string, any> = {};
@@ -273,6 +273,7 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', async (req, res) 
         promptId: r.prompt_id,
         state: r.state,
         value: r.response_value_json,
+        note: r.notes || undefined,
         updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
       };
     }
@@ -301,26 +302,30 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', async (req, res) 
   }
 });
 
-// Route: Save Response for a Prompt
-router.put('/assessments/:id/responses/:promptId', async (req, res) => {
+// Route: Save Response for a Prompt (Preserving all four distinct response states)
+router.put('/assessments/:id/responses/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
   const { id, promptId } = req.params;
   const { state, value, note, notApplicableRationale } = req.body;
 
-  if (!state) {
-    return res.status(400).json({ error: 'Response state is required' });
+  // Valid states: 'not_answered' | 'not_sure' | 'na' | 'answered'
+  const validStates = ['not_answered', 'not_sure', 'na', 'answered'];
+  if (!state || !validStates.includes(state)) {
+    return res.status(400).json({ error: `Valid response state is required: ${validStates.join(', ')}` });
   }
 
   try {
+    const combinedNotes = note || notApplicableRationale || null;
     const upsertRes = await query(
-      `INSERT INTO assessment_responses (assessment_id, prompt_id, state, response_value_json, answered_at, updated_at)
-       VALUES ($1, $2, $3, $4, NOW(), NOW())
+      `INSERT INTO assessment_responses (assessment_id, prompt_id, state, response_value_json, notes, answered_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
        ON CONFLICT (assessment_id, prompt_id) DO UPDATE SET
          state = EXCLUDED.state,
          response_value_json = EXCLUDED.response_value_json,
+         notes = EXCLUDED.notes,
          answered_at = NOW(),
          updated_at = NOW()
        RETURNING *`,
-      [id, promptId, state, JSON.stringify(value !== undefined ? value : null)]
+      [id, promptId, state, JSON.stringify(value !== undefined ? value : null), combinedNotes]
     );
 
     const row = upsertRes.rows[0];
@@ -328,8 +333,8 @@ router.put('/assessments/:id/responses/:promptId', async (req, res) => {
       promptId: row.prompt_id,
       state: row.state,
       value: row.response_value_json,
-      note,
-      notApplicableRationale,
+      note: row.notes || undefined,
+      notApplicableRationale: state === 'na' ? row.notes || undefined : undefined,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
     });
   } catch (err) {

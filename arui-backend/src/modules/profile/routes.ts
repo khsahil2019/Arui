@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
-import { authenticate } from '../../middleware/auth.js';
+import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 
 const router = Router();
 
@@ -236,7 +236,7 @@ export const PROFILE_FORM_DEFINITION = {
   ],
 };
 
-// Route: Get Profile Form Schema
+// Route: Get Profile Form Schema (Public/Methodology)
 router.get('/methodology/profile-form', (req, res) => {
   return res.json(PROFILE_FORM_DEFINITION);
 });
@@ -254,7 +254,7 @@ router.get('/methodology/reference/states/:state/districts', (req, res) => {
 });
 
 // Route: Get Profile Values for Assessment/Institution
-router.get(['/assessments/:id/profile', '/institutions/:id/profile'], async (req, res) => {
+router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const pRes = await query(
@@ -286,7 +286,7 @@ router.get(['/assessments/:id/profile', '/institutions/:id/profile'], async (req
 });
 
 // Route: Save Profile Values
-router.put(['/assessments/:id/profile', '/institutions/:id/profile'], async (req, res) => {
+router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   const { values } = req.body;
 
@@ -295,7 +295,6 @@ router.put(['/assessments/:id/profile', '/institutions/:id/profile'], async (req
   }
 
   try {
-    // Check if assessment exists
     let assessmentId = id;
     let institutionId = id;
 
@@ -307,13 +306,12 @@ router.put(['/assessments/:id/profile', '/institutions/:id/profile'], async (req
       const instRes = await query(`SELECT id FROM institutions WHERE id = $1`, [id]);
       if (instRes.rows.length > 0) {
         institutionId = instRes.rows[0].id;
-        // get latest assessment for institution
         const aRes = await query(`SELECT id FROM assessments WHERE institution_id = $1 ORDER BY created_at DESC LIMIT 1`, [institutionId]);
         if (aRes.rows.length > 0) assessmentId = aRes.rows[0].id;
       }
     }
 
-    // Calculate completeness
+    // Calculate completeness based on key fields
     let filledCount = 0;
     const requiredKeys = ['IP01_INST_NAME', 'IP02_INST_TYPE', 'IP03_MANDATE', 'IP04_STATE', 'IP05_DISTRICT', 'IP08_STUDENT_ENROLLMENT', 'IP09_FACULTY_COUNT', 'IP15_RESEARCH_INTENSITY', 'IP10_AI_EXPOSURE', 'IP11_DISCIPLINARY_CONSEQUENCE', 'IP16_RESOURCE_ENVELOPE'];
     for (const key of requiredKeys) {
@@ -335,7 +333,7 @@ router.put(['/assessments/:id/profile', '/institutions/:id/profile'], async (req
       [institutionId, assessmentId, JSON.stringify(values), completenessScore]
     );
 
-    // Update institution name and state if provided
+    // Update institution details if provided
     if (values.IP01_INST_NAME || values.name) {
       await query(
         `UPDATE institutions SET name = COALESCE($1, name), state = COALESCE($2, state), district = COALESCE($3, district), updated_at = NOW() WHERE id = $4`,

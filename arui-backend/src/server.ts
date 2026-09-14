@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
 import authRoutes from './modules/auth/routes.js';
 import profileRoutes from './modules/profile/routes.js';
 import assessmentRoutes from './modules/assessment/routes.js';
@@ -11,14 +13,44 @@ import assessorRoutes from './modules/assessor/routes.js';
 import reportRoutes from './modules/reports/routes.js';
 import methodologyRoutes from './modules/methodology/routes.js';
 import dashboardRoutes from './modules/docs/dashboard.js';
+import { getJwtSecret } from './middleware/auth.js';
 
 dotenv.config();
 
+// Fail startup if production and JWT_SECRET is absent
+getJwtSecret();
+
 const app = express();
+
+// Parse allowed origins from environment
+const rawCorsOrigin = process.env.CORS_ORIGIN || 'http://localhost:8080,http://localhost:5173,http://localhost:3000';
+const allowedOrigins = rawCorsOrigin.split(',').map((o) => o.trim()).filter(Boolean);
 
 app.use(
   cors({
-    origin: '*',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      // Check for preview/subdomain deployments matching pattern
+      const isAllowedSubdomain = allowedOrigins.some((allowed) => {
+        if (allowed.startsWith('*.')) {
+          const domain = allowed.slice(2);
+          return origin.endsWith(domain);
+        }
+        return false;
+      });
+      if (isAllowedSubdomain) return callback(null, true);
+
+      // In development mode, allow localhost origins
+      if (process.env.NODE_ENV !== 'production' && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS policy error: Origin ${origin} not allowed`));
+    },
     credentials: true,
   })
 );
@@ -26,36 +58,29 @@ app.use(
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
+// Static uploads directory relative to project root
+const uploadsDir = path.resolve(process.cwd(), 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
+
 // Interactive API Explorer & Dashboard on root
 app.use('/docs', dashboardRoutes);
 app.get('/', dashboardRoutes);
 
-// Master Full Walkthrough HTML Page & Screenshots & PDF / ZIP Downloads
-app.get('/walkthrough', (req, res) => {
-  res.sendFile('/Users/sahilkhan/FlutterDev/Arui/assessment_master_walkthrough.html');
-});
-app.get('/download/master-guide.pdf', (req, res) => {
-  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Institutional_Assessment_Master_Guide.pdf', 'ARUI_Institutional_Assessment_Master_Guide.pdf');
-});
-app.get('/download/screenshots.zip', (req, res) => {
-  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Assessment_HD_Screenshots.zip', 'ARUI_Assessment_HD_Screenshots.zip');
-});
-app.get('/download/verification-suite.mjs', (req, res) => {
-  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_PRODUCTION_verification_suite.mjs', 'ARUI_PRODUCTION_verification_suite.mjs');
-});
-app.get('/download/pending-work-and-gates.json', (req, res) => {
-  res.download('/Users/sahilkhan/FlutterDev/Arui/ARUI_Pending_Work_and_Gates.json', 'ARUI_Pending_Work_and_Gates.json');
-});
-app.use('/screenshots', express.static('/Users/sahilkhan/FlutterDev/Arui/arui_hd_screenshots'));
-
-
 // Health Check
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'arui-production-backend', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    service: 'arui-production-backend',
+    version: '4.2.0',
+    methodology: '11 Domains / 143 Metrics / 69 Cards / 63 Questions',
+    timestamp: new Date().toISOString(),
+  });
 });
 
-
-// Mount Routes
+// Mount Production API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/auth', authRoutes);
 
@@ -86,7 +111,7 @@ app.use('/', methodologyRoutes);
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Unhandled Server Error:', err);
-  res.status(500).json({ error: err.message || 'Internal Server Error' });
+  res.status(err.status || 500).json({ error: err.message || 'Internal Server Error' });
 });
 
 export default app;

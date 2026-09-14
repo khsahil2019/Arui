@@ -90,14 +90,30 @@ export interface ArUiApi {
   getExecutionLog(assessmentId: string): Promise<ExecutionLogEntry[]>;
 }
 
-const configuredBaseUrl = (import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined) || null;
+function getResolvedBaseUrl(): string {
+  const envUrl = import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined;
+  if (envUrl && envUrl.trim() !== '') {
+    return envUrl.trim();
+  }
+  if (typeof window !== "undefined") {
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+      return "http://localhost:4000";
+    }
+    // Deployed environment: fallback to same origin or API endpoint
+    return window.location.origin;
+  }
+  return "http://localhost:4000";
+}
 
-export const apiMode: "mock" | "http" = configuredBaseUrl ? "http" : "mock";
+const configuredBaseUrl = getResolvedBaseUrl();
+
+export const apiMode: "mock" | "http" = "http";
 
 let instance: ArUiApi | undefined;
 
 export function getApi(): ArUiApi {
-  const api = instance ?? (configuredBaseUrl ? createHttpApi(configuredBaseUrl) : createMockApi());
+  const url = getResolvedBaseUrl();
+  const api = instance ?? createHttpApi(url);
   instance = api;
   return api;
 }
