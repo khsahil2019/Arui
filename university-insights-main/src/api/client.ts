@@ -93,13 +93,17 @@ export interface ArUiApi {
 function getResolvedBaseUrl(): string {
   const envUrl = import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined;
   if (envUrl && envUrl.trim() !== '') {
-    return envUrl.trim();
+    return envUrl.trim().replace(/\/$/, "");
   }
   if (typeof window !== "undefined") {
+    // If running in local dev / LAN (e.g. port 8080, 5173, 3000), target backend on port 4000
+    if (window.location.port === "8080" || window.location.port === "5173" || window.location.port === "3000") {
+      return `${window.location.protocol}//${window.location.hostname}:4000`;
+    }
     if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
       return "http://localhost:4000";
     }
-    // Deployed environment: fallback to same origin or API endpoint
+    // Deployed environment: fallback to same origin
     return window.location.origin;
   }
   return "http://localhost:4000";

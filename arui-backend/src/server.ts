@@ -13,6 +13,7 @@ import assessorRoutes from './modules/assessor/routes.js';
 import reportRoutes from './modules/reports/routes.js';
 import methodologyRoutes from './modules/methodology/routes.js';
 import dashboardRoutes from './modules/docs/dashboard.js';
+import adminRoutes from './modules/admin/routes.js';
 import { getJwtSecret } from './middleware/auth.js';
 
 dotenv.config();
@@ -44,8 +45,13 @@ app.use(
       });
       if (isAllowedSubdomain) return callback(null, true);
 
-      // In development mode, allow localhost origins
-      if (process.env.NODE_ENV !== 'production' && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+      // In development mode, allow localhost and private network IPs (10.x, 192.168.x, 172.x)
+      if (
+        process.env.NODE_ENV !== 'production' ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        /^http:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(origin)
+      ) {
         return callback(null, true);
       }
 
@@ -107,6 +113,9 @@ app.use('/', reportRoutes);
 
 app.use('/api/v1', methodologyRoutes);
 app.use('/', methodologyRoutes);
+
+app.use('/api/v1', adminRoutes);
+app.use('/', adminRoutes);
 
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

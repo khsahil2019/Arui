@@ -90,8 +90,8 @@ export const requireInstitutionAccess = async (req: Request, res: Response, next
 
   // For INSTITUTION_ADMIN, determine target institution
   let targetInstitutionId: string | null = null;
-  const assessmentId = req.params.assessmentId || req.params.id || req.body.assessmentId || (req.query.assessmentId as string);
-  const institutionId = req.params.institutionId || req.body.institutionId || (req.query.institutionId as string);
+  const assessmentId = req.params?.assessmentId || req.params?.id || req.body?.assessmentId || (req.query?.assessmentId as string);
+  const institutionId = req.params?.institutionId || req.body?.institutionId || (req.query?.institutionId as string);
 
   if (institutionId) {
     targetInstitutionId = institutionId;

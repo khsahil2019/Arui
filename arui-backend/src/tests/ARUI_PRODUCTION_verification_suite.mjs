@@ -354,6 +354,8 @@ async function runVerificationSuite() {
   console.log(`\n${colors.bold}[SUITE 13] Server-Generated PDF & Integrity Compliance (Action 15, 18)${colors.reset}`);
 
   const possiblePdfPaths = [
+    path.resolve(process.cwd(), '../docs/guides/ARUI_Institutional_Assessment_Master_Guide.pdf'),
+    path.resolve(process.cwd(), 'docs/guides/ARUI_Institutional_Assessment_Master_Guide.pdf'),
     path.resolve(process.cwd(), 'ARUI_Institutional_Assessment_Master_Guide.pdf'),
     path.resolve(process.cwd(), '../ARUI_Institutional_Assessment_Master_Guide.pdf'),
   ];

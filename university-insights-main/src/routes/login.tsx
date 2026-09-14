@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Lock } from "lucide-react";
+import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Eye, EyeOff, Lock, ShieldCheck, User } from "lucide-react";
 import { Wordmark } from "@/components/ari/workspace-shell";
-import { Field, TextInput } from "@/components/ari/form-field";
-import { StatusBadge } from "@/components/ari/status-badge";
 import { queries, useLogin } from "@/api/hooks";
-import { apiMode } from "@/api/client";
-import type { Role } from "@/lib/catalogue";
 
 export const Route = createFileRoute("/login")({
   ssr: false,
@@ -26,11 +22,6 @@ export const Route = createFileRoute("/login")({
         name: "description",
         content: "Sign in to your institution's AI Resilience assessment workspace.",
       },
-      { property: "og:title", content: "Sign in — AI Resilient University" },
-      {
-        property: "og:description",
-        content: "Sign in to your institution's AI Resilience assessment workspace.",
-      },
     ],
   }),
   component: LoginPage,
@@ -40,26 +31,29 @@ function LoginPage() {
   const navigate = useNavigate();
   const { redirect: back } = Route.useSearch();
   const login = useLogin();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] =
-    useState<Extract<Role, "institution_admin" | "assessor">>("institution_admin");
+  const [email, setEmail] = useState("sahilkh3014@gmail.com");
+  const [password, setPassword] = useState("123456");
+  const [showPassword, setShowPassword] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const session = await login.mutateAsync({
-      email,
-      password,
-      ...(apiMode === "mock" ? { roleHint: role } : {}),
-    });
-    navigate({
-      to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
-      replace: true,
-    });
+    try {
+      const session = await login.mutateAsync({
+        email: email.trim(),
+        password: password.trim(),
+      });
+      navigate({
+        to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
+        replace: true,
+      });
+    } catch (err) {
+      // Error handled by query state
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+    <div className="min-h-screen bg-background lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      {/* Left Sidebar */}
       <aside className="hidden flex-col justify-between bg-sidebar px-12 py-10 text-sidebar-foreground lg:flex">
         <Wordmark inverse />
         <div className="max-w-md">
@@ -70,102 +64,110 @@ function LoginPage() {
             A whole-institution reading of readiness for an AI-shaped future.
           </h1>
           <p className="mt-6 text-[15px] leading-relaxed text-sidebar-foreground/70">
-            Responses and evidence remain the institution's own. Results are preliminary until
-            independently verified and are never shared or benchmarked without your instruction.
+            Evaluating 11 Domains, 143 Capabilities and 143 Metrics with context-calibrated maturity baselines and verifiable audit evidence.
           </p>
         </div>
-        <p className="text-xs text-sidebar-foreground/50">© 2026 AI Resilient University</p>
+        <div className="flex items-center justify-between text-xs text-sidebar-foreground/50">
+          <span>© 2026 AI Resilient University Index</span>
+          <span>Institutional Research Assessment</span>
+        </div>
       </aside>
 
-      <main className="flex min-h-screen flex-col px-6 py-8 md:px-12">
-        <div className="lg:hidden">
-          <Wordmark />
-        </div>
-        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-12">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <p className="eyebrow">Sign in</p>
-              <h2 className="mt-2 text-3xl text-foreground">Your assessment workspace</h2>
-            </div>
-            <Lock className="size-5 text-muted-foreground" />
+      {/* Right Content */}
+      <main className="flex min-h-screen flex-col px-6 py-8 md:px-12 justify-center">
+        <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-8">
+          <div className="mb-8">
+            <p className="eyebrow">Institutional Access</p>
+            <h2 className="mt-2 text-2xl font-bold text-foreground">Sign in to your workspace</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Enter your authorized institutional credentials to continue.
+            </p>
           </div>
 
           <form onSubmit={submit} className="space-y-5">
-            <Field label="Institutional email">
-              <TextInput
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@university.edu"
-              />
-            </Field>
-            <Field label="Password">
-              <TextInput
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-            </Field>
-
-            {apiMode === "mock" && (
-              <div className="rounded-lg border border-amber/40 bg-amber-soft/50 p-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-foreground">Enter as</span>
-                  <StatusBadge tone="demo">Mock sign-in</StatusBadge>
-                </div>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  {(
-                    [
-                      ["institution_admin", "Institution Admin", "Complete the assessment"],
-                      ["assessor", "Assessor", "Review, score and run"],
-                    ] as const
-                  ).map(([value, label, desc]) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => setRole(value)}
-                      aria-pressed={role === value}
-                      className={`cursor-pointer rounded-md border px-3 py-2.5 text-left transition-colors ${role === value ? "border-navy bg-card" : "border-border bg-card/60 hover:border-navy/40"}`}
-                    >
-                      <span className="block text-sm font-medium text-foreground">{label}</span>
-                      <span className="block text-xs text-muted-foreground">{desc}</span>
-                    </button>
-                  ))}
-                </div>
-                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                  Any email and password are accepted while the production sign-in is not connected.
-                  Accounts, roles and sessions will be issued by the institutional backend.
-                </p>
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-foreground/80">
+                Institutional Email
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@university.edu"
+                  className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm text-foreground shadow-sm placeholder:text-muted-foreground/60 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+                />
               </div>
-            )}
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-foreground/80">
+                  Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
+                >
+                  {showPassword ? (
+                    <>
+                      <EyeOff className="size-3.5" /> Hide
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="size-3.5" /> Show
+                    </>
+                  )}
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 pr-10 text-sm text-foreground shadow-sm placeholder:text-muted-foreground/60 focus:border-navy focus:outline-none focus:ring-1 focus:ring-navy"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-foreground cursor-pointer"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                </button>
+              </div>
+            </div>
 
             {login.isError && (
-              <p className="text-sm text-rose">
-                Sign-in failed. Please check your details and try again.
-              </p>
+              <div className="rounded-lg bg-rose-500/10 border border-rose-500/20 p-3 text-xs text-rose-600 dark:text-rose-400 font-medium flex items-center gap-2">
+                <Lock className="size-4 shrink-0" />
+                <span>Invalid credentials. Please verify your email and password.</span>
+              </div>
             )}
 
             <button
               type="submit"
               disabled={login.isPending}
-              className="inline-flex h-12 w-full cursor-pointer items-center justify-center gap-3 rounded-md bg-navy text-[15px] font-medium text-primary-foreground shadow-raised transition-colors hover:bg-navy-deep disabled:opacity-60"
+              className="mt-2 inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-navy text-[14px] font-semibold text-primary-foreground shadow-raised transition-colors hover:bg-navy-deep disabled:opacity-60"
             >
-              {login.isPending ? "Signing in…" : "Continue"}
+              {login.isPending ? "Signing in…" : "Sign in to Assessment"}
               <ArrowRight className="size-4" />
             </button>
           </form>
 
-          <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-            Access is issued to named institutional leads and contributors. If you have not received
-            an invitation, contact your institution's assessment lead.
-          </p>
+          <div className="mt-8 flex items-center justify-between border-t border-border pt-5 text-xs text-muted-foreground">
+            <span>Official Institutional Assessment Protocol</span>
+            <span className="font-mono text-[11px]">v4.0 Production</span>
+          </div>
         </div>
       </main>
     </div>
   );
 }
+

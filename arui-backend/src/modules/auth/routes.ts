@@ -44,6 +44,18 @@ router.post('/login', async (req, res) => {
       );
       if (aRes.rows.length > 0) {
         assessmentId = aRes.rows[0].id;
+      } else {
+        const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
+        const versionId = mvRes.rows[0]?.id;
+        const insRes = await query(
+          `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, current_domain)
+           VALUES ($1, $2, 'Institutional AI Resilience Assessment (2026 Baseline)', 'DRAFT', 'profile', 'D01')
+           RETURNING id`,
+          [userRow.institution_id, versionId]
+        );
+        if (insRes.rows.length > 0) {
+          assessmentId = insRes.rows[0].id;
+        }
       }
     } else {
       const aRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);

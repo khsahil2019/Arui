@@ -12,9 +12,10 @@ export const Route = createFileRoute("/_workspace")({
   beforeLoad: async ({ context, location }) => {
     const session = await context.queryClient.ensureQueryData(queries.session());
     if (!session) throw redirect({ to: "/login", search: { redirect: location.href } });
-    if (session.user.role === "assessor" || !session.assessmentId)
+    if (session.user.role === "assessor") {
       throw redirect({ to: "/assessor" });
-    return { session, assessmentId: session.assessmentId };
+    }
+    return { session, assessmentId: session.assessmentId || "active" };
   },
   component: WorkspaceLayout,
 });

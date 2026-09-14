@@ -88,10 +88,18 @@ function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' =
   }
 
   const cardCode = q.card_code || '';
-  const theme = cardCode ? `Strategic Area ${cardCode}` : 'Strategic Direction & Capability';
+  const theme = cardCode ? `Strategic Area ${cardCode}` : (q.domain_code ? `${q.domain_code} Strategic Area` : 'Strategic Direction & Capability');
+  
+  // Format globally unique prompt ID
+  let promptId = q.code || q.id;
+  if (q.domain_code && q.code) {
+    if (!q.code.startsWith(q.domain_code)) {
+      promptId = `${q.domain_code}-${q.code}`;
+    }
+  }
 
   return {
-    id: q.code || q.id,
+    id: promptId,
     domainCode: q.domain_code || null,
     domainName: q.domain_code ? (DOMAIN_NAMES[q.domain_code] || `Domain ${q.domain_code}`) : 'Institutional Pulse',
     theme,

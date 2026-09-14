@@ -24,8 +24,10 @@ export const domainNames = {
 export type DomainCode = keyof typeof domainNames;
 export const domainCodes = Object.keys(domainNames) as DomainCode[];
 
-/** Domains in the current assessment scope (first vertical slice). */
-export const inScopeDomains: DomainCode[] = ["D01", "D02", "D03"];
+/** All 11 authoritative domains in the ARUI assessment scope. */
+export const inScopeDomains: DomainCode[] = [
+  "D01", "D02", "D03", "D04", "D05", "D06", "D07", "D08", "D09", "D10", "D11"
+];
 
 /** The eleven canonical assessment areas, in domain order. */
 export const assessmentAreas = domainCodes.map((c) => domainNames[c]);
