@@ -12,7 +12,8 @@
     "test": "tsx src/tests/e2e.test.ts",
     "test:reproducibility": "tsx src/tests/reproducibility.test.ts",
     "test:verification": "tsx src/tests/ARUI_PRODUCTION_verification_suite.mjs",
-    "test:all": "npm test && npm run test:reproducibility && npm run test:verification"
+    "test:adversarial": "tsx src/tests/ARUI_COMPREHENSIVE_ADVERSARIAL_SUITE.mjs",
+    "test:all": "npm test && npm run test:reproducibility && npm run test:verification && npm run test:adversarial"
   },
   "keywords": [],
   "author": "",
