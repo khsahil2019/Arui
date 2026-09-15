@@ -71,12 +71,12 @@ export function generateAssessmentPdfStream(payload: any, res: any) {
 
   if (isPartial) {
     doc.fillColor(AMBER).fontSize(10).font('Helvetica-Bold').text(
-      'Assessment Coverage: Partial Baseline',
+      'Overall Institutional ARUI Index: Withheld',
       55,
       boxTop + 24
     );
     doc.fillColor(CHARCOAL).fontSize(9).font('Helvetica').text(
-      `Evaluated ${payload.report?.assessedDomainsCount || 3} of 11 core domains. An institution-wide aggregate ARUI index is not reported until all 11 domains are evaluated.`,
+      `Assessment coverage is partial (${payload.report?.assessedDomainsCount || 3} of 11 core domains evaluated). Institution-wide aggregate score is withheld until full 11-domain coverage is achieved. Individual assessed domain baselines are reported below.`,
       55,
       boxTop + 42,
       { width: 485 }

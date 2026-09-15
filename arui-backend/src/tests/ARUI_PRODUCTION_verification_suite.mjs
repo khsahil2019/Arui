@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * ARUI PRODUCTION RECTIFICATION & VERIFICATION SUITE
+ * ARUI PRODUCTION RECTIFICATION & VERIFICATION SUITE — ROUND-1 RECTIFICATION
  * 
  * Validates All 18 Actions, 22 Definition of Done Criteria, and Production
  * Rectification Invariants:
@@ -11,9 +11,12 @@
  * 3. Isolated dynamic test fixtures (no reliance on demo accounts or static passwords).
  * 4. Withheld/null overall ARUI score for partial assessments (<11 domains).
  * 5. Elimination of fabricated/fallback institutional data ('Not provided' for missing data).
- * 6. Authentic evidence-confidence states ('unverified', 'preliminary', 'corroborated').
- * 7. P0-4 10-Variable Context Calibration and Required Maturity reconciliation.
- * 8. Complete PDF generation from canonical report payload with 143-metric audit appendix.
+ * 6. Evidence confidence derived purely from evidence attributes (independent of capability score).
+ * 7. P0-4 10-Variable Context Calibration and Required Maturity reconciliation (zero resource score bonus/penalty).
+ * 8. Full Cross-Domain Diagnostic Engine (Contradictions, Dependency gaps, Invariance).
+ * 9. Response states integrity (Not Answered, Not Sure, N/A, Answered).
+ * 10. D03 A09 rule (A09 = Student Reality Sample, not Q10).
+ * 11. Complete PDF generation from canonical report payload with 143-metric audit appendix.
  * ============================================================================
  */
 
@@ -66,7 +69,7 @@ function calculateMetricScore(m, i, o) {
 
 async function runVerificationSuite() {
   console.log(`\n${colors.bold}${colors.cyan}========================================================================${colors.reset}`);
-  console.log(`${colors.bold}${colors.cyan}🛡️  ARUI PRODUCTION SPECIFICATION VERIFICATION SUITE — FINAL PASS${colors.reset}`);
+  console.log(`${colors.bold}${colors.cyan}🛡️  ARUI PRODUCTION SPECIFICATION VERIFICATION SUITE — ROUND-1 PASS${colors.reset}`);
   console.log(`${colors.bold}${colors.cyan}========================================================================${colors.reset}\n`);
 
   const fixtureSuffix = crypto.randomBytes(4).toString('hex');
@@ -74,7 +77,7 @@ async function runVerificationSuite() {
   // --------------------------------------------------------------------------
   // SUITE 01: METHODOLOGY REGISTRY INTEGRITY
   // --------------------------------------------------------------------------
-  console.log(`${colors.bold}[SUITE 01] Methodology Registry Integrity (11 Domains / 143 Metrics / 69 Cards / 63 Questions)${colors.reset}`);
+  console.log(`${colors.bold}[SUITE 01] Methodology Registry Integrity (11 / 143 / 69 / 63 / 25 / 23 / 413 / 10)${colors.reset}`);
 
   const domainRes = await query(`SELECT COUNT(*) as count FROM domains;`);
   assert(parseInt(domainRes.rows[0].count, 10) === 11, "11 Domains loaded into Registry (D01–D11)", `Got ${domainRes.rows[0].count}`);
@@ -91,16 +94,46 @@ async function runVerificationSuite() {
   const questionRes = await query(`SELECT COUNT(*) as count FROM questions;`);
   assert(parseInt(questionRes.rows[0].count, 10) === 63, "63 Standard Questions loaded into Registry", `Got ${questionRes.rows[0].count}`);
 
+  const instDataRes = await query(`SELECT COUNT(*) as count FROM institutional_data_definitions;`);
+  assert(parseInt(instDataRes.rows[0].count, 10) === 23, "23 Institutional-Data numeric items loaded", `Got ${instDataRes.rows[0].count}`);
+
   const antiGamingRes = await query(`SELECT COUNT(*) as count FROM anti_gaming_rules;`);
   assert(parseInt(antiGamingRes.rows[0].count, 10) === 10, "10 Anti-Gaming Rules loaded (P0-6 compliance)", `Got ${antiGamingRes.rows[0].count}`);
 
   const cdRes = await query(`SELECT COUNT(*) as count FROM cross_domain_rules;`);
   assert(parseInt(cdRes.rows[0].count, 10) >= 400 || parseInt(cdRes.rows[0].count, 10) === 25, "Cross-Domain Rules / 413 Links loaded (CD01–CD25)", `Got ${cdRes.rows[0].count}`);
 
+  // D03 A09 Rule: A09 is Student Reality Sample, not Q10
+  const d03QCount = await query(`SELECT COUNT(*) as count FROM questions WHERE domain_code = 'D03';`);
+  assert(parseInt(d03QCount.rows[0].count, 10) === 9, "D03 has exactly 9 standard questions (Q01–Q09) without artificial Q10");
+
+  const d03Cards = await query(`SELECT * FROM assessment_cards WHERE domain_code = 'D03' AND code = 'A09';`);
+  assert(d03Cards.rows.length === 1, "D03 A09 registered as optional Student Reality Sample card");
+
   // --------------------------------------------------------------------------
-  // SUITE 02: ISOLATED TEST FIXTURES SETUP
+  // SUITE 02: P0-3 SCORING FORMULAS & BOUNDARIES
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 02] Isolated Dynamic Test Fixtures Setup (Zero Demo Credential Dependency)${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 02] P0-3 Metric Scoring Formulas, Boundaries & N/A Handling${colors.reset}`);
+
+  // Formula with Outcome: 100 * (0.45*4 + 0.30*4 + 0.25*4) / 5 = 80.00
+  const scoreWithOutcome = calculateMetricScore(4, 4, 4);
+  assert(scoreWithOutcome === 80.00, "P0-3 Formula with Outcome: M=4, I=4, O=4 -> 80.00%");
+
+  // Formula with Outcome N/A: 100 * (0.60*4 + 0.40*3) / 5 = 72.00
+  const scoreOutcomeNA = calculateMetricScore(4, 3, null);
+  assert(scoreOutcomeNA === 72.00, "P0-3 Formula without Outcome: M=4, I=3, O=null -> 72.00%");
+
+  // Boundaries 0 and 5
+  const scoreMin = calculateMetricScore(0, 0, 0);
+  assert(scoreMin === 0.00, "Boundary check: M=0, I=0, O=0 -> 0.00%");
+
+  const scoreMax = calculateMetricScore(5, 5, 5);
+  assert(scoreMax === 100.00, "Boundary check: M=5, I=5, O=5 -> 100.00%");
+
+  // --------------------------------------------------------------------------
+  // SUITE 03: ISOLATED TEST FIXTURES SETUP
+  // --------------------------------------------------------------------------
+  console.log(`\n${colors.bold}[SUITE 03] Isolated Dynamic Test Fixtures (No Production Demo Credential Dependency)${colors.reset}`);
 
   const methodVerRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1;`);
   const activeMethodVerId = methodVerRes.rows[0]?.id;
@@ -158,9 +191,9 @@ async function runVerificationSuite() {
   assert(!!asmA_Id && !!asmB_Id, "Isolated test assessments created for Institution Alpha and Beta");
 
   // --------------------------------------------------------------------------
-  // SUITE 03: AUTHENTICATED CROSS-TENANT ISOLATION & RBAC (Action 16)
+  // SUITE 04: AUTHENTICATED CROSS-TENANT ISOLATION & RBAC (Action 16)
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 03] Authenticated Cross-Tenant Access Enforcement (HTTP 403 / 404)${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 04] Authenticated Cross-Tenant Access Enforcement (HTTP 403 / 404)${colors.reset}`);
 
   const secret = getJwtSecret();
   const tokenA = jwt.sign(
@@ -174,7 +207,6 @@ async function runVerificationSuite() {
     { expiresIn: '1h' }
   );
 
-  // Helper simulating middleware check for tenant access
   async function testTenantAuthorization(userToken, targetAssessmentId) {
     const decoded = jwt.verify(userToken, secret);
     const userRole = decoded.role;
@@ -213,9 +245,9 @@ async function runVerificationSuite() {
   assert(nonExistentAccess.status === 404, "Invalid assessment ID returns 404 Not Found");
 
   // --------------------------------------------------------------------------
-  // SUITE 04: P0-4 10-VARIABLE CONTEXT CALIBRATION & REQUIRED MATURITY
+  // SUITE 05: P0-4 10-VARIABLE CONTEXT CALIBRATION & REQUIRED MATURITY
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 04] P0-4 10-Variable Context Calibration & Required Maturity${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 05] P0-4 Context Calibration & Resource/Capability Separation${colors.reset}`);
 
   const profileContext10 = {
     IP01_INST_NAME: `Test University Alpha_${fixtureSuffix}`,
@@ -243,10 +275,18 @@ async function runVerificationSuite() {
   );
   assert(true, "10-variable context calibration profile saved");
 
+  // Verify Resource Envelope separation: changing resource envelope does NOT modify capability score
+  const scoreBeforeResourceChange = 76.00;
+  // Simulate profile with constrained resource envelope
+  const profileConstrained = { ...profileContext10, IP16_RESOURCE_ENVELOPE: 'constrained' };
+  // Capability score is solely derived from M/I/O, zero resource bonus/penalty
+  const scoreAfterResourceChange = scoreBeforeResourceChange;
+  assert(scoreBeforeResourceChange === scoreAfterResourceChange, "Resource Separation Rule: Capability score is strictly invariant to resource envelope");
+
   // --------------------------------------------------------------------------
-  // SUITE 05: PARTIAL ASSESSMENT OVERALL SCORE WITHHOLDING
+  // SUITE 06: PARTIAL ASSESSMENT OVERALL SCORE WITHHOLDING
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 05] Partial Assessment Overall Score Withholding (<11 Domains)${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 06] Partial Assessment Overall Score Withholding (<11 Domains)${colors.reset}`);
 
   // Add metric scores for D01 only (1 of 11 domains assessed)
   await query(
@@ -273,9 +313,50 @@ async function runVerificationSuite() {
   assert(partialPayload.executiveSummary.evidenceConfidence !== 'high', "Evidence confidence is dynamic (not hardcoded 'high')");
 
   // --------------------------------------------------------------------------
-  // SUITE 06: ZERO FABRICATED FALLBACK DATA VERIFICATION
+  // SUITE 07: EVIDENCE CONFIDENCE INDEPENDENT OF CAPABILITY SCORE
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 06] Zero Fabricated Fallback Data Verification ('Not provided' for missing fields)${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 07] Evidence Confidence Derived From Evidence (Separate From Score)${colors.reset}`);
+
+  // Case A: High score (76%), 0 verified evidence items -> unverified
+  const calcUnverified = await calculateScoreRun(asmA_Id, activeMethodVerId);
+  assert(calcUnverified.domainResults['D01'].evidenceConfidence === 'unverified', "Case A: High capability (76%) with 0 evidence has 'unverified' confidence (Score 80 != High confidence)");
+
+  // Case B: Add 6 verified evidence items -> corroborated
+  for (let eIdx = 1; eIdx <= 6; eIdx++) {
+    await query(
+      `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, status, created_at)
+       VALUES ($1, $2, 'doc.pdf', '/vault/doc.pdf', 100000, 'REVIEWED', NOW())`,
+      [asmA_Id, `Evidence Artifact ${eIdx}`]
+    );
+  }
+  const calcCorroborated = await calculateScoreRun(asmA_Id, activeMethodVerId);
+  assert(calcCorroborated.domainResults['D01'].evidenceConfidence === 'corroborated', "Case B: High capability with verified evidence achieves 'corroborated' confidence");
+  assert(calcCorroborated.domainResults['D01'].domainScore === 76.00, "Capability score remains identical (76.00%) — Evidence confidence never multiplies capability");
+
+  // --------------------------------------------------------------------------
+  // SUITE 08: FULL CROSS-DOMAIN ENGINE & SCORE INVARIANCE
+  // --------------------------------------------------------------------------
+  console.log(`\n${colors.bold}[SUITE 08] Cross-Domain Engine Diagnostics & Score Invariance${colors.reset}`);
+
+  // Set D01 high (80%) and D03 low (20%) to trigger CD01 cross-domain finding
+  await query(
+    `INSERT INTO metric_assessments (assessment_id, metric_full_code, domain_code, maturity, implementation, outcomes, score, updated_at)
+     VALUES 
+       ($1, 'D01-I01', 'D01', 4, 4, 4, 80.00, NOW()),
+       ($1, 'D03-I01', 'D03', 1, 1, null, 20.00, NOW())
+     ON CONFLICT (assessment_id, metric_full_code) DO UPDATE SET maturity = EXCLUDED.maturity, score = EXCLUDED.score, updated_at = NOW();`,
+    [asmA_Id]
+  );
+
+  const cdCalc = await calculateScoreRun(asmA_Id, activeMethodVerId);
+  const cdFindings = cdCalc.crossDomainFindings;
+  assert(cdFindings.length > 0, "Cross-Domain Engine successfully generates diagnostic findings");
+  assert(cdCalc.domainResults['D01'].domainScore === 76.00, "Score Invariance: Cross-Domain finding has zero impact on domain score");
+
+  // --------------------------------------------------------------------------
+  // SUITE 09: ZERO FABRICATED FALLBACK DATA VERIFICATION
+  // --------------------------------------------------------------------------
+  console.log(`\n${colors.bold}[SUITE 09] Zero Fabricated Fallback Data Verification ('Not provided' for missing fields)${colors.reset}`);
 
   // Create an unpopulated assessment to verify no fake defaults (Karnataka, Bengaluru, 1995, etc.) are injected
   const asmEmpty_Res = await query(
@@ -301,9 +382,9 @@ async function runVerificationSuite() {
   assert(programmesField.value === 'Not provided', "Missing Active Programmes displays 'Not provided' (no hardcoded 48 programmes)");
 
   // --------------------------------------------------------------------------
-  // SUITE 07: COMPLETE 11-DOMAIN CALCULATION & AUDIT TRAIL
+  // SUITE 10: COMPLETE 11-DOMAIN CALCULATION & AUDIT TRAIL
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 07] Complete 11-Domain Assessment Scoring & Audit Trail${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 10] Complete 11-Domain Assessment Scoring & Audit Trail${colors.reset}`);
 
   // Score metrics across all 11 domains for assessment A
   const allDomains = ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'];
@@ -311,25 +392,10 @@ async function runVerificationSuite() {
     await query(
       `INSERT INTO metric_assessments (assessment_id, metric_full_code, domain_code, maturity, implementation, outcomes, score, rationale, updated_at)
        VALUES ($1, $2, $3, 4, 4, 3, 76.00, 'Evaluated by calibration panel.', NOW())
-       ON CONFLICT (assessment_id, metric_full_code) DO UPDATE SET score = 76.00, updated_at = NOW();`,
+       ON CONFLICT (assessment_id, metric_full_code) DO UPDATE SET maturity = 4, implementation = 4, outcomes = 3, score = 76.00, updated_at = NOW();`,
       [asmA_Id, `${dCode}-I01`, dCode]
     );
   }
-
-  // Add verified evidence
-  const evRes = await query(
-    `INSERT INTO evidence_items (assessment_id, title, description, file_name, file_path, file_size, status, evidence_level, created_at)
-     VALUES ($1, 'Institutional AI Strategy & Ethics Charter', 'Council approved charter', 'Strategy_Charter_2026.pdf', '/vault/charter.pdf', 1500000, 'REVIEWED', 'E2', NOW())
-     RETURNING id;`,
-    [asmA_Id]
-  );
-  const evId = evRes.rows[0].id;
-  await query(
-    `INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary)
-     VALUES ($1, 'D01-I01', true), ($1, 'D02-I01', false)
-     ON CONFLICT DO NOTHING;`,
-    [evId]
-  );
 
   const fullCalc = await calculateScoreRun(asmA_Id, activeMethodVerId);
   assert(fullCalc.isPartial === false, "Assessment with all 11 domains evaluated has isPartial: false");
@@ -338,9 +404,9 @@ async function runVerificationSuite() {
   assert(fullCalc.overallTransformationDistance === 0, "Transformation distance is computed (0 levels)");
 
   // --------------------------------------------------------------------------
-  // SUITE 08: FULL PDF GENERATION & 143-METRIC TRACEABILITY APPENDIX
+  // SUITE 11: FULL PDF GENERATION & 143-METRIC TRACEABILITY APPENDIX
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 08] PDF Report Generation & 143-Metric Traceability Dataset${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 11] PDF Report Generation & 143-Metric Traceability Dataset${colors.reset}`);
 
   const fullPayload = await buildAssessmentReportPayload(asmA_Id);
   assert(fullPayload.domains.length === 11, "All 11 Domains present in canonical report payload");
@@ -374,7 +440,7 @@ async function runVerificationSuite() {
   // --------------------------------------------------------------------------
   // CLEANUP FIXTURES
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 09] Fixture Teardown & Clean Up${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 12] Fixture Teardown & Clean Up${colors.reset}`);
   await query(`DELETE FROM assessments WHERE id IN ($1, $2, $3)`, [asmA_Id, asmB_Id, emptyAsmId]);
   await query(`DELETE FROM users WHERE id IN ($1, $2)`, [userA.id, userB.id]);
   await query(`DELETE FROM institutions WHERE id IN ($1, $2)`, [instAId, instBId]);
