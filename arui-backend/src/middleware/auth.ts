@@ -100,15 +100,24 @@ export const requireInstitutionAccess = async (req: Request, res: Response, next
       const aRes = await query(`SELECT institution_id FROM assessments WHERE id = $1`, [assessmentId]);
       if (aRes.rows.length > 0) {
         targetInstitutionId = aRes.rows[0].institution_id;
+      } else {
+        const instRes = await query(`SELECT id FROM institutions WHERE id = $1`, [assessmentId]);
+        if (instRes.rows.length > 0) {
+          targetInstitutionId = instRes.rows[0].id;
+        } else {
+          return res.status(404).json({ error: 'Assessment or institution resource not found' });
+        }
       }
     } catch (e) {
       console.error('Failed to verify assessment institution:', e);
+      return res.status(500).json({ error: 'Failed to verify institution authorization' });
     }
   }
 
   if (targetInstitutionId && req.user.institutionId && targetInstitutionId !== req.user.institutionId) {
-    return res.status(403).json({ error: 'Forbidden: You do not have access to this institution data.' });
+    return res.status(403).json({ error: 'Forbidden: Cross-tenant access denied. You can only access your own institution data.' });
   }
 
   next();
 };
+

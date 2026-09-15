@@ -28,27 +28,83 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     scoreMap[s.metric_full_code] = s;
   }
 
-  // 2. Fetch Profile for Context Engine (P0-4 Context Calibration)
+  // 2. Fetch Profile for Context Engine (P0-4 Context Calibration — 10-Variable Architecture)
   const profRes = await query(
     `SELECT values_json FROM institution_profiles WHERE assessment_id = $1 ORDER BY updated_at DESC LIMIT 1`,
     [assessmentId]
   );
   const profileValues = profRes.rows[0]?.values_json || {};
 
-  // Context calibration factors
+  // P0-4 10-Variable Context Calibration Factors
+  // Variable 1: Institutional Form
+  const instType = profileValues.IP02_INST_TYPE || 'comprehensive';
+
+  // Variable 2: Mandate (Teaching 0, Broad T+R 0.25, Research-intensive 0.5, Professional/regulated 0.5, Specialist 0.25)
+  const mandateVal = Array.isArray(profileValues.IP03_MANDATE)
+    ? profileValues.IP03_MANDATE[0]
+    : profileValues.IP03_MANDATE;
+  let mandateDelta = 0.25;
+  if (mandateVal === 'research_intensive' || mandateVal === 'professional') mandateDelta = 0.5;
+  else if (mandateVal === 'teaching') mandateDelta = 0.0;
+  else if (mandateVal === 'specialist') mandateDelta = 0.25;
+
+  // Variable 3: AI Exposure Index (Low 0, Medium 0.25, High 0.5, Very High 0.75)
   const aiExposure = profileValues.IP10_AI_EXPOSURE || 'medium';
+  let exposureDelta = 0.25;
+  if (aiExposure === 'very_high' || aiExposure === 'critical') exposureDelta = 0.75;
+  else if (aiExposure === 'high') exposureDelta = 0.5;
+  else if (aiExposure === 'low') exposureDelta = 0.0;
+
+  // Variable 4: Disciplinary Consequence (Low 0, Medium 0.25, High 0.5, Critical 0.75)
   const consequence = profileValues.IP11_DISCIPLINARY_CONSEQUENCE || 'medium';
+  let consequenceDelta = 0.25;
+  if (consequence === 'critical') consequenceDelta = 0.75;
+  else if (consequence === 'high') consequenceDelta = 0.5;
+  else if (consequence === 'low') consequenceDelta = 0.0;
+
+  // Variable 5: Trajectory / Institutional Momentum
+  const trajectory = profileValues.IP12_TRAJECTORY || profileValues.trajectory;
+  let trajectoryDelta = 0.1;
+  if (trajectory === 'high_growth' || trajectory === 5) trajectoryDelta = 0.35;
+  else if (trajectory === 'transforming' || trajectory === 4) trajectoryDelta = 0.25;
+  else if (trajectory === 'declining' || trajectory === 1) trajectoryDelta = 0.0;
+
+  // Variable 6: Student Scale (<2.5k 0, 2.5k-10k 0.1, 10k-25k 0.2, 25k-50k 0.3, >50k 0.4)
+  const scale = profileValues.IP08_STUDENT_ENROLLMENT || '10000_25000';
+  let scaleDelta = 0.2;
+  if (scale === 'over_50000' || scale === '>60k') scaleDelta = 0.4;
+  else if (scale === '25000_50000' || scale === '30k_60k') scaleDelta = 0.3;
+  else if (scale === 'under_2500' || scale === '<2k') scaleDelta = 0.0;
+  else if (scale === '2500_10000' || scale === '2k_10k') scaleDelta = 0.1;
+
+  // Variable 7: Geography & Location Category (Rural 0, Semi-Urban 0.1, Urban 0.2, Metro 0.25)
+  const location = profileValues.IP06_LOCATION || 'metro';
+  let locationDelta = 0.2;
+  if (location === 'metro') locationDelta = 0.25;
+  else if (location === 'semi_urban') locationDelta = 0.1;
+  else if (location === 'rural') locationDelta = 0.0;
+
+  // Variable 8: Resource Envelope (Constrained -0.25, Moderate 0, Substantial +0.25)
+  const resourceEnv = profileValues.IP16_RESOURCE_ENVELOPE || 'moderate';
+  let resourceDelta = 0.0;
+  if (resourceEnv === 'substantial') resourceDelta = 0.25;
+  else if (resourceEnv === 'constrained') resourceDelta = -0.25;
+
+  // Variable 9: Research Intensity (1–5 scale: 1=0, 2=0, 3=0.1, 4=0.25, 5=0.5)
   const researchInt = Number(profileValues.IP15_RESEARCH_INTENSITY) || 3;
+  let researchDelta = 0.1;
+  if (researchInt >= 5) researchDelta = 0.5;
+  else if (researchInt >= 4) researchDelta = 0.25;
+  else if (researchInt <= 2) researchDelta = 0.0;
 
-  let exposureDelta = 0;
-  if (aiExposure === 'very_high') exposureDelta = 0.6;
-  else if (aiExposure === 'high') exposureDelta = 0.3;
-  else if (aiExposure === 'low') exposureDelta = -0.3;
+  // Variable 10: Faculty & Academic Complexity
+  const facultyCount = profileValues.IP09_FACULTY_COUNT || '500_1500';
+  let facultyDelta = 0.1;
+  if (facultyCount === 'over_1500') facultyDelta = 0.2;
+  else if (facultyCount === 'under_150') facultyDelta = 0.0;
 
-  let consequenceDelta = 0;
-  if (consequence === 'critical') consequenceDelta = 0.6;
-  else if (consequence === 'high') consequenceDelta = 0.3;
-  else if (consequence === 'low') consequenceDelta = -0.3;
+  // Base composite context factor (B_d = 3.0 baseline)
+  const baseContextShift = (mandateDelta + exposureDelta + consequenceDelta + trajectoryDelta + scaleDelta + locationDelta + resourceDelta + researchDelta + facultyDelta) / 3.0;
 
   const metricResults: Record<string, any> = {};
   const domainMetricScores: Record<string, number[]> = {};
@@ -96,7 +152,12 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     };
   }
 
-  // 4. Compute Domain Results & Required Maturity (P0-4)
+  // Fetch Evidence for Evidence-Confidence Calculation
+  const evRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1`, [assessmentId]);
+  const evidenceItems = evRes.rows;
+  const verifiedEvidenceCount = evidenceItems.filter((e) => e.status === 'REVIEWED' || e.status === 'CORROBORATED').length;
+
+  // 4. Compute Domain Results & Required Maturity (P0-4 10-Variable Context Architecture)
   const domainResults: Record<string, any> = {};
   const contextResults: Record<string, any> = {};
   let weightedSum = 0;
@@ -111,12 +172,24 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     const domainScore = assessed ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100 : null;
     const currentMaturity = assessed && domainScore !== null ? Math.min(5, Math.max(0, Math.round(domainScore / 20))) : null;
 
-    // Required Maturity Rd = clamp(round(3 + sum(factor * sensitivity)), 1, 5)
-    let rawRd = 3.0 + exposureDelta + consequenceDelta;
-    if (d.code === 'D10' && researchInt >= 4) rawRd += 0.5;
-    if (d.code === 'D02' && consequence === 'critical') rawRd += 0.5;
+    // Required Maturity Rd = clamp(round(3.0 + baseContextShift + domainSensitivity), 1, 5)
+    let domainSensitivity = 0;
+    if (d.code === 'D02' && (consequence === 'critical' || consequence === 'high')) domainSensitivity += 0.5;
+    if (d.code === 'D10' && (researchInt >= 4 || mandateVal === 'research_intensive')) domainSensitivity += 0.5;
+    if (d.code === 'D08' && (scaleDelta >= 0.3 || location === 'metro')) domainSensitivity += 0.25;
+    if (d.code === 'D09' && (mandateVal === 'professional' || aiExposure === 'high' || aiExposure === 'very_high')) domainSensitivity += 0.25;
+    if ((d.code === 'D04' || d.code === 'D05') && (aiExposure === 'high' || aiExposure === 'very_high')) domainSensitivity += 0.25;
+
+    let rawRd = 3.0 + baseContextShift + domainSensitivity;
     const requiredMaturity = Math.min(5, Math.max(1, Math.round(rawRd)));
     const transformationDistance = currentMaturity !== null ? requiredMaturity - currentMaturity : null;
+
+    let domainConfidence: 'unverified' | 'preliminary' | 'corroborated' = 'unverified';
+    if (assessed) {
+      if (verifiedEvidenceCount >= 6) domainConfidence = 'corroborated';
+      else if (evidenceItems.length >= 2 || scores.length >= 3) domainConfidence = 'preliminary';
+      else domainConfidence = 'unverified';
+    }
 
     domainResults[d.code] = {
       code: d.code,
@@ -126,7 +199,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
       currentMaturity,
       requiredMaturity,
       transformationDistance,
-      evidenceConfidence: assessed ? ((domainScore || 0) >= 60 ? 'high' : 'medium') : 'low',
+      evidenceConfidence: domainConfidence,
       metricsAssessedCount: scores.length,
       totalMetricsCount: metricsRes.rows.filter((m: any) => m.domain_code === d.code).length,
     };
@@ -175,11 +248,11 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
   const antiGamingFlagsRes = await query(`SELECT * FROM anti_gaming_flags WHERE assessment_id = $1`, [assessmentId]);
   const antiGamingFlags = antiGamingFlagsRes.rows;
 
-  // 7. Overall Score Calculation (Partial Assessment Rule)
+  // 7. Overall Score Calculation (Partial Assessment Rule: Canonical overall score is strictly withheld/null if not all 11 domains are assessed)
   const isPartial = assessedDomainsCount < domainsRes.rows.length;
   const overallScore = !isPartial && totalWeightAssessed > 0
     ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100
-    : (totalWeightAssessed > 0 ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100 : null);
+    : null;
 
   const overallCurrentMaturity = overallScore !== null ? Math.min(5, Math.max(0, Math.round(overallScore / 20))) : null;
   const overallRequiredMaturity = 4;

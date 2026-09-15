@@ -148,42 +148,54 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     {
       group: 'Institutional Identity & Demographics',
       fields: [
-        { id: 'IP01', label: 'Institution Legal Name', value: pValues.IP01_INST_NAME || assessment.institution_name },
-        { id: 'IP02', label: 'Institutional Form', value: pValues.IP02_INST_TYPE || 'Comprehensive University' },
-        { id: 'IP03', label: 'Institutional Mandate', value: Array.isArray(pValues.IP03_MANDATE) ? pValues.IP03_MANDATE.join(', ') : 'Broad Teaching & Research' },
-        { id: 'IP04', label: 'State / Union Territory', value: pValues.IP04_STATE || assessment.institution_state || 'Karnataka' },
-        { id: 'IP05', label: 'District', value: pValues.IP05_DISTRICT || assessment.institution_district || 'Bengaluru Urban' },
-        { id: 'IP06', label: 'Location Category', value: pValues.IP06_LOCATION || 'Metro / Tier 1' },
-        { id: 'IP07', label: 'Year Established', value: pValues.IP07_YEAR_ESTABLISHED || '1995' },
+        { id: 'IP01', label: 'Institution Legal Name', value: pValues.IP01_INST_NAME || assessment.institution_name || 'Not provided' },
+        { id: 'IP02', label: 'Institutional Form', value: pValues.IP02_INST_TYPE || 'Not provided' },
+        { id: 'IP03', label: 'Institutional Mandate', value: Array.isArray(pValues.IP03_MANDATE) ? pValues.IP03_MANDATE.join(', ') : (pValues.IP03_MANDATE || 'Not provided') },
+        { id: 'IP04', label: 'State / Union Territory', value: pValues.IP04_STATE || assessment.institution_state || 'Not provided' },
+        { id: 'IP05', label: 'District', value: pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided' },
+        { id: 'IP06', label: 'Location Category', value: pValues.IP06_LOCATION || 'Not provided' },
+        { id: 'IP07', label: 'Year Established', value: pValues.IP07_YEAR_ESTABLISHED || 'Not provided' },
       ],
     },
     {
       group: 'Academic Scale & Programme Breadth',
       fields: [
-        { id: 'IP08', label: 'Total Student Enrolment', value: pValues.IP08_STUDENT_ENROLLMENT || '10,000–25,000' },
-        { id: 'IP09', label: 'Full-Time Faculty Count', value: pValues.IP09_FACULTY_COUNT || '500–1,500' },
-        { id: 'IP10', label: 'Active Degree Programmes', value: pValues.IP10_ACTIVE_PROGRAMMES || '48' },
-        { id: 'IP14', label: 'Major Discipline Clusters', value: Array.isArray(pValues.IP14_MAJOR_DISCIPLINES) ? pValues.IP14_MAJOR_DISCIPLINES.join(', ') : 'Engineering, Sciences, Management, Humanities' },
+        { id: 'IP08', label: 'Total Student Enrolment', value: pValues.IP08_STUDENT_ENROLLMENT || 'Not provided' },
+        { id: 'IP09', label: 'Full-Time Faculty Count', value: pValues.IP09_FACULTY_COUNT || 'Not provided' },
+        { id: 'IP10', label: 'Active Degree Programmes', value: pValues.IP10_ACTIVE_PROGRAMMES || 'Not provided' },
+        { id: 'IP14', label: 'Major Discipline Clusters', value: Array.isArray(pValues.IP14_MAJOR_DISCIPLINES) ? pValues.IP14_MAJOR_DISCIPLINES.join(', ') : (pValues.IP14_MAJOR_DISCIPLINES || 'Not provided') },
       ],
     },
     {
       group: 'Context & Exposure Calibration (P0-4)',
       fields: [
-        { id: 'IP15', label: 'Research Intensity (1–5)', value: `${pValues.IP15_RESEARCH_INTENSITY || 3} / 5` },
-        { id: 'IP10', label: 'AI Exposure Index', value: pValues.IP10_AI_EXPOSURE || 'Medium' },
-        { id: 'IP11', label: 'Disciplinary Consequence of AI Errors', value: pValues.IP11_DISCIPLINARY_CONSEQUENCE || 'High' },
-        { id: 'IP16', label: 'Resource Envelope', value: pValues.IP16_RESOURCE_ENVELOPE || 'Moderate' },
+        { id: 'IP15', label: 'Research Intensity (1–5)', value: pValues.IP15_RESEARCH_INTENSITY ? `${pValues.IP15_RESEARCH_INTENSITY} / 5` : 'Not provided' },
+        { id: 'IP10', label: 'AI Exposure Index', value: pValues.IP10_AI_EXPOSURE || 'Not provided' },
+        { id: 'IP11', label: 'Disciplinary Consequence of AI Errors', value: pValues.IP11_DISCIPLINARY_CONSEQUENCE || 'Not provided' },
+        { id: 'IP16', label: 'Resource Envelope', value: pValues.IP16_RESOURCE_ENVELOPE || 'Not provided' },
       ],
     },
     {
       group: 'Assessment Leadership & Governance',
       fields: [
-        { id: 'IP13', label: 'Institutional Lead', value: pValues.IP13_LEAD_NAME || 'Designated Institutional Admin' },
-        { id: 'IP14', label: 'Official Designation', value: pValues.IP14_LEAD_TITLE || 'Academic Leadership' },
-        { id: 'IP15', label: 'Official Contact', value: pValues.IP15_LEAD_EMAIL || 'admin@institution.edu' },
+        { id: 'IP13', label: 'Institutional Lead', value: pValues.IP13_LEAD_NAME || 'Not provided' },
+        { id: 'IP14', label: 'Official Designation', value: pValues.IP14_LEAD_TITLE || 'Not provided' },
+        { id: 'IP15', label: 'Official Contact', value: pValues.IP15_LEAD_EMAIL || 'Not provided' },
       ],
     },
   ];
+
+  // Derive evidence confidence from actual evidence records and review state
+  const verifiedCount = evidenceItems.filter((e) => e.status === 'REVIEWED' || e.status === 'CORROBORATED').length;
+  const submittedCount = evidenceItems.length;
+  let computedConfidence: 'unverified' | 'preliminary' | 'corroborated' = 'unverified';
+  if (verifiedCount >= 8) {
+    computedConfidence = 'corroborated';
+  } else if (verifiedCount >= 3 || submittedCount >= 5) {
+    computedConfidence = 'preliminary';
+  } else {
+    computedConfidence = 'unverified';
+  }
 
   const payload = {
     report: {
@@ -205,10 +217,10 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     institution: {
       id: assessment.institution_id,
       name: assessment.institution_name,
-      state: pValues.IP04_STATE || assessment.institution_state || '',
-      district: pValues.IP05_DISTRICT || assessment.institution_district || '',
+      state: pValues.IP04_STATE || assessment.institution_state || 'Not provided',
+      district: pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided',
       profile: fullProfileGroups,
-      profileCompleteness: 'complete',
+      profileCompleteness: pValues && Object.keys(pValues).length >= 10 ? 'complete' : 'partial',
     },
     assessment: {
       id: assessment.id,
@@ -221,14 +233,14 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
         ? `Institutional AI Resilience Assessment — Preliminary Diagnostic Brief (${assessedCount}/11 Domains)`
         : 'Institutional AI Resilience Assessment — Executive Diagnostic Report',
       narrative: isPartial
-        ? `This preliminary assessment evaluates ${assessedCount} of the 11 ARUI domains for ${assessment.institution_name}. An institution-wide overall ARUI score is not reported until full 11-domain assessment coverage is achieved. Individual assessed domains provide baseline operational guidance.`
+        ? `This preliminary assessment evaluates ${assessedCount} of the 11 ARUI domains for ${assessment.institution_name}. An institution-wide overall ARUI score is withheld until full 11-domain assessment coverage is achieved. Individual assessed domains provide baseline operational guidance.`
         : `${assessment.institution_name} has completed evaluation across all 11 core institutional resilience domains. The evaluation combines institutional profile parameters, adaptive diagnostic probes, verifiable evidence review, and independent rubric calibration.`,
       overallIndex: calculation.overallScore,
       isPartial,
       currentMaturityLevel: calculation.overallCurrentMaturity,
       requiredMaturityLevel: calculation.overallRequiredMaturity,
       transformationDistance: calculation.overallTransformationDistance,
-      evidenceConfidence: isPartial ? 'preliminary' : 'high',
+      evidenceConfidence: computedConfidence,
     },
     overall: {
       currentMaturity: calculation.overallCurrentMaturity,
@@ -236,7 +248,7 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
       transformationDistance: calculation.overallTransformationDistance,
       domainScore: calculation.overallScore,
       isPartial,
-      evidenceConfidence: isPartial ? 'preliminary' : 'high',
+      evidenceConfidence: computedConfidence,
     },
     domains: domainsList,
     crossDomain: {
@@ -244,9 +256,9 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
       findings: calculation.crossDomainFindings,
     },
     evidence: {
-      submittedCount: evidenceItems.length,
-      verifiedCount: evidenceItems.filter((e) => e.status === 'REVIEWED').length,
-      guidelineCompliance: evidenceItems.length >= 8 ? 'High' : 'Emerging',
+      submittedCount,
+      verifiedCount,
+      guidelineCompliance: verifiedCount >= 8 ? 'High' : (submittedCount >= 4 ? 'Moderate' : 'Emerging'),
     },
     strengths: calculation.strengths,
     vulnerabilities: calculation.vulnerabilities,

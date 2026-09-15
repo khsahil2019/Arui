@@ -185,7 +185,14 @@ router.get('/assessments/active', authenticate, async (req, res) => {
 // Route: Create New Assessment
 router.post('/assessments', authenticate, async (req, res) => {
   const { institutionId, title, scopeDomains } = req.body;
-  const targetInstitutionId = institutionId || req.user?.institutionId;
+  let targetInstitutionId = institutionId || req.user?.institutionId;
+
+  if (req.user?.role === 'INSTITUTION_ADMIN') {
+    if (institutionId && req.user.institutionId && institutionId !== req.user.institutionId) {
+      return res.status(403).json({ error: 'Forbidden: Institution Admin can only create assessments for their own institution.' });
+    }
+    targetInstitutionId = req.user.institutionId;
+  }
 
   if (!targetInstitutionId) {
     return res.status(400).json({ error: 'Institution ID is required' });
