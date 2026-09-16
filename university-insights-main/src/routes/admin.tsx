@@ -106,8 +106,8 @@ function AdminPage() {
     }
     return null;
   });
-  const [adminEmail, setAdminEmail] = useState("admin@arui.org");
-  const [adminPassword, setAdminPassword] = useState("arui@2026");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [adminAuthError, setAdminAuthError] = useState<string | null>(null);
   const [adminAuthPending, setAdminAuthPending] = useState(false);
@@ -159,9 +159,10 @@ function AdminPage() {
     const token = adminToken || (typeof window !== "undefined" ? window.localStorage.getItem(ADMIN_TOKEN_KEY) : null);
     return {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : { "x-admin-key": "arui@2026" }),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
   };
+
 
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,14 +263,14 @@ function AdminPage() {
   }, [adminToken, activeTab, selectedTable]);
 
   const handleInstantLogin = async (user: UserRecord) => {
-    let pass = "123456";
-    if (user.email === "lead@apex.edu" || user.email === "assessor@arui.org" || user.email === "admin@arui.org") pass = "arui@2026";
+    const pass = window.prompt(`Enter password to sign in as ${user.email}:`);
+    if (!pass) return;
 
     try {
       setStatusMsg({ type: "success", text: `Signing in as ${user.email}…` });
       const session = await login.mutateAsync({
         email: user.email,
-        password: pass,
+        password: pass.trim(),
       });
 
       if (session) {
@@ -280,10 +281,11 @@ function AdminPage() {
     } catch (e: any) {
       setStatusMsg({ 
         type: "error", 
-        text: `Direct sign-in failed. Please use 'Reset Password' to set a new password, then log in.` 
+        text: `Sign-in failed. Please verify password or use 'Reset Password' to set a new password.` 
       });
     }
   };
+
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();

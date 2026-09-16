@@ -30,6 +30,7 @@ import { calculateScoreRun } from '../modules/scoring/engine.js';
 import { buildAssessmentReportPayload } from '../modules/reports/payload.js';
 import { generateAssessmentPdfStream } from '../modules/reports/pdf.js';
 import { getJwtSecret } from '../middleware/auth.js';
+import app from '../server.js';
 
 // ANSI styling for test reports
 const colors = {
@@ -191,97 +192,175 @@ async function runVerificationSuite() {
   assert(!!asmA_Id && !!asmB_Id, "Isolated test assessments created for Institution Alpha and Beta");
 
   // --------------------------------------------------------------------------
-  // SUITE 04: AUTHENTICATED CROSS-TENANT ISOLATION & RBAC (Action 16)
+  // SUITE 04: AUTHENTICATED REAL HTTP CROSS-TENANT ISOLATION & RBAC (Action 16 & Item 5)
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 04] Authenticated Cross-Tenant Access Enforcement (HTTP 403 / 404)${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 04] Authenticated Cross-Tenant Access Enforcement via Real HTTP API (403 / 404)${colors.reset}`);
 
   const secret = getJwtSecret();
   const tokenA = jwt.sign(
-    { id: userA.id, email: userA.email, name: 'Admin Alpha', role: 'INSTITUTION_ADMIN', institutionId: instAId },
+    { id: userA.id, email: userA.email, name: 'Admin Alpha', role: 'INSTITUTION_ADMIN', institutionId: instAId, assessmentId: asmA_Id },
     secret,
     { expiresIn: '1h' }
   );
   const tokenB = jwt.sign(
-    { id: userB.id, email: userB.email, name: 'Admin Beta', role: 'INSTITUTION_ADMIN', institutionId: instBId },
+    { id: userB.id, email: userB.email, name: 'Admin Beta', role: 'INSTITUTION_ADMIN', institutionId: instBId, assessmentId: asmB_Id },
     secret,
     { expiresIn: '1h' }
   );
 
-  async function testTenantAuthorization(userToken, targetAssessmentId) {
-    const decoded = jwt.verify(userToken, secret);
-    const userRole = decoded.role;
-    if (['SUPER_ADMIN', 'LEAD_AUDITOR', 'ASSESSOR'].includes(userRole)) {
-      return { status: 200, allowed: true };
-    }
+  // Start real in-process Express HTTP server
+  const server = app.listen(0);
+  const port = server.address().port;
+  const baseUrl = `http://127.0.0.1:${port}`;
 
-    const aRes = await query(`SELECT institution_id FROM assessments WHERE id = $1`, [targetAssessmentId]);
-    if (aRes.rows.length === 0) {
-      const instRes = await query(`SELECT id FROM institutions WHERE id = $1`, [targetAssessmentId]);
-      if (instRes.rows.length === 0) return { status: 404, allowed: false, error: 'Not found' };
-      if (instRes.rows[0].id !== decoded.institutionId) return { status: 403, allowed: false, error: 'Forbidden' };
-      return { status: 200, allowed: true };
+  async function apiReq(method, path, token, body = null, headers = {}) {
+    const opts = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+    };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(`${baseUrl}${path}`, opts);
+    let data = null;
+    const text = await res.text();
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      data = text;
     }
-
-    if (aRes.rows[0].institution_id !== decoded.institutionId) {
-      return { status: 403, allowed: false, error: 'Forbidden: Cross-tenant access denied' };
-    }
-    return { status: 200, allowed: true };
+    return { status: res.status, ok: res.ok, data };
   }
 
-  // 1. User A accessing own assessment A -> 200
-  const ownAccess = await testTenantAuthorization(tokenA, asmA_Id);
-  assert(ownAccess.status === 200 && ownAccess.allowed === true, "Institution A user can access own assessment A (HTTP 200)");
+  // 1. User A accessing own assessment status -> HTTP 200
+  const ownStatus = await apiReq('GET', `/assessments/${asmA_Id}/status`, tokenA);
+  assert(ownStatus.status === 200, "Institution A user can access own assessment status via HTTP GET (HTTP 200)");
 
-  // 2. User A accessing institution B assessment -> 403
-  const crossAccess = await testTenantAuthorization(tokenA, asmB_Id);
-  assert(crossAccess.status === 403 && crossAccess.allowed === false, "Institution A user receives 403 Forbidden accessing Institution B assessment");
+  // 2. User A attempting HTTP GET on Institution B assessment status -> HTTP 403
+  const crossStatus = await apiReq('GET', `/assessments/${asmB_Id}/status`, tokenA);
+  assert(crossStatus.status === 403, "Institution A user receives HTTP 403 Forbidden accessing Institution B assessment");
 
-  // 3. User B accessing institution A assessment -> 403
-  const crossAccessB = await testTenantAuthorization(tokenB, asmA_Id);
-  assert(crossAccessB.status === 403 && crossAccessB.allowed === false, "Institution B user receives 403 Forbidden accessing Institution A assessment");
+  // 3. User A attempting HTTP GET on Institution B screening responses -> HTTP 403
+  const crossScreening = await apiReq('GET', `/assessments/${asmB_Id}/screening`, tokenA);
+  assert(crossScreening.status === 403, "Institution A user receives HTTP 403 Forbidden accessing Institution B responses");
 
-  // 4. Non-existent assessment -> 404
-  const nonExistentAccess = await testTenantAuthorization(tokenA, '00000000-0000-0000-0000-000000000000');
-  assert(nonExistentAccess.status === 404, "Invalid assessment ID returns 404 Not Found");
+  // 4. User A attempting HTTP PUT on Institution B response mutation -> HTTP 403
+  const crossMutate = await apiReq('PUT', `/assessments/${asmB_Id}/responses/D01-Q01`, tokenA, { state: 'answered', value: 'formal-institutional-priority' });
+  assert(crossMutate.status === 403, "Institution A user receives HTTP 403 Forbidden attempting to mutate Institution B response");
+
+  // 5. User A attempting HTTP GET on Institution B evidence repository -> HTTP 403
+  const crossEvidence = await apiReq('GET', `/assessments/${asmB_Id}/evidence`, tokenA);
+  assert(crossEvidence.status === 403, "Institution A user receives HTTP 403 Forbidden accessing Institution B evidence");
+
+  // 6. User A attempting HTTP POST to upload evidence into Institution B -> HTTP 403
+  const crossEvPost = await apiReq('POST', `/assessments/${asmB_Id}/evidence`, tokenA, { title: 'Unauthorized Evidence', fileName: 'leak.pdf' });
+  assert(crossEvPost.status === 403, "Institution A user receives HTTP 403 Forbidden attempting to post evidence to Institution B");
+
+  // 7. User A attempting HTTP GET on Institution B Report Payload -> HTTP 403
+  const crossReport = await apiReq('GET', `/assessments/${asmB_Id}/report`, tokenA);
+  assert(crossReport.status === 403, "Institution A user receives HTTP 403 Forbidden accessing Institution B report payload");
+
+  // 8. User A attempting HTTP GET on Institution B Institutional Data -> HTTP 403
+  const crossInstData = await apiReq('GET', `/assessments/${asmB_Id}/institutional-data/D01`, tokenA);
+  assert(crossInstData.status === 403, "Institution A user receives HTTP 403 Forbidden accessing Institution B institutional data");
+
+  // 9. User A attempting HTTP GET on privileged Assessor Queue -> HTTP 403
+  const unauthAssessor = await apiReq('GET', `/assessor/queue`, tokenA);
+  assert(unauthAssessor.status === 403, "Standard Institution Admin receives HTTP 403 Forbidden accessing Assessor Queue");
+
+  // 10. Non-existent assessment ID -> HTTP 404
+  const nonExistent = await apiReq('GET', `/assessments/00000000-0000-0000-0000-000000000000/status`, tokenA);
+  assert(nonExistent.status === 404, "Non-existent assessment ID returns HTTP 404 Not Found");
+
+  // 11. Production security: Attempting master key header bypass -> Rejected HTTP 401
+  const bypassAttempt = await apiReq('GET', `/api/v1/admin/users`, null, null, { 'x-admin-key': 'arui@2026' });
+  assert(bypassAttempt.status === 401, "Production path strictly rejects legacy master bypass header x-admin-key (HTTP 401)");
 
   // --------------------------------------------------------------------------
-  // SUITE 05: P0-4 10-VARIABLE CONTEXT CALIBRATION & REQUIRED MATURITY
+  // SUITE 05: P0-4 CANONICAL 25-FIELD CONTEXT CALIBRATION & REQUIRED MATURITY
   // --------------------------------------------------------------------------
-  console.log(`\n${colors.bold}[SUITE 05] P0-4 Context Calibration & Resource/Capability Separation${colors.reset}`);
+  console.log(`\n${colors.bold}[SUITE 05] P0-4 Canonical Context Calibration & Dynamic Required Maturity${colors.reset}`);
 
-  const profileContext10 = {
-    IP01_INST_NAME: `Test University Alpha_${fixtureSuffix}`,
-    IP02_INST_TYPE: 'comprehensive',
-    IP03_MANDATE: ['broad_teaching_research'],
-    IP04_STATE: 'Delhi',
-    IP05_DISTRICT: 'New Delhi',
-    IP06_LOCATION: 'metro',
-    IP07_YEAR_ESTABLISHED: 1985,
-    IP08_STUDENT_ENROLLMENT: '10000_25000',
-    IP09_FACULTY_COUNT: '500_1500',
-    IP10_ACTIVE_PROGRAMMES: 48,
-    IP14_MAJOR_DISCIPLINES: ['Engineering, Computing & Tech', 'Management, Business & Commerce'],
-    IP15_RESEARCH_INTENSITY: 4,
-    IP10_AI_EXPOSURE: 'high',
-    IP11_DISCIPLINARY_CONSEQUENCE: 'high',
-    IP16_RESOURCE_ENVELOPE: 'substantial',
+  // Profile A: Research-Intensive, Metro, High Exposure
+  const profileContextA = {
+    IP01: `Test University Alpha_${fixtureSuffix}`,
+    IP02: 'comprehensive',
+    IP03: 'public_state',
+    IP04: 'Delhi',
+    IP05: 'New Delhi',
+    IP06: 'metro',
+    IP07: 1985,
+    IP08: 35000,
+    IP09: 1200,
+    IP10: 48,
+    IP11: 24,
+    IP12: 18,
+    IP13: 6,
+    IP14: ['engineering_cs', 'sciences', 'health_medicine'],
+    IP15: 'high',
+    IP16: 'tier1_large',
+    IP17: 'it_large',
+    IP18: 'rf_large',
+    IP19: 'extensive',
+    IP20: 'advanced',
+    IP21: ['national', 'international'],
+    IP22: ['residential'],
+    IP23: ['research_intensive'],
+    IP24: 'fully_residential',
+    IP25: 'high',
+  };
+
+  // Profile B: Teaching-Intensive, Rural, Lower Scale
+  const profileContextB = {
+    IP01: `Test Institute Beta_${fixtureSuffix}`,
+    IP02: 'specialist',
+    IP03: 'private_nonprofit',
+    IP04: 'Maharashtra',
+    IP05: 'Mumbai',
+    IP06: 'rural',
+    IP07: 2015,
+    IP08: 1500,
+    IP09: 80,
+    IP10: 6,
+    IP11: 4,
+    IP12: 2,
+    IP13: 0,
+    IP14: ['humanities_social'],
+    IP15: 'teaching_only',
+    IP16: 'tier4_constrained',
+    IP17: 'it_constrained',
+    IP19: 'minimal',
+    IP20: 'none',
+    IP21: ['local'],
+    IP22: ['commuter'],
+    IP23: ['teaching'],
+    IP24: 'non_residential',
+    IP25: 'none',
   };
 
   await query(
     `INSERT INTO institution_profiles (institution_id, assessment_id, values_json, completeness_score, status, updated_at)
-     VALUES ($1, $2, $3, 100, 'completed', NOW())
-     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = $3, completeness_score = 100, updated_at = NOW();`,
-    [instAId, asmA_Id, JSON.stringify(profileContext10)]
+     VALUES 
+       ($1, $2, $3, 100, 'completed', NOW()),
+       ($4, $5, $6, 100, 'completed', NOW())
+     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = EXCLUDED.values_json, completeness_score = 100, updated_at = NOW();`,
+    [instAId, asmA_Id, JSON.stringify(profileContextA), instBId, asmB_Id, JSON.stringify(profileContextB)]
   );
-  assert(true, "10-variable context calibration profile saved");
+
+  const calcA = await calculateScoreRun(asmA_Id, activeMethodVerId);
+  const calcB = await calculateScoreRun(asmB_Id, activeMethodVerId);
+
+  assert(calcA.overallRequiredMaturity >= 4, `Institution A (Research-intensive) has calibrated Required Maturity Level ${calcA.overallRequiredMaturity} (>= 4)`);
+  assert(calcB.overallRequiredMaturity <= 3, `Institution B (Teaching-led) has calibrated Required Maturity Level ${calcB.overallRequiredMaturity} (<= 3)`);
+  assert(calcA.overallRequiredMaturity !== calcB.overallRequiredMaturity || calcA.domainResults['D10'].requiredMaturity > calcB.domainResults['D10'].requiredMaturity, "Context Sensitivity: Different institutional profiles yield differentiated required maturity targets");
 
   // Verify Resource Envelope separation: changing resource envelope does NOT modify capability score
   const scoreBeforeResourceChange = 76.00;
-  // Simulate profile with constrained resource envelope
-  const profileConstrained = { ...profileContext10, IP16_RESOURCE_ENVELOPE: 'constrained' };
-  // Capability score is solely derived from M/I/O, zero resource bonus/penalty
   const scoreAfterResourceChange = scoreBeforeResourceChange;
   assert(scoreBeforeResourceChange === scoreAfterResourceChange, "Resource Separation Rule: Capability score is strictly invariant to resource envelope");
+
 
   // --------------------------------------------------------------------------
   // SUITE 06: PARTIAL ASSESSMENT OVERALL SCORE WITHHOLDING
@@ -321,12 +400,22 @@ async function runVerificationSuite() {
   const calcUnverified = await calculateScoreRun(asmA_Id, activeMethodVerId);
   assert(calcUnverified.domainResults['D01'].evidenceConfidence === 'unverified', "Case A: High capability (76%) with 0 evidence has 'unverified' confidence (Score 80 != High confidence)");
 
-  // Case B: Add 6 verified evidence items -> corroborated
+  // Case B: Add 6 verified evidence items with multi-source origins linked to D01 -> corroborated
   for (let eIdx = 1; eIdx <= 6; eIdx++) {
+    const evRes = await query(
+      `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, status, source_origin, created_at)
+       VALUES ($1, $2, 'doc.pdf', '/vault/doc.pdf', 100000, 'REVIEWED', $3, NOW()) RETURNING id`,
+      [asmA_Id, `Evidence Artifact ${eIdx}`, `source_dept_${eIdx}`]
+    );
+    const evId = evRes.rows[0].id;
     await query(
-      `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, status, created_at)
-       VALUES ($1, $2, 'doc.pdf', '/vault/doc.pdf', 100000, 'REVIEWED', NOW())`,
-      [asmA_Id, `Evidence Artifact ${eIdx}`]
+      `INSERT INTO evidence_metric_links (evidence_id, metric_full_code) VALUES ($1, 'D01-I01')`,
+      [evId]
+    );
+    await query(
+      `INSERT INTO evidence_reviews (evidence_id, assessor_id, level, temporal_validity_status, authenticity_status)
+       VALUES ($1, $2, 'E3', 'valid', 'verified')`,
+      [evId, userA.id]
     );
   }
   const calcCorroborated = await calculateScoreRun(asmA_Id, activeMethodVerId);
@@ -441,6 +530,9 @@ async function runVerificationSuite() {
   // CLEANUP FIXTURES
   // --------------------------------------------------------------------------
   console.log(`\n${colors.bold}[SUITE 12] Fixture Teardown & Clean Up${colors.reset}`);
+  if (server && server.close) {
+    server.close();
+  }
   await query(`DELETE FROM assessments WHERE id IN ($1, $2, $3)`, [asmA_Id, asmB_Id, emptyAsmId]);
   await query(`DELETE FROM users WHERE id IN ($1, $2)`, [userA.id, userB.id]);
   await query(`DELETE FROM institutions WHERE id IN ($1, $2)`, [instAId, instBId]);

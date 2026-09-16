@@ -32,9 +32,17 @@ app.use(
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+
+      // In production mode, wildcard '*' is strictly forbidden
+      const isProd = process.env.NODE_ENV === 'production';
+      if (!isProd && allowedOrigins.includes('*')) {
         return callback(null, true);
       }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
       // Check for preview/subdomain deployments matching pattern
       const isAllowedSubdomain = allowedOrigins.some((allowed) => {
         if (allowed.startsWith('*.')) {
@@ -47,10 +55,10 @@ app.use(
 
       // In development mode, allow localhost and private network IPs (10.x, 192.168.x, 172.x)
       if (
-        process.env.NODE_ENV !== 'production' ||
-        origin.includes('localhost') ||
-        origin.includes('127.0.0.1') ||
-        /^http:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(origin)
+        !isProd &&
+        (origin.includes('localhost') ||
+          origin.includes('127.0.0.1') ||
+          /^http:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(origin))
       ) {
         return callback(null, true);
       }
@@ -60,6 +68,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));

@@ -28,83 +28,122 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     scoreMap[s.metric_full_code] = s;
   }
 
-  // 2. Fetch Profile for Context Engine (P0-4 Context Calibration — 10-Variable Architecture)
+  // 2. Fetch Profile for Context Engine (P0-4 Canonical 25-Field Context Calibration)
   const profRes = await query(
     `SELECT values_json FROM institution_profiles WHERE assessment_id = $1 ORDER BY updated_at DESC LIMIT 1`,
     [assessmentId]
   );
   const profileValues = profRes.rows[0]?.values_json || {};
 
-  // P0-4 10-Variable Context Calibration Factors
-  // Variable 1: Institutional Form
-  const instType = profileValues.IP02_INST_TYPE || 'comprehensive';
+  // Canonical P0-4 25-Field Factor Resolution:
+  // IP01: Institution name
+  // IP02: Institution type (Comprehensive, Technical, Health, Business, Liberal Arts, Specialist)
+  const instType = profileValues.IP02 || profileValues.IP02_INST_TYPE || 'comprehensive';
 
-  // Variable 2: Mandate (Teaching 0, Broad T+R 0.25, Research-intensive 0.5, Professional/regulated 0.5, Specialist 0.25)
-  const mandateVal = Array.isArray(profileValues.IP03_MANDATE)
-    ? profileValues.IP03_MANDATE[0]
-    : profileValues.IP03_MANDATE;
+  // IP03: Governance type (Public, Private, Autonomous)
+  const governanceType = profileValues.IP03 || profileValues.IP03_GOVERNANCE_TYPE || 'public';
+
+  // IP04 & IP05: State & District
+  const state = profileValues.IP04 || profileValues.IP04_STATE || '';
+  const district = profileValues.IP05 || profileValues.IP05_DISTRICT || '';
+
+  // IP06: Location (Metro 0.25, Urban 0.20, Semi-Urban 0.10, Rural 0.0)
+  const location = profileValues.IP06 || profileValues.IP06_LOCATION || 'metro';
+  let locationDelta = 0.20;
+  if (location === 'metro') locationDelta = 0.25;
+  else if (location === 'semi_urban') locationDelta = 0.10;
+  else if (location === 'rural') locationDelta = 0.0;
+
+  // IP07: Year established
+  const yearEst = Number(profileValues.IP07 || profileValues.IP07_YEAR_ESTABLISHED) || 2000;
+
+  // IP08: Student Enrolment Headcount Scale (<2.5k: 0.0, 2.5k-10k: 0.10, 10k-25k: 0.20, 25k-50k: 0.30, >50k: 0.40)
+  const studentVal = profileValues.IP08 || profileValues.IP08_STUDENT_ENROLLMENT;
+  let scaleDelta = 0.20;
+  if (typeof studentVal === 'number') {
+    if (studentVal > 50000) scaleDelta = 0.40;
+    else if (studentVal >= 25000) scaleDelta = 0.30;
+    else if (studentVal >= 10000) scaleDelta = 0.20;
+    else if (studentVal >= 2500) scaleDelta = 0.10;
+    else scaleDelta = 0.0;
+  } else if (typeof studentVal === 'string') {
+    if (studentVal === 'over_50000' || studentVal === '>50k' || studentVal === '>60k') scaleDelta = 0.40;
+    else if (studentVal === '25000_50000' || studentVal === '30k_60k') scaleDelta = 0.30;
+    else if (studentVal === 'under_2500' || studentVal === '<2k') scaleDelta = 0.0;
+    else if (studentVal === '2500_10000' || studentVal === '2k_10k') scaleDelta = 0.10;
+  }
+
+  // IP09: Faculty Headcount Scale
+  const facultyVal = profileValues.IP09 || profileValues.IP09_FACULTY_COUNT;
+  let facultyDelta = 0.10;
+  if (typeof facultyVal === 'number') {
+    if (facultyVal > 1500) facultyDelta = 0.20;
+    else if (facultyVal < 150) facultyDelta = 0.0;
+  } else if (typeof facultyVal === 'string') {
+    if (facultyVal === 'over_1500') facultyDelta = 0.20;
+    else if (facultyVal === 'under_150') facultyDelta = 0.0;
+  }
+
+  // IP10, IP11, IP12, IP13: Academic Programmes Breadth (Active, UG, PG, Doctoral)
+  const activeProg = Number(profileValues.IP10 || profileValues.IP10_ACTIVE_PROGRAMMES) || 30;
+  const docProg = Number(profileValues.IP13 || profileValues.IP13_DOCTORAL_PROGRAMMES) || 0;
+  let progComplexityDelta = 0.10;
+  if (activeProg > 50 || docProg > 10) progComplexityDelta = 0.20;
+  else if (activeProg < 10) progComplexityDelta = 0.0;
+
+  // IP14: Major Disciplines Clusters
+  const disciplines = Array.isArray(profileValues.IP14 || profileValues.IP14_MAJOR_DISCIPLINES)
+    ? (profileValues.IP14 || profileValues.IP14_MAJOR_DISCIPLINES)
+    : [];
+  let discExposureDelta = 0.20;
+  const hasHighExposureDisc = disciplines.some((d: string) =>
+    ['engineering_cs', 'engineering', 'cs', 'health_medicine', 'medicine', 'stem'].some(k => d.toLowerCase().includes(k))
+  );
+  if (hasHighExposureDisc) discExposureDelta = 0.35;
+
+  // IP15: Research Intensity (Teaching-only 0.0, Low 0.10, Moderate 0.25, High/Research-intensive 0.50)
+  const researchIntVal = profileValues.IP15 || profileValues.IP15_RESEARCH_INTENSITY;
+  let researchDelta = 0.10;
+  if (typeof researchIntVal === 'number') {
+    if (researchIntVal >= 5) researchDelta = 0.50;
+    else if (researchIntVal >= 4) researchDelta = 0.25;
+    else if (researchIntVal <= 2) researchDelta = 0.0;
+  } else if (typeof researchIntVal === 'string') {
+    const lower = researchIntVal.toLowerCase();
+    if (lower.includes('high') || lower.includes('intensive')) researchDelta = 0.50;
+    else if (lower.includes('mod') || lower.includes('balanced')) researchDelta = 0.25;
+    else if (lower.includes('teach') || lower.includes('low')) researchDelta = 0.0;
+  }
+
+  // IP16, IP17, IP18: Resource Envelope & Expenditure Bands
+  // P0-4 Rule: Resource envelope affects evidence burden only, NOT maturity standards / capability score
+  const resourceVal = profileValues.IP16 || profileValues.IP16_RESOURCE_ENVELOPE;
+
+  // IP19 & IP20: Industry Engagement & Innovation Ecosystem
+  const industryEng = profileValues.IP19 || 'moderate';
+  const innovationEco = profileValues.IP20 || 'emerging';
+  let ecosystemDelta = 0.10;
+  if (String(industryEng).toLowerCase().includes('extensive') || String(innovationEco).toLowerCase().includes('advanced')) {
+    ecosystemDelta = 0.25;
+  }
+
+  // IP23: Institutional Mandate (Teaching 0.0, Broad T+R 0.25, Research-intensive 0.50, Professional/regulated 0.50, Specialist 0.25)
+  const mandateVal = Array.isArray(profileValues.IP23 || profileValues.IP03_MANDATE)
+    ? (profileValues.IP23 || profileValues.IP03_MANDATE)[0]
+    : (profileValues.IP23 || profileValues.IP03_MANDATE);
   let mandateDelta = 0.25;
-  if (mandateVal === 'research_intensive' || mandateVal === 'professional') mandateDelta = 0.5;
+  if (mandateVal === 'research_intensive' || mandateVal === 'professional') mandateDelta = 0.50;
   else if (mandateVal === 'teaching') mandateDelta = 0.0;
   else if (mandateVal === 'specialist') mandateDelta = 0.25;
 
-  // Variable 3: AI Exposure Index (Low 0, Medium 0.25, High 0.5, Very High 0.75)
-  const aiExposure = profileValues.IP10_AI_EXPOSURE || 'medium';
-  let exposureDelta = 0.25;
-  if (aiExposure === 'very_high' || aiExposure === 'critical') exposureDelta = 0.75;
-  else if (aiExposure === 'high') exposureDelta = 0.5;
-  else if (aiExposure === 'low') exposureDelta = 0.0;
+  // IP25: International Exposure
+  const intlExpo = profileValues.IP25 || 'moderate';
+  let intlDelta = 0.05;
+  if (String(intlExpo).toLowerCase().includes('high')) intlDelta = 0.15;
 
-  // Variable 4: Disciplinary Consequence (Low 0, Medium 0.25, High 0.5, Critical 0.75)
-  const consequence = profileValues.IP11_DISCIPLINARY_CONSEQUENCE || 'medium';
-  let consequenceDelta = 0.25;
-  if (consequence === 'critical') consequenceDelta = 0.75;
-  else if (consequence === 'high') consequenceDelta = 0.5;
-  else if (consequence === 'low') consequenceDelta = 0.0;
-
-  // Variable 5: Trajectory / Institutional Momentum
-  const trajectory = profileValues.IP12_TRAJECTORY || profileValues.trajectory;
-  let trajectoryDelta = 0.1;
-  if (trajectory === 'high_growth' || trajectory === 5) trajectoryDelta = 0.35;
-  else if (trajectory === 'transforming' || trajectory === 4) trajectoryDelta = 0.25;
-  else if (trajectory === 'declining' || trajectory === 1) trajectoryDelta = 0.0;
-
-  // Variable 6: Student Scale (<2.5k 0, 2.5k-10k 0.1, 10k-25k 0.2, 25k-50k 0.3, >50k 0.4)
-  const scale = profileValues.IP08_STUDENT_ENROLLMENT || '10000_25000';
-  let scaleDelta = 0.2;
-  if (scale === 'over_50000' || scale === '>60k') scaleDelta = 0.4;
-  else if (scale === '25000_50000' || scale === '30k_60k') scaleDelta = 0.3;
-  else if (scale === 'under_2500' || scale === '<2k') scaleDelta = 0.0;
-  else if (scale === '2500_10000' || scale === '2k_10k') scaleDelta = 0.1;
-
-  // Variable 7: Geography & Location Category (Rural 0, Semi-Urban 0.1, Urban 0.2, Metro 0.25)
-  const location = profileValues.IP06_LOCATION || 'metro';
-  let locationDelta = 0.2;
-  if (location === 'metro') locationDelta = 0.25;
-  else if (location === 'semi_urban') locationDelta = 0.1;
-  else if (location === 'rural') locationDelta = 0.0;
-
-  // Variable 8: Resource Envelope (Constrained -0.25, Moderate 0, Substantial +0.25)
-  const resourceEnv = profileValues.IP16_RESOURCE_ENVELOPE || 'moderate';
-  let resourceDelta = 0.0;
-  if (resourceEnv === 'substantial') resourceDelta = 0.25;
-  else if (resourceEnv === 'constrained') resourceDelta = -0.25;
-
-  // Variable 9: Research Intensity (1–5 scale: 1=0, 2=0, 3=0.1, 4=0.25, 5=0.5)
-  const researchInt = Number(profileValues.IP15_RESEARCH_INTENSITY) || 3;
-  let researchDelta = 0.1;
-  if (researchInt >= 5) researchDelta = 0.5;
-  else if (researchInt >= 4) researchDelta = 0.25;
-  else if (researchInt <= 2) researchDelta = 0.0;
-
-  // Variable 10: Faculty & Academic Complexity
-  const facultyCount = profileValues.IP09_FACULTY_COUNT || '500_1500';
-  let facultyDelta = 0.1;
-  if (facultyCount === 'over_1500') facultyDelta = 0.2;
-  else if (facultyCount === 'under_150') facultyDelta = 0.0;
-
-  // Base composite context factor (B_d = 3.0 baseline)
-  const baseContextShift = (mandateDelta + exposureDelta + consequenceDelta + trajectoryDelta + scaleDelta + locationDelta + resourceDelta + researchDelta + facultyDelta) / 3.0;
+  // Composite Baseline Context Shift: sum of calibrated factors normalized over baseline factor count
+  const factorSum = mandateDelta + discExposureDelta + researchDelta + scaleDelta + locationDelta + facultyDelta + progComplexityDelta + ecosystemDelta + intlDelta;
+  const baseContextShift = factorSum / 3.0;
 
   const metricResults: Record<string, any> = {};
   const domainMetricScores: Record<string, number[]> = {};
@@ -152,17 +191,59 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     };
   }
 
-  // Fetch Evidence for Evidence-Confidence Calculation
-  const evRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1`, [assessmentId]);
+  // 4. Fetch Evidence Items and Metric Links for P0-6 Evidence Confidence Engine
+  const evRes = await query(
+    `SELECT e.*, er.level as reviewed_level, er.temporal_validity_status
+     FROM evidence_items e
+     LEFT JOIN evidence_reviews er ON er.evidence_id = e.id
+     WHERE e.assessment_id = $1`,
+    [assessmentId]
+  );
   const evidenceItems = evRes.rows;
-  const verifiedEvidenceCount = evidenceItems.filter((e) => e.status === 'REVIEWED' || e.status === 'CORROBORATED').length;
 
-  // 4. Compute Domain Results & Required Maturity (P0-4 10-Variable Context Architecture)
+  const linksRes = await query(
+    `SELECT eml.metric_full_code, eml.evidence_id, e.status, e.source_origin, er.level as reviewed_level, er.temporal_validity_status
+     FROM evidence_metric_links eml
+     JOIN evidence_items e ON e.id = eml.evidence_id
+     LEFT JOIN evidence_reviews er ON er.evidence_id = e.id
+     WHERE e.assessment_id = $1`,
+    [assessmentId]
+  );
+
+  // Group evidence by domain
+  const domainEvidenceMap: Record<string, any[]> = {};
+  for (const d of domainsRes.rows) {
+    domainEvidenceMap[d.code] = [];
+  }
+  for (const row of linksRes.rows) {
+    const domainCode = row.metric_full_code.split('-')[0];
+    if (domainEvidenceMap[domainCode]) {
+      domainEvidenceMap[domainCode].push(row);
+    }
+  }
+
+  // If evidence items exist on the assessment but lack explicit per-metric links,
+  // associate them with assessed domains
+  if (linksRes.rows.length === 0 && evidenceItems.length > 0) {
+    for (const d of domainsRes.rows) {
+      if ((domainMetricScores[d.code] || []).length > 0) {
+        domainEvidenceMap[d.code] = evidenceItems.map((e) => ({
+          ...e,
+          metric_full_code: `${d.code}-I01`,
+          evidence_id: e.id,
+        }));
+      }
+    }
+  }
+
+  // 5. Compute Domain Results & Context-Calibrated Required Maturity (P0-4 Formula)
+  // R_d = clamp(round(3.0 + baseContextShift + domainSensitivity), 1, 5)
   const domainResults: Record<string, any> = {};
   const contextResults: Record<string, any> = {};
   let weightedSum = 0;
   let totalWeightAssessed = 0;
   let assessedDomainsCount = 0;
+  const domainRdList: number[] = [];
 
   for (const d of domainsRes.rows) {
     const scores = domainMetricScores[d.code] || [];
@@ -172,23 +253,41 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     const domainScore = assessed ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100 : null;
     const currentMaturity = assessed && domainScore !== null ? Math.min(5, Math.max(0, Math.round(domainScore / 20))) : null;
 
-    // Required Maturity Rd = clamp(round(3.0 + baseContextShift + domainSensitivity), 1, 5)
+    // Domain-specific sensitivity factors
     let domainSensitivity = 0;
-    if (d.code === 'D02' && (consequence === 'critical' || consequence === 'high')) domainSensitivity += 0.5;
-    if (d.code === 'D10' && (researchInt >= 4 || mandateVal === 'research_intensive')) domainSensitivity += 0.5;
-    if (d.code === 'D08' && (scaleDelta >= 0.3 || location === 'metro')) domainSensitivity += 0.25;
-    if (d.code === 'D09' && (mandateVal === 'professional' || aiExposure === 'high' || aiExposure === 'very_high')) domainSensitivity += 0.25;
-    if ((d.code === 'D04' || d.code === 'D05') && (aiExposure === 'high' || aiExposure === 'very_high')) domainSensitivity += 0.25;
+    if (d.code === 'D01' && (hasHighExposureDisc || mandateVal === 'research_intensive')) domainSensitivity += 0.25;
+    if (d.code === 'D02' && (hasHighExposureDisc || discExposureDelta >= 0.30)) domainSensitivity += 0.50;
+    if (d.code === 'D03' && (scaleDelta >= 0.30 || location === 'metro')) domainSensitivity += 0.25;
+    if (d.code === 'D04' && (hasHighExposureDisc || progComplexityDelta >= 0.20)) domainSensitivity += 0.25;
+    if (d.code === 'D05' && (facultyDelta >= 0.20 || scaleDelta >= 0.30)) domainSensitivity += 0.25;
+    if (d.code === 'D06' && (scaleDelta >= 0.30 || intlDelta >= 0.10)) domainSensitivity += 0.25;
+    if (d.code === 'D07' && (hasHighExposureDisc || discExposureDelta >= 0.30)) domainSensitivity += 0.25;
+    if (d.code === 'D08' && (scaleDelta >= 0.30 || location === 'metro')) domainSensitivity += 0.25;
+    if (d.code === 'D09' && (mandateVal === 'professional' || ecosystemDelta >= 0.20)) domainSensitivity += 0.25;
+    if (d.code === 'D10' && (researchDelta >= 0.25 || mandateVal === 'research_intensive')) domainSensitivity += 0.50;
+    if (d.code === 'D11' && (scaleDelta >= 0.30 || mandateVal === 'research_intensive')) domainSensitivity += 0.25;
 
-    let rawRd = 3.0 + baseContextShift + domainSensitivity;
+    const rawRd = 3.0 + baseContextShift + domainSensitivity;
     const requiredMaturity = Math.min(5, Math.max(1, Math.round(rawRd)));
+    domainRdList.push(requiredMaturity);
+
     const transformationDistance = currentMaturity !== null ? requiredMaturity - currentMaturity : null;
 
+    // P0-6 Evidence Confidence Calculation: Decoupled from capability scores
+    const linkedDomainEv = domainEvidenceMap[d.code] || [];
+    const reviewedDomainEv = linkedDomainEv.filter(
+      (e) => (e.status === 'REVIEWED' || e.status === 'CORROBORATED') && e.temporal_validity_status !== 'invalid'
+    );
+    const e2PlusCount = reviewedDomainEv.filter((e) => ['E2', 'E3', 'E4'].includes(e.reviewed_level || 'E2')).length;
+    const distinctOrigins = new Set(reviewedDomainEv.map((e) => e.source_origin || e.evidence_id || e.id)).size;
+
     let domainConfidence: 'unverified' | 'preliminary' | 'corroborated' = 'unverified';
-    if (assessed) {
-      if (verifiedEvidenceCount >= 6) domainConfidence = 'corroborated';
-      else if (evidenceItems.length >= 2 || scores.length >= 3) domainConfidence = 'preliminary';
-      else domainConfidence = 'unverified';
+    if (e2PlusCount >= 2 && distinctOrigins >= 2) {
+      domainConfidence = 'corroborated';
+    } else if (reviewedDomainEv.length >= 1 || linkedDomainEv.length >= 1) {
+      domainConfidence = 'preliminary';
+    } else {
+      domainConfidence = 'unverified';
     }
 
     domainResults[d.code] = {
@@ -217,7 +316,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     }
   }
 
-  // 5. Cross-Domain Diagnostic Engine (Diagnostic only; zero score effect)
+  // 6. Cross-Domain Diagnostic Engine (Executes 25 rules / 413 links; strictly diagnostic, 0 score impact)
   const crossDomainFindings: any[] = [];
   let cdRulesQuery = `SELECT * FROM cross_domain_rules`;
   const cdParams: any[] = [];
@@ -227,38 +326,71 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
   }
   const cdRulesRes = await query(cdRulesQuery, cdParams);
 
+  // Track triggered rules to avoid duplicate redundant findings
+  const triggeredRuleMap = new Map<string, boolean>();
+
   for (const rule of cdRulesRes.rows) {
     const fromM = metricResults[rule.from_metric];
     const toM = metricResults[rule.to_metric];
 
     if (fromM && toM && fromM.score !== null && toM.score !== null) {
-      if (fromM.score >= 70 && toM.score <= 30) {
+      const fromScore = fromM.score;
+      const toScore = toM.score;
+      const scoreGap = fromScore - toScore;
+      const pairKey = `${rule.rule_id}-${rule.from_metric}-${rule.to_metric}`;
+
+      // Rule Category 1: Contradiction Alert (High advance score with weak foundational capability)
+      if (fromScore >= 70 && toScore <= 30 && !triggeredRuleMap.has(pairKey)) {
+        triggeredRuleMap.set(pairKey, true);
         crossDomainFindings.push({
           ruleId: rule.rule_id,
           severity: 'CONTRADICTION',
+          type: 'contradiction',
           fromMetric: rule.from_metric,
           toMetric: rule.to_metric,
-          message: `Cross-domain contradiction (${rule.rule_id}): High maturity scored in ${rule.from_metric} (${fromM.score}%) while foundational capability in ${rule.to_metric} is low (${toM.score}%).`,
+          message: `Cross-domain contradiction (${rule.rule_id}): Advanced capability evaluated in ${rule.from_metric} (${fromScore}%) while foundational capability in ${rule.to_metric} is low (${toScore}%).`,
+        });
+      }
+      // Rule Category 2: Dependency Gap (Upstream dependency lag)
+      else if (scoreGap >= 40 && !triggeredRuleMap.has(pairKey)) {
+        triggeredRuleMap.set(pairKey, true);
+        crossDomainFindings.push({
+          ruleId: rule.rule_id,
+          severity: 'DEPENDENCY_GAP',
+          type: 'dependency_gap',
+          fromMetric: rule.from_metric,
+          toMetric: rule.to_metric,
+          message: `Cross-domain dependency gap (${rule.rule_id}): Downstream capability ${rule.from_metric} (${fromScore}%) exceeds foundational capability ${rule.to_metric} (${toScore}%) by ${Math.round(scoreGap)} points.`,
         });
       }
     }
   }
 
-  // 6. Anti-Gaming Flags
+  // 7. Anti-Gaming Flags
   const antiGamingFlagsRes = await query(`SELECT * FROM anti_gaming_flags WHERE assessment_id = $1`, [assessmentId]);
   const antiGamingFlags = antiGamingFlagsRes.rows;
 
-  // 7. Overall Score Calculation (Partial Assessment Rule: Canonical overall score is strictly withheld/null if not all 11 domains are assessed)
+  // 8. Overall Score & Dynamic Required Maturity Calculation
+  // Partial Assessment Rule: Canonical overall score is strictly withheld/null if not all 11 domains are assessed
   const isPartial = assessedDomainsCount < domainsRes.rows.length;
   const overallScore = !isPartial && totalWeightAssessed > 0
     ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100
     : null;
 
   const overallCurrentMaturity = overallScore !== null ? Math.min(5, Math.max(0, Math.round(overallScore / 20))) : null;
-  const overallRequiredMaturity = 4;
+
+  // Overall Required Maturity derived dynamically from domain requirements (never fixed at 4)
+  const applicableDomainRdValues = Object.values(domainResults)
+    .filter((d: any) => d.assessed || !isPartial)
+    .map((d: any) => d.requiredMaturity);
+  const targetRdList = applicableDomainRdValues.length > 0 ? applicableDomainRdValues : domainRdList;
+  const overallRequiredMaturity = targetRdList.length > 0
+    ? Math.min(5, Math.max(1, Math.round(targetRdList.reduce((a, b) => a + b, 0) / targetRdList.length)))
+    : 3;
+
   const overallTransformationDistance = overallCurrentMaturity !== null ? overallRequiredMaturity - overallCurrentMaturity : null;
 
-  // 8. Dynamic Strengths and Vulnerabilities Generation from actual scores
+  // 9. Dynamic Strengths and Vulnerabilities Generation from actual scores
   const assessedDomainEntries = Object.values(domainResults).filter((d: any) => d.assessed && d.domainScore !== null);
   assessedDomainEntries.sort((a: any, b: any) => (b.domainScore || 0) - (a.domainScore || 0));
 
@@ -322,3 +454,4 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     contradictions,
   };
 }
+

@@ -118,80 +118,104 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
   const assessedCount = calculation.assessedDomainsCount;
   const isPartial = calculation.isPartial;
 
-  // 4. Construct Dynamic Dynamic Priorities & Transformation Roadmap from Gaps
-  const immediateActions: string[] = [];
-  const nearTermActions: string[] = [];
-  const strategicActions: string[] = [];
+  // 4. Construct Structured Priorities & Transformation Roadmap with clear separation of findings vs recommendations
+  const observedFindings: string[] = [];
+  const diagnostics: string[] = [];
+  const genericRecommendations: string[] = [
+    'Establish an institutional AI observatory to monitor evolving technology and regulatory standards.',
+    'Integrate multi-source authentic capability verification across core graduating cohorts.',
+    'Maintain versioned audit trails and documentation for high-stakes institutional AI deployments.',
+  ];
+  const institutionSpecificRecommendations: string[] = [];
 
   const underperformingDomains = domainsList.filter((d) => d.assessed && d.transformationDistance !== null && d.transformationDistance > 0);
   underperformingDomains.sort((a, b) => (b.transformationDistance || 0) - (a.transformationDistance || 0));
 
   if (underperformingDomains.length > 0) {
-    immediateActions.push(`Address highest transformation distance in ${underperformingDomains[0].name} (${underperformingDomains[0].code}) where current maturity lags target by +${underperformingDomains[0].transformationDistance} levels.`);
+    const highestLag = underperformingDomains[0];
+    observedFindings.push(
+      `Observed capability lag in ${highestLag.name} (${highestLag.code}) where evaluated maturity (Level ${highestLag.currentMaturity}) lags context-calibrated target (Level ${highestLag.requiredMaturity}) by +${highestLag.transformationDistance} levels.`
+    );
+    institutionSpecificRecommendations.push(
+      `Prioritize transformation roadmap in ${highestLag.name} (${highestLag.code}) to close the +${highestLag.transformationDistance}-level maturity gap.`
+    );
+
     if (underperformingDomains.length > 1) {
-      nearTermActions.push(`Implement operational safeguards and capability upskilling for ${underperformingDomains[1].name} (${underperformingDomains[1].code}).`);
+      const secondLag = underperformingDomains[1];
+      observedFindings.push(
+        `Secondary transformation requirement identified in ${secondLag.name} (${secondLag.code}) with a target maturity gap of +${secondLag.transformationDistance} levels.`
+      );
+      institutionSpecificRecommendations.push(
+        `Implement operational capability milestones and faculty enablement for ${secondLag.name} (${secondLag.code}).`
+      );
     }
-  } else {
-    immediateActions.push('Maintain ongoing evidence verification and audit trails for high-stakes capability areas.');
+  } else if (assessedCount > 0) {
+    observedFindings.push('Evaluated domains currently satisfy baseline context-calibrated maturity targets.');
   }
 
-  // Cross-domain priority actions
+  // Cross-domain diagnostics
   for (const c of calculation.contradictions) {
-    nearTermActions.push(`Resolve ${c.title}: ${c.body}`);
+    diagnostics.push(`Cross-domain signal (${c.title}): ${c.body}`);
   }
 
-  strategicActions.push('Establish institutional AI observatory and annual longitudinal benchmarking cycle.');
-  strategicActions.push('Integrate authentic student capability verification across all graduating cohorts.');
-
-  // 5. Build Comprehensive 25-Field Profile Object
+  // 5. Build Canonical 25-Field Profile Object (Strict 1:1 Mapping to Registry IP01–IP25)
   const fullProfileGroups = [
     {
       group: 'Institutional Identity & Demographics',
       fields: [
-        { id: 'IP01', label: 'Institution Legal Name', value: pValues.IP01_INST_NAME || assessment.institution_name || 'Not provided' },
-        { id: 'IP02', label: 'Institutional Form', value: pValues.IP02_INST_TYPE || 'Not provided' },
-        { id: 'IP03', label: 'Institutional Mandate', value: Array.isArray(pValues.IP03_MANDATE) ? pValues.IP03_MANDATE.join(', ') : (pValues.IP03_MANDATE || 'Not provided') },
-        { id: 'IP04', label: 'State / Union Territory', value: pValues.IP04_STATE || assessment.institution_state || 'Not provided' },
-        { id: 'IP05', label: 'District', value: pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided' },
-        { id: 'IP06', label: 'Location Category', value: pValues.IP06_LOCATION || 'Not provided' },
-        { id: 'IP07', label: 'Year Established', value: pValues.IP07_YEAR_ESTABLISHED || 'Not provided' },
+        { id: 'IP01', label: 'Institution name', value: pValues.IP01 || pValues.IP01_INST_NAME || assessment.institution_name || 'Not provided' },
+        { id: 'IP02', label: 'Institution type', value: pValues.IP02 || pValues.IP02_INST_TYPE || 'Not provided' },
+        { id: 'IP03', label: 'Governance type', value: pValues.IP03 || pValues.IP03_GOVERNANCE_TYPE || 'Not provided' },
+        { id: 'IP04', label: 'State', value: pValues.IP04 || pValues.IP04_STATE || assessment.institution_state || 'Not provided' },
+        { id: 'IP05', label: 'District', value: pValues.IP05 || pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided' },
+        { id: 'IP06', label: 'Location', value: pValues.IP06 || pValues.IP06_LOCATION || 'Not provided' },
+        { id: 'IP07', label: 'Year established', value: pValues.IP07 || pValues.IP07_YEAR_ESTABLISHED || 'Not provided' },
       ],
     },
     {
-      group: 'Academic Scale & Programme Breadth',
+      group: 'Academic Scale & Programmes',
       fields: [
-        { id: 'IP08', label: 'Total Student Enrolment', value: pValues.IP08_STUDENT_ENROLLMENT || 'Not provided' },
-        { id: 'IP09', label: 'Full-Time Faculty Count', value: pValues.IP09_FACULTY_COUNT || 'Not provided' },
-        { id: 'IP10', label: 'Active Degree Programmes', value: pValues.IP10_ACTIVE_PROGRAMMES || 'Not provided' },
-        { id: 'IP14', label: 'Major Discipline Clusters', value: Array.isArray(pValues.IP14_MAJOR_DISCIPLINES) ? pValues.IP14_MAJOR_DISCIPLINES.join(', ') : (pValues.IP14_MAJOR_DISCIPLINES || 'Not provided') },
+        { id: 'IP08', label: 'Students', value: pValues.IP08 || pValues.IP08_STUDENT_ENROLLMENT || 'Not provided' },
+        { id: 'IP09', label: 'Faculty', value: pValues.IP09 || pValues.IP09_FACULTY_COUNT || 'Not provided' },
+        { id: 'IP10', label: 'Active programmes', value: pValues.IP10 || pValues.IP10_ACTIVE_PROGRAMMES || 'Not provided' },
+        { id: 'IP11', label: 'UG programmes', value: pValues.IP11 || pValues.IP11_UG_PROGRAMMES || 'Not provided' },
+        { id: 'IP12', label: 'PG programmes', value: pValues.IP12 || pValues.IP12_PG_PROGRAMMES || 'Not provided' },
+        { id: 'IP13', label: 'Doctoral programmes', value: pValues.IP13 || pValues.IP13_DOCTORAL_PROGRAMMES || 'Not provided' },
+        { id: 'IP14', label: 'Major disciplines', value: Array.isArray(pValues.IP14 || pValues.IP14_MAJOR_DISCIPLINES) ? (pValues.IP14 || pValues.IP14_MAJOR_DISCIPLINES).join(', ') : (pValues.IP14 || pValues.IP14_MAJOR_DISCIPLINES || 'Not provided') },
       ],
     },
     {
-      group: 'Context & Exposure Calibration (P0-4)',
+      group: 'Context Calibration & Financial Bands',
       fields: [
-        { id: 'IP15', label: 'Research Intensity (1–5)', value: pValues.IP15_RESEARCH_INTENSITY ? `${pValues.IP15_RESEARCH_INTENSITY} / 5` : 'Not provided' },
-        { id: 'IP10', label: 'AI Exposure Index', value: pValues.IP10_AI_EXPOSURE || 'Not provided' },
-        { id: 'IP11', label: 'Disciplinary Consequence of AI Errors', value: pValues.IP11_DISCIPLINARY_CONSEQUENCE || 'Not provided' },
-        { id: 'IP16', label: 'Resource Envelope', value: pValues.IP16_RESOURCE_ENVELOPE || 'Not provided' },
+        { id: 'IP15', label: 'Research intensity', value: pValues.IP15 || (pValues.IP15_RESEARCH_INTENSITY ? `${pValues.IP15_RESEARCH_INTENSITY} / 5` : 'Not provided') },
+        { id: 'IP16', label: 'Annual expenditure band', value: pValues.IP16 || pValues.IP16_RESOURCE_ENVELOPE || 'Not provided' },
+        { id: 'IP17', label: 'Technology/IT expenditure band', value: pValues.IP17 || 'Not provided' },
+        { id: 'IP18', label: 'Research funding band', value: pValues.IP18 || 'Not provided' },
       ],
     },
     {
-      group: 'Assessment Leadership & Governance',
+      group: 'Ecosystem, Catchment & Mandate',
       fields: [
-        { id: 'IP13', label: 'Institutional Lead', value: pValues.IP13_LEAD_NAME || 'Not provided' },
-        { id: 'IP14', label: 'Official Designation', value: pValues.IP14_LEAD_TITLE || 'Not provided' },
-        { id: 'IP15', label: 'Official Contact', value: pValues.IP15_LEAD_EMAIL || 'Not provided' },
+        { id: 'IP19', label: 'Industry engagement', value: pValues.IP19 || 'Not provided' },
+        { id: 'IP20', label: 'Innovation/incubation ecosystem', value: pValues.IP20 || 'Not provided' },
+        { id: 'IP21', label: 'Student catchment', value: Array.isArray(pValues.IP21) ? pValues.IP21.join(', ') : (pValues.IP21 || 'Not provided') },
+        { id: 'IP22', label: 'Student mobility pattern', value: Array.isArray(pValues.IP22) ? pValues.IP22.join(', ') : (pValues.IP22 || 'Not provided') },
+        { id: 'IP23', label: 'Institutional mandate', value: Array.isArray(pValues.IP23 || pValues.IP03_MANDATE) ? (pValues.IP23 || pValues.IP03_MANDATE).join(', ') : (pValues.IP23 || pValues.IP03_MANDATE || 'Not provided') },
+        { id: 'IP24', label: 'Residential model', value: pValues.IP24 || 'Not provided' },
+        { id: 'IP25', label: 'International exposure', value: pValues.IP25 || 'Not provided' },
       ],
     },
   ];
 
-  // Derive evidence confidence from actual evidence records and review state
+  // Derive evidence confidence strictly from evidence items and review records
   const verifiedCount = evidenceItems.filter((e) => e.status === 'REVIEWED' || e.status === 'CORROBORATED').length;
   const submittedCount = evidenceItems.length;
+  const e2PlusCount = evidenceItems.filter((e) => ['E2', 'E3', 'E4'].includes(e.evidence_level)).length;
+
   let computedConfidence: 'unverified' | 'preliminary' | 'corroborated' = 'unverified';
-  if (verifiedCount >= 8) {
+  if (e2PlusCount >= 4 || verifiedCount >= 6) {
     computedConfidence = 'corroborated';
-  } else if (verifiedCount >= 3 || submittedCount >= 5) {
+  } else if (submittedCount >= 2 || verifiedCount >= 1) {
     computedConfidence = 'preliminary';
   } else {
     computedConfidence = 'unverified';
@@ -217,8 +241,8 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     institution: {
       id: assessment.institution_id,
       name: assessment.institution_name,
-      state: pValues.IP04_STATE || assessment.institution_state || 'Not provided',
-      district: pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided',
+      state: pValues.IP04 || pValues.IP04_STATE || assessment.institution_state || 'Not provided',
+      district: pValues.IP05 || pValues.IP05_DISTRICT || assessment.institution_district || 'Not provided',
       profile: fullProfileGroups,
       profileCompleteness: pValues && Object.keys(pValues).length >= 10 ? 'complete' : 'partial',
     },
@@ -258,14 +282,18 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     evidence: {
       submittedCount,
       verifiedCount,
-      guidelineCompliance: verifiedCount >= 8 ? 'High' : (submittedCount >= 4 ? 'Moderate' : 'Emerging'),
+      guidelineCompliance: verifiedCount >= 6 ? 'High' : (submittedCount >= 3 ? 'Moderate' : 'Emerging'),
     },
     strengths: calculation.strengths,
     vulnerabilities: calculation.vulnerabilities,
     priorities: {
-      immediateActions,
-      mediumTermActions: nearTermActions,
-      strategicActions,
+      observedFindings,
+      diagnostics,
+      genericRecommendations,
+      institutionSpecificRecommendations,
+      immediateActions: institutionSpecificRecommendations.length > 0 ? institutionSpecificRecommendations : ['Maintain ongoing evidence verification and audit trails for high-stakes capability areas.'],
+      mediumTermActions: diagnostics.length > 0 ? diagnostics : ['Resolve emergent cross-domain dependencies during next assessment cycle.'],
+      strategicActions: genericRecommendations,
     },
     metricAuditAppendix,
     methodologyNote: {
@@ -285,3 +313,4 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
 
   return payload;
 }
+

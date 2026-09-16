@@ -6,13 +6,8 @@ import { getJwtSecret } from '../../middleware/auth.js';
 
 const router = Router();
 
-// Middleware to secure admin routes
+// Middleware to secure admin routes (strictly JWT bearer token with Super Admin / Lead Auditor role)
 export const adminAuth = (req: any, res: any, next: any) => {
-  const adminKey = req.headers['x-admin-key'];
-  if (adminKey === 'arui@2026' || adminKey === 'superadmin2026') {
-    return next();
-  }
-
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Unauthorized: Super Admin credentials required.' });
@@ -36,27 +31,13 @@ export const adminAuth = (req: any, res: any, next: any) => {
 
 // Route: Super Admin Secure Login
 router.post('/admin/login', async (req, res) => {
-  const { email, password, adminKey } = req.body;
+  const { email, password } = req.body;
 
   try {
-    // Quick unlock with admin master key
-    if (adminKey === 'arui@2026' || adminKey === 'superadmin2026') {
-      const secret = getJwtSecret();
-      const token = jwt.sign(
-        { id: 'admin-master', email: 'admin@arui.org', name: 'Super Admin Master', role: 'SUPER_ADMIN' },
-        secret,
-        { expiresIn: '7d' }
-      );
-      return res.json({
-        token,
-        user: { email: 'admin@arui.org', name: 'Super Admin Master', role: 'SUPER_ADMIN' },
-        message: 'Super Admin access granted.',
-      });
-    }
-
     if (!email || !password) {
       return res.status(400).json({ error: 'Admin email and password are required.' });
     }
+
 
     const uRes = await query(`SELECT * FROM users WHERE LOWER(email) = LOWER($1)`, [email.trim()]);
     if (uRes.rows.length === 0) {

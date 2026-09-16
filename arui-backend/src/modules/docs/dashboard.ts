@@ -317,13 +317,11 @@ router.get('/', async (req, res) => {
                 <span class="method-pill method-POST">POST</span>
                 <span class="path-text">/auth/login</span>
               </div>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-test" onclick="loginDemo('sahilkh3014@gmail.com', '123456')">Login as Sahil</button>
-                <button class="btn-test" style="color: #8b5cf6; border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.15);" onclick="loginDemo('assessor@arui.org', 'arui@2026')">Login as Assessor</button>
-              </div>
+              <button class="btn-test" onclick="promptLogin()">Authenticate</button>
             </div>
             <div class="desc-text">Authenticates credentials with bcrypt and issues role-based JWT bearer token.</div>
           </div>
+
 
           <div class="endpoint-item">
             <div class="endpoint-top">
@@ -635,10 +633,15 @@ router.get('/', async (req, res) => {
       }
     }
 
-    async function loginDemo(email, password) {
+    async function promptLogin() {
+      const email = prompt('Enter your institutional email:', '');
+      if (!email) return;
+      const password = prompt('Enter your password:', '');
+      if (!password) return;
       await executeApi('POST', '/auth/login', { email, password });
     }
   </script>
+
 </body>
 </html>`;
 

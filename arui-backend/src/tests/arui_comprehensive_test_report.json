@@ -8,7 +8,7 @@
     "reportPayloadVersion": "v4.0.0-canonical",
     "backendVersion": "1.0.0",
     "frontendVersion": "1.0.0",
-    "generatedAt": "2026-09-15T15:17:08.203Z",
+    "generatedAt": "2026-09-16T08:24:39.359Z",
     "finalStatus": {
       "technicallyVerified": true,
       "empiricallyValidated": false,
@@ -59,7 +59,7 @@
       "actual": "Active methodology version: v4.0",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-15T15:17:08.203Z\"\n}"
+      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-16T08:24:39.359Z\"\n}"
     },
     {
       "testId": "TEST-004",
@@ -509,7 +509,7 @@
       "actual": "Engine handled profile faithfully (Overall: 43%)",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Overall Score: 43% | Assessed: 11/11 | CD Findings: 0 | AG Flags: 0"
+      "evidence": "Overall Score: 43% | Assessed: 11/11 | CD Findings: 1 | AG Flags: 0"
     },
     {
       "testId": "TEST-049",
@@ -605,8 +605,8 @@
       "testId": "TEST-058",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution A report payload contains only Institution A data",
-      "expected": "institution.id === e4cab3f5-9974-4626-90e2-50be5391e774",
-      "actual": "institution.id: e4cab3f5-9974-4626-90e2-50be5391e774",
+      "expected": "institution.id === ae9f2770-ba4c-4892-b304-07ce327d2a13",
+      "actual": "institution.id: ae9f2770-ba4c-4892-b304-07ce327d2a13",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -615,8 +615,8 @@
       "testId": "TEST-059",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution B report payload contains only Institution B data",
-      "expected": "institution.id === 8b05841c-bcfc-4604-9074-9c2aacf12d40",
-      "actual": "institution.id: 8b05841c-bcfc-4604-9074-9c2aacf12d40",
+      "expected": "institution.id === 0659ca50-90f7-402f-8a00-3a0d7a952d57",
+      "actual": "institution.id: 0659ca50-90f7-402f-8a00-3a0d7a952d57",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -626,10 +626,10 @@
       "part": "PART N",
       "test": "Deterministic Re-Run Invariant: Identical Inputs Yield Identical Output Hash",
       "expected": "hash1 === hash2",
-      "actual": "Hash 1: bdefc3824733c91b... | Hash 2: bdefc3824733c91b...",
+      "actual": "Hash 1: 7db2708496cac33e... | Hash 2: 7db2708496cac33e...",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Deterministic Output SHA-256: bdefc3824733c91b72cf956e584cc0a82d5aab34c055727635b843d2c1e52780"
+      "evidence": "Deterministic Output SHA-256: 7db2708496cac33e781d81129d9ea9f865596a4096db1e94d214acdb2cd8791f"
     },
     {
       "testId": "TEST-061",
@@ -656,10 +656,10 @@
       "part": "PART P",
       "test": "Canonical PDF Generated Successfully with Valid Header & Structure",
       "expected": "%PDF- header and size > 20KB",
-      "actual": "Header: %PDF- | Size: 27.6 KB",
+      "actual": "Header: %PDF- | Size: 29.2 KB",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Generated PDF size: 28252 bytes"
+      "evidence": "Generated PDF size: 29867 bytes"
     },
     {
       "testId": "TEST-064",

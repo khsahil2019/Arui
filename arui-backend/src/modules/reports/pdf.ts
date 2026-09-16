@@ -89,7 +89,8 @@ export function generateAssessmentPdfStream(payload: any, res: any) {
     doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(`Level ${payload.overall?.currentMaturity ?? '—'} of 5`, 240, boxTop + 48);
 
     doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Required Maturity (Context Rd):', 55, boxTop + 68);
-    doc.fillColor(TEAL).fontSize(11).font('Helvetica-Bold').text(`Level ${payload.overall?.requiredMaturity ?? '4'} of 5`, 240, boxTop + 68);
+    doc.fillColor(TEAL).fontSize(11).font('Helvetica-Bold').text(`Level ${payload.overall?.requiredMaturity ?? '—'} of 5`, 240, boxTop + 68);
+
 
     doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Transformation Distance:', 360, boxTop + 68);
     doc.fillColor(AMBER).fontSize(11).font('Helvetica-Bold').text(
