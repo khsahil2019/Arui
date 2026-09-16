@@ -22,9 +22,60 @@ export const domainNames = {
 } as const;
 
 export type DomainCode = keyof typeof domainNames;
+export type EngineType = "arui" | "ecri";
+
+export const aruiDomainNames = domainNames;
+
+export const ecriDimensionNames = {
+  D01: "Employer Demand Intelligence",
+  D02: "Employability Capability Framework",
+  D03: "Industry-Aligned Curriculum",
+  D04: "Experiential & Practice-Based Learning",
+  D05: "Career Development Infrastructure",
+  D06: "Professional & Human Capabilities",
+  D07: "Digital & AI-Era Work Readiness",
+  D08: "Portfolio & Capability Signalling",
+  D09: "Employer Engagement & Recruitment Ecosystem",
+  D10: "Employment Outcome Quality",
+  D11: "Career Adaptability, Lifelong Readiness & Employability Intelligence",
+} as const;
+
+export const engineConfigs = {
+  arui: {
+    code: "arui",
+    name: "ARUI Framework",
+    shortTitle: "ARUI",
+    title: "AI-Resilient University Index",
+    subtitle: "Institutional AI Resilience Assessment",
+    domainsLabel: "11 Domains · 143 Metrics",
+    scopeCount: 11,
+    metricCount: 143,
+    badgeTone: "navy",
+  },
+  ecri: {
+    code: "ecri",
+    name: "ECRI Benchmark",
+    shortTitle: "ECRI",
+    title: "Employability & Career Readiness Index",
+    subtitle: "Industry Integration & Graduate Career Readiness Benchmark",
+    domainsLabel: "11 Dimensions · 132 Metrics",
+    scopeCount: 11,
+    metricCount: 132,
+    badgeTone: "teal",
+  },
+} as const;
+
+export function getEngineConfig(engine: string | null | undefined) {
+  const norm = engine?.toLowerCase();
+  return norm === "ecri" ? engineConfigs.ecri : engineConfigs.arui;
+}
+
+export function getFrameworkDomains(engine: string | null | undefined) {
+  return engine?.toLowerCase() === "ecri" ? ecriDimensionNames : aruiDomainNames;
+}
+
 export const domainCodes = Object.keys(domainNames) as DomainCode[];
 
-/** All 11 authoritative domains in the ARUI assessment scope. */
 export const inScopeDomains: DomainCode[] = [
   "D01",
   "D02",

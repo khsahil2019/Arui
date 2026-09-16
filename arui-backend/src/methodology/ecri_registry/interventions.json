@@ -1,0 +1,134 @@
+[
+  {
+    "id": "INT-01",
+    "problemPattern": "Weak demand intelligence",
+    "intervention": "Employer/labour-market intelligence cycle",
+    "primaryDimensions": [
+      "D01"
+    ],
+    "horizon": "0\u201390 days",
+    "expectedLeadingIndicators": "Demand coverage, recency, employer signal quality",
+    "expectedLaggingIndicators": "Curriculum changes aligned to demand",
+    "dependencies": "Data owner + employer input"
+  },
+  {
+    "id": "INT-02",
+    "problemPattern": "Weak capability framework",
+    "intervention": "Capability taxonomy and proficiency architecture",
+    "primaryDimensions": [
+      "D02"
+    ],
+    "horizon": "0\u201390 days",
+    "expectedLeadingIndicators": "Mapped capabilities, proficiency definitions",
+    "expectedLaggingIndicators": "Improved capability assessment",
+    "dependencies": "Academic + employer validation"
+  },
+  {
+    "id": "INT-03",
+    "problemPattern": "Curriculum misalignment",
+    "intervention": "Industry-informed curriculum review",
+    "primaryDimensions": [
+      "D03"
+    ],
+    "horizon": "3\u201312 months",
+    "expectedLeadingIndicators": "Learning outcome alignment, review cycle",
+    "expectedLaggingIndicators": "Relevant employment / role quality",
+    "dependencies": "D01 + D02"
+  },
+  {
+    "id": "INT-04",
+    "problemPattern": "Low authentic experience",
+    "intervention": "Project/WIL expansion and quality assurance",
+    "primaryDimensions": [
+      "D04"
+    ],
+    "horizon": "3\u201312 months",
+    "expectedLeadingIndicators": "Authentic projects, supervision quality",
+    "expectedLaggingIndicators": "Experience outcomes / employer confidence",
+    "dependencies": "Employer ecosystem"
+  },
+  {
+    "id": "INT-05",
+    "problemPattern": "Weak career services",
+    "intervention": "Career coaching and transition pathway",
+    "primaryDimensions": [
+      "D05"
+    ],
+    "horizon": "0\u201312 months",
+    "expectedLeadingIndicators": "Utilisation, coaching coverage, readiness",
+    "expectedLaggingIndicators": "Time-to-employment / relevant employment",
+    "dependencies": "D09 + data"
+  },
+  {
+    "id": "INT-06",
+    "problemPattern": "Weak professional capabilities",
+    "intervention": "Embedded capability development and assessment",
+    "primaryDimensions": [
+      "D06"
+    ],
+    "horizon": "3\u201318 months",
+    "expectedLeadingIndicators": "Assessment coverage, progression",
+    "expectedLaggingIndicators": "Employer feedback / work performance proxies",
+    "dependencies": "D02 + D03"
+  },
+  {
+    "id": "INT-07",
+    "problemPattern": "Digital/AI readiness gap",
+    "intervention": "AI-era work readiness pathway",
+    "primaryDimensions": [
+      "D07"
+    ],
+    "horizon": "0\u201312 months",
+    "expectedLeadingIndicators": "AI literacy, verification, productivity evidence",
+    "expectedLaggingIndicators": "Employer confidence / work sample quality",
+    "dependencies": "D03 + D04 + D08"
+  },
+  {
+    "id": "INT-08",
+    "problemPattern": "Weak signalling",
+    "intervention": "Portfolio and evidence-signalling system",
+    "primaryDimensions": [
+      "D08"
+    ],
+    "horizon": "0\u20136 months",
+    "expectedLeadingIndicators": "Portfolio coverage, work-sample quality",
+    "expectedLaggingIndicators": "Selection/interview outcomes",
+    "dependencies": "D04 + D06 + D07"
+  },
+  {
+    "id": "INT-09",
+    "problemPattern": "Weak employer ecosystem",
+    "intervention": "Employer engagement operating model",
+    "primaryDimensions": [
+      "D09"
+    ],
+    "horizon": "0\u201312 months",
+    "expectedLeadingIndicators": "Depth, repeat engagement, recruitment linkage",
+    "expectedLaggingIndicators": "Employer confidence / employment outcomes",
+    "dependencies": "D01 + D10"
+  },
+  {
+    "id": "INT-10",
+    "problemPattern": "Weak outcome intelligence",
+    "intervention": "Outcome data architecture",
+    "primaryDimensions": [
+      "D10"
+    ],
+    "horizon": "0\u20136 months",
+    "expectedLeadingIndicators": "Coverage, denominator integrity, transparency",
+    "expectedLaggingIndicators": "Durability / role quality",
+    "dependencies": "Data governance"
+  },
+  {
+    "id": "INT-11",
+    "problemPattern": "Weak adaptability/intelligence",
+    "intervention": "Career adaptability + alumni intelligence loop",
+    "primaryDimensions": [
+      "D11"
+    ],
+    "horizon": "3\u201318 months",
+    "expectedLeadingIndicators": "Alumni coverage, feedback use, learning rate",
+    "expectedLaggingIndicators": "Trajectory quality / transition resilience",
+    "dependencies": "D10 + D05"
+  }
+]

@@ -48,6 +48,8 @@ export interface LoginRequest {
   password: string;
   /** Mock only — the production backend derives role from the account. */
   roleHint?: Role;
+  productCode?: string;
+  engine?: string;
 }
 
 /* ------------------------------------------------------------------ */

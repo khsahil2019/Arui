@@ -1,42 +1,106 @@
 [
   {
-    "code": "AG-ECRI-01",
-    "riskPattern": "Inflated Placement Percentage Claim without verifiable offer letters or salary tax receipts.",
-    "detectionLogic": "Claimed placement > 95% while median salary documentation is missing or unverified.",
-    "evidenceSignal": "Offer letters lacking corporate HR digital signatures or EPF/TDS documentation.",
-    "action": "Flag for mandatory lead assessor audit; score capped at Level 2 until corroborated.",
-    "scoringProtection": "Prevents unverified placement marketing claims from distorting D09 scores."
+    "code": "AG-01",
+    "riskPattern": "Volume inflation",
+    "detectionLogic": "Check active use, recurrence, student exposure, curriculum/recruitment linkage.",
+    "evidenceSignal": "Hundreds of employer partnerships",
+    "action": "Enhanced verification if headline count is material.",
+    "scoringProtection": "No volume-only uplift."
   },
   {
-    "code": "AG-ECRI-02",
-    "riskPattern": "Superficial MoU Accumulation without operational activity or student placements.",
-    "detectionLogic": "High number of active corporate MoUs (>50) but <5% of students engaged in joint programs.",
-    "evidenceSignal": "MoUs lacking joint annual progress reports or credit-bearing course logs.",
-    "action": "Invalidate inactive MoUs from partner score calculation in D02.",
-    "scoringProtection": "Ensures only active, credit-bearing partnerships contribute to institutional score."
+    "code": "AG-02",
+    "riskPattern": "Policy inflation",
+    "detectionLogic": "Trace implementation, adoption, review and operating records.",
+    "evidenceSignal": "Policy/strategy exists therefore capability is mature.",
+    "action": "Request operating evidence.",
+    "scoringProtection": "Policy-only evidence cannot establish \u22653."
   },
   {
-    "code": "AG-ECRI-03",
-    "riskPattern": "Unsupervised or Sub-Standard Internships counted toward mandatory graduation requirement.",
-    "detectionLogic": "Internship duration < 6 weeks or absence of formal employer supervisor evaluation.",
-    "evidenceSignal": "Generic participation certificates without detailed competency assessment rubric.",
-    "action": "Exclude unverified internships from D04 coverage calculation.",
-    "scoringProtection": "Safeguards authentic Work-Integrated Learning standards."
+    "code": "AG-03",
+    "riskPattern": "Placement inflation",
+    "detectionLogic": "Validate denominator, eligibility, definition, time window and verification.",
+    "evidenceSignal": "95% placement",
+    "action": "Institutional research verification.",
+    "scoringProtection": "Outcome held until validated."
   },
   {
-    "code": "AG-ECRI-04",
-    "riskPattern": "Cherry-Picked Highest CTC Claim disguised as Institutional Median Compensation.",
-    "detectionLogic": "Disparity between average of top 5% offers and full cohort median > 400%.",
-    "evidenceSignal": "Single highest international outlier presented in institutional headline marketing.",
-    "action": "Enforce strict cohort median CTC reporting based on audited placement ledger.",
-    "scoringProtection": "Protects salary transparency and realistic student ROI benchmarking."
+    "code": "AG-04",
+    "riskPattern": "Role irrelevance",
+    "detectionLogic": "Check role relevance to programme/occupational pathway.",
+    "evidenceSignal": "Graduate employed in unrelated/low-relevance role counted as success.",
+    "action": "Outcome-quality review.",
+    "scoringProtection": "Disaggregate quality/relevance."
   },
   {
-    "code": "AG-ECRI-05",
-    "riskPattern": "Circular or Self-Referential Board of Studies approval without external industry panel.",
-    "detectionLogic": "Curriculum renewal records showing only internal academic signatures.",
-    "evidenceSignal": "Absence of external industry representative minutes or syllabus review notes.",
-    "action": "Cap D03 Curriculum Co-Design at Level 1 (Ad-hoc).",
-    "scoringProtection": "Mandates genuine external employer co-design in syllabus modernization."
+    "code": "AG-05",
+    "riskPattern": "Salary inflation",
+    "detectionLogic": "Check median, denominator, sector/geography, exclusions and distribution.",
+    "evidenceSignal": "High average salary",
+    "action": "Outcome verification.",
+    "scoringProtection": "Do not rely on mean headline."
+  },
+  {
+    "code": "AG-06",
+    "riskPattern": "Participation inflation",
+    "detectionLogic": "Check meaningful completion, assessed work, application and coverage.",
+    "evidenceSignal": "100% attended career programme",
+    "action": "Deep-dive to capability evidence.",
+    "scoringProtection": "Attendance cannot establish capability."
+  },
+  {
+    "code": "AG-07",
+    "riskPattern": "Employer-name inflation",
+    "detectionLogic": "Verify actual engagement, period, scope and student contact.",
+    "evidenceSignal": "Prestigious employer logos listed as evidence.",
+    "action": "Evidence audit.",
+    "scoringProtection": "Logo/name alone receives no material credit."
+  },
+  {
+    "code": "AG-08",
+    "riskPattern": "One-off pilot inflation",
+    "detectionLogic": "Check scale, repeatability, coverage and persistence.",
+    "evidenceSignal": "Successful pilot presented as institutional capability.",
+    "action": "Request longitudinal evidence.",
+    "scoringProtection": "Pilot remains Level 1\u20132 unless broader evidence supports more."
+  },
+  {
+    "code": "AG-09",
+    "riskPattern": "Denominator manipulation",
+    "detectionLogic": "Reconstruct eligible population and exclusions.",
+    "evidenceSignal": "Only successful cohort/subset reported.",
+    "action": "Institutional research adjudication.",
+    "scoringProtection": "Use declared denominator; flag exclusions."
+  },
+  {
+    "code": "AG-10",
+    "riskPattern": "Attribution inflation",
+    "detectionLogic": "Test alternative contributors and pathway evidence.",
+    "evidenceSignal": "Outcome attributed entirely to institution.",
+    "action": "Diagnostic wording control.",
+    "scoringProtection": "Report association rather than causality unless justified."
+  },
+  {
+    "code": "AG-11",
+    "riskPattern": "Cherry-picking",
+    "detectionLogic": "Sample representative coverage.",
+    "evidenceSignal": "Only strongest programme/cohort shown.",
+    "action": "Sampling review.",
+    "scoringProtection": "Require representative evidence."
+  },
+  {
+    "code": "AG-12",
+    "riskPattern": "Stale evidence",
+    "detectionLogic": "Check date and continuity.",
+    "evidenceSignal": "Old success used as current state.",
+    "action": "Request current evidence.",
+    "scoringProtection": "Old evidence cannot substantiate current operating state alone."
+  },
+  {
+    "code": "AG-13",
+    "riskPattern": "Metric duplication",
+    "detectionLogic": "Trace evidence IDs and construct boundaries.",
+    "evidenceSignal": "Same project/event claimed under multiple metrics.",
+    "action": "Cross-domain QA.",
+    "scoringProtection": "Credit only demonstrated construct; prevent double counting."
   }
 ]

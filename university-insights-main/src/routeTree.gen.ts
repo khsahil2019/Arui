@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AruiRouteImport } from './routes/arui'
 import { Route as AssessorRouteImport } from './routes/assessor'
 import { Route as EcriRouteImport } from './routes/ecri'
 import { Route as LoginRouteImport } from './routes/login'
@@ -21,16 +22,36 @@ import { Route as WorkspaceOrientationRouteImport } from './routes/_workspace.or
 import { Route as WorkspaceOverviewRouteImport } from './routes/_workspace.overview'
 import { Route as WorkspaceProfileRouteImport } from './routes/_workspace.profile'
 import { Route as WorkspacePulseRouteImport } from './routes/_workspace.pulse'
+import { Route as AruiIndexRouteImport } from './routes/arui.index'
+import { Route as AruiEvidenceRouteImport } from './routes/arui.evidence'
+import { Route as AruiIntelligenceRouteImport } from './routes/arui.intelligence'
+import { Route as AruiLoginRouteImport } from './routes/arui.login'
+import { Route as AruiOrientationRouteImport } from './routes/arui.orientation'
+import { Route as AruiOverviewRouteImport } from './routes/arui.overview'
+import { Route as AruiProfileRouteImport } from './routes/arui.profile'
+import { Route as AruiPulseRouteImport } from './routes/arui.pulse'
 import { Route as AssessorIndexRouteImport } from './routes/assessor.index'
 import { Route as AssessorIdRouteImport } from './routes/assessor.$id'
+import { Route as EcriIndexRouteImport } from './routes/ecri.index'
+import { Route as EcriEvidenceRouteImport } from './routes/ecri.evidence'
+import { Route as EcriIntelligenceRouteImport } from './routes/ecri.intelligence'
+import { Route as EcriLoginRouteImport } from './routes/ecri.login'
+import { Route as EcriOrientationRouteImport } from './routes/ecri.orientation'
+import { Route as EcriOverviewRouteImport } from './routes/ecri.overview'
+import { Route as EcriProfileRouteImport } from './routes/ecri.profile'
+import { Route as EcriPulseRouteImport } from './routes/ecri.pulse'
 import { Route as WorkspaceAssessmentIndexRouteImport } from './routes/_workspace.assessment.index'
 import { Route as WorkspaceAssessmentDomainRouteImport } from './routes/_workspace.assessment.$domain'
+import { Route as AruiAssessmentIndexRouteImport } from './routes/arui.assessment.index'
+import { Route as AruiAssessmentDomainRouteImport } from './routes/arui.assessment.$domain'
 import { Route as AssessorIdIndexRouteImport } from './routes/assessor.$id.index'
 import { Route as AssessorIdContextRouteImport } from './routes/assessor.$id.context'
 import { Route as AssessorIdEvidenceRouteImport } from './routes/assessor.$id.evidence'
 import { Route as AssessorIdResponsesRouteImport } from './routes/assessor.$id.responses'
 import { Route as AssessorIdRunsRouteImport } from './routes/assessor.$id.runs'
 import { Route as AssessorIdScoringRouteImport } from './routes/assessor.$id.scoring'
+import { Route as EcriAssessmentIndexRouteImport } from './routes/ecri.assessment.index'
+import { Route as EcriAssessmentDomainRouteImport } from './routes/ecri.assessment.$domain'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -44,6 +65,11 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AruiRoute = AruiRouteImport.update({
+  id: '/arui',
+  path: '/arui',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AssessorRoute = AssessorRouteImport.update({
@@ -91,6 +117,46 @@ const WorkspacePulseRoute = WorkspacePulseRouteImport.update({
   path: '/pulse',
   getParentRoute: () => WorkspaceRoute,
 } as any)
+const AruiIndexRoute = AruiIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiEvidenceRoute = AruiEvidenceRouteImport.update({
+  id: '/evidence',
+  path: '/evidence',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiIntelligenceRoute = AruiIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiLoginRoute = AruiLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiOrientationRoute = AruiOrientationRouteImport.update({
+  id: '/orientation',
+  path: '/orientation',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiOverviewRoute = AruiOverviewRouteImport.update({
+  id: '/overview',
+  path: '/overview',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiProfileRoute = AruiProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiPulseRoute = AruiPulseRouteImport.update({
+  id: '/pulse',
+  path: '/pulse',
+  getParentRoute: () => AruiRoute,
+} as any)
 const AssessorIndexRoute = AssessorIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -100,6 +166,46 @@ const AssessorIdRoute = AssessorIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => AssessorRoute,
+} as any)
+const EcriIndexRoute = EcriIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriEvidenceRoute = EcriEvidenceRouteImport.update({
+  id: '/evidence',
+  path: '/evidence',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriIntelligenceRoute = EcriIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriLoginRoute = EcriLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriOrientationRoute = EcriOrientationRouteImport.update({
+  id: '/orientation',
+  path: '/orientation',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriOverviewRoute = EcriOverviewRouteImport.update({
+  id: '/overview',
+  path: '/overview',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriProfileRoute = EcriProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriPulseRoute = EcriPulseRouteImport.update({
+  id: '/pulse',
+  path: '/pulse',
+  getParentRoute: () => EcriRoute,
 } as any)
 const WorkspaceAssessmentIndexRoute =
   WorkspaceAssessmentIndexRouteImport.update({
@@ -113,6 +219,16 @@ const WorkspaceAssessmentDomainRoute =
     path: '/assessment/$domain',
     getParentRoute: () => WorkspaceRoute,
   } as any)
+const AruiAssessmentIndexRoute = AruiAssessmentIndexRouteImport.update({
+  id: '/assessment/',
+  path: '/assessment/',
+  getParentRoute: () => AruiRoute,
+} as any)
+const AruiAssessmentDomainRoute = AruiAssessmentDomainRouteImport.update({
+  id: '/assessment/$domain',
+  path: '/assessment/$domain',
+  getParentRoute: () => AruiRoute,
+} as any)
 const AssessorIdIndexRoute = AssessorIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -143,12 +259,23 @@ const AssessorIdScoringRoute = AssessorIdScoringRouteImport.update({
   path: '/scoring',
   getParentRoute: () => AssessorIdRoute,
 } as any)
+const EcriAssessmentIndexRoute = EcriAssessmentIndexRouteImport.update({
+  id: '/assessment/',
+  path: '/assessment/',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriAssessmentDomainRoute = EcriAssessmentDomainRouteImport.update({
+  id: '/assessment/$domain',
+  path: '/assessment/$domain',
+  getParentRoute: () => EcriRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/arui': typeof AruiRouteWithChildren
   '/assessor': typeof AssessorRouteWithChildren
-  '/ecri': typeof EcriRoute
+  '/ecri': typeof EcriRouteWithChildren
   '/login': typeof LoginRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
@@ -156,21 +283,40 @@ export interface FileRoutesByFullPath {
   '/overview': typeof WorkspaceOverviewRoute
   '/profile': typeof WorkspaceProfileRoute
   '/pulse': typeof WorkspacePulseRoute
+  '/arui/evidence': typeof AruiEvidenceRoute
+  '/arui/intelligence': typeof AruiIntelligenceRoute
+  '/arui/login': typeof AruiLoginRoute
+  '/arui/orientation': typeof AruiOrientationRoute
+  '/arui/overview': typeof AruiOverviewRoute
+  '/arui/profile': typeof AruiProfileRoute
+  '/arui/pulse': typeof AruiPulseRoute
   '/assessor/$id': typeof AssessorIdRouteWithChildren
+  '/ecri/evidence': typeof EcriEvidenceRoute
+  '/ecri/intelligence': typeof EcriIntelligenceRoute
+  '/ecri/login': typeof EcriLoginRoute
+  '/ecri/orientation': typeof EcriOrientationRoute
+  '/ecri/overview': typeof EcriOverviewRoute
+  '/ecri/profile': typeof EcriProfileRoute
+  '/ecri/pulse': typeof EcriPulseRoute
+  '/arui/': typeof AruiIndexRoute
   '/assessor/': typeof AssessorIndexRoute
+  '/ecri/': typeof EcriIndexRoute
   '/assessment/$domain': typeof WorkspaceAssessmentDomainRoute
+  '/arui/assessment/$domain': typeof AruiAssessmentDomainRoute
   '/assessor/$id/context': typeof AssessorIdContextRoute
   '/assessor/$id/evidence': typeof AssessorIdEvidenceRoute
   '/assessor/$id/responses': typeof AssessorIdResponsesRoute
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
+  '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
   '/assessment/': typeof WorkspaceAssessmentIndexRoute
+  '/arui/assessment/': typeof AruiAssessmentIndexRoute
   '/assessor/$id/': typeof AssessorIdIndexRoute
+  '/ecri/assessment/': typeof EcriAssessmentIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
-  '/ecri': typeof EcriRoute
   '/login': typeof LoginRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
@@ -178,23 +324,44 @@ export interface FileRoutesByTo {
   '/overview': typeof WorkspaceOverviewRoute
   '/profile': typeof WorkspaceProfileRoute
   '/pulse': typeof WorkspacePulseRoute
+  '/arui/evidence': typeof AruiEvidenceRoute
+  '/arui/intelligence': typeof AruiIntelligenceRoute
+  '/arui/login': typeof AruiLoginRoute
+  '/arui/orientation': typeof AruiOrientationRoute
+  '/arui/overview': typeof AruiOverviewRoute
+  '/arui/profile': typeof AruiProfileRoute
+  '/arui/pulse': typeof AruiPulseRoute
+  '/ecri/evidence': typeof EcriEvidenceRoute
+  '/ecri/intelligence': typeof EcriIntelligenceRoute
+  '/ecri/login': typeof EcriLoginRoute
+  '/ecri/orientation': typeof EcriOrientationRoute
+  '/ecri/overview': typeof EcriOverviewRoute
+  '/ecri/profile': typeof EcriProfileRoute
+  '/ecri/pulse': typeof EcriPulseRoute
+  '/arui': typeof AruiIndexRoute
   '/assessor': typeof AssessorIndexRoute
+  '/ecri': typeof EcriIndexRoute
   '/assessment/$domain': typeof WorkspaceAssessmentDomainRoute
+  '/arui/assessment/$domain': typeof AruiAssessmentDomainRoute
   '/assessor/$id/context': typeof AssessorIdContextRoute
   '/assessor/$id/evidence': typeof AssessorIdEvidenceRoute
   '/assessor/$id/responses': typeof AssessorIdResponsesRoute
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
+  '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
   '/assessment': typeof WorkspaceAssessmentIndexRoute
+  '/arui/assessment': typeof AruiAssessmentIndexRoute
   '/assessor/$id': typeof AssessorIdIndexRoute
+  '/ecri/assessment': typeof EcriAssessmentIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_workspace': typeof WorkspaceRouteWithChildren
   '/admin': typeof AdminRoute
+  '/arui': typeof AruiRouteWithChildren
   '/assessor': typeof AssessorRouteWithChildren
-  '/ecri': typeof EcriRoute
+  '/ecri': typeof EcriRouteWithChildren
   '/login': typeof LoginRoute
   '/_workspace/evidence': typeof WorkspaceEvidenceRoute
   '/_workspace/intelligence': typeof WorkspaceIntelligenceRoute
@@ -202,22 +369,43 @@ export interface FileRoutesById {
   '/_workspace/overview': typeof WorkspaceOverviewRoute
   '/_workspace/profile': typeof WorkspaceProfileRoute
   '/_workspace/pulse': typeof WorkspacePulseRoute
+  '/arui/evidence': typeof AruiEvidenceRoute
+  '/arui/intelligence': typeof AruiIntelligenceRoute
+  '/arui/login': typeof AruiLoginRoute
+  '/arui/orientation': typeof AruiOrientationRoute
+  '/arui/overview': typeof AruiOverviewRoute
+  '/arui/profile': typeof AruiProfileRoute
+  '/arui/pulse': typeof AruiPulseRoute
   '/assessor/$id': typeof AssessorIdRouteWithChildren
+  '/ecri/evidence': typeof EcriEvidenceRoute
+  '/ecri/intelligence': typeof EcriIntelligenceRoute
+  '/ecri/login': typeof EcriLoginRoute
+  '/ecri/orientation': typeof EcriOrientationRoute
+  '/ecri/overview': typeof EcriOverviewRoute
+  '/ecri/profile': typeof EcriProfileRoute
+  '/ecri/pulse': typeof EcriPulseRoute
+  '/arui/': typeof AruiIndexRoute
   '/assessor/': typeof AssessorIndexRoute
+  '/ecri/': typeof EcriIndexRoute
   '/_workspace/assessment/$domain': typeof WorkspaceAssessmentDomainRoute
+  '/arui/assessment/$domain': typeof AruiAssessmentDomainRoute
   '/assessor/$id/context': typeof AssessorIdContextRoute
   '/assessor/$id/evidence': typeof AssessorIdEvidenceRoute
   '/assessor/$id/responses': typeof AssessorIdResponsesRoute
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
+  '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
   '/_workspace/assessment/': typeof WorkspaceAssessmentIndexRoute
+  '/arui/assessment/': typeof AruiAssessmentIndexRoute
   '/assessor/$id/': typeof AssessorIdIndexRoute
+  '/ecri/assessment/': typeof EcriAssessmentIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/arui'
     | '/assessor'
     | '/ecri'
     | '/login'
@@ -227,21 +415,40 @@ export interface FileRouteTypes {
     | '/overview'
     | '/profile'
     | '/pulse'
+    | '/arui/evidence'
+    | '/arui/intelligence'
+    | '/arui/login'
+    | '/arui/orientation'
+    | '/arui/overview'
+    | '/arui/profile'
+    | '/arui/pulse'
     | '/assessor/$id'
+    | '/ecri/evidence'
+    | '/ecri/intelligence'
+    | '/ecri/login'
+    | '/ecri/orientation'
+    | '/ecri/overview'
+    | '/ecri/profile'
+    | '/ecri/pulse'
+    | '/arui/'
     | '/assessor/'
+    | '/ecri/'
     | '/assessment/$domain'
+    | '/arui/assessment/$domain'
     | '/assessor/$id/context'
     | '/assessor/$id/evidence'
     | '/assessor/$id/responses'
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
+    | '/ecri/assessment/$domain'
     | '/assessment/'
+    | '/arui/assessment/'
     | '/assessor/$id/'
+    | '/ecri/assessment/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
-    | '/ecri'
     | '/login'
     | '/evidence'
     | '/intelligence'
@@ -249,20 +456,41 @@ export interface FileRouteTypes {
     | '/overview'
     | '/profile'
     | '/pulse'
+    | '/arui/evidence'
+    | '/arui/intelligence'
+    | '/arui/login'
+    | '/arui/orientation'
+    | '/arui/overview'
+    | '/arui/profile'
+    | '/arui/pulse'
+    | '/ecri/evidence'
+    | '/ecri/intelligence'
+    | '/ecri/login'
+    | '/ecri/orientation'
+    | '/ecri/overview'
+    | '/ecri/profile'
+    | '/ecri/pulse'
+    | '/arui'
     | '/assessor'
+    | '/ecri'
     | '/assessment/$domain'
+    | '/arui/assessment/$domain'
     | '/assessor/$id/context'
     | '/assessor/$id/evidence'
     | '/assessor/$id/responses'
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
+    | '/ecri/assessment/$domain'
     | '/assessment'
+    | '/arui/assessment'
     | '/assessor/$id'
+    | '/ecri/assessment'
   id:
     | '__root__'
     | '/'
     | '/_workspace'
     | '/admin'
+    | '/arui'
     | '/assessor'
     | '/ecri'
     | '/login'
@@ -272,24 +500,45 @@ export interface FileRouteTypes {
     | '/_workspace/overview'
     | '/_workspace/profile'
     | '/_workspace/pulse'
+    | '/arui/evidence'
+    | '/arui/intelligence'
+    | '/arui/login'
+    | '/arui/orientation'
+    | '/arui/overview'
+    | '/arui/profile'
+    | '/arui/pulse'
     | '/assessor/$id'
+    | '/ecri/evidence'
+    | '/ecri/intelligence'
+    | '/ecri/login'
+    | '/ecri/orientation'
+    | '/ecri/overview'
+    | '/ecri/profile'
+    | '/ecri/pulse'
+    | '/arui/'
     | '/assessor/'
+    | '/ecri/'
     | '/_workspace/assessment/$domain'
+    | '/arui/assessment/$domain'
     | '/assessor/$id/context'
     | '/assessor/$id/evidence'
     | '/assessor/$id/responses'
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
+    | '/ecri/assessment/$domain'
     | '/_workspace/assessment/'
+    | '/arui/assessment/'
     | '/assessor/$id/'
+    | '/ecri/assessment/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
   AdminRoute: typeof AdminRoute
+  AruiRoute: typeof AruiRouteWithChildren
   AssessorRoute: typeof AssessorRouteWithChildren
-  EcriRoute: typeof EcriRoute
+  EcriRoute: typeof EcriRouteWithChildren
   LoginRoute: typeof LoginRoute
 }
 
@@ -314,6 +563,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arui': {
+      id: '/arui'
+      path: '/arui'
+      fullPath: '/arui'
+      preLoaderRoute: typeof AruiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/assessor': {
@@ -379,6 +635,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspacePulseRouteImport
       parentRoute: typeof WorkspaceRoute
     }
+    '/arui/': {
+      id: '/arui/'
+      path: '/'
+      fullPath: '/arui/'
+      preLoaderRoute: typeof AruiIndexRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/evidence': {
+      id: '/arui/evidence'
+      path: '/evidence'
+      fullPath: '/arui/evidence'
+      preLoaderRoute: typeof AruiEvidenceRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/intelligence': {
+      id: '/arui/intelligence'
+      path: '/intelligence'
+      fullPath: '/arui/intelligence'
+      preLoaderRoute: typeof AruiIntelligenceRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/login': {
+      id: '/arui/login'
+      path: '/login'
+      fullPath: '/arui/login'
+      preLoaderRoute: typeof AruiLoginRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/orientation': {
+      id: '/arui/orientation'
+      path: '/orientation'
+      fullPath: '/arui/orientation'
+      preLoaderRoute: typeof AruiOrientationRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/overview': {
+      id: '/arui/overview'
+      path: '/overview'
+      fullPath: '/arui/overview'
+      preLoaderRoute: typeof AruiOverviewRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/profile': {
+      id: '/arui/profile'
+      path: '/profile'
+      fullPath: '/arui/profile'
+      preLoaderRoute: typeof AruiProfileRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/pulse': {
+      id: '/arui/pulse'
+      path: '/pulse'
+      fullPath: '/arui/pulse'
+      preLoaderRoute: typeof AruiPulseRouteImport
+      parentRoute: typeof AruiRoute
+    }
     '/assessor/': {
       id: '/assessor/'
       path: '/'
@@ -393,6 +705,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessorIdRouteImport
       parentRoute: typeof AssessorRoute
     }
+    '/ecri/': {
+      id: '/ecri/'
+      path: '/'
+      fullPath: '/ecri/'
+      preLoaderRoute: typeof EcriIndexRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/evidence': {
+      id: '/ecri/evidence'
+      path: '/evidence'
+      fullPath: '/ecri/evidence'
+      preLoaderRoute: typeof EcriEvidenceRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/intelligence': {
+      id: '/ecri/intelligence'
+      path: '/intelligence'
+      fullPath: '/ecri/intelligence'
+      preLoaderRoute: typeof EcriIntelligenceRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/login': {
+      id: '/ecri/login'
+      path: '/login'
+      fullPath: '/ecri/login'
+      preLoaderRoute: typeof EcriLoginRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/orientation': {
+      id: '/ecri/orientation'
+      path: '/orientation'
+      fullPath: '/ecri/orientation'
+      preLoaderRoute: typeof EcriOrientationRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/overview': {
+      id: '/ecri/overview'
+      path: '/overview'
+      fullPath: '/ecri/overview'
+      preLoaderRoute: typeof EcriOverviewRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/profile': {
+      id: '/ecri/profile'
+      path: '/profile'
+      fullPath: '/ecri/profile'
+      preLoaderRoute: typeof EcriProfileRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/pulse': {
+      id: '/ecri/pulse'
+      path: '/pulse'
+      fullPath: '/ecri/pulse'
+      preLoaderRoute: typeof EcriPulseRouteImport
+      parentRoute: typeof EcriRoute
+    }
     '/_workspace/assessment/': {
       id: '/_workspace/assessment/'
       path: '/assessment'
@@ -406,6 +774,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/assessment/$domain'
       preLoaderRoute: typeof WorkspaceAssessmentDomainRouteImport
       parentRoute: typeof WorkspaceRoute
+    }
+    '/arui/assessment/': {
+      id: '/arui/assessment/'
+      path: '/assessment'
+      fullPath: '/arui/assessment/'
+      preLoaderRoute: typeof AruiAssessmentIndexRouteImport
+      parentRoute: typeof AruiRoute
+    }
+    '/arui/assessment/$domain': {
+      id: '/arui/assessment/$domain'
+      path: '/assessment/$domain'
+      fullPath: '/arui/assessment/$domain'
+      preLoaderRoute: typeof AruiAssessmentDomainRouteImport
+      parentRoute: typeof AruiRoute
     }
     '/assessor/$id/': {
       id: '/assessor/$id/'
@@ -449,6 +831,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AssessorIdScoringRouteImport
       parentRoute: typeof AssessorIdRoute
     }
+    '/ecri/assessment/': {
+      id: '/ecri/assessment/'
+      path: '/assessment'
+      fullPath: '/ecri/assessment/'
+      preLoaderRoute: typeof EcriAssessmentIndexRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/assessment/$domain': {
+      id: '/ecri/assessment/$domain'
+      path: '/assessment/$domain'
+      fullPath: '/ecri/assessment/$domain'
+      preLoaderRoute: typeof EcriAssessmentDomainRouteImport
+      parentRoute: typeof EcriRoute
+    }
   }
 }
 
@@ -477,6 +873,34 @@ const WorkspaceRouteChildren: WorkspaceRouteChildren = {
 const WorkspaceRouteWithChildren = WorkspaceRoute._addFileChildren(
   WorkspaceRouteChildren,
 )
+
+interface AruiRouteChildren {
+  AruiEvidenceRoute: typeof AruiEvidenceRoute
+  AruiIntelligenceRoute: typeof AruiIntelligenceRoute
+  AruiLoginRoute: typeof AruiLoginRoute
+  AruiOrientationRoute: typeof AruiOrientationRoute
+  AruiOverviewRoute: typeof AruiOverviewRoute
+  AruiProfileRoute: typeof AruiProfileRoute
+  AruiPulseRoute: typeof AruiPulseRoute
+  AruiIndexRoute: typeof AruiIndexRoute
+  AruiAssessmentDomainRoute: typeof AruiAssessmentDomainRoute
+  AruiAssessmentIndexRoute: typeof AruiAssessmentIndexRoute
+}
+
+const AruiRouteChildren: AruiRouteChildren = {
+  AruiEvidenceRoute: AruiEvidenceRoute,
+  AruiIntelligenceRoute: AruiIntelligenceRoute,
+  AruiLoginRoute: AruiLoginRoute,
+  AruiOrientationRoute: AruiOrientationRoute,
+  AruiOverviewRoute: AruiOverviewRoute,
+  AruiProfileRoute: AruiProfileRoute,
+  AruiPulseRoute: AruiPulseRoute,
+  AruiIndexRoute: AruiIndexRoute,
+  AruiAssessmentDomainRoute: AruiAssessmentDomainRoute,
+  AruiAssessmentIndexRoute: AruiAssessmentIndexRoute,
+}
+
+const AruiRouteWithChildren = AruiRoute._addFileChildren(AruiRouteChildren)
 
 interface AssessorIdRouteChildren {
   AssessorIdContextRoute: typeof AssessorIdContextRoute
@@ -514,12 +938,41 @@ const AssessorRouteWithChildren = AssessorRoute._addFileChildren(
   AssessorRouteChildren,
 )
 
+interface EcriRouteChildren {
+  EcriEvidenceRoute: typeof EcriEvidenceRoute
+  EcriIntelligenceRoute: typeof EcriIntelligenceRoute
+  EcriLoginRoute: typeof EcriLoginRoute
+  EcriOrientationRoute: typeof EcriOrientationRoute
+  EcriOverviewRoute: typeof EcriOverviewRoute
+  EcriProfileRoute: typeof EcriProfileRoute
+  EcriPulseRoute: typeof EcriPulseRoute
+  EcriIndexRoute: typeof EcriIndexRoute
+  EcriAssessmentDomainRoute: typeof EcriAssessmentDomainRoute
+  EcriAssessmentIndexRoute: typeof EcriAssessmentIndexRoute
+}
+
+const EcriRouteChildren: EcriRouteChildren = {
+  EcriEvidenceRoute: EcriEvidenceRoute,
+  EcriIntelligenceRoute: EcriIntelligenceRoute,
+  EcriLoginRoute: EcriLoginRoute,
+  EcriOrientationRoute: EcriOrientationRoute,
+  EcriOverviewRoute: EcriOverviewRoute,
+  EcriProfileRoute: EcriProfileRoute,
+  EcriPulseRoute: EcriPulseRoute,
+  EcriIndexRoute: EcriIndexRoute,
+  EcriAssessmentDomainRoute: EcriAssessmentDomainRoute,
+  EcriAssessmentIndexRoute: EcriAssessmentIndexRoute,
+}
+
+const EcriRouteWithChildren = EcriRoute._addFileChildren(EcriRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WorkspaceRoute: WorkspaceRouteWithChildren,
   AdminRoute: AdminRoute,
+  AruiRoute: AruiRouteWithChildren,
   AssessorRoute: AssessorRouteWithChildren,
-  EcriRoute: EcriRoute,
+  EcriRoute: EcriRouteWithChildren,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

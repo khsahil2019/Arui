@@ -388,10 +388,10 @@ function AdminPage() {
           <div className="mx-auto flex max-w-7xl items-center justify-between">
             <Wordmark />
             <Link
-              to="/login"
+              to="/"
               className="text-xs text-muted-foreground hover:text-foreground font-medium flex items-center gap-1.5"
             >
-              <ArrowLeft className="size-3.5" /> Institutional Login
+              <ArrowLeft className="size-3.5" /> Back to Main Portal
             </Link>
           </div>
         </header>
@@ -533,11 +533,11 @@ function AdminPage() {
               Refresh
             </button>
             <Link
-              to="/overview"
+              to="/"
               className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-ivory-deep"
             >
               <ArrowLeft className="size-3.5 text-muted-foreground" />
-              Workspace
+              Main Portal
             </Link>
             <button
               type="button"

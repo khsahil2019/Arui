@@ -237,6 +237,7 @@ export async function seed() {
   }
 
   // Insert ECRI Capabilities
+  await query(`DELETE FROM capabilities WHERE methodology_version_id = $1`, [ecriVersionId]);
   for (let i = 0; i < ecriCapabilities.length; i++) {
     const c = ecriCapabilities[i];
     await query(
@@ -249,6 +250,7 @@ export async function seed() {
   }
 
   // Insert ECRI 132 Metrics
+  await query(`DELETE FROM metrics WHERE methodology_version_id = $1`, [ecriVersionId]);
   for (let i = 0; i < ecriMetrics.length; i++) {
     const m = ecriMetrics[i];
     await query(
@@ -351,7 +353,7 @@ export async function seed() {
   }
   console.log(`Seeded ECRI Methodology Registry (11 Dimensions, 132 Canonical Metrics, Badges & Calibration).`);
 
-  // 4. Seed Demo Institution & Users
+  // 4. Seed Demo Institutions & Distinct Users for ARUI and ECRI
   const instRes = await query(
     `INSERT INTO institutions (name, slug, country, state, district)
      VALUES ($1, $2, $3, $4, $5)
@@ -361,36 +363,82 @@ export async function seed() {
   );
   const instId = instRes.rows[0].id;
 
-  const passwordHash = await bcrypt.hash('arui@2026', 10);
-
-  // Institution Admin / Lead Assessor
-  await query(
-    `INSERT INTO users (institution_id, email, password_hash, name, role)
+  const horizonRes = await query(
+    `INSERT INTO institutions (name, slug, country, state, district)
      VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role`,
-    [instId, 'lead@apex.edu', passwordHash, 'Dr. Aris Thorne (Institutional Lead)', 'INSTITUTION_ADMIN']
+     ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
+     RETURNING id`,
+    ['Horizon State University', 'horizon-state-university', 'India', 'Maharashtra', 'Mumbai Suburban']
   );
+  const horizonInstId = horizonRes.rows[0].id;
 
-  // External Assessor
-  await query(
-    `INSERT INTO users (institution_id, email, password_hash, name, role)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role`,
-    [null, 'assessor@arui.org', passwordHash, 'Prof. Elizabeth Vance (Lead Assessor)', 'ASSESSOR']
-  );
-
-  // User Sahil Khan (Institution Admin)
+  // Hashes for Demo Credentials
+  const apexPasswordHash = await bcrypt.hash('apex123', 10);
   const sahilPasswordHash = await bcrypt.hash('123456', 10);
+  const aruiAssessorHash = await bcrypt.hash('assessor123', 10);
+  const horizonPasswordHash = await bcrypt.hash('horizon123', 10);
+  const ecriAssessorHash = await bcrypt.hash('assessor123', 10);
+
+  // --- ARUI DEMO USERS ---
+  // 1. Apex University Lead
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
-    [instId, 'sahilkh3014@gmail.com', sahilPasswordHash, 'Sahil Khan', 'INSTITUTION_ADMIN']
+    [instId, 'lead@apex.edu', apexPasswordHash, 'Dr. Aris Thorne (Institutional Lead)', 'INSTITUTION_ADMIN']
   );
 
-  console.log('Seeded demo users (sahilkh3014@gmail.com, lead@apex.edu, assessor@arui.org).');
+  // 2. Global Super Admin
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [null, 'sahilkh3014@gmail.com', sahilPasswordHash, 'Sahil Khan (Global Super Admin)', 'SUPER_ADMIN']
+  );
 
-  // 5. Seed baseline ARUI Assessment
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [null, 'admin@arui.org', await bcrypt.hash('admin123', 10), 'Chief Platform Administrator', 'SUPER_ADMIN']
+  );
+
+  // 3. ARUI External Assessor
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [null, 'assessor@arui.org', aruiAssessorHash, 'Prof. Elizabeth Vance (Lead ARUI Assessor)', 'ASSESSOR']
+  );
+
+  // --- ECRI DEMO USERS ---
+  // 4. Horizon University Career & Employability Lead
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [horizonInstId, 'lead@horizon.edu', horizonPasswordHash, 'Prof. Marcus Vance (Dean of Career & WIL)', 'INSTITUTION_ADMIN']
+  );
+
+  // 5. Horizon University Industry Relations & WIL Officer
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [horizonInstId, 'industry@horizon.edu', horizonPasswordHash, 'Sarah Jenkins (Director of Corporate Partnerships)', 'CONTRIBUTOR']
+  );
+
+  // 6. ECRI External Assessor / Adjudicator
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [null, 'assessor@ecri.org', ecriAssessorHash, 'Dr. Robert Sterling (Lead ECRI Adjudicator)', 'ASSESSOR']
+  );
+
+  console.log('Seeded distinct demo users for ARUI (Apex) and ECRI (Horizon).');
+
+  // 5. Seed baseline ARUI Assessment for Apex
   const asmRes = await query(
     `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -399,12 +447,12 @@ export async function seed() {
   );
   const assessmentId = asmRes.rows[0].id;
 
-  // Seed baseline ECRI Assessment
+  // Seed baseline ECRI Assessment for Horizon
   const ecriAsmRes = await query(
     `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING id`,
-    ['ecri', instId, ecriVersionId, 'ECRI Graduate Employability & Career Readiness Assessment (2026)', 'DRAFT', 'assessment', 'D01']
+    ['ecri', horizonInstId, ecriVersionId, 'ECRI Graduate Employability & Career Readiness Assessment (2026)', 'DRAFT', 'assessment', 'D01']
   );
   const ecriAssessmentId = ecriAsmRes.rows[0].id;
 

@@ -9,6 +9,9 @@ import { CoverageBar } from "@/components/ari/progress";
 import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
+import { getEngineConfig, getFrameworkDomains, type EngineType, type DomainCode } from "@/lib/catalogue";
+import { useRouterState } from "@tanstack/react-router";
+
 export const Route = createFileRoute("/_workspace/assessment/")({
   loader: ({ context }) =>
     context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
@@ -34,6 +37,12 @@ export const Route = createFileRoute("/_workspace/assessment/")({
 function AssessmentHub() {
   const { assessmentId } = Route.useRouteContext();
   const { data: status } = useSuspenseQuery(queries.status(assessmentId));
+  const routerState = useRouterState();
+  const rawEngine = new URLSearchParams(routerState.location.search).get("engine");
+  const engine: EngineType = rawEngine?.toLowerCase() === "ecri" ? "ecri" : "arui";
+  const engineConfig = getEngineConfig(engine);
+  const frameworkDomains = getFrameworkDomains(engine);
+
   const inScope = status.domains.filter((d) => d.inScope);
   const later = status.domains.filter((d) => !d.inScope);
   const next = inScope.find((d) => d.state !== "complete");
@@ -41,24 +50,32 @@ function AssessmentHub() {
   return (
     <PageContainer>
       <PageHeader
-        eyebrow="Assessment"
-        title="The assessed domains."
-        lede="Each domain opens with a core set of questions grouped by theme. Where a response needs more depth, the assessment asks a targeted follow-up. Domains can be completed in any order and returned to at any time."
+        eyebrow={`${engineConfig.name} · Assessment Matrix`}
+        title={`The ${engineConfig.scopeCount} ${engine === "ecri" ? "Dimensions" : "Domains"} of ${engineConfig.shortTitle}`}
+        lede={`Exhaustive institutional evaluation of ${engineConfig.title} across ${engineConfig.domainsLabel}. Complete the areas in any order and return at any time.`}
         meta={
-          <StatusBadge tone="outline">
-            Assessment coverage · {inScope.length} of {status.domains.length} domains
-          </StatusBadge>
+          <div className="flex items-center gap-2">
+            <span className={cn("font-bold px-2.5 py-1 rounded text-xs", engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy")}>
+              {engineConfig.shortTitle} Mode
+            </span>
+            <StatusBadge tone="outline">
+              Coverage · {inScope.length} of {status.domains.length} {engine === "ecri" ? "dimensions" : "domains"}
+            </StatusBadge>
+          </div>
         }
       />
 
       <div className="mt-10 grid gap-4">
         {inScope.map((d) => {
           const pct = d.themesTotal ? d.themesExplored / d.themesTotal : 0;
+          const displayName = frameworkDomains[d.code as DomainCode] || d.name;
+
           return (
             <Link
               key={d.code}
               to="/assessment/$domain"
               params={{ domain: d.code }}
+              search={{ engine }}
               className={cn(
                 "group grid gap-5 rounded-xl border bg-card px-6 py-6 shadow-card transition-colors hover:border-navy/40 md:grid-cols-[4rem_1fr_14rem_auto] md:items-center",
                 next?.code === d.code ? "border-navy/40" : "border-border",
@@ -67,7 +84,7 @@ function AssessmentHub() {
               <span className="font-mono text-sm text-muted-foreground">{d.code}</span>
               <span>
                 <span className="block font-serif text-xl leading-snug text-foreground">
-                  {d.name}
+                  {displayName}
                 </span>
                 <span className="mt-1 block text-[13px] text-muted-foreground">
                   {d.state === "not_started" && "Not started"}

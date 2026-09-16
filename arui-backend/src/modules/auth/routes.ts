@@ -35,32 +35,49 @@ router.post('/login', async (req, res) => {
       }
     }
 
-    // Get latest assessment for institution or latest active assessment for assessor
+    const productCode = (req.body.productCode || req.body.engine || 'arui').toLowerCase();
+
+    // Get latest assessment for institution and product
     let assessmentId = null;
     if (userRow.institution_id) {
       const aRes = await query(
-        `SELECT id FROM assessments WHERE institution_id = $1 ORDER BY created_at DESC LIMIT 1`,
-        [userRow.institution_id]
+        `SELECT id FROM assessments WHERE institution_id = $1 AND product_code = $2 ORDER BY created_at DESC LIMIT 1`,
+        [userRow.institution_id, productCode]
       );
       if (aRes.rows.length > 0) {
         assessmentId = aRes.rows[0].id;
       } else {
-        const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
-        const versionId = mvRes.rows[0]?.id;
-        const insRes = await query(
-          `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, current_domain)
-           VALUES ($1, $2, 'Institutional AI Resilience Assessment (2026 Baseline)', 'DRAFT', 'profile', 'D01')
-           RETURNING id`,
-          [userRow.institution_id, versionId]
+        // Fallback to any assessment for this institution
+        const anyRes = await query(
+          `SELECT id FROM assessments WHERE institution_id = $1 ORDER BY created_at DESC LIMIT 1`,
+          [userRow.institution_id]
         );
-        if (insRes.rows.length > 0) {
-          assessmentId = insRes.rows[0].id;
+        if (anyRes.rows.length > 0) {
+          assessmentId = anyRes.rows[0].id;
+        } else {
+          const mvRes = await query(`SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true LIMIT 1`, [productCode]);
+          const versionId = mvRes.rows[0]?.id;
+          const insRes = await query(
+            `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
+             VALUES ($1, $2, $3, 'Institutional Assessment (2026 Baseline)', 'DRAFT', 'profile', 'D01')
+             RETURNING id`,
+            [productCode, userRow.institution_id, versionId]
+          );
+          if (insRes.rows.length > 0) {
+            assessmentId = insRes.rows[0].id;
+          }
         }
       }
     } else {
-      const aRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+      const aRes = await query(
+        `SELECT id FROM assessments WHERE product_code = $1 ORDER BY created_at DESC LIMIT 1`,
+        [productCode]
+      );
       if (aRes.rows.length > 0) {
         assessmentId = aRes.rows[0].id;
+      } else {
+        const fallbackRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+        if (fallbackRes.rows.length > 0) assessmentId = fallbackRes.rows[0].id;
       }
     }
 

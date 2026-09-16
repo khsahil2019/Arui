@@ -1,59 +1,130 @@
-import type { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  Building2,
   Check,
   ClipboardList,
   Compass,
   FolderOpen,
   LayoutDashboard,
   LogOut,
-  Map,
   Radio,
-  type LucideIcon,
+  SlidersHorizontal,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { assessmentStatusLabels, roleLabels } from "@/lib/catalogue";
-import type { AssessmentStatusView, Session, StageId } from "@/api/types";
-import { useLogout } from "@/api/hooks";
-import { apiMode } from "@/api/client";
 import { StatusBadge } from "./status-badge";
+import { cn } from "@/lib/utils";
+import { assessmentStatusLabels } from "@/lib/catalogue";
+import { apiMode } from "@/api/client";
+import { useLogout } from "@/api/hooks";
+import type { AssessmentStatusView, Session } from "@/api/types";
 
-export type NavStatus = "complete" | "current" | "upcoming" | "locked";
+export type NavStatus = "complete" | "current" | "pending" | "disabled";
+
+export type EngineType = "arui" | "ecri";
+
+export interface EngineConfig {
+  code: EngineType;
+  title: string;
+  shortTitle: string;
+  domainsLabel: string;
+}
+
+export function getEngineConfig(engine?: EngineType | string): EngineConfig {
+  const isEcri = engine?.toLowerCase() === "ecri";
+  if (isEcri) {
+    return {
+      code: "ecri",
+      title: "Employability & Career Readiness Index",
+      shortTitle: "ECRI",
+      domainsLabel: "11 Dimensions · 132 Metrics",
+    };
+  }
+  return {
+    code: "arui",
+    title: "AI Resilient University",
+    shortTitle: "ARUI",
+    domainsLabel: "11 Domains · 143 Metrics",
+  };
+}
 
 export interface NavItem {
   to: string;
-  params?: Record<string, string>;
   label: string;
-  icon: LucideIcon;
-  status?: NavStatus | undefined;
-  stage?: StageId | undefined;
+  icon: typeof LayoutDashboard;
   exact?: boolean | undefined;
+  params?: Record<string, string> | undefined;
+  status?: NavStatus | undefined;
+  stage?: "profile" | "pulse" | "assessment" | "evidence" | "results" | undefined;
 }
 
+const roleLabels: Record<string, string> = {
+  institution_admin: "Institutional Lead",
+  contributor: "Domain Contributor",
+  assessor: "Independent Assessor",
+  superadmin: "Platform Administrator",
+};
+
+export const aruiNav: NavItem[] = [
+  { to: "/arui/overview", label: "Overview", icon: LayoutDashboard, exact: true },
+  { to: "/arui/profile", label: "Context Profile", icon: SlidersHorizontal, stage: "profile" },
+  { to: "/arui/orientation", label: "Orientation", icon: Compass },
+  { to: "/arui/pulse", label: "Institutional Pulse", icon: Radio, stage: "pulse" },
+  { to: "/arui/assessment", label: "11 Domains Assessment", icon: ClipboardList, stage: "assessment" },
+  { to: "/arui/evidence", label: "Evidence Vault", icon: FolderOpen, stage: "evidence" },
+  { to: "/arui/intelligence", label: "Strategic Intelligence", icon: Compass, stage: "results" },
+];
+
+export const ecriNav: NavItem[] = [
+  { to: "/ecri/overview", label: "Scoreboard Overview", icon: LayoutDashboard, exact: true },
+  { to: "/ecri/profile", label: "Institutional & WIL Profile", icon: SlidersHorizontal, stage: "profile" },
+  { to: "/ecri/orientation", label: "Benchmark Scope", icon: Compass },
+  { to: "/ecri/pulse", label: "Placement Pulse", icon: Radio, stage: "pulse" },
+  { to: "/ecri/assessment", label: "11 Dimensions Hub", icon: ClipboardList, stage: "assessment" },
+  { to: "/ecri/evidence", label: "WIL Evidence Vault", icon: FolderOpen, stage: "evidence" },
+  { to: "/ecri/intelligence", label: "Career Intelligence", icon: Compass, stage: "results" },
+];
+
 export const workspaceNav: NavItem[] = [
-  { to: "/overview", label: "Overview", icon: LayoutDashboard },
-  { to: "/profile", label: "Institution Profile", icon: Building2, stage: "profile" },
-  { to: "/orientation", label: "Orientation", icon: Map, stage: "orientation" },
+  { to: "/overview", label: "Overview", icon: LayoutDashboard, exact: true },
+  { to: "/profile", label: "Institution Profile", icon: SlidersHorizontal, stage: "profile" },
+  { to: "/orientation", label: "Orientation", icon: Compass },
   { to: "/pulse", label: "Institutional Pulse", icon: Radio, stage: "pulse" },
   { to: "/assessment", label: "Assessment", icon: ClipboardList, stage: "assessment" },
   { to: "/evidence", label: "Evidence", icon: FolderOpen, stage: "evidence" },
   { to: "/intelligence", label: "Preliminary results", icon: Compass, stage: "results" },
 ];
 
-export function Wordmark({ className, inverse }: { className?: string; inverse?: boolean }) {
+export function Wordmark({
+  className,
+  inverse,
+  engine = "arui",
+}: {
+  className?: string;
+  inverse?: boolean;
+  engine?: EngineType | string;
+}) {
+  const config = getEngineConfig(engine);
+  const isEcri = config.code === "ecri";
+  const homeTarget = isEcri ? "/ecri/overview" : "/overview";
+
   return (
-    <Link to="/" className={cn("group inline-flex items-center gap-3", className)}>
+    <Link
+      to={homeTarget as any}
+      className={cn("group inline-flex items-center gap-3", className)}
+    >
       <span
         className={cn(
-          "flex size-8 items-center justify-center rounded-[5px] border font-serif text-[15px] font-medium leading-none",
+          "flex size-8 items-center justify-center rounded-[5px] border font-serif text-[13px] font-bold leading-none tracking-tight",
           inverse
-            ? "border-sidebar-border bg-sidebar-accent text-sidebar-foreground"
-            : "border-navy bg-navy text-primary-foreground",
+            ? isEcri
+              ? "border-teal/40 bg-teal/20 text-teal"
+              : "border-sidebar-border bg-sidebar-accent text-sidebar-foreground"
+            : isEcri
+              ? "border-teal bg-teal text-white"
+              : "border-navy bg-navy text-primary-foreground",
         )}
       >
-        AR
+        {isEcri ? "EC" : "AR"}
       </span>
       <span className="leading-tight">
         <span
@@ -62,7 +133,7 @@ export function Wordmark({ className, inverse }: { className?: string; inverse?:
             inverse ? "text-sidebar-primary" : "text-foreground",
           )}
         >
-          AI Resilient University
+          {config.title}
         </span>
         <span
           className={cn(
@@ -70,7 +141,7 @@ export function Wordmark({ className, inverse }: { className?: string; inverse?:
             inverse ? "text-sidebar-foreground/60" : "text-muted-foreground",
           )}
         >
-          Institutional AI Resilience Assessment
+          {config.domainsLabel}
         </span>
       </span>
     </Link>
@@ -80,8 +151,9 @@ export function Wordmark({ className, inverse }: { className?: string; inverse?:
 interface WorkspaceShellProps {
   children: ReactNode;
   session: Session;
-  nav: NavItem[];
-  navLabel: string;
+  nav?: NavItem[];
+  navLabel?: string;
+  engine?: EngineType;
   /** Institution status block (respondent workspace). */
   status?: AssessmentStatusView | null;
   /** Identity line under the nav (assessor workspace). */
@@ -92,16 +164,25 @@ export function WorkspaceShell({
   children,
   session,
   nav,
-  navLabel,
+  navLabel = "Workspace",
+  engine: explicitEngine,
   status,
   identity,
 }: WorkspaceShellProps) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const routerState = useRouterState();
+  const pathname = routerState.location.pathname;
+  const rawEngine = explicitEngine || (pathname.startsWith("/ecri") ? "ecri" : "arui");
+  const engine: EngineType = rawEngine?.toLowerCase() === "ecri" ? "ecri" : "arui";
+  const engineConfig = getEngineConfig(engine);
+
+  const defaultNav = engine === "ecri" ? ecriNav : pathname.startsWith("/arui") ? aruiNav : (nav || workspaceNav);
+  const activeNav = nav || defaultNav;
+
   const navigate = useNavigate();
   const qc = useQueryClient();
   const logout = useLogout();
 
-  const items = nav.map((item) => ({
+  const items: NavItem[] = activeNav.map((item) => ({
     ...item,
     status:
       item.status ??
@@ -115,8 +196,8 @@ export function WorkspaceShell({
   const current = [...items].reverse().find((n) => isActive(resolve(n)))?.label ?? navLabel;
 
   const id = identity ?? {
-    title: status?.institutionName ?? session.institution?.name ?? "Institution",
-    subtitle: `Assessment cycle ${status?.cycle ?? "2026"}`,
+    title: status?.institutionName ?? session.institution?.name ?? (engine === "ecri" ? "Horizon State University" : "Apex National University"),
+    subtitle: `${engineConfig.shortTitle} Cycle · 2026`,
     badge: status ? (
       <StatusBadge tone="outline" className="border-sidebar-border text-sidebar-foreground/80">
         Status · {assessmentStatusLabels[status.status]}
@@ -127,15 +208,16 @@ export function WorkspaceShell({
   const signOut = async () => {
     await logout.mutateAsync();
     qc.clear();
-    navigate({ to: "/login", replace: true });
+    navigate({ to: (engine === "ecri" ? "/ecri/login" : "/login") as any, replace: true });
   };
 
   return (
     <div className="min-h-screen bg-background lg:grid lg:grid-cols-[16.5rem_1fr]">
       <aside className="hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col">
-        <div className="px-6 pb-6 pt-7">
-          <Wordmark inverse />
+        <div className="px-6 pb-6 pt-6">
+          <Wordmark inverse engine={engine} />
         </div>
+
         <nav className="flex-1 px-3">
           <p className="eyebrow mb-2 px-3 text-sidebar-foreground/50">{navLabel}</p>
           <ul className="space-y-0.5">
@@ -150,12 +232,12 @@ export function WorkspaceShell({
                     className={cn(
                       "group flex items-center gap-3 rounded-md px-3 py-2.5 text-[13.5px] transition-colors",
                       active
-                        ? "bg-sidebar-primary text-sidebar-primary-foreground"
+                        ? "bg-sidebar-primary text-sidebar-primary-foreground font-semibold"
                         : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground",
                     )}
                   >
                     <Icon className="size-4 shrink-0 opacity-80" />
-                    <span className="flex-1 font-medium">{item.label}</span>
+                    <span className="flex-1">{item.label}</span>
                     {item.status && <NavStatusDot status={item.status} active={active} />}
                   </Link>
                 </li>
@@ -177,10 +259,14 @@ export function WorkspaceShell({
         <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur">
           <div className="flex h-14 items-center justify-between gap-4 px-5 md:px-8">
             <div className="flex items-center gap-4 lg:hidden">
-              <Wordmark />
+              <Wordmark engine={engine} />
             </div>
             <div className="hidden items-center gap-2 text-xs text-muted-foreground lg:flex">
-              <span>{id.title}</span>
+              <span className="font-semibold text-foreground">{id.title}</span>
+              <span className="text-border">/</span>
+              <span className={cn("font-bold px-2 py-0.5 rounded text-[11px]", engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy")}>
+                {engineConfig.shortTitle} Platform
+              </span>
               <span className="text-border">/</span>
               <span className="text-foreground">{current}</span>
             </div>
@@ -212,7 +298,7 @@ export function WorkspaceShell({
                       className={cn(
                         "block border-b-2 px-3 py-2.5 text-[13px] font-medium transition-colors",
                         active
-                          ? "border-navy text-foreground"
+                          ? "border-navy text-foreground font-semibold"
                           : "border-transparent text-muted-foreground hover:text-foreground",
                       )}
                     >

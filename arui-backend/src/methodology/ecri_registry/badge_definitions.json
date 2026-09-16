@@ -1,64 +1,55 @@
 [
   {
     "productCode": "ecri",
-    "code": "ECRI_SECTOR_LEADER_PLATINUM",
-    "name": "Platinum Benchmark — Global Employability Excellence",
-    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 85.0 with zero critical dimension vulnerabilities.",
+    "code": "ECRI_EMPLOYABILITY_EXCELLENCE",
+    "name": "ECRI Employability Excellence Badge",
+    "meaning": "Awarded to institutions demonstrating Level 4+ maturity across Employer Demand, Industry Curriculum, and Outcome Quality.",
     "difficulty": "Platinum",
     "criteriaJson": {
-      "minOverallScore": 85,
-      "minDimensionScore": 70,
-      "requiredEvidenceLevel": "E3"
+      "minScore": 85.0,
+      "minDimensionsLevel4": 8
     },
     "requirementsJson": {
-      "auditedPlacementRate": 90,
-      "mandatoryInternshipCoverage": 95
+      "evidenceVerified": true,
+      "zeroAntiGamingFlags": true
     },
-    "awardRule": "Overall ECRI >= 85 and all 11 Dimensions >= 70.",
+    "awardRule": "Overall Score >= 85.0 and D10 Employment Outcome >= Level 4",
     "validityMonths": 24,
-    "icon": "trophy-gold"
+    "icon": "award"
   },
   {
     "productCode": "ecri",
-    "code": "ECRI_INDUSTRY_CO_DESIGN_GOLD",
-    "name": "Gold Recognition — Industry Co-Designed Curriculum & WIL",
-    "meaning": "Recognizes exceptional institutional performance in D02 (Industry Ecosystem), D03 (Curriculum Co-Design) and D04 (Experiential Learning).",
+    "code": "ECRI_INDUSTRY_ALIGNED_CURRICULUM",
+    "name": "Industry-Aligned Curriculum Pioneer",
+    "meaning": "Recognizes exceptional co-design, experiential learning, and employer advisory governance.",
     "difficulty": "Gold",
     "criteriaJson": {
-      "requiredDimensions": [
-        "D02",
-        "D03",
-        "D04"
-      ],
-      "minAverageScore": 80
+      "minD03Score": 80.0,
+      "minD04Score": 80.0
     },
     "requirementsJson": {
-      "corporatePartners": 50,
-      "mandatoryCapstones": true
+      "advisoryMinutesProvided": true
     },
-    "awardRule": "Average of D02, D03, D04 >= 80.0.",
+    "awardRule": "D03 >= 80% and D04 >= 80%",
     "validityMonths": 12,
-    "icon": "shield-check"
+    "icon": "book-open"
   },
   {
     "productCode": "ecri",
-    "code": "ECRI_CAREER_SERVICES_EXCELLENCE",
-    "name": "Distinction — Career Navigation & Student Mentorship",
-    "meaning": "Awarded for outstanding 1-on-1 personalized career counseling, alumni mentoring, and career literacy infrastructure in D05 & D06.",
-    "difficulty": "Silver",
+    "code": "ECRI_CAREER_ADAPTABILITY_LEADER",
+    "name": "Career Readiness & Adaptability Benchmark",
+    "meaning": "Awarded for outstanding digital readiness, human capability development, and lifelong employability tracking.",
+    "difficulty": "Gold",
     "criteriaJson": {
-      "requiredDimensions": [
-        "D05",
-        "D06"
-      ],
-      "minAverageScore": 75
+      "minD06Score": 80.0,
+      "minD07Score": 80.0,
+      "minD11Score": 80.0
     },
     "requirementsJson": {
-      "counselorRatio": "1:250",
-      "mentorshipCoverage": 80
+      "alumniTrackingActive": true
     },
-    "awardRule": "Average of D05, D06 >= 75.0.",
+    "awardRule": "D06 >= 80%, D07 >= 80%, and D11 >= 80%",
     "validityMonths": 12,
-    "icon": "star"
+    "icon": "shield-check"
   }
 ]

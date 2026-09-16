@@ -1,21 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, FileCheck2, Lock, ScrollText } from "lucide-react";
-import { Wordmark } from "@/components/ari/workspace-shell";
-import { assessmentAreas } from "@/lib/catalogue";
+import {
+  ArrowRight,
+  BarChart3,
+  BookOpen,
+  Briefcase,
+  CheckCircle2,
+  Clock,
+  Cpu,
+  FileCheck2,
+  GraduationCap,
+  Layers,
+  Lock,
+  ScrollText,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AI Resilient University — Institutional AI Resilience Assessment" },
+      { title: "Higher Education Advisory — Dual Assessment Frameworks (ARUI & ECRI)" },
       {
         name: "description",
         content:
-          "Understand how prepared your institution is for an AI-shaped future. A research-grade assessment for universities across strategy, governance, people, curriculum and more.",
-      },
-      { property: "og:title", content: "AI Resilient University" },
-      {
-        property: "og:description",
-        content: "Understand how prepared your institution is for an AI-shaped future.",
+          "Institutional evaluation and transformation intelligence across AI Resilience (ARUI) and Graduate Employability (ECRI).",
       },
     ],
   }),
@@ -25,163 +33,285 @@ export const Route = createFileRoute("/")({
 const facts = [
   {
     icon: Clock,
-    title: "Estimated effort",
-    body: "Around 3–4 hours of senior time across a few sittings. The assessment adapts to your context, so many institutions need less.",
+    title: "Executive Assessment Time",
+    body: "Around 3–4 hours across senior leadership sittings. The evaluation adapts dynamically to institutional scale and context.",
   },
   {
     icon: ScrollText,
-    title: "What your institution receives",
-    body: "An institutional position across the assessed domains, the maturity your context requires, your transformation distance, strengths, vulnerabilities and early contradiction signals — written for executive decision-making.",
+    title: "Institutional Deliverables",
+    body: "Domain-level positioning, transformation distance analysis, vulnerability index, and actionable executive roadmaps.",
   },
   {
     icon: FileCheck2,
-    title: "How evidence works",
-    body: "Evidence is optional at first and strengthens confidence in your results. One document can support several areas of the assessment; you are never asked for the same item twice.",
+    title: "Evidence & Verification",
+    body: "Support self-assessment with institutional policies and artifacts. Documents can cross-reference multiple rubric metrics.",
   },
   {
     icon: Lock,
-    title: "Confidentiality",
-    body: "Responses and evidence remain the institution's own. Results are preliminary until independently verified and are never shared or benchmarked without your instruction.",
+    title: "Enterprise Confidentiality",
+    body: "Responses and telemetry remain private to your institution. Results are strictly locked to authorized institutional leadership.",
   },
 ];
 
 function WelcomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-10">
-        <Wordmark />
-        <Link
-          to="/overview"
-          className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-        >
-          Return to an existing assessment
-        </Link>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
-        <section className="grid gap-14 pt-10 md:pt-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-20">
-          <div>
-            <p className="eyebrow mb-4">Higher Education Assessment Platform</p>
-            <h1 className="max-w-2xl text-[2.75rem] leading-[1.06] text-foreground md:text-[3.75rem] lg:text-[4.25rem]">
-              Institutional evaluation &{" "}
-              <em className="font-normal italic text-navy">transformation</em> intelligence.
-            </h1>
-            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted-foreground">
-              A unified research-grade platform evaluating universities across artificial
-              intelligence resilience, graduate employability, curricular co-design, and governance.
-            </p>
-
-            {/* Assessment Products Selection Grid */}
-            <div className="mt-10 grid gap-6 sm:grid-cols-2">
-              {/* Product 1: ARUI */}
-              <div className="flex flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-card transition-all hover:border-navy/40 hover:shadow-lg">
-                <div>
-                  <span className="rounded bg-navy/10 px-2.5 py-1 text-[11px] font-bold text-navy uppercase tracking-wider">
-                    ARUI Framework
-                  </span>
-                  <h3 className="mt-3 text-lg font-bold text-foreground">
-                    AI-Resilient University Index
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    Exhaustive 11-domain assessment of AI strategy, governance, human capability,
-                    curriculum resilience, and academic integrity.
-                  </p>
-                </div>
-                <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
-                  <Link
-                    to="/profile"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-navy hover:underline"
-                  >
-                    Start ARUI <ArrowRight className="size-3.5" />
-                  </Link>
-                  <span className="font-mono text-[11px] text-muted-foreground">
-                    11 Domains · 143 Metrics
-                  </span>
-                </div>
-              </div>
-
-              {/* Product 2: ECRI */}
-              <div className="flex flex-col justify-between rounded-xl border border-navy/30 bg-navy/5 p-6 shadow-card transition-all hover:border-navy hover:shadow-lg">
-                <div>
-                  <span className="rounded bg-navy text-white px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
-                    ECRI Benchmark
-                  </span>
-                  <h3 className="mt-3 text-lg font-bold text-foreground">
-                    Employability & Career Readiness Index
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                    Rigorous 11-dimension evaluation of employer integration, curriculum co-design,
-                    internships (WIL), and graduate career progression.
-                  </p>
-                </div>
-                <div className="mt-6 flex items-center justify-between border-t border-navy/15 pt-4">
-                  <Link
-                    to="/ecri"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-navy hover:underline"
-                  >
-                    Explore ECRI Product <ArrowRight className="size-3.5" />
-                  </Link>
-                  <span className="font-mono text-[11px] font-semibold text-navy">
-                    11 Dimensions · 132 Metrics
-                  </span>
-                </div>
-              </div>
+    <div className="min-h-screen bg-background text-foreground selection:bg-navy selection:text-white">
+      {/* Top Header */}
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
+          <div className="flex items-center gap-3.5">
+            <div className="flex size-9 items-center justify-center rounded-lg bg-navy font-serif text-sm font-bold text-white shadow-sm ring-1 ring-white/10">
+              HE
             </div>
-
-            <div className="mt-12 border-t border-border pt-6">
-              <p className="eyebrow mb-3">Universal Platform Standards</p>
-              <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <FileCheck2 className="size-3.5 text-navy" /> Save & Resume Workflow
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Lock className="size-3.5 text-navy" /> Private & Verified Evidence
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <ScrollText className="size-3.5 text-navy" /> Single Canonical Report Payload
-                </span>
-              </div>
+            <div>
+              <span className="block font-serif text-base font-semibold tracking-tight text-foreground">
+                Higher Education Advisory
+              </span>
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                Institutional Benchmarking Intelligence
+              </span>
             </div>
           </div>
 
-          <aside className="lg:pt-4">
-            <div className="rounded-xl border border-border bg-card shadow-card">
-              <div className="border-b border-border px-7 py-5">
-                <p className="eyebrow">Before you begin</p>
-              </div>
-              <ul className="divide-y divide-border">
-                {facts.map((f) => (
-                  <li key={f.title} className="flex gap-5 px-7 py-6">
-                    <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md border border-border bg-ivory-deep/70 text-navy">
-                      <f.icon className="size-4" />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Dual Engines Active</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl px-6 pb-28 md:px-10">
+        {/* Hero Section */}
+        <section className="pt-12 pb-10 md:pt-16 md:pb-14">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-navy/15 bg-navy/5 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-navy mb-5">
+              <Sparkles className="size-3.5 text-navy" />
+              <span>Institutional Excellence Platform</span>
+            </div>
+            <h1 className="text-4xl font-serif leading-[1.08] tracking-tight text-foreground md:text-5xl lg:text-6xl">
+              Institutional evaluation &{" "}
+              <span className="italic font-serif text-navy">transformation</span> intelligence.
+            </h1>
+            <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+              Select an assessment engine to benchmark your institution against global standards,
+              evaluate risk and maturity, and unlock board-ready transformation intelligence.
+            </p>
+          </div>
+
+          {/* Large Distinct Product Assessment Cards */}
+          <div className="mt-12 grid gap-8 lg:grid-cols-2">
+            {/* Card 1: ARUI */}
+            <div className="group relative flex flex-col justify-between rounded-2xl border-2 border-border/90 bg-card p-8 shadow-card transition-all duration-300 hover:border-navy hover:shadow-xl">
+              {/* Subtle background glow */}
+              <div className="absolute top-0 right-0 -mr-12 -mt-12 size-48 rounded-full bg-navy/5 blur-3xl pointer-events-none transition-all group-hover:bg-navy/10" />
+
+              <div>
+                {/* Header Badges */}
+                <div className="flex flex-wrap items-center justify-between gap-2.5 pb-4 border-b border-border">
+                  <div className="flex items-center gap-2">
+                    <span className="flex size-8 items-center justify-center rounded-lg bg-navy text-white shadow-sm">
+                      <Cpu className="size-4.5" />
                     </span>
                     <div>
-                      <h2 className="font-sans text-[15px] font-semibold tracking-normal text-foreground">
-                        {f.title}
-                      </h2>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                        {f.body}
-                      </p>
+                      <span className="block font-bold text-xs uppercase tracking-widest text-navy">
+                        ARUI Framework
+                      </span>
+                      <span className="block text-[11px] text-muted-foreground">
+                        Version 4.0 Assessment Model
+                      </span>
                     </div>
-                  </li>
-                ))}
-              </ul>
+                  </div>
+
+                  <div className="inline-flex items-center gap-1.5 rounded-md border border-navy/20 bg-navy/5 px-3 py-1 text-xs font-bold text-navy shadow-sm">
+                    <BarChart3 className="size-3.5 text-navy" />
+                    <span>11 Domains · 143 Metrics</span>
+                  </div>
+                </div>
+
+                {/* Card Title & Description */}
+                <div className="mt-6">
+                  <h2 className="text-2xl font-serif font-bold text-foreground group-hover:text-navy transition-colors">
+                    AI-Resilient University Index
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    Comprehensive research-grade evaluation measuring how institutional strategy,
+                    ethical governance, curriculum co-adaptation, faculty capability, and tech infrastructure
+                    respond to artificial intelligence.
+                  </p>
+                </div>
+
+                {/* Key Pillars */}
+                <div className="mt-6 grid grid-cols-2 gap-2 text-xs font-medium text-foreground">
+                  <div className="flex items-center gap-2 rounded-lg bg-muted/60 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-navy shrink-0" />
+                    <span>Strategic AI Leadership</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-muted/60 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-navy shrink-0" />
+                    <span>Academic & Exam Integrity</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-muted/60 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-navy shrink-0" />
+                    <span>Faculty AI Capability</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-muted/60 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-navy shrink-0" />
+                    <span>Compute & Data Sovereignty</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6">
+                <Link
+                  to="/arui/login"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-navy px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-navy/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-navy/30"
+                >
+                  <span>Start ARUI Workspace</span>
+                  <ArrowRight className="size-4" />
+                </Link>
+                <Link
+                  to="/arui"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-navy hover:text-navy/80 hover:underline px-2 py-1.5"
+                >
+                  <BookOpen className="size-3.5" />
+                  <span>Explore Product Specs</span>
+                </Link>
+              </div>
             </div>
-            <p className="mt-5 px-1 text-xs leading-relaxed text-muted-foreground">
-              Designed for Vice-Chancellors, Presidents, Provosts, Registrars, Deans, IQAC
-              leadership and institutional strategy teams. A single institutional lead can complete
-              the assessment; contributors can be invited by area.
-            </p>
-          </aside>
+
+            {/* Card 2: ECRI */}
+            <div className="group relative flex flex-col justify-between rounded-2xl border-2 border-teal/40 bg-teal/[0.03] p-8 shadow-card transition-all duration-300 hover:border-teal hover:shadow-xl">
+              {/* Subtle background glow */}
+              <div className="absolute top-0 right-0 -mr-12 -mt-12 size-48 rounded-full bg-teal/10 blur-3xl pointer-events-none transition-all group-hover:bg-teal/15" />
+
+              <div>
+                {/* Header Badges */}
+                <div className="flex flex-wrap items-center justify-between gap-2.5 pb-4 border-b border-teal/20">
+                  <div className="flex items-center gap-2">
+                    <span className="flex size-8 items-center justify-center rounded-lg bg-teal text-white shadow-sm">
+                      <Briefcase className="size-4.5" />
+                    </span>
+                    <div>
+                      <span className="block font-bold text-xs uppercase tracking-widest text-teal">
+                        ECRI Benchmark
+                      </span>
+                      <span className="block text-[11px] text-muted-foreground">
+                        Employability & Work-Readiness
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="inline-flex items-center gap-1.5 rounded-md border border-teal/30 bg-teal/10 px-3 py-1 text-xs font-bold text-teal shadow-sm">
+                    <BarChart3 className="size-3.5 text-teal" />
+                    <span>11 Dimensions · 132 Metrics</span>
+                  </div>
+                </div>
+
+                {/* Card Title & Description */}
+                <div className="mt-6">
+                  <h2 className="text-2xl font-serif font-bold text-foreground group-hover:text-teal transition-colors">
+                    Employability & Career Readiness Index
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                    In-depth multi-dimensional framework assessing employer partnerships, industry co-designed
+                    curriculum, Work-Integrated Learning (WIL), alumni tracking, and high-impact career pathways.
+                  </p>
+                </div>
+
+                {/* Key Pillars */}
+                <div className="mt-6 grid grid-cols-2 gap-2 text-xs font-medium text-foreground">
+                  <div className="flex items-center gap-2 rounded-lg bg-teal/10 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-teal shrink-0" />
+                    <span>Employer Curriculum Co-Design</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-teal/10 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-teal shrink-0" />
+                    <span>Structured Internships (WIL)</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-teal/10 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-teal shrink-0" />
+                    <span>Alumni Career Progression</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-teal/10 px-3 py-2">
+                    <CheckCircle2 className="size-3.5 text-teal shrink-0" />
+                    <span>Industry Faculty Exchange</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-teal/20 pt-6">
+                <Link
+                  to="/ecri/login"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal px-5 py-2.5 text-sm font-bold text-white shadow-md transition-all hover:bg-teal/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-teal/30"
+                >
+                  <span>Start ECRI Workspace</span>
+                  <ArrowRight className="size-4" />
+                </Link>
+                <Link
+                  to="/ecri"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:text-teal/80 hover:underline px-2 py-1.5"
+                >
+                  <BookOpen className="size-3.5" />
+                  <span>Explore Product Specs</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Informational Guidance Section */}
+        <section className="mt-16 pt-12 border-t border-border">
+          <div className="grid gap-12 lg:grid-cols-3">
+            <div className="lg:col-span-1">
+              <p className="eyebrow mb-2">Institutional Advisory</p>
+              <h3 className="text-2xl font-serif font-bold text-foreground">
+                Built for university executive leadership.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Engineered specifically for Vice-Chancellors, Provosts, Deans, IQAC Directors, and institutional
+                planning committees. Designed for single-lead administration or distributed multi-contributor evaluation.
+              </p>
+            </div>
+
+            <div className="lg:col-span-2 grid gap-6 sm:grid-cols-2">
+              {facts.map((f) => (
+                <div
+                  key={f.title}
+                  className="flex gap-4 rounded-xl border border-border bg-card p-5 shadow-sm"
+                >
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-ivory-deep/80 text-navy">
+                    <f.icon className="size-5" />
+                  </span>
+                  <div>
+                    <h4 className="font-sans text-sm font-bold text-foreground">{f.title}</h4>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{f.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
       </main>
 
-      <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-xs text-muted-foreground md:px-10">
-          <span>© 2026 AI Resilient University</span>
-          <span>Stage 1 product prototype · No methodology content or scoring is active</span>
+      {/* Footer */}
+      <footer className="border-t border-border bg-card/50">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-muted-foreground md:px-10">
+          <div className="flex items-center gap-4">
+            <span className="font-semibold text-foreground">Higher Education Advisory</span>
+            <span>·</span>
+            <span>Dual Assessment Frameworks</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <Link to="/arui" className="hover:text-foreground">ARUI Specs</Link>
+            <Link to="/ecri" className="hover:text-foreground">ECRI Specs</Link>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
+

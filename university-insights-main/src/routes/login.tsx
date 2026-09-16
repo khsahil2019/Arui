@@ -6,14 +6,31 @@ import { queries, useLogin } from "@/api/hooks";
 
 export const Route = createFileRoute("/login")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
-    typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
+  validateSearch: (search: Record<string, unknown>): { redirect?: string; engine?: string } => ({
+    ...(typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {}),
+    ...(typeof search["engine"] === "string" ? { engine: search["engine"] } : {}),
+  }),
   beforeLoad: async ({ context, search }) => {
     const session = await context.queryClient.ensureQueryData(queries.session());
-    if (session)
+    if (session) {
+      const target = search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/overview");
       throw redirect({
-        to: search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
+        to: target as any,
+        search: (search.engine ? { engine: search.engine } : {}) as any,
       });
+    }
+    if (search.engine === "ecri") {
+      throw redirect({
+        to: "/ecri/login",
+        search: search.redirect ? { redirect: search.redirect } : {},
+      });
+    }
+    if (search.engine === "arui") {
+      throw redirect({
+        to: "/arui/login",
+        search: search.redirect ? { redirect: search.redirect } : {},
+      });
+    }
   },
   head: () => ({
     meta: [
@@ -162,9 +179,95 @@ function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-8 flex items-center justify-between border-t border-border pt-5 text-xs text-muted-foreground">
+          {/* Quick Demo Sign-In Options */}
+          <div className="mt-6 rounded-xl border border-navy/20 bg-navy/5 p-4">
+            <p className="text-xs font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <ShieldCheck className="size-4" /> Instant Demo Access
+            </p>
+            <div className="grid gap-2">
+              <button
+                type="button"
+                onClick={async () => {
+                  setEmail("lead@apex.edu");
+                  setPassword("apex123");
+                  try {
+                    const session = await login.mutateAsync({
+                      email: "lead@apex.edu",
+                      password: "apex123",
+                    });
+                    navigate({
+                      to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
+                      replace: true,
+                    });
+                  } catch {}
+                }}
+                disabled={login.isPending}
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
+              >
+                <div>
+                  <p className="font-semibold text-navy">Apex National University (Institution Admin)</p>
+                  <p className="text-[11px] text-muted-foreground">lead@apex.edu · Complete 11-Domain Assessment</p>
+                </div>
+                <ArrowRight className="size-3.5 text-navy shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  setEmail("sahilkh3014@gmail.com");
+                  setPassword("password123");
+                  try {
+                    const session = await login.mutateAsync({
+                      email: "sahilkh3014@gmail.com",
+                      password: "password123",
+                    });
+                    navigate({
+                      to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
+                      replace: true,
+                    });
+                  } catch {}
+                }}
+                disabled={login.isPending}
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
+              >
+                <div>
+                  <p className="font-semibold text-foreground">Global Higher Ed Admin</p>
+                  <p className="text-[11px] text-muted-foreground">sahilkh3014@gmail.com · Full Platform Access</p>
+                </div>
+                <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  setEmail("assessor@arui.org");
+                  setPassword("assessor123");
+                  try {
+                    const session = await login.mutateAsync({
+                      email: "assessor@arui.org",
+                      password: "assessor123",
+                    });
+                    navigate({
+                      to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
+                      replace: true,
+                    });
+                  } catch {}
+                }}
+                disabled={login.isPending}
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
+              >
+                <div>
+                  <p className="font-semibold text-foreground">Independent Assessor</p>
+                  <p className="text-[11px] text-muted-foreground">assessor@arui.org · Scoring & Verification Queue</p>
+                </div>
+                <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
             <span>Official Institutional Assessment Protocol</span>
-            <span className="font-mono text-[11px]">v4.0 Production</span>
+            <span className="font-mono text-[11px]">v4.0 / ECRI v6.0</span>
           </div>
         </div>
       </main>

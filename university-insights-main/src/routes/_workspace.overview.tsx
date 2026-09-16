@@ -32,6 +32,9 @@ export const Route = createFileRoute("/_workspace/overview")({
   component: OverviewPage,
 });
 
+import { getEngineConfig, type EngineType } from "@/lib/catalogue";
+import { useRouterState } from "@tanstack/react-router";
+
 const stageLinks = {
   profile: "/profile",
   orientation: "/orientation",
@@ -44,23 +47,34 @@ const stageLinks = {
 function OverviewPage() {
   const { assessmentId } = Route.useRouteContext();
   const { data: status } = useSuspenseQuery(queries.status(assessmentId));
+  const routerState = useRouterState();
+  const rawEngine = new URLSearchParams(routerState.location.search).get("engine");
+  const engine: EngineType = rawEngine?.toLowerCase() === "ecri" ? "ecri" : "arui";
+  const engineConfig = getEngineConfig(engine);
+
   const nextStage = status.stages.find((s) => s.state === "current");
 
   return (
     <PageContainer>
       <PageHeader
-        eyebrow="Workspace overview"
+        eyebrow={`${engineConfig.name} · Workspace Overview`}
         title={status.institutionName}
-        lede="A single place to see where the institutional assessment stands, who is contributing, and what the assessment needs next."
+        lede={`Institutional assessment workspace for ${engineConfig.title}. Track progress across profile, pulse, ${engineConfig.domainsLabel}, evidence vault, and executive intelligence.`}
         meta={
-          <StatusBadge tone="blue" dot>
-            Status · {assessmentStatusLabels[status.status]}
-          </StatusBadge>
+          <div className="flex items-center gap-2">
+            <span className={cn("font-bold px-2.5 py-1 rounded text-xs", engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy")}>
+              {engineConfig.shortTitle} Mode
+            </span>
+            <StatusBadge tone="blue" dot>
+              Status · {assessmentStatusLabels[status.status]}
+            </StatusBadge>
+          </div>
         }
         actions={
           nextStage && (
             <Link
               to={stageLinks[nextStage.id]}
+              search={{ engine }}
               className="inline-flex h-10 items-center gap-2 rounded-md bg-navy px-4 text-sm font-medium text-primary-foreground shadow-raised hover:bg-navy-deep"
             >
               Continue · {nextStage.label} <ArrowRight className="size-4" />
@@ -77,6 +91,7 @@ function OverviewPage() {
               <li key={step.id}>
                 <Link
                   to={stageLinks[step.id]}
+                  search={{ engine }}
                   className="group flex items-center gap-5 px-6 py-4 transition-colors hover:bg-ivory-deep/50"
                 >
                   <span
@@ -125,10 +140,11 @@ function OverviewPage() {
             <DefinitionList
               className="px-6"
               items={[
-                { term: "Cycle", detail: status.cycle },
+                { term: "Engine", detail: `${engineConfig.name} (${engineConfig.title})` },
+                { term: "Cycle", detail: `${status.cycle} Assessment` },
                 {
                   term: "Scope",
-                  detail: `${status.domains.filter((d) => d.inScope).length} of ${status.domains.length} domains`,
+                  detail: engineConfig.domainsLabel,
                 },
                 {
                   term: "Contributors",
@@ -136,17 +152,15 @@ function OverviewPage() {
                     ? status.contributors.map((c) => `${c.name} (${roleLabels[c.role]})`).join(", ")
                     : "None yet invited",
                 },
-                { term: "Methodology", detail: status.methodologyVersion },
+                { term: "Methodology", detail: engine === "ecri" ? "ECRI v6.0 Calibrated Master (132 Metrics)" : status.methodologyVersion },
                 { term: "Confidentiality", detail: status.confidentiality },
               ]}
             />
           </Panel>
           <Panel tone="muted" className="px-6 py-5">
-            <p className="eyebrow">Evidence</p>
+            <p className="eyebrow">Evidence Vault</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Most
-              institutions provide {status.evidence.coreTarget.min}–{status.evidence.coreTarget.max}{" "}
-              core items.
+              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Verified against the {engineConfig.shortTitle} evidence intelligence rubric.
             </p>
           </Panel>
         </div>

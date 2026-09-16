@@ -3,198 +3,924 @@
     "domainCode": "D01",
     "code": "C01",
     "fullCode": "D01-C01",
-    "name": "Institutional Strategy Strategy & Framework"
+    "name": "Labour-market sensing",
+    "sortOrder": 1
   },
   {
     "domainCode": "D01",
     "code": "C02",
     "fullCode": "D01-C02",
-    "name": "Institutional Strategy Implementation & Operations"
+    "name": "Occupational demand mapping",
+    "sortOrder": 2
   },
   {
     "domainCode": "D01",
     "code": "C03",
     "fullCode": "D01-C03",
-    "name": "Institutional Strategy Outcomes, Governance & Impact"
+    "name": "Employer voice architecture",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D01",
+    "code": "C04",
+    "fullCode": "D01-C04",
+    "name": "Emerging-skill detection",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D01",
+    "code": "C05",
+    "fullCode": "D01-C05",
+    "name": "Regional and sector intelligence",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D01",
+    "code": "C06",
+    "fullCode": "D01-C06",
+    "name": "Role/occupation mapping",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D01",
+    "code": "C07",
+    "fullCode": "D01-C07",
+    "name": "Demand-to-programme translation",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D01",
+    "code": "C08",
+    "fullCode": "D01-C08",
+    "name": "Employer signal reliability",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D01",
+    "code": "C09",
+    "fullCode": "D01-C09",
+    "name": "Forecasting and scenario use",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D01",
+    "code": "C10",
+    "fullCode": "D01-C10",
+    "name": "Demand intelligence governance",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D01",
+    "code": "C11",
+    "fullCode": "D01-C11",
+    "name": "Data coverage and refresh",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D01",
+    "code": "C12",
+    "fullCode": "D01-C12",
+    "name": "Decision use of demand intelligence",
+    "sortOrder": 12
   },
   {
     "domainCode": "D02",
     "code": "C01",
     "fullCode": "D02-C01",
-    "name": "Industry Ecosystem Strategy & Framework"
+    "name": "Graduate capability taxonomy",
+    "sortOrder": 1
   },
   {
     "domainCode": "D02",
     "code": "C02",
     "fullCode": "D02-C02",
-    "name": "Industry Ecosystem Implementation & Operations"
+    "name": "Capability-to-role mapping",
+    "sortOrder": 2
   },
   {
     "domainCode": "D02",
     "code": "C03",
     "fullCode": "D02-C03",
-    "name": "Industry Ecosystem Outcomes, Governance & Impact"
+    "name": "Proficiency definitions",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D02",
+    "code": "C04",
+    "fullCode": "D02-C04",
+    "name": "Programme capability mapping",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D02",
+    "code": "C05",
+    "fullCode": "D02-C05",
+    "name": "Capability assessment",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D02",
+    "code": "C06",
+    "fullCode": "D02-C06",
+    "name": "Capability gap identification",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D02",
+    "code": "C07",
+    "fullCode": "D02-C07",
+    "name": "Capability progression",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D02",
+    "code": "C08",
+    "fullCode": "D02-C08",
+    "name": "Employability credentials",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D02",
+    "code": "C09",
+    "fullCode": "D02-C09",
+    "name": "Employer validation",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D02",
+    "code": "C10",
+    "fullCode": "D02-C10",
+    "name": "Capability equity",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D02",
+    "code": "C11",
+    "fullCode": "D02-C11",
+    "name": "Capability governance",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D02",
+    "code": "C12",
+    "fullCode": "D02-C12",
+    "name": "Framework review",
+    "sortOrder": 12
   },
   {
     "domainCode": "D03",
     "code": "C01",
     "fullCode": "D03-C01",
-    "name": "Curriculum Co-Design Strategy & Framework"
+    "name": "Industry-informed outcomes",
+    "sortOrder": 1
   },
   {
     "domainCode": "D03",
     "code": "C02",
     "fullCode": "D03-C02",
-    "name": "Curriculum Co-Design Implementation & Operations"
+    "name": "Occupational relevance mapping",
+    "sortOrder": 2
   },
   {
     "domainCode": "D03",
     "code": "C03",
     "fullCode": "D03-C03",
-    "name": "Curriculum Co-Design Outcomes, Governance & Impact"
+    "name": "Curriculum currency",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D03",
+    "code": "C04",
+    "fullCode": "D03-C04",
+    "name": "Professional content relevance",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D03",
+    "code": "C05",
+    "fullCode": "D03-C05",
+    "name": "Industry validation",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D03",
+    "code": "C06",
+    "fullCode": "D03-C06",
+    "name": "Future-skill integration",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D03",
+    "code": "C07",
+    "fullCode": "D03-C07",
+    "name": "Programme review",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D03",
+    "code": "C08",
+    "fullCode": "D03-C08",
+    "name": "Curriculum flexibility",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D03",
+    "code": "C09",
+    "fullCode": "D03-C09",
+    "name": "Professional standards alignment",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D03",
+    "code": "C10",
+    "fullCode": "D03-C10",
+    "name": "Work-context coherence",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D03",
+    "code": "C11",
+    "fullCode": "D03-C11",
+    "name": "Employability accountability",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D03",
+    "code": "C12",
+    "fullCode": "D03-C12",
+    "name": "Curriculum responsiveness",
+    "sortOrder": 12
   },
   {
     "domainCode": "D04",
     "code": "C01",
     "fullCode": "D04-C01",
-    "name": "Experiential Learning Strategy & Framework"
+    "name": "Authentic projects",
+    "sortOrder": 1
   },
   {
     "domainCode": "D04",
     "code": "C02",
     "fullCode": "D04-C02",
-    "name": "Experiential Learning Implementation & Operations"
+    "name": "Work-integrated learning",
+    "sortOrder": 2
   },
   {
     "domainCode": "D04",
     "code": "C03",
     "fullCode": "D04-C03",
-    "name": "Experiential Learning Outcomes, Governance & Impact"
+    "name": "Internship/placement quality",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D04",
+    "code": "C04",
+    "fullCode": "D04-C04",
+    "name": "Live industry briefs",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D04",
+    "code": "C05",
+    "fullCode": "D04-C05",
+    "name": "Practice environments",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D04",
+    "code": "C06",
+    "fullCode": "D04-C06",
+    "name": "Experiential supervision",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D04",
+    "code": "C07",
+    "fullCode": "D04-C07",
+    "name": "Practice assessment",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D04",
+    "code": "C08",
+    "fullCode": "D04-C08",
+    "name": "Reflection and transfer",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D04",
+    "code": "C09",
+    "fullCode": "D04-C09",
+    "name": "Project employer relevance",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D04",
+    "code": "C10",
+    "fullCode": "D04-C10",
+    "name": "Equitable access",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D04",
+    "code": "C11",
+    "fullCode": "D04-C11",
+    "name": "Employer participation",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D04",
+    "code": "C12",
+    "fullCode": "D04-C12",
+    "name": "Experiential outcomes",
+    "sortOrder": 12
   },
   {
     "domainCode": "D05",
     "code": "C01",
     "fullCode": "D05-C01",
-    "name": "Career Services Strategy & Framework"
+    "name": "Career service governance",
+    "sortOrder": 1
   },
   {
     "domainCode": "D05",
     "code": "C02",
     "fullCode": "D05-C02",
-    "name": "Career Services Implementation & Operations"
+    "name": "Career guidance",
+    "sortOrder": 2
   },
   {
     "domainCode": "D05",
     "code": "C03",
     "fullCode": "D05-C03",
-    "name": "Career Services Outcomes, Governance & Impact"
+    "name": "Career coaching",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D05",
+    "code": "C04",
+    "fullCode": "D05-C04",
+    "name": "Career exploration",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D05",
+    "code": "C05",
+    "fullCode": "D05-C05",
+    "name": "Job-search readiness",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D05",
+    "code": "C06",
+    "fullCode": "D05-C06",
+    "name": "Interview and selection preparation",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D05",
+    "code": "C07",
+    "fullCode": "D05-C07",
+    "name": "Placement preparation",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D05",
+    "code": "C08",
+    "fullCode": "D05-C08",
+    "name": "Occupational information",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D05",
+    "code": "C09",
+    "fullCode": "D05-C09",
+    "name": "Employer exposure",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D05",
+    "code": "C10",
+    "fullCode": "D05-C10",
+    "name": "Career support equity",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D05",
+    "code": "C11",
+    "fullCode": "D05-C11",
+    "name": "Service utilisation",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D05",
+    "code": "C12",
+    "fullCode": "D05-C12",
+    "name": "Transition-to-work support",
+    "sortOrder": 12
   },
   {
     "domainCode": "D06",
     "code": "C01",
     "fullCode": "D06-C01",
-    "name": "Applied Competencies Strategy & Framework"
+    "name": "Communication",
+    "sortOrder": 1
   },
   {
     "domainCode": "D06",
     "code": "C02",
     "fullCode": "D06-C02",
-    "name": "Applied Competencies Implementation & Operations"
+    "name": "Teamwork",
+    "sortOrder": 2
   },
   {
     "domainCode": "D06",
     "code": "C03",
     "fullCode": "D06-C03",
-    "name": "Applied Competencies Outcomes, Governance & Impact"
+    "name": "Problem solving",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D06",
+    "code": "C04",
+    "fullCode": "D06-C04",
+    "name": "Critical thinking",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D06",
+    "code": "C05",
+    "fullCode": "D06-C05",
+    "name": "Professional judgement",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D06",
+    "code": "C06",
+    "fullCode": "D06-C06",
+    "name": "Leadership and initiative",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D06",
+    "code": "C07",
+    "fullCode": "D06-C07",
+    "name": "Adaptability and learning agility",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D06",
+    "code": "C08",
+    "fullCode": "D06-C08",
+    "name": "Professional work behaviour",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D06",
+    "code": "C09",
+    "fullCode": "D06-C09",
+    "name": "Creativity and innovation",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D06",
+    "code": "C10",
+    "fullCode": "D06-C10",
+    "name": "Ethical judgement",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D06",
+    "code": "C11",
+    "fullCode": "D06-C11",
+    "name": "Self-management and resilience",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D06",
+    "code": "C12",
+    "fullCode": "D06-C12",
+    "name": "Interpersonal effectiveness",
+    "sortOrder": 12
   },
   {
     "domainCode": "D07",
     "code": "C01",
     "fullCode": "D07-C01",
-    "name": "Assessment Integrity Strategy & Framework"
+    "name": "Digital literacy",
+    "sortOrder": 1
   },
   {
     "domainCode": "D07",
     "code": "C02",
     "fullCode": "D07-C02",
-    "name": "Assessment Integrity Implementation & Operations"
+    "name": "AI work literacy",
+    "sortOrder": 2
   },
   {
     "domainCode": "D07",
     "code": "C03",
     "fullCode": "D07-C03",
-    "name": "Assessment Integrity Outcomes, Governance & Impact"
+    "name": "AI-assisted productivity",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D07",
+    "code": "C04",
+    "fullCode": "D07-C04",
+    "name": "AI judgement and verification",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D07",
+    "code": "C05",
+    "fullCode": "D07-C05",
+    "name": "Digital collaboration",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D07",
+    "code": "C06",
+    "fullCode": "D07-C06",
+    "name": "Data literacy",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D07",
+    "code": "C07",
+    "fullCode": "D07-C07",
+    "name": "Digital problem solving",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D07",
+    "code": "C08",
+    "fullCode": "D07-C08",
+    "name": "Cyber/privacy work readiness",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D07",
+    "code": "C09",
+    "fullCode": "D07-C09",
+    "name": "Tool adaptability",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D07",
+    "code": "C10",
+    "fullCode": "D07-C10",
+    "name": "Human-AI collaboration",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D07",
+    "code": "C11",
+    "fullCode": "D07-C11",
+    "name": "AI-era role awareness",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D07",
+    "code": "C12",
+    "fullCode": "D07-C12",
+    "name": "Digital/AI validation",
+    "sortOrder": 12
   },
   {
     "domainCode": "D08",
     "code": "C01",
     "fullCode": "D08-C01",
-    "name": "Entrepreneurship Strategy & Framework"
+    "name": "Portfolio architecture",
+    "sortOrder": 1
   },
   {
     "domainCode": "D08",
     "code": "C02",
     "fullCode": "D08-C02",
-    "name": "Entrepreneurship Implementation & Operations"
+    "name": "Project evidence",
+    "sortOrder": 2
   },
   {
     "domainCode": "D08",
     "code": "C03",
     "fullCode": "D08-C03",
-    "name": "Entrepreneurship Outcomes, Governance & Impact"
+    "name": "Work-sample quality",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D08",
+    "code": "C04",
+    "fullCode": "D08-C04",
+    "name": "Capability storytelling",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D08",
+    "code": "C05",
+    "fullCode": "D08-C05",
+    "name": "CV/resume quality",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D08",
+    "code": "C06",
+    "fullCode": "D08-C06",
+    "name": "Interview evidence",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D08",
+    "code": "C07",
+    "fullCode": "D08-C07",
+    "name": "Professional digital presence",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D08",
+    "code": "C08",
+    "fullCode": "D08-C08",
+    "name": "Credentials and certifications",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D08",
+    "code": "C09",
+    "fullCode": "D08-C09",
+    "name": "Employer-facing signalling",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D08",
+    "code": "C10",
+    "fullCode": "D08-C10",
+    "name": "Student evidence ownership",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D08",
+    "code": "C11",
+    "fullCode": "D08-C11",
+    "name": "Evidence authenticity",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D08",
+    "code": "C12",
+    "fullCode": "D08-C12",
+    "name": "Signal effectiveness",
+    "sortOrder": 12
   },
   {
     "domainCode": "D09",
     "code": "C01",
     "fullCode": "D09-C01",
-    "name": "Placement Architecture Strategy & Framework"
+    "name": "Employer relationship strategy",
+    "sortOrder": 1
   },
   {
     "domainCode": "D09",
     "code": "C02",
     "fullCode": "D09-C02",
-    "name": "Placement Architecture Implementation & Operations"
+    "name": "Employer network breadth",
+    "sortOrder": 2
   },
   {
     "domainCode": "D09",
     "code": "C03",
     "fullCode": "D09-C03",
-    "name": "Placement Architecture Outcomes, Governance & Impact"
+    "name": "Advisory mechanisms",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D09",
+    "code": "C04",
+    "fullCode": "D09-C04",
+    "name": "Industry co-creation",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D09",
+    "code": "C05",
+    "fullCode": "D09-C05",
+    "name": "Recruiter engagement",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D09",
+    "code": "C06",
+    "fullCode": "D09-C06",
+    "name": "Recruitment quality",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D09",
+    "code": "C07",
+    "fullCode": "D09-C07",
+    "name": "Internship partnerships",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D09",
+    "code": "C08",
+    "fullCode": "D09-C08",
+    "name": "Mentoring and networking",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D09",
+    "code": "C09",
+    "fullCode": "D09-C09",
+    "name": "Employer confidence",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D09",
+    "code": "C10",
+    "fullCode": "D09-C10",
+    "name": "Repeat employer relationships",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D09",
+    "code": "C11",
+    "fullCode": "D09-C11",
+    "name": "Employer diversity",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D09",
+    "code": "C12",
+    "fullCode": "D09-C12",
+    "name": "Ecosystem governance",
+    "sortOrder": 12
   },
   {
     "domainCode": "D10",
     "code": "C01",
     "fullCode": "D10-C01",
-    "name": "Alumni Engagement Strategy & Framework"
+    "name": "Outcome coverage",
+    "sortOrder": 1
   },
   {
     "domainCode": "D10",
     "code": "C02",
     "fullCode": "D10-C02",
-    "name": "Alumni Engagement Implementation & Operations"
+    "name": "Employment relevance",
+    "sortOrder": 2
   },
   {
     "domainCode": "D10",
     "code": "C03",
     "fullCode": "D10-C03",
-    "name": "Alumni Engagement Outcomes, Governance & Impact"
+    "name": "Role quality",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D10",
+    "code": "C04",
+    "fullCode": "D10-C04",
+    "name": "Compensation quality",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D10",
+    "code": "C05",
+    "fullCode": "D10-C05",
+    "name": "Employer quality",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D10",
+    "code": "C06",
+    "fullCode": "D10-C06",
+    "name": "Sector and role distribution",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D10",
+    "code": "C07",
+    "fullCode": "D10-C07",
+    "name": "Time-to-employment",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D10",
+    "code": "C08",
+    "fullCode": "D10-C08",
+    "name": "Outcome transparency",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D10",
+    "code": "C09",
+    "fullCode": "D10-C09",
+    "name": "Underemployment and mismatch",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D10",
+    "code": "C10",
+    "fullCode": "D10-C10",
+    "name": "Further study and entrepreneurship",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D10",
+    "code": "C11",
+    "fullCode": "D10-C11",
+    "name": "Outcome durability",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D10",
+    "code": "C12",
+    "fullCode": "D10-C12",
+    "name": "Outcome equity",
+    "sortOrder": 12
   },
   {
     "domainCode": "D11",
     "code": "C01",
     "fullCode": "D11-C01",
-    "name": "Continuous Calibration Strategy & Framework"
+    "name": "Career adaptability",
+    "sortOrder": 1
   },
   {
     "domainCode": "D11",
     "code": "C02",
     "fullCode": "D11-C02",
-    "name": "Continuous Calibration Implementation & Operations"
+    "name": "Career self-management",
+    "sortOrder": 2
   },
   {
     "domainCode": "D11",
     "code": "C03",
     "fullCode": "D11-C03",
-    "name": "Continuous Calibration Outcomes, Governance & Impact"
+    "name": "Lifelong learning orientation",
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D11",
+    "code": "C04",
+    "fullCode": "D11-C04",
+    "name": "Occupational mobility",
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D11",
+    "code": "C05",
+    "fullCode": "D11-C05",
+    "name": "Transition readiness",
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D11",
+    "code": "C06",
+    "fullCode": "D11-C06",
+    "name": "Alumni career intelligence",
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D11",
+    "code": "C07",
+    "fullCode": "D11-C07",
+    "name": "Graduate trajectory tracking",
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D11",
+    "code": "C08",
+    "fullCode": "D11-C08",
+    "name": "Outcome feedback loops",
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D11",
+    "code": "C09",
+    "fullCode": "D11-C09",
+    "name": "Employability analytics",
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D11",
+    "code": "C10",
+    "fullCode": "D11-C10",
+    "name": "Post-graduation support",
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D11",
+    "code": "C11",
+    "fullCode": "D11-C11",
+    "name": "Institutional learning",
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D11",
+    "code": "C12",
+    "fullCode": "D11-C12",
+    "name": "Continuous improvement",
+    "sortOrder": 12
   }
 ]
