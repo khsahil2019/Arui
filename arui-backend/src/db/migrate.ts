@@ -12,16 +12,29 @@ export async function migrate() {
   const sql = `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+    -- Products Master (ARUI, ECRI, and future Higher Education methodologies)
+    CREATE TABLE IF NOT EXISTS products (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      code VARCHAR(50) UNIQUE NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      tagline VARCHAR(255),
+      description TEXT,
+      category VARCHAR(100) DEFAULT 'Higher Education',
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
     -- Methodology Versions (Immutable Registry Releases)
     CREATE TABLE IF NOT EXISTS methodology_versions (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) DEFAULT 'arui',
       version VARCHAR(50) UNIQUE NOT NULL,
       name VARCHAR(255) NOT NULL,
       is_active BOOLEAN DEFAULT false,
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
-    -- 11 Domains
+    -- 11 Dimensions / Domains
     CREATE TABLE IF NOT EXISTS domains (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
@@ -45,7 +58,7 @@ export async function migrate() {
       UNIQUE(methodology_version_id, full_code)
     );
 
-    -- 143 Metrics
+    -- Canonical Metrics (143 for ARUI, 132 for ECRI)
     CREATE TABLE IF NOT EXISTS metrics (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
@@ -100,7 +113,7 @@ export async function migrate() {
       sort_order INT DEFAULT 0
     );
 
-    -- Institutional Data Items (23 numeric items)
+    -- Institutional Data Items
     CREATE TABLE IF NOT EXISTS institutional_data_definitions (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
@@ -124,7 +137,7 @@ export async function migrate() {
       metric_link VARCHAR(100)
     );
 
-    -- Cross-Domain Rules (CD01..CD25)
+    -- Cross-Domain & Contradiction Rules
     CREATE TABLE IF NOT EXISTS cross_domain_rules (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
@@ -136,7 +149,7 @@ export async function migrate() {
       from_required_r INT
     );
 
-    -- Anti-Gaming Rules (AG01..AG10)
+    -- Anti-Gaming Rules
     CREATE TABLE IF NOT EXISTS anti_gaming_rules (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
@@ -146,6 +159,91 @@ export async function migrate() {
       evidence_signal TEXT,
       action TEXT NOT NULL,
       scoring_protection TEXT NOT NULL
+    );
+
+    -- Assessor Calibration & Adjudication Rules
+    CREATE TABLE IF NOT EXISTS calibration_rules (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      methodology_version_id UUID REFERENCES methodology_versions(id) ON DELETE CASCADE,
+      rule_code VARCHAR(50) NOT NULL,
+      domain_code VARCHAR(10),
+      metric_full_code VARCHAR(50),
+      category VARCHAR(50) DEFAULT 'CALIBRATION',
+      decision_test TEXT NOT NULL,
+      guidance_text TEXT NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Generic Badge Definitions Engine
+    CREATE TABLE IF NOT EXISTS badge_definitions (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      code VARCHAR(50) NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      meaning TEXT NOT NULL,
+      difficulty VARCHAR(50) DEFAULT 'Gold',
+      criteria_json JSONB DEFAULT '{}',
+      requirements_json JSONB DEFAULT '{}',
+      award_rule TEXT,
+      validity_months INT DEFAULT 12,
+      icon VARCHAR(100) DEFAULT 'award',
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      UNIQUE(product_code, code)
+    );
+
+    -- Dynamic Report Branding Configuration (Admin Controlled)
+    CREATE TABLE IF NOT EXISTS brand_configs (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      institution_id UUID REFERENCES institutions(id) ON DELETE CASCADE,
+      logo_url TEXT,
+      header_text TEXT,
+      footer_text TEXT,
+      contact_email VARCHAR(255),
+      contact_phone VARCHAR(100),
+      contact_whatsapp VARCHAR(100),
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Dynamic Pricing (Admin / Backend Controlled)
+    CREATE TABLE IF NOT EXISTS product_pricing (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      tier_name VARCHAR(100) DEFAULT 'Standard Institutional Assessment',
+      currency VARCHAR(10) DEFAULT 'USD',
+      amount NUMERIC(10,2) NOT NULL DEFAULT 4999.00,
+      features_json JSONB DEFAULT '[]',
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Dynamic Call-To-Action (Admin Controlled)
+    CREATE TABLE IF NOT EXISTS cta_configs (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      cta_text VARCHAR(255) NOT NULL DEFAULT 'Request Institutional Assessment',
+      cta_link TEXT DEFAULT '/contact',
+      cta_visibility BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Institutional Enquiries Capture
+    CREATE TABLE IF NOT EXISTS enquiries (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      institution_name VARCHAR(255) NOT NULL,
+      designation VARCHAR(255),
+      email VARCHAR(255) NOT NULL,
+      phone VARCHAR(100),
+      whatsapp VARCHAR(100),
+      message TEXT,
+      status VARCHAR(50) DEFAULT 'NEW',
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
     -- Institutions Master
@@ -175,6 +273,7 @@ export async function migrate() {
     -- Assessments Lifecycle State Machine
     CREATE TABLE IF NOT EXISTS assessments (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) DEFAULT 'arui',
       institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
       methodology_version_id UUID NOT NULL REFERENCES methodology_versions(id),
       title VARCHAR(255) NOT NULL,
@@ -185,6 +284,17 @@ export async function migrate() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
+
+    -- Alter table safely if product_code column is not yet present on existing tables
+    DO $$ 
+    BEGIN
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='assessments' AND column_name='product_code') THEN
+        ALTER TABLE assessments ADD COLUMN product_code VARCHAR(50) DEFAULT 'arui';
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='methodology_versions' AND column_name='product_code') THEN
+        ALTER TABLE methodology_versions ADD COLUMN product_code VARCHAR(50) DEFAULT 'arui';
+      END IF;
+    END $$;
 
     -- 25-Field Institution Profile (P0-4 context engine inputs)
     CREATE TABLE IF NOT EXISTS institution_profiles (
@@ -213,7 +323,7 @@ export async function migrate() {
       UNIQUE(assessment_id, prompt_id)
     );
 
-    -- Institutional Data Values (23 items with provided, not_provided, not_sure, na)
+    -- Institutional Data Values
     CREATE TABLE IF NOT EXISTS assessment_institutional_data (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
@@ -269,7 +379,7 @@ export async function migrate() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
-    -- Assessor M/I/O Scoring (Strict P0-3 Formula: 100 * (0.45M + 0.30I + 0.25O)/5 or 100 * (0.60M + 0.40I)/5)
+    -- Assessor M/I/O Scoring (Strict Formula: 100 * (0.45M + 0.30I + 0.25O)/5 or 100 * (0.60M + 0.40I)/5)
     CREATE TABLE IF NOT EXISTS metric_assessments (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
@@ -288,7 +398,7 @@ export async function migrate() {
       UNIQUE(assessment_id, metric_full_code)
     );
 
-    -- Cross-Domain Findings (CD01..CD25 - Diagnostic only, 0 score effect)
+    -- Cross-Domain Findings (Diagnostic only, 0 score effect)
     CREATE TABLE IF NOT EXISTS cross_domain_findings (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
@@ -301,7 +411,7 @@ export async function migrate() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
-    -- Anti-Gaming Flags (AG01..AG10)
+    -- Anti-Gaming Flags
     CREATE TABLE IF NOT EXISTS anti_gaming_flags (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
@@ -332,12 +442,13 @@ export async function migrate() {
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
 
-    -- Reports (JSON Payload + Generated PDF)
+    -- Canonical Reports (Payload + Generated PDF)
     CREATE TABLE IF NOT EXISTS reports (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
       assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
       score_run_id UUID REFERENCES score_runs(id) ON DELETE SET NULL,
-      version VARCHAR(50) DEFAULT 'preliminary',
+      report_type VARCHAR(50) DEFAULT 'EXECUTIVE_REPORT',
+      version VARCHAR(50) DEFAULT 'canonical_v1',
       payload_json JSONB NOT NULL,
       pdf_path TEXT,
       generated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

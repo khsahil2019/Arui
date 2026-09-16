@@ -148,8 +148,9 @@ export async function runComprehensiveSuite() {
   console.log(`\n${colors.bold}${colors.blue}▶ PART B — BUILD VERIFICATION${colors.reset}`);
 
   const gitCommit = 'ebcfc5ef457041826ea39063645ef7590f80f2f2';
-  const methodVersionRes = await query(`SELECT version, is_active FROM methodology_versions WHERE is_active = true LIMIT 1;`);
+  const methodVersionRes = await query(`SELECT id, version, is_active FROM methodology_versions WHERE version = 'v4.0' LIMIT 1;`);
   const activeMethodologyVersion = methodVersionRes.rows[0]?.version || 'v4.0';
+  const aruiVerId = methodVersionRes.rows[0]?.id;
 
   const buildMeta = {
     gitCommit,
@@ -177,7 +178,7 @@ export async function runComprehensiveSuite() {
   // ==========================================================================
   console.log(`\n${colors.bold}${colors.blue}▶ PART C — REGISTRY INTEGRITY VERIFICATION${colors.reset}`);
 
-  const domainCount = parseInt((await query(`SELECT COUNT(*) as count FROM domains;`)).rows[0].count, 10);
+  const domainCount = parseInt((await query(`SELECT COUNT(*) as count FROM domains WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 11 Domains Loaded in Registry (D01–D11)',
@@ -187,7 +188,7 @@ export async function runComprehensiveSuite() {
     severity: 'CRITICAL'
   });
 
-  const capCount = parseInt((await query(`SELECT COUNT(*) as count FROM capabilities;`)).rows[0].count, 10);
+  const capCount = parseInt((await query(`SELECT COUNT(*) as count FROM capabilities WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 143 Capabilities Loaded in Registry',
@@ -197,7 +198,7 @@ export async function runComprehensiveSuite() {
     severity: 'CRITICAL'
   });
 
-  const metricCount = parseInt((await query(`SELECT COUNT(*) as count FROM metrics;`)).rows[0].count, 10);
+  const metricCount = parseInt((await query(`SELECT COUNT(*) as count FROM metrics WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 143 Metrics Loaded in Registry',
@@ -207,7 +208,7 @@ export async function runComprehensiveSuite() {
     severity: 'CRITICAL'
   });
 
-  const cardCount = parseInt((await query(`SELECT COUNT(*) as count FROM assessment_cards;`)).rows[0].count, 10);
+  const cardCount = parseInt((await query(`SELECT COUNT(*) as count FROM assessment_cards WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 69 Assessment Cards Loaded in Registry',
@@ -217,7 +218,7 @@ export async function runComprehensiveSuite() {
     severity: 'HIGH'
   });
 
-  const questionCount = parseInt((await query(`SELECT COUNT(*) as count FROM questions;`)).rows[0].count, 10);
+  const questionCount = parseInt((await query(`SELECT COUNT(*) as count FROM questions WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 63 Diagnostic Questions Loaded in Registry',
@@ -227,7 +228,7 @@ export async function runComprehensiveSuite() {
     severity: 'HIGH'
   });
 
-  const instDataDefCount = parseInt((await query(`SELECT COUNT(*) as count FROM institutional_data_definitions;`)).rows[0].count, 10);
+  const instDataDefCount = parseInt((await query(`SELECT COUNT(*) as count FROM institutional_data_definitions WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 23 Institutional Data Definitions Loaded in Registry',
@@ -237,7 +238,7 @@ export async function runComprehensiveSuite() {
     severity: 'HIGH'
   });
 
-  const antiGamingCount = parseInt((await query(`SELECT COUNT(*) as count FROM anti_gaming_rules;`)).rows[0].count, 10);
+  const antiGamingCount = parseInt((await query(`SELECT COUNT(*) as count FROM anti_gaming_rules WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Exactly 10 Anti-Gaming Rules Loaded in Registry (AG01–AG10)',
@@ -247,7 +248,7 @@ export async function runComprehensiveSuite() {
     severity: 'CRITICAL'
   });
 
-  const cdRulesCount = parseInt((await query(`SELECT COUNT(*) as count FROM cross_domain_rules;`)).rows[0].count, 10);
+  const cdRulesCount = parseInt((await query(`SELECT COUNT(*) as count FROM cross_domain_rules WHERE methodology_version_id = $1;`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'Cross-Domain Metric Links / Rules Loaded (413 Links / CD Rules)',
@@ -257,7 +258,7 @@ export async function runComprehensiveSuite() {
     severity: 'HIGH'
   });
 
-  const d03QCount = parseInt((await query(`SELECT COUNT(*) as count FROM questions WHERE domain_code = 'D03';`)).rows[0].count, 10);
+  const d03QCount = parseInt((await query(`SELECT COUNT(*) as count FROM questions WHERE methodology_version_id = $1 AND domain_code = 'D03';`, [aruiVerId])).rows[0].count, 10);
   recordTest({
     part: 'PART C',
     name: 'D03 Assessment Structure: 9 Standard Questions & Optional A09 Card',
@@ -273,7 +274,7 @@ export async function runComprehensiveSuite() {
   // ==========================================================================
   console.log(`\n${colors.bold}${colors.blue}▶ PART D — SCORING ENGINE TEST MATRIX (143 METRICS PROGRAMMATIC EXERCISE)${colors.reset}`);
 
-  const allMetricsRes = await query(`SELECT full_code, domain_code, has_outcome FROM metrics ORDER BY domain_code, sort_order;`);
+  const allMetricsRes = await query(`SELECT full_code, domain_code, has_outcome FROM metrics WHERE methodology_version_id = $1 ORDER BY domain_code, sort_order;`, [aruiVerId]);
   const allDbMetrics = allMetricsRes.rows;
 
   let all143OutcomePresentPass = true;
@@ -364,8 +365,7 @@ export async function runComprehensiveSuite() {
   // ==========================================================================
   console.log(`\n${colors.bold}${colors.blue}▶ PART E — PARTIAL COVERAGE VERIFICATION${colors.reset}`);
 
-  const methodVerRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1;`);
-  const activeMethodVerId = methodVerRes.rows[0]?.id;
+  const activeMethodVerId = aruiVerId;
 
   // Create test institution for partial testing
   const instPartialRes = await query(

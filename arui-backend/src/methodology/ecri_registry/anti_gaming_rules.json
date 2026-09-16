@@ -1,0 +1,42 @@
+[
+  {
+    "code": "AG-ECRI-01",
+    "riskPattern": "Inflated Placement Percentage Claim without verifiable offer letters or salary tax receipts.",
+    "detectionLogic": "Claimed placement > 95% while median salary documentation is missing or unverified.",
+    "evidenceSignal": "Offer letters lacking corporate HR digital signatures or EPF/TDS documentation.",
+    "action": "Flag for mandatory lead assessor audit; score capped at Level 2 until corroborated.",
+    "scoringProtection": "Prevents unverified placement marketing claims from distorting D09 scores."
+  },
+  {
+    "code": "AG-ECRI-02",
+    "riskPattern": "Superficial MoU Accumulation without operational activity or student placements.",
+    "detectionLogic": "High number of active corporate MoUs (>50) but <5% of students engaged in joint programs.",
+    "evidenceSignal": "MoUs lacking joint annual progress reports or credit-bearing course logs.",
+    "action": "Invalidate inactive MoUs from partner score calculation in D02.",
+    "scoringProtection": "Ensures only active, credit-bearing partnerships contribute to institutional score."
+  },
+  {
+    "code": "AG-ECRI-03",
+    "riskPattern": "Unsupervised or Sub-Standard Internships counted toward mandatory graduation requirement.",
+    "detectionLogic": "Internship duration < 6 weeks or absence of formal employer supervisor evaluation.",
+    "evidenceSignal": "Generic participation certificates without detailed competency assessment rubric.",
+    "action": "Exclude unverified internships from D04 coverage calculation.",
+    "scoringProtection": "Safeguards authentic Work-Integrated Learning standards."
+  },
+  {
+    "code": "AG-ECRI-04",
+    "riskPattern": "Cherry-Picked Highest CTC Claim disguised as Institutional Median Compensation.",
+    "detectionLogic": "Disparity between average of top 5% offers and full cohort median > 400%.",
+    "evidenceSignal": "Single highest international outlier presented in institutional headline marketing.",
+    "action": "Enforce strict cohort median CTC reporting based on audited placement ledger.",
+    "scoringProtection": "Protects salary transparency and realistic student ROI benchmarking."
+  },
+  {
+    "code": "AG-ECRI-05",
+    "riskPattern": "Circular or Self-Referential Board of Studies approval without external industry panel.",
+    "detectionLogic": "Curriculum renewal records showing only internal academic signatures.",
+    "evidenceSignal": "Absence of external industry representative minutes or syllabus review notes.",
+    "action": "Cap D03 Curriculum Co-Design at Level 1 (Ad-hoc).",
+    "scoringProtection": "Mandates genuine external employer co-design in syllabus modernization."
+  }
+]

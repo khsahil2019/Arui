@@ -13,7 +13,8 @@
     "test:reproducibility": "tsx src/tests/reproducibility.test.ts",
     "test:verification": "tsx src/tests/ARUI_PRODUCTION_verification_suite.mjs",
     "test:adversarial": "tsx src/tests/ARUI_COMPREHENSIVE_ADVERSARIAL_SUITE.mjs",
-    "test:all": "npm test && npm run test:reproducibility && npm run test:verification && npm run test:adversarial"
+    "test:ecri": "tsx src/tests/methodology_integrity.test.ts && tsx src/tests/session_and_routing.test.ts && tsx src/tests/canonical_payload.test.ts && tsx src/tests/pdf_generation.test.ts && tsx src/tests/commercial_and_admin.test.ts",
+    "test:all": "npm test && npm run test:reproducibility && npm run test:verification && npm run test:adversarial && npm run test:ecri"
   },
   "keywords": [],
   "author": "",

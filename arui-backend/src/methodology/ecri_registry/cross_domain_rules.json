@@ -1,0 +1,26 @@
+[
+  {
+    "ruleId": "CD-ECRI-01",
+    "fromMetric": "D09-M01",
+    "toMetric": "D02-M01",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
+  },
+  {
+    "ruleId": "CD-ECRI-02",
+    "fromMetric": "D04-M01",
+    "toMetric": "D03-M01",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 25,
+    "fromRequiredR": 4
+  },
+  {
+    "ruleId": "CD-ECRI-03",
+    "fromMetric": "D08-M02",
+    "toMetric": "D01-M02",
+    "fromScoreThreshold": 75,
+    "toScoreThreshold": 20,
+    "fromRequiredR": 3
+  }
+]

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkspaceRouteImport } from './routes/_workspace'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AssessorRouteImport } from './routes/assessor'
+import { Route as EcriRouteImport } from './routes/ecri'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as WorkspaceEvidenceRouteImport } from './routes/_workspace.evidence'
 import { Route as WorkspaceIntelligenceRouteImport } from './routes/_workspace.intelligence'
@@ -48,6 +49,11 @@ const AdminRoute = AdminRouteImport.update({
 const AssessorRoute = AssessorRouteImport.update({
   id: '/assessor',
   path: '/assessor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EcriRoute = EcriRouteImport.update({
+  id: '/ecri',
+  path: '/ecri',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/assessor': typeof AssessorRouteWithChildren
+  '/ecri': typeof EcriRoute
   '/login': typeof LoginRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/ecri': typeof EcriRoute
   '/login': typeof LoginRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/_workspace': typeof WorkspaceRouteWithChildren
   '/admin': typeof AdminRoute
   '/assessor': typeof AssessorRouteWithChildren
+  '/ecri': typeof EcriRoute
   '/login': typeof LoginRoute
   '/_workspace/evidence': typeof WorkspaceEvidenceRoute
   '/_workspace/intelligence': typeof WorkspaceIntelligenceRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/assessor'
+    | '/ecri'
     | '/login'
     | '/evidence'
     | '/intelligence'
@@ -231,6 +241,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/ecri'
     | '/login'
     | '/evidence'
     | '/intelligence'
@@ -253,6 +264,7 @@ export interface FileRouteTypes {
     | '/_workspace'
     | '/admin'
     | '/assessor'
+    | '/ecri'
     | '/login'
     | '/_workspace/evidence'
     | '/_workspace/intelligence'
@@ -277,6 +289,7 @@ export interface RootRouteChildren {
   WorkspaceRoute: typeof WorkspaceRouteWithChildren
   AdminRoute: typeof AdminRoute
   AssessorRoute: typeof AssessorRouteWithChildren
+  EcriRoute: typeof EcriRoute
   LoginRoute: typeof LoginRoute
 }
 
@@ -308,6 +321,13 @@ declare module '@tanstack/react-router' {
       path: '/assessor'
       fullPath: '/assessor'
       preLoaderRoute: typeof AssessorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ecri': {
+      id: '/ecri'
+      path: '/ecri'
+      fullPath: '/ecri'
+      preLoaderRoute: typeof EcriRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -499,6 +519,7 @@ const rootRouteChildren: RootRouteChildren = {
   WorkspaceRoute: WorkspaceRouteWithChildren,
   AdminRoute: AdminRoute,
   AssessorRoute: AssessorRouteWithChildren,
+  EcriRoute: EcriRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

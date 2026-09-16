@@ -1,0 +1,38 @@
+[
+  {
+    "scope": "ECRI_Global",
+    "level": 0,
+    "label": "Absent / Non-Existent",
+    "description": "No formalized policy, systematic mechanism, dedicated budget, or institutional execution exists. Activity is nonexistent or completely sporadic."
+  },
+  {
+    "scope": "ECRI_Global",
+    "level": 1,
+    "label": "Reactive / Ad-hoc",
+    "description": "Isolated informal initiatives exist within individual departments without institutional standardization, tracking, or dedicated leadership ownership."
+  },
+  {
+    "scope": "ECRI_Global",
+    "level": 2,
+    "label": "Emerging / Localized",
+    "description": "Documented policies and early frameworks exist in leading departments. Partial implementation with emerging evidence, but lacks campus-wide coverage."
+  },
+  {
+    "scope": "ECRI_Global",
+    "level": 3,
+    "label": "Structured / Standardized",
+    "description": "Formalized institutional framework operating across all academic units with dedicated budget, trained personnel, routine audits, and consistent verifiable evidence."
+  },
+  {
+    "scope": "ECRI_Global",
+    "level": 4,
+    "label": "Integrated / Institutionalized",
+    "description": "High-performing, fully integrated ecosystem. Co-designed with leading industry partners, measured against rigorous outcome benchmarks, and backed by high-confidence corroborated evidence."
+  },
+  {
+    "scope": "ECRI_Global",
+    "level": 5,
+    "label": "Adaptive / Sector-Leading",
+    "description": "Exemplary, sector-defining benchmark. Continuous labor market calibration, longitudinal impact tracking, proactive agile modernization, and national/global recognized excellence."
+  }
+]

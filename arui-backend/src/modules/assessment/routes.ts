@@ -154,6 +154,28 @@ export async function getAssessmentStatusView(assessmentId: string) {
   };
 }
 
+// Route: List all Higher Education Assessment Products
+router.get('/products', async (req, res) => {
+  try {
+    const productsRes = await query(
+      `SELECT p.*, 
+              pp.amount, pp.currency, pp.tier_name, pp.features_json,
+              cta.cta_text, cta.cta_link, cta.cta_visibility,
+              bc.logo_url, bc.header_text, bc.footer_text, bc.contact_email, bc.contact_phone, bc.contact_whatsapp
+       FROM products p
+       LEFT JOIN product_pricing pp ON pp.product_code = p.code AND pp.is_active = true
+       LEFT JOIN cta_configs cta ON cta.product_code = p.code
+       LEFT JOIN brand_configs bc ON bc.product_code = p.code AND bc.institution_id IS NULL
+       WHERE p.is_active = true
+       ORDER BY p.code ASC`
+    );
+    return res.json(productsRes.rows);
+  } catch (err) {
+    console.error('Error fetching products:', err);
+    return res.status(500).json({ error: 'Failed to fetch products' });
+  }
+});
+
 // Route: Get Assessment Status
 router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, async (req, res) => {
   try {
@@ -168,28 +190,95 @@ router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, as
   }
 });
 
-// Route: Get or Create default assessment
+// Route: List all assessments for user's institution
+router.get('/assessments', authenticate, async (req, res) => {
+  try {
+    const productCode = req.query.product as string | undefined;
+    let sql = `
+      SELECT a.*, i.name as institution_name, m.version as methodology_version, p.name as product_name
+      FROM assessments a
+      JOIN institutions i ON i.id = a.institution_id
+      JOIN methodology_versions m ON m.id = a.methodology_version_id
+      LEFT JOIN products p ON p.code = a.product_code
+    `;
+    const params: any[] = [];
+    const conditions: string[] = [];
+
+    if (req.user?.institutionId) {
+      conditions.push(`a.institution_id = $${params.length + 1}`);
+      params.push(req.user.institutionId);
+    }
+    if (productCode) {
+      conditions.push(`a.product_code = $${params.length + 1}`);
+      params.push(productCode);
+    }
+
+    if (conditions.length > 0) {
+      sql += ` WHERE ` + conditions.join(' AND ');
+    }
+    sql += ` ORDER BY a.created_at DESC`;
+
+    const aRes = await query(sql, params);
+    return res.json(aRes.rows);
+  } catch (err) {
+    console.error('Error listing assessments:', err);
+    return res.status(500).json({ error: 'Failed to list assessments' });
+  }
+});
+
+// Route: Get or Create active assessment for given product
 router.get('/assessments/active', authenticate, async (req, res) => {
   try {
+    const productCode = (req.query.product as string) || 'arui';
     let aRes;
     if (req.user?.institutionId) {
-      aRes = await query(`SELECT id FROM assessments WHERE institution_id = $1 ORDER BY created_at DESC LIMIT 1`, [req.user.institutionId]);
+      aRes = await query(
+        `SELECT id, product_code, title, status, stage FROM assessments 
+         WHERE institution_id = $1 AND (product_code = $2 OR (product_code IS NULL AND $2 = 'arui')) 
+         ORDER BY created_at DESC LIMIT 1`,
+        [req.user.institutionId, productCode]
+      );
     } else {
-      aRes = await query(`SELECT id FROM assessments ORDER BY created_at DESC LIMIT 1`);
+      aRes = await query(
+        `SELECT id, product_code, title, status, stage FROM assessments 
+         WHERE (product_code = $1 OR (product_code IS NULL AND $1 = 'arui')) 
+         ORDER BY created_at DESC LIMIT 1`,
+        [productCode]
+      );
     }
 
     if (aRes.rows.length === 0) {
-      return res.status(404).json({ error: 'No active assessment found' });
+      // Create one if none exists for this institution/product
+      const instId = req.user?.institutionId || (await query(`SELECT id FROM institutions LIMIT 1`)).rows[0]?.id;
+      const mvRes = await query(
+        `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true LIMIT 1`,
+        [productCode]
+      );
+      const versionId = mvRes.rows[0]?.id || (await query(`SELECT id FROM methodology_versions LIMIT 1`)).rows[0]?.id;
+
+      const title = productCode === 'ecri' 
+        ? 'Graduate Employability & Career Readiness Assessment' 
+        : 'Institutional AI Resilience Assessment';
+
+      const newAsm = await query(
+        `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
+         VALUES ($1, $2, $3, $4, 'DRAFT', 'profile', 'D01')
+         RETURNING id, product_code, title, status, stage`,
+        [productCode, instId, versionId, title]
+      );
+      return res.json(newAsm.rows[0]);
     }
-    return res.json({ id: aRes.rows[0].id });
+    return res.json(aRes.rows[0]);
   } catch (err) {
+    console.error('Error in get active assessment:', err);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 // Route: Create New Assessment
 router.post('/assessments', authenticate, async (req, res) => {
-  const { institutionId, title, scopeDomains } = req.body;
+  const { institutionId, title, scopeDomains, productCode } = req.body;
+  const targetProduct = productCode || 'arui';
   let targetInstitutionId = institutionId || req.user?.institutionId;
 
   if (req.user?.role === 'INSTITUTION_ADMIN') {
@@ -204,14 +293,18 @@ router.post('/assessments', authenticate, async (req, res) => {
   }
 
   try {
-    const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
+    const mvRes = await query(
+      `SELECT id FROM methodology_versions WHERE (product_code = $1 OR product_code IS NULL) AND is_active = true ORDER BY created_at DESC LIMIT 1`,
+      [targetProduct]
+    );
     const versionId = mvRes.rows[0]?.id;
 
+    const defaultScope = ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'];
     const insRes = await query(
-      `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, scope_domains_json)
-       VALUES ($1, $2, $3, 'DRAFT', 'profile', $4)
+      `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, scope_domains_json)
+       VALUES ($1, $2, $3, $4, 'DRAFT', 'profile', $5)
        RETURNING *`,
-      [targetInstitutionId, versionId, title || 'Institutional Assessment', JSON.stringify(scopeDomains || ['D01', 'D02', 'D03'])]
+      [targetProduct, targetInstitutionId, versionId, title || `${targetProduct.toUpperCase()} Assessment`, JSON.stringify(scopeDomains || defaultScope)]
     );
     return res.status(201).json(insRes.rows[0]);
   } catch (err) {
@@ -234,7 +327,7 @@ router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, asy
   }
 });
 
-// Route: Update Assessment (Guards against methodology version or direct score mutation)
+// Route: Update Assessment
 router.patch('/assessments/:id', authenticate, requireInstitutionAccess, async (req, res) => {
   const { methodologyVersionId, methodology_version_id, overallScore, score } = req.body;
 
@@ -246,17 +339,18 @@ router.patch('/assessments/:id', authenticate, requireInstitutionAccess, async (
     return res.status(400).json({ error: 'Scores are server-computed and cannot be directly mutated by client.' });
   }
 
-  const { title, stage, status } = req.body;
+  const { title, stage, status, currentDomain, current_domain } = req.body;
   try {
     const uRes = await query(
       `UPDATE assessments 
        SET title = COALESCE($1, title),
            stage = COALESCE($2, stage),
            status = COALESCE($3, status),
+           current_domain = COALESCE($4, current_domain),
            updated_at = NOW()
-       WHERE id = $4
+       WHERE id = $5
        RETURNING *`,
-      [title, stage, status, req.params.id]
+      [title, stage, status, currentDomain || current_domain, req.params.id]
     );
     if (uRes.rows.length === 0) return res.status(404).json({ error: 'Assessment not found' });
     return res.json(uRes.rows[0]);

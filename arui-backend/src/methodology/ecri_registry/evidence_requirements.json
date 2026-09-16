@@ -1,0 +1,178 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "D01-EV01",
+    "title": "Institutional Strategy, Employability Governance & Resourcing — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D01-M01"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-EV02",
+    "title": "Institutional Strategy, Employability Governance & Resourcing — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D01-M09"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-EV01",
+    "title": "Industry Ecosystem, Partnerships & Employer Integration — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D02-M01"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-EV02",
+    "title": "Industry Ecosystem, Partnerships & Employer Integration — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D02-M09"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-EV01",
+    "title": "Curriculum Co-Design, Skills Forecasting & Modernization — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D03-M01"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-EV02",
+    "title": "Curriculum Co-Design, Skills Forecasting & Modernization — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D03-M09"
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-EV01",
+    "title": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D04-M01"
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-EV02",
+    "title": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D04-M09"
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-EV01",
+    "title": "Career Services, Guidance, Mentorship & Student Agency — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D05-M01"
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-EV02",
+    "title": "Career Services, Guidance, Mentorship & Student Agency — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D05-M09"
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-EV01",
+    "title": "Applied Competencies, Digital Proficiency & Transversal Skills — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D06-M01"
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-EV02",
+    "title": "Applied Competencies, Digital Proficiency & Transversal Skills — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D06-M09"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-EV01",
+    "title": "Assessment Integrity, Authentic Evaluation & Industry Certification — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D07-M01"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-EV02",
+    "title": "Assessment Integrity, Authentic Evaluation & Industry Certification — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D07-M09"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-EV01",
+    "title": "Entrepreneurship, Venture Creation & Innovation Ecosystem — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D08-M01"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-EV02",
+    "title": "Entrepreneurship, Venture Creation & Innovation Ecosystem — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D08-M09"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-EV01",
+    "title": "Placement Architecture, Corporate Relations & Career Outcomes — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D09-M01"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-EV02",
+    "title": "Placement Architecture, Corporate Relations & Career Outcomes — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D09-M09"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-EV01",
+    "title": "Alumni Engagement, Career Tracking & Lifelong Progression — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D10-M01"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-EV02",
+    "title": "Alumni Engagement, Career Tracking & Lifelong Progression — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D10-M09"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-EV01",
+    "title": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment — Institutional Policy, Charter & Governing Minutes",
+    "quantity": "1-3 Official PDF Documents",
+    "requirement": "Mandatory",
+    "metricLink": "D11-M01"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-EV02",
+    "title": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment — Execution Audit, Partner Log & Outcome Verification Data",
+    "quantity": "1 Detailed Audit / Report Sheet",
+    "requirement": "Mandatory",
+    "metricLink": "D11-M09"
+  }
+]

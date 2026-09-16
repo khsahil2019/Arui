@@ -29,22 +29,25 @@ async function runE2ETests() {
   try {
     // 1. Database & Methodology Registry Integrity
     console.log('[1/8] Testing Methodology Registry Integrity...');
-    const domRes = await query(`SELECT count(*) as count FROM domains`);
+    const aruiMvRes = await query(`SELECT id FROM methodology_versions WHERE version = 'v4.0'`);
+    const aruiVersionId = aruiMvRes.rows[0]?.id;
+
+    const domRes = await query(`SELECT count(*) as count FROM domains WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(domRes.rows[0].count, 10) === 11, 'All 11 Domains loaded into database');
 
-    const metRes = await query(`SELECT count(*) as count FROM metrics`);
+    const metRes = await query(`SELECT count(*) as count FROM metrics WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(metRes.rows[0].count, 10) === 143, 'All 143 Metrics loaded into database');
 
-    const capRes = await query(`SELECT count(*) as count FROM capabilities`);
+    const capRes = await query(`SELECT count(*) as count FROM capabilities WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(capRes.rows[0].count, 10) === 143, 'All 143 Capabilities loaded into database');
 
-    const cardRes = await query(`SELECT count(*) as count FROM assessment_cards`);
+    const cardRes = await query(`SELECT count(*) as count FROM assessment_cards WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(cardRes.rows[0].count, 10) === 69, 'All 69 Assessment Cards loaded into database');
 
-    const qCountRes = await query(`SELECT count(*) as count FROM questions`);
+    const qCountRes = await query(`SELECT count(*) as count FROM questions WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(qCountRes.rows[0].count, 10) === 63, 'All 63 Diagnostic Questions loaded into database');
 
-    const antiGamingRes = await query(`SELECT count(*) as count FROM anti_gaming_rules`);
+    const antiGamingRes = await query(`SELECT count(*) as count FROM anti_gaming_rules WHERE methodology_version_id = $1`, [aruiVersionId]);
     assert(parseInt(antiGamingRes.rows[0].count, 10) === 10, 'All 10 Anti-Gaming rules active');
 
     // 2. Authentication & Isolated Tenant Setup
@@ -81,8 +84,7 @@ async function runE2ETests() {
 
     assert(!!user1 && !!user2, 'Dynamic test fixture users created successfully');
 
-    const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);
-    const versionId = mvRes.rows[0].id;
+    const versionId = aruiVersionId;
 
     const asmA = (await query(
       `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, scope_domains_json)

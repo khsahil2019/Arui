@@ -1,0 +1,266 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "D01-CARD1",
+    "name": "Institutional Strategy, Employability Governance & Resourcing — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D01-M01"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-CARD2",
+    "name": "Institutional Strategy, Employability Governance & Resourcing — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D01-M05"
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-CARD3",
+    "name": "Institutional Strategy, Employability Governance & Resourcing — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D01-M09"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-CARD1",
+    "name": "Industry Ecosystem, Partnerships & Employer Integration — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D02-M01"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-CARD2",
+    "name": "Industry Ecosystem, Partnerships & Employer Integration — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D02-M05"
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-CARD3",
+    "name": "Industry Ecosystem, Partnerships & Employer Integration — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D02-M09"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-CARD1",
+    "name": "Curriculum Co-Design, Skills Forecasting & Modernization — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D03-M01"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-CARD2",
+    "name": "Curriculum Co-Design, Skills Forecasting & Modernization — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D03-M05"
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-CARD3",
+    "name": "Curriculum Co-Design, Skills Forecasting & Modernization — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D03-M09"
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-CARD1",
+    "name": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D04-M01"
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-CARD2",
+    "name": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D04-M05"
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-CARD3",
+    "name": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D04-M09"
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-CARD1",
+    "name": "Career Services, Guidance, Mentorship & Student Agency — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D05-M01"
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-CARD2",
+    "name": "Career Services, Guidance, Mentorship & Student Agency — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D05-M05"
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-CARD3",
+    "name": "Career Services, Guidance, Mentorship & Student Agency — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D05-M09"
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-CARD1",
+    "name": "Applied Competencies, Digital Proficiency & Transversal Skills — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D06-M01"
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-CARD2",
+    "name": "Applied Competencies, Digital Proficiency & Transversal Skills — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D06-M05"
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-CARD3",
+    "name": "Applied Competencies, Digital Proficiency & Transversal Skills — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D06-M09"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-CARD1",
+    "name": "Assessment Integrity, Authentic Evaluation & Industry Certification — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D07-M01"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-CARD2",
+    "name": "Assessment Integrity, Authentic Evaluation & Industry Certification — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D07-M05"
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-CARD3",
+    "name": "Assessment Integrity, Authentic Evaluation & Industry Certification — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D07-M09"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-CARD1",
+    "name": "Entrepreneurship, Venture Creation & Innovation Ecosystem — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D08-M01"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-CARD2",
+    "name": "Entrepreneurship, Venture Creation & Innovation Ecosystem — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D08-M05"
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-CARD3",
+    "name": "Entrepreneurship, Venture Creation & Innovation Ecosystem — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D08-M09"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-CARD1",
+    "name": "Placement Architecture, Corporate Relations & Career Outcomes — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D09-M01"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-CARD2",
+    "name": "Placement Architecture, Corporate Relations & Career Outcomes — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D09-M05"
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-CARD3",
+    "name": "Placement Architecture, Corporate Relations & Career Outcomes — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D09-M09"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-CARD1",
+    "name": "Alumni Engagement, Career Tracking & Lifelong Progression — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D10-M01"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-CARD2",
+    "name": "Alumni Engagement, Career Tracking & Lifelong Progression — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D10-M05"
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-CARD3",
+    "name": "Alumni Engagement, Career Tracking & Lifelong Progression — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D10-M09"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-CARD1",
+    "name": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment — Governance, Mandate & Policy",
+    "format": "Structural Framework & Leadership Verification",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D11-M01"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-CARD2",
+    "name": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment — Operational Execution & Scale",
+    "format": "Operational Depth, Student Participation & Audit",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D11-M05"
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-CARD3",
+    "name": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment — Verifiable Outcomes & Impact",
+    "format": "Longitudinal Employer Outcomes & Impact Analysis",
+    "respondentAction": "Provide institutional evidence, operational metrics, and narrative self-assessment rating across governance, execution, and outcomes.",
+    "metricLink": "D11-M09"
+  }
+]

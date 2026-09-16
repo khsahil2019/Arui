@@ -35,7 +35,6 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -65,7 +64,8 @@ function LoginPage() {
             A whole-institution reading of readiness for an AI-shaped future.
           </h1>
           <p className="mt-6 text-[15px] leading-relaxed text-sidebar-foreground/70">
-            Evaluating 11 Domains, 143 Capabilities and 143 Metrics with context-calibrated maturity baselines and verifiable audit evidence.
+            Evaluating 11 Domains, 143 Capabilities and 143 Metrics with context-calibrated maturity
+            baselines and verifiable audit evidence.
           </p>
         </div>
         <div className="flex items-center justify-between text-xs text-sidebar-foreground/50">
@@ -171,4 +171,3 @@ function LoginPage() {
     </div>
   );
 }
-

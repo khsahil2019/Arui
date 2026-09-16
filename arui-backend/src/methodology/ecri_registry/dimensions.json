@@ -1,0 +1,68 @@
+[
+  {
+    "code": "D01",
+    "name": "Institutional Strategy, Employability Governance & Resourcing",
+    "purpose": "Assesses the strategic commitment, leadership governance, budgetary allocation, and key performance indicators driving graduate employability across all academic faculties.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D02",
+    "name": "Industry Ecosystem, Partnerships & Employer Integration",
+    "purpose": "Evaluates the breadth, depth, and institutionalization of corporate partnerships, advisory boards, joint research/innovation labs, and recurring employer engagement.",
+    "provisionalWeight": 0.11
+  },
+  {
+    "code": "D03",
+    "name": "Curriculum Co-Design, Skills Forecasting & Modernization",
+    "purpose": "Measures structured industry participation in syllabus design, dynamic responsiveness to labor market shifts, emerging technologies, and continuous curriculum renewal.",
+    "provisionalWeight": 0.11
+  },
+  {
+    "code": "D04",
+    "name": "Experiential Learning, Internships, Apprenticeships & Work-Integrated Learning",
+    "purpose": "Evaluates credit-bearing mandatory internships, live industry capstone projects, simulated work environments, clinical rotations, and apprenticeships.",
+    "provisionalWeight": 0.12
+  },
+  {
+    "code": "D05",
+    "name": "Career Services, Guidance, Mentorship & Student Agency",
+    "purpose": "Assesses professional career counseling, 1-on-1 career navigation, industry mentorship networks, resume clinics, interview masterclasses, and student self-advocacy.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D06",
+    "name": "Applied Competencies, Digital Proficiency & Transversal Skills",
+    "purpose": "Measures institutional integration of critical thinking, high-order problem solving, communication, leadership, ethical reasoning, and domain-specific digital tool fluencies.",
+    "provisionalWeight": 0.1
+  },
+  {
+    "code": "D07",
+    "name": "Assessment Integrity, Authentic Evaluation & Industry Certification",
+    "purpose": "Evaluates real-world performance-based assessments, workplace problem-solving evaluations, oral vivas, and embedded industry credentials/micro-certifications.",
+    "provisionalWeight": 0.09
+  },
+  {
+    "code": "D08",
+    "name": "Entrepreneurship, Venture Creation & Innovation Ecosystem",
+    "purpose": "Assesses institutional incubation infrastructure, seed funding, intellectual property commercialization support, student venture mentoring, and startup acceleration.",
+    "provisionalWeight": 0.08
+  },
+  {
+    "code": "D09",
+    "name": "Placement Architecture, Corporate Relations & Career Outcomes",
+    "purpose": "Evaluates the institutional campus recruitment infrastructure, employer diversity, median CTC progression, premier employer conversion, and career placement outcomes.",
+    "provisionalWeight": 0.11
+  },
+  {
+    "code": "D10",
+    "name": "Alumni Engagement, Career Tracking & Lifelong Progression",
+    "purpose": "Measures systematic long-term alumni career trajectory tracking (3-5-10 years), alumni mentorship contributions, continuous upskilling, and lifelong professional networks.",
+    "provisionalWeight": 0.04
+  },
+  {
+    "code": "D11",
+    "name": "Continuous Calibration, Evidence Intelligence & Labor Market Alignment",
+    "purpose": "Assesses institutional analytics on graduate market performance, employer satisfaction audits, longitudinal impact assessment, and systemic feedback loops.",
+    "provisionalWeight": 0.04
+  }
+]

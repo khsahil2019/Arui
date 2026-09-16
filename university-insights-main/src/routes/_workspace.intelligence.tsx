@@ -114,15 +114,21 @@ function ResultsPage() {
       <section className="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))] lg:items-start">
         <Panel tone="navy" className="px-7 py-6">
           <p className="eyebrow text-primary-foreground/60">
-            {results.coverage.assessed < results.coverage.total ? `Partial Assessment (${results.coverage.assessed}/${results.coverage.total} Domains)` : `Comprehensive (${results.coverage.codes})`}
+            {results.coverage.assessed < results.coverage.total
+              ? `Partial Assessment (${results.coverage.assessed}/${results.coverage.total} Domains)`
+              : `Comprehensive (${results.coverage.codes})`}
           </p>
           <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <span className="font-serif text-4xl leading-none">
-              {o.current !== null && o.current !== undefined ? maturityLabels[o.current] : "Withheld"}
+              {o.current !== null && o.current !== undefined
+                ? maturityLabels[o.current]
+                : "Withheld"}
             </span>
             <span className="text-sm text-primary-foreground/70">
               Required for this context:{" "}
-              <span className="text-primary-foreground">{maturityLabels[o.required] || "Structured"}</span>
+              <span className="text-primary-foreground">
+                {maturityLabels[o.required] || "Structured"}
+              </span>
             </span>
           </div>
           {o.current !== null && o.current !== undefined ? (
@@ -135,7 +141,8 @@ function ResultsPage() {
             />
           ) : (
             <div className="mt-4 rounded border border-white/20 bg-white/10 px-3 py-2 text-xs text-primary-foreground/80">
-              Overall institution-wide ARUI score is withheld until all 11 domains are evaluated. Individual domain baselines are displayed below.
+              Overall institution-wide ARUI score is withheld until all 11 domains are evaluated.
+              Individual domain baselines are displayed below.
             </div>
           )}
           <div className="mt-3 flex justify-between text-[11px] uppercase tracking-[0.1em] text-primary-foreground/60">

@@ -1,0 +1,200 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "C01",
+    "fullCode": "D01-C01",
+    "name": "Institutional Strategy Strategy & Framework"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C02",
+    "fullCode": "D01-C02",
+    "name": "Institutional Strategy Implementation & Operations"
+  },
+  {
+    "domainCode": "D01",
+    "code": "C03",
+    "fullCode": "D01-C03",
+    "name": "Institutional Strategy Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C01",
+    "fullCode": "D02-C01",
+    "name": "Industry Ecosystem Strategy & Framework"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C02",
+    "fullCode": "D02-C02",
+    "name": "Industry Ecosystem Implementation & Operations"
+  },
+  {
+    "domainCode": "D02",
+    "code": "C03",
+    "fullCode": "D02-C03",
+    "name": "Industry Ecosystem Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C01",
+    "fullCode": "D03-C01",
+    "name": "Curriculum Co-Design Strategy & Framework"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C02",
+    "fullCode": "D03-C02",
+    "name": "Curriculum Co-Design Implementation & Operations"
+  },
+  {
+    "domainCode": "D03",
+    "code": "C03",
+    "fullCode": "D03-C03",
+    "name": "Curriculum Co-Design Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C01",
+    "fullCode": "D04-C01",
+    "name": "Experiential Learning Strategy & Framework"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C02",
+    "fullCode": "D04-C02",
+    "name": "Experiential Learning Implementation & Operations"
+  },
+  {
+    "domainCode": "D04",
+    "code": "C03",
+    "fullCode": "D04-C03",
+    "name": "Experiential Learning Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C01",
+    "fullCode": "D05-C01",
+    "name": "Career Services Strategy & Framework"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C02",
+    "fullCode": "D05-C02",
+    "name": "Career Services Implementation & Operations"
+  },
+  {
+    "domainCode": "D05",
+    "code": "C03",
+    "fullCode": "D05-C03",
+    "name": "Career Services Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C01",
+    "fullCode": "D06-C01",
+    "name": "Applied Competencies Strategy & Framework"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C02",
+    "fullCode": "D06-C02",
+    "name": "Applied Competencies Implementation & Operations"
+  },
+  {
+    "domainCode": "D06",
+    "code": "C03",
+    "fullCode": "D06-C03",
+    "name": "Applied Competencies Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C01",
+    "fullCode": "D07-C01",
+    "name": "Assessment Integrity Strategy & Framework"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C02",
+    "fullCode": "D07-C02",
+    "name": "Assessment Integrity Implementation & Operations"
+  },
+  {
+    "domainCode": "D07",
+    "code": "C03",
+    "fullCode": "D07-C03",
+    "name": "Assessment Integrity Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C01",
+    "fullCode": "D08-C01",
+    "name": "Entrepreneurship Strategy & Framework"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C02",
+    "fullCode": "D08-C02",
+    "name": "Entrepreneurship Implementation & Operations"
+  },
+  {
+    "domainCode": "D08",
+    "code": "C03",
+    "fullCode": "D08-C03",
+    "name": "Entrepreneurship Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C01",
+    "fullCode": "D09-C01",
+    "name": "Placement Architecture Strategy & Framework"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C02",
+    "fullCode": "D09-C02",
+    "name": "Placement Architecture Implementation & Operations"
+  },
+  {
+    "domainCode": "D09",
+    "code": "C03",
+    "fullCode": "D09-C03",
+    "name": "Placement Architecture Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C01",
+    "fullCode": "D10-C01",
+    "name": "Alumni Engagement Strategy & Framework"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C02",
+    "fullCode": "D10-C02",
+    "name": "Alumni Engagement Implementation & Operations"
+  },
+  {
+    "domainCode": "D10",
+    "code": "C03",
+    "fullCode": "D10-C03",
+    "name": "Alumni Engagement Outcomes, Governance & Impact"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C01",
+    "fullCode": "D11-C01",
+    "name": "Continuous Calibration Strategy & Framework"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C02",
+    "fullCode": "D11-C02",
+    "name": "Continuous Calibration Implementation & Operations"
+  },
+  {
+    "domainCode": "D11",
+    "code": "C03",
+    "fullCode": "D11-C03",
+    "name": "Continuous Calibration Outcomes, Governance & Impact"
+  }
+]

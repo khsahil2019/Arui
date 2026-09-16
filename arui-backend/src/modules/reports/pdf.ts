@@ -1,14 +1,21 @@
 import PDFDocument from 'pdfkit';
 
 export function generateAssessmentPdfStream(payload: any, res: any) {
+  const isEcri = payload.report?.productCode === 'ecri' || payload.report?.productName?.includes('Employability');
+  const productCode = isEcri ? 'ecri' : 'arui';
+  const productTitle = isEcri ? 'EMPLOYABILITY & CAREER READINESS INDEX (ECRI)' : 'AI RESILIENT UNIVERSITY INDEX (ARUI)';
+  const productSub = isEcri ? 'Institutional Employability & Career Readiness Assessment Report' : 'Institutional AI Resilience Assessment Report';
+  const productAcronym = isEcri ? 'ECRI' : 'ARUI';
+  const branding = payload.branding || {};
+
   const doc = new PDFDocument({
     size: 'A4',
     margin: 40,
     bufferPages: true,
     info: {
-      Title: `ARUI Assessment Report — ${payload.institution?.name || 'Institution'}`,
-      Author: 'AI Resilient University Index (ARUI) / Rafts & Rivers',
-      Subject: 'Institutional AI Resilience Assessment Report',
+      Title: `${productAcronym} Assessment Report — ${payload.institution?.name || 'Institution'}`,
+      Author: `${productTitle} / Rafts & Rivers Higher Education Advisory`,
+      Subject: productSub,
     },
   });
 
@@ -25,286 +32,241 @@ export function generateAssessmentPdfStream(payload: any, res: any) {
   const AMBER = '#b45309';
   const GREEN = '#15803d';
 
-  const isPartial = payload.report?.isPartial ?? true;
+  const isPartial = payload.report?.isPartial ?? false;
   const institutionName = payload.institution?.name || 'Institution';
-  const methodologyVersion = payload.report?.methodologyVersion || 'ARUI v4.0';
+  const methodologyVersion = payload.report?.methodologyVersion || (isEcri ? 'ECRI v6.0' : 'ARUI v4.0');
   const cycle = payload.assessment?.cycle || '2026 Baseline';
-  const reportId = payload.report?.id || 'ARUI-REP';
+  const reportId = payload.report?.id || `${productAcronym}-REP`;
 
   // Helper function for section headings
   function addSectionHeader(title: string, yPos?: number) {
     if (yPos) doc.y = yPos;
-    doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text(title, 40, doc.y);
-    doc.moveDown(0.4);
+    doc.fillColor(NAVY).fontSize(12).font('Helvetica-Bold').text(title, 40, doc.y);
+    doc.moveDown(0.3);
     doc.rect(40, doc.y, 515, 1.5).fill(TEAL);
-    doc.moveDown(0.8);
+    doc.moveDown(0.6);
   }
 
   // ==========================================
   // PAGE 1: COVER & EXECUTIVE POSITION
   // ==========================================
-  // Top Banner
+  // Top Banner with Admin Header Text
   doc.rect(0, 0, doc.page.width, 130).fill(NAVY);
-  doc.fillColor('#ffffff').fontSize(22).font('Helvetica-Bold').text('AI RESILIENT UNIVERSITY INDEX', 40, 32);
-  doc.fontSize(12).font('Helvetica').fillColor('#93c5fd').text('Institutional AI Resilience Assessment Report', 40, 62);
-  doc.fontSize(9.5).font('Helvetica').fillColor('#cbd5e1').text(
-    `Methodology: ${methodologyVersion} · Assessed by Rafts & Rivers · Status: ${payload.report?.kind?.toUpperCase() || 'PRELIMINARY'}`,
+  doc.fillColor('#ffffff').fontSize(18).font('Helvetica-Bold').text(productTitle, 40, 28);
+  doc.fontSize(11).font('Helvetica').fillColor('#93c5fd').text(productSub, 40, 56);
+  doc.fontSize(8.5).font('Helvetica').fillColor('#cbd5e1').text(
+    `${branding.header_text || productTitle} · Methodology: ${methodologyVersion} · Status: ${payload.report?.kind?.toUpperCase() || 'OFFICIAL'}`,
     40,
-    82
+    78
+  );
+  doc.fontSize(8).font('Helvetica').fillColor('#cbd5e1').text(
+    `Contact: ${branding.contact_email || 'evaluations@he-advisory.org'} · Phone: ${branding.contact_phone || '+1 (800) 555-ECRI'}`,
+    40,
+    94
   );
 
   // Institution & Cycle Info
   doc.y = 145;
-  doc.fillColor(CHARCOAL).fontSize(18).font('Helvetica-Bold').text(institutionName, 40, doc.y);
-  doc.fontSize(10).font('Helvetica').fillColor(MUTED).text(
-    `Cycle: ${cycle} · Published: ${new Date(payload.report?.generatedAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · Report ID: ${reportId}`,
+  doc.fillColor(CHARCOAL).fontSize(17).font('Helvetica-Bold').text(institutionName, 40, doc.y);
+  doc.fontSize(9.5).font('Helvetica').fillColor(MUTED).text(
+    `Assessment Cycle: ${cycle} · Published: ${new Date(payload.report?.generatedAt || Date.now()).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · Report ID: ${reportId}`,
     40,
     doc.y + 4
   );
 
   // Executive Score Card Box
-  doc.y = 200;
-  doc.rect(40, doc.y, 515, isPartial ? 90 : 105).fillAndStroke(LIGHT_BG, BORDER);
+  doc.y = 195;
+  doc.rect(40, doc.y, 515, isPartial ? 90 : 100).fillAndStroke(LIGHT_BG, BORDER);
   
-  const boxTop = doc.y + 12;
-  doc.fillColor(NAVY).fontSize(12).font('Helvetica-Bold').text('Executive AI Resilience Position', 55, boxTop);
+  const boxTop = doc.y + 10;
+  doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(`Executive ${productAcronym} Performance Position`, 55, boxTop);
 
   if (isPartial) {
     doc.fillColor(AMBER).fontSize(10).font('Helvetica-Bold').text(
-      'Overall Institutional ARUI Index: Withheld',
+      `Overall Institutional ${productAcronym} Index: Withheld`,
       55,
-      boxTop + 24
+      boxTop + 22
     );
-    doc.fillColor(CHARCOAL).fontSize(9).font('Helvetica').text(
-      `Assessment coverage is partial (${payload.report?.assessedDomainsCount || 3} of 11 core domains evaluated). Institution-wide aggregate score is withheld until full 11-domain coverage is achieved. Individual assessed domain baselines are reported below.`,
+    doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text(
+      `Assessment coverage is partial (${payload.report?.assessedDomainsCount || 3} of 11 dimensions evaluated). Aggregate score is withheld until full 11-dimension coverage is achieved.`,
       55,
-      boxTop + 42,
+      boxTop + 38,
       { width: 485 }
     );
   } else {
-    doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Overall Institutional ARUI Index:', 55, boxTop + 24);
-    doc.fillColor(BLUE).fontSize(16).font('Helvetica-Bold').text(`${payload.overall?.domainScore ?? '—'}%`, 240, boxTop + 20);
+    doc.fillColor(CHARCOAL).fontSize(9.5).font('Helvetica').text(`Overall ${productAcronym} Index:`, 55, boxTop + 22);
+    doc.fillColor(BLUE).fontSize(16).font('Helvetica-Bold').text(`${payload.overall?.domainScore ?? '—'} / 100`, 220, boxTop + 18);
 
-    doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Observed Maturity:', 55, boxTop + 48);
-    doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(`Level ${payload.overall?.currentMaturity ?? '—'} of 5`, 240, boxTop + 48);
+    doc.fillColor(CHARCOAL).fontSize(9.5).font('Helvetica').text('Observed Maturity:', 55, boxTop + 44);
+    doc.fillColor(NAVY).fontSize(10).font('Helvetica-Bold').text(`Level ${payload.overall?.currentMaturity ?? '—'} of 5`, 220, boxTop + 44);
 
-    doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Required Maturity (Context Rd):', 55, boxTop + 68);
-    doc.fillColor(TEAL).fontSize(11).font('Helvetica-Bold').text(`Level ${payload.overall?.requiredMaturity ?? '—'} of 5`, 240, boxTop + 68);
+    doc.fillColor(CHARCOAL).fontSize(9.5).font('Helvetica').text('Required Context (Rd):', 55, boxTop + 64);
+    doc.fillColor(TEAL).fontSize(10).font('Helvetica-Bold').text(`Level ${payload.overall?.requiredMaturity ?? '—'} of 5`, 220, boxTop + 64);
 
-
-    doc.fillColor(CHARCOAL).fontSize(10).font('Helvetica').text('Transformation Distance:', 360, boxTop + 68);
-    doc.fillColor(AMBER).fontSize(11).font('Helvetica-Bold').text(
+    doc.fillColor(CHARCOAL).fontSize(9.5).font('Helvetica').text('Transformation Gap:', 350, boxTop + 64);
+    doc.fillColor(AMBER).fontSize(10).font('Helvetica-Bold').text(
       `${(payload.overall?.transformationDistance || 0) > 0 ? '+' : ''}${payload.overall?.transformationDistance ?? 0} Levels`,
-      480,
-      boxTop + 68
+      470,
+      boxTop + 64
     );
   }
 
   // Executive Summary Narrative
-  doc.y = isPartial ? 305 : 325;
+  doc.y = isPartial ? 300 : 310;
   addSectionHeader('1. Executive Diagnostic Interpretation');
-  doc.fillColor(CHARCOAL).fontSize(9.5).font('Helvetica').lineGap(3).text(
+  doc.fillColor(CHARCOAL).fontSize(9).font('Helvetica').lineGap(2.5).text(
     payload.executiveSummary?.narrative ||
-      'Holistic institutional assessment across strategy, governance, curriculum, faculty and learning systems.',
+      'Holistic institutional evaluation across strategy, governance, curriculum co-design, experiential learning, and career outcomes.',
     40,
     doc.y,
     { width: 515 }
   );
 
   // Key Strategic Priorities
-  doc.moveDown(1.2);
+  doc.moveDown(0.8);
   addSectionHeader('2. Priority Transformation Imperatives');
   const immediate = payload.priorities?.immediateActions || [];
   let priY = doc.y;
   for (const pri of immediate.slice(0, 3)) {
-    doc.fillColor(BLUE).fontSize(11).text('▪', 45, priY);
-    doc.fillColor(CHARCOAL).fontSize(9).font('Helvetica').text(pri, 60, priY, { width: 490 });
-    priY = doc.y + 6;
+    doc.fillColor(BLUE).fontSize(10).text('▪', 45, priY);
+    doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text(pri, 58, priY, { width: 490 });
+    priY = doc.y + 4;
   }
 
   // Cover Confidentiality Box at bottom
-  doc.rect(40, doc.page.height - 75, 515, 38).fill('#f1f5f9');
+  doc.rect(40, doc.page.height - 70, 515, 34).fill('#f1f5f9');
   doc.fillColor(MUTED).fontSize(7.5).font('Helvetica').text(
-    'CONFIDENTIALITY NOTICE: This diagnostic report is prepared strictly for university leadership. ARUI provides developmental institutional capability diagnostics and is not an accredited ranking, certification, or statutory compliance audit.',
+    `CONFIDENTIALITY NOTICE: This diagnostic report is prepared strictly for university leadership. ${branding.footer_text || 'Confidential & Proprietary © Higher Education Advisory Benchmark'}`,
     50,
-    doc.page.height - 65,
+    doc.page.height - 60,
     { width: 495, align: 'center' }
   );
 
   // ==========================================
-  // PAGE 2: 25-FIELD INSTITUTIONAL PROFILE
+  // PAGE 2: 11-DIMENSION SCOREBOARD & BREAKDOWN
   // ==========================================
   doc.addPage();
-  addSectionHeader('3. ARUI Institutional Profile & Context Calibration (25 Fields)');
-  doc.fillColor(MUTED).fontSize(8.5).font('Helvetica').text(
-    'Baseline organizational scale, demographic structure, and context factors used to calibrate Required Maturity (P0-4).',
+  addSectionHeader(`3. 11-Dimension ${productAcronym} Performance Scoreboard`);
+  doc.fillColor(MUTED).fontSize(8).font('Helvetica').text(
+    `Granular dimension-level performance comparing Observed Maturity with Context-Calibrated Target Maturity (Rd).`,
     40,
     doc.y
   );
-  doc.moveDown(0.8);
-
-  const profileGroups = payload.institution?.profile || [];
-  for (const grp of profileGroups) {
-    doc.fillColor(NAVY).fontSize(9.5).font('Helvetica-Bold').text(grp.group, 40, doc.y);
-    doc.moveDown(0.3);
-
-    // Render Field Table
-    let tableY = doc.y;
-    doc.rect(40, tableY, 515, 18).fill(NAVY);
-    doc.fillColor('#ffffff').fontSize(8).font('Helvetica-Bold').text('ID', 45, tableY + 5);
-    doc.text('Profile Parameter', 90, tableY + 5);
-    doc.text('Institutional Value', 310, tableY + 5);
-
-    let rowY = tableY + 18;
-    for (let idx = 0; idx < grp.fields.length; idx++) {
-      const f = grp.fields[idx];
-      const isEven = idx % 2 === 0;
-      doc.rect(40, rowY, 515, 18).fill(isEven ? LIGHT_BG : '#ffffff');
-      doc.rect(40, rowY, 515, 18).stroke(BORDER);
-
-      doc.fillColor(BLUE).fontSize(8).font('Helvetica-Bold').text(f.id, 45, rowY + 5);
-      doc.fillColor(CHARCOAL).fontSize(8).font('Helvetica').text(f.label, 90, rowY + 5, { width: 210, ellipsis: true });
-      doc.fillColor(NAVY).fontSize(8).font('Helvetica-Bold').text(String(f.value), 310, rowY + 5, { width: 235, ellipsis: true });
-      rowY += 18;
-    }
-    doc.y = rowY + 10;
-  }
-
-  // Methodology Architecture Card
   doc.moveDown(0.5);
-  addSectionHeader('4. Methodology Architecture & Scoring Formula');
-  doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').lineGap(2.5).text(
-    'The ARUI framework evaluates institutional resilience across 11 core domains, 143 capabilities, and 143 metrics. Metric scores are computed strictly server-side using standard rubric anchors:\n' +
-    '• Standard Metric Score (with Outcome): 100 × (0.45M + 0.30I + 0.25O) / 5\n' +
-    '• Standard Metric Score (Outcome N/A): 100 × (0.60M + 0.40I) / 5\n' +
-    '• Domain Score: Mean of applicable assessed metric scores.\n' +
-    '• Cross-Domain Diagnostics (CD01–CD25) and Context Calibration (Rd) are diagnostic controls that do not alter capability scores.',
-    40,
-    doc.y,
-    { width: 515 }
-  );
 
-  // ==========================================
-  // PAGE 3: 11-DOMAIN PROFILE & DIAGNOSTICS
-  // ==========================================
-  doc.addPage();
-  addSectionHeader('5. 11-Domain Institutional Resilience Breakdown');
-  doc.fillColor(MUTED).fontSize(8.5).font('Helvetica').text(
-    'Evaluation across all 11 ARUI domains comparing Observed Maturity with Context-Calibrated Required Maturity (Rd).',
-    40,
-    doc.y
-  );
-  doc.moveDown(0.6);
-
-  // Domain Table Header
   let domTableY = doc.y;
-  doc.rect(40, domTableY, 515, 20).fill(NAVY);
-  doc.fillColor('#ffffff').fontSize(8).font('Helvetica-Bold')
-    .text('Code', 45, domTableY + 6)
-    .text('Domain Pillar', 80, domTableY + 6)
-    .text('Observed', 290, domTableY + 6)
-    .text('Required', 345, domTableY + 6)
-    .text('Distance', 405, domTableY + 6)
-    .text('Score', 460, domTableY + 6)
-    .text('Status', 505, domTableY + 6);
+  doc.rect(40, domTableY, 515, 18).fill(NAVY);
+  doc.fillColor('#ffffff').fontSize(7.5).font('Helvetica-Bold')
+    .text('Code', 45, domTableY + 5)
+    .text('Dimension Pillar', 80, domTableY + 5)
+    .text('Observed', 290, domTableY + 5)
+    .text('Required', 345, domTableY + 5)
+    .text('Distance', 405, domTableY + 5)
+    .text('Score', 460, domTableY + 5)
+    .text('Status', 505, domTableY + 5);
 
-  let dRowY = domTableY + 20;
+  let dRowY = domTableY + 18;
   const domains = payload.domains || [];
   for (let i = 0; i < domains.length; i++) {
     const d = domains[i];
     const isEven = i % 2 === 0;
-    doc.rect(40, dRowY, 515, 20).fill(isEven ? LIGHT_BG : '#ffffff');
-    doc.rect(40, dRowY, 515, 20).stroke(BORDER);
+    doc.rect(40, dRowY, 515, 18).fill(isEven ? LIGHT_BG : '#ffffff');
+    doc.rect(40, dRowY, 515, 18).stroke(BORDER);
 
-    doc.fillColor(BLUE).fontSize(8).font('Helvetica-Bold').text(d.code, 45, dRowY + 6);
-    doc.fillColor(CHARCOAL).fontSize(7.5).font('Helvetica').text(d.name, 80, dRowY + 6, { width: 205, ellipsis: true });
-    doc.fillColor(CHARCOAL).fontSize(8).font('Helvetica-Bold').text(d.assessed ? `L${d.currentMaturity}` : '—', 300, dRowY + 6);
-    doc.fillColor(TEAL).text(`L${d.requiredMaturity}`, 355, dRowY + 6);
+    doc.fillColor(BLUE).fontSize(7.5).font('Helvetica-Bold').text(d.code, 45, dRowY + 5);
+    doc.fillColor(CHARCOAL).fontSize(7).font('Helvetica').text(d.name, 80, dRowY + 5, { width: 205, ellipsis: true });
+    doc.fillColor(CHARCOAL).fontSize(7.5).font('Helvetica-Bold').text(d.assessed ? `L${d.currentMaturity}` : '—', 300, dRowY + 5);
+    doc.fillColor(TEAL).text(`L${d.requiredMaturity}`, 355, dRowY + 5);
     doc.fillColor(d.transformationDistance > 0 ? AMBER : GREEN).text(
       d.assessed ? `${d.transformationDistance > 0 ? '+' : ''}${d.transformationDistance}` : '—',
       415,
-      dRowY + 6
+      dRowY + 5
     );
-    doc.fillColor(NAVY).text(d.assessed && d.domainScore !== null ? `${d.domainScore}%` : '—', 460, dRowY + 6);
-    doc.fillColor(d.assessed ? GREEN : MUTED).fontSize(7.5).font('Helvetica').text(d.assessed ? 'Assessed' : 'Pending', 505, dRowY + 6);
+    doc.fillColor(NAVY).text(d.assessed && d.domainScore !== null ? `${d.domainScore}%` : '—', 460, dRowY + 5);
+    doc.fillColor(d.assessed ? GREEN : MUTED).fontSize(7).font('Helvetica').text(d.assessed ? 'Assessed' : 'Pending', 505, dRowY + 5);
 
-    dRowY += 20;
+    dRowY += 18;
   }
 
-  doc.y = dRowY + 15;
-  addSectionHeader('6. Cross-Domain Diagnostics & Contradiction Alerts (CD01–CD25)');
+  doc.y = dRowY + 12;
+  addSectionHeader('4. Cross-Domain Diagnostic Signals & Contradiction Alerts');
   const findings = payload.crossDomain?.findings || [];
   if (findings.length === 0) {
-    doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text('No cross-domain contradictions or capability imbalances detected.', 45, doc.y);
+    doc.fillColor(CHARCOAL).fontSize(8).font('Helvetica').text('No cross-domain contradictions or capability imbalances detected.', 45, doc.y);
   } else {
     for (const f of findings.slice(0, 3)) {
-      doc.rect(40, doc.y, 515, 34).fillAndStroke('#fffbeb', '#fde68a');
-      doc.fillColor(AMBER).fontSize(8).font('Helvetica-Bold').text(`Diagnostic Signal [${f.ruleId || 'CD'}]: ${f.severity || 'OBSERVATION'}`, 50, doc.y + 5);
-      doc.fillColor(CHARCOAL).fontSize(7.5).font('Helvetica').text(f.message, 50, doc.y + 16, { width: 495 });
-      doc.y += 40;
+      doc.rect(40, doc.y, 515, 28).fillAndStroke('#fffbeb', '#fde68a');
+      doc.fillColor(AMBER).fontSize(7.5).font('Helvetica-Bold').text(`Diagnostic Signal [${f.ruleId || 'CD'}]: ${f.severity || 'OBSERVATION'}`, 48, doc.y + 4);
+      doc.fillColor(CHARCOAL).fontSize(7).font('Helvetica').text(f.message, 48, doc.y + 14, { width: 495 });
+      doc.y += 32;
     }
   }
 
   // ==========================================
-  // PAGE 4: EVIDENCE & TRANSFORMATION ROADMAP
+  // PAGE 3: GAP ANALYSIS & TRANSFORMATION ROADMAP
   // ==========================================
   doc.addPage();
-  addSectionHeader('7. Evidence Integrity & Verification Summary');
-  doc.fillColor(MUTED).fontSize(8.5).font('Helvetica').text(
-    'Assessor verification coverage across submitted institutional policies, curriculum rubrics, and data exports.',
-    40,
-    doc.y
-  );
-  doc.moveDown(0.6);
+  addSectionHeader('5. Detailed Gap Analysis (Observed vs Required Context Rd)');
+  
+  let gapTableY = doc.y;
+  doc.rect(40, gapTableY, 515, 18).fill(NAVY);
+  doc.fillColor('#ffffff').fontSize(7.5).font('Helvetica-Bold')
+    .text('Dimension', 45, gapTableY + 5)
+    .text('Observed', 220, gapTableY + 5)
+    .text('Required', 275, gapTableY + 5)
+    .text('Gap', 330, gapTableY + 5)
+    .text('Priority', 370, gapTableY + 5)
+    .text('Recommended Focus', 430, gapTableY + 5);
 
-  // Evidence Stats Box
-  doc.rect(40, doc.y, 515, 45).fillAndStroke(LIGHT_BG, BORDER);
-  const evBoxY = doc.y + 8;
-  doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text('Total Items Submitted:', 55, evBoxY);
-  doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(`${payload.evidence?.submittedCount || 0} Artifacts`, 165, evBoxY - 2);
+  let gRowY = gapTableY + 18;
+  const gapList = payload.gapAnalysis || [];
+  for (let i = 0; i < gapList.length; i++) {
+    const g = gapList[i];
+    const isEven = i % 2 === 0;
+    doc.rect(40, gRowY, 515, 17).fill(isEven ? LIGHT_BG : '#ffffff');
+    doc.rect(40, gRowY, 515, 17).stroke(BORDER);
 
-  doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text('Assessor Verified:', 270, evBoxY);
-  doc.fillColor(GREEN).fontSize(11).font('Helvetica-Bold').text(`${payload.evidence?.verifiedCount || 0} Verified`, 365, evBoxY - 2);
+    doc.fillColor(CHARCOAL).fontSize(7).font('Helvetica').text(`${g.domainCode}: ${g.domainName}`, 45, gRowY + 4, { width: 170, ellipsis: true });
+    doc.fillColor(NAVY).fontSize(7.5).font('Helvetica-Bold').text(`L${g.observedMaturity}`, 225, gRowY + 4);
+    doc.fillColor(TEAL).text(`L${g.requiredMaturity}`, 280, gRowY + 4);
+    doc.fillColor(g.gap > 0 ? AMBER : GREEN).text(`${g.gap > 0 ? '+' : ''}${g.gap}`, 335, gRowY + 4);
+    doc.fillColor(g.priority === 'Critical' ? AMBER : (g.priority === 'High' ? BLUE : GREEN)).text(g.priority, 370, gRowY + 4);
+    doc.fillColor(CHARCOAL).fontSize(6.5).font('Helvetica').text(g.recommendedAction, 430, gRowY + 4, { width: 120, ellipsis: true });
 
-  doc.fillColor(CHARCOAL).fontSize(8.5).font('Helvetica').text('Compliance Level:', 55, evBoxY + 20);
-  doc.fillColor(TEAL).fontSize(9.5).font('Helvetica-Bold').text(payload.evidence?.guidelineCompliance || 'High', 165, evBoxY + 20);
+    gRowY += 17;
+  }
 
-  doc.y = evBoxY + 45;
-  addSectionHeader('8. Intelligence & Transformation Action Roadmap');
-
-  const roadmapSections = [
-    { title: 'Priority 1 — Immediate Actions (0–3 Months)', items: payload.priorities?.immediateActions || [], color: AMBER },
-    { title: 'Priority 2 — Near-Term Operationalization (3–9 Months)', items: payload.priorities?.mediumTermActions || [], color: BLUE },
-    { title: 'Priority 3 — Strategic Institutional Capability (9–18 Months)', items: payload.priorities?.strategicActions || [], color: TEAL },
-  ];
-
-  for (const sec of roadmapSections) {
-    doc.fillColor(sec.color).fontSize(9).font('Helvetica-Bold').text(sec.title, 40, doc.y);
+  doc.y = gRowY + 12;
+  addSectionHeader('6. 3-Horizon Transformation Action Roadmap');
+  const roadmap = payload.transformationRoadmap || [];
+  for (const rm of roadmap) {
+    doc.fillColor(BLUE).fontSize(8.5).font('Helvetica-Bold').text(`${rm.horizon} — ${rm.title}`, 40, doc.y);
+    doc.moveDown(0.2);
+    for (const it of rm.interventions) {
+      doc.fillColor(TEAL).fontSize(9).text('•', 45, doc.y);
+      doc.fillColor(CHARCOAL).fontSize(7.5).font('Helvetica').text(it, 56, doc.y - 1, { width: 495 });
+      doc.moveDown(0.3);
+    }
     doc.moveDown(0.3);
-    for (const it of sec.items) {
-      doc.fillColor(sec.color).fontSize(10).text('•', 45, doc.y);
-      doc.fillColor(CHARCOAL).fontSize(8).font('Helvetica').text(it, 58, doc.y - 1, { width: 495 });
-      doc.moveDown(0.4);
-    }
-    doc.moveDown(0.4);
   }
 
   // ==========================================
-  // PAGE 5+: 143-METRIC TRACEABILITY APPENDIX
+  // PAGE 4+: FULL CANONICAL METRIC TRACEABILITY APPENDIX
   // ==========================================
   doc.addPage();
-  addSectionHeader('9. Appendix: Full 143-Metric Auditable Traceability Dataset');
-  doc.fillColor(MUTED).fontSize(8).font('Helvetica').text(
-    'Traceable rubric record of all 143 metrics across 11 domains with M/I/O scoring, applicability, and assessor verification status.',
+  const metricCount = payload.metricAuditAppendix?.length || (isEcri ? 132 : 143);
+  addSectionHeader(`7. Appendix: Full ${metricCount}-Metric Traceability Dataset`);
+  doc.fillColor(MUTED).fontSize(7.5).font('Helvetica').text(
+    `Auditable ledger of all canonical metrics across 11 dimensions with M/I/O breakdown, evidence references, and assessor verification.`,
     40,
     doc.y
   );
-  doc.moveDown(0.6);
+  doc.moveDown(0.5);
 
   const metrics = payload.metricAuditAppendix || [];
   const renderTraceabilityTableHeader = (y: number) => {
-    doc.rect(40, y, 515, 18).fill(NAVY);
-    doc.fillColor('#ffffff').fontSize(7.5).font('Helvetica-Bold')
+    doc.rect(40, y, 515, 17).fill(NAVY);
+    doc.fillColor('#ffffff').fontSize(7).font('Helvetica-Bold')
       .text('Metric Code', 45, y + 5)
       .text('Capability & Metric Name', 105, y + 5)
       .text('M', 320, y + 5)
@@ -317,46 +279,45 @@ export function generateAssessmentPdfStream(payload: any, res: any) {
 
   let rowAppendixY = doc.y;
   renderTraceabilityTableHeader(rowAppendixY);
-  rowAppendixY += 18;
+  rowAppendixY += 17;
 
   for (let idx = 0; idx < metrics.length; idx++) {
     const m = metrics[idx];
 
-    // Check for page boundary
-    if (rowAppendixY > doc.page.height - 60) {
+    if (rowAppendixY > doc.page.height - 55) {
       doc.addPage();
       rowAppendixY = 40;
       renderTraceabilityTableHeader(rowAppendixY);
-      rowAppendixY += 18;
+      rowAppendixY += 17;
     }
 
     const isEven = idx % 2 === 0;
-    doc.rect(40, rowAppendixY, 515, 16).fill(isEven ? LIGHT_BG : '#ffffff');
-    doc.rect(40, rowAppendixY, 515, 16).stroke(BORDER);
+    doc.rect(40, rowAppendixY, 515, 15).fill(isEven ? LIGHT_BG : '#ffffff');
+    doc.rect(40, rowAppendixY, 515, 15).stroke(BORDER);
 
-    doc.fillColor(BLUE).fontSize(7).font('Helvetica-Bold').text(m.metricCode, 45, rowAppendixY + 4);
+    doc.fillColor(BLUE).fontSize(6.5).font('Helvetica-Bold').text(m.metricCode, 45, rowAppendixY + 4);
     doc.fillColor(CHARCOAL).fontSize(6.5).font('Helvetica').text(m.metricName, 105, rowAppendixY + 4, { width: 205, ellipsis: true });
-    doc.fillColor(CHARCOAL).fontSize(7).font('Helvetica').text(String(m.maturity), 320, rowAppendixY + 4);
+    doc.fillColor(CHARCOAL).fontSize(6.5).font('Helvetica').text(String(m.maturity), 320, rowAppendixY + 4);
     doc.text(String(m.implementation), 335, rowAppendixY + 4);
     doc.text(String(m.outcomes), 350, rowAppendixY + 4);
     doc.fillColor(NAVY).font('Helvetica-Bold').text(m.score, 370, rowAppendixY + 4);
     doc.fillColor(m.status === 'Assessed' ? GREEN : MUTED).font('Helvetica').text(m.status, 415, rowAppendixY + 4);
-    doc.fillColor(CHARCOAL).fontSize(6.5).text(m.assessorStatus, 465, rowAppendixY + 4, { width: 85, ellipsis: true });
+    doc.fillColor(CHARCOAL).fontSize(6).text(m.assessorStatus, 465, rowAppendixY + 4, { width: 85, ellipsis: true });
 
-    rowAppendixY += 16;
+    rowAppendixY += 15;
   }
 
   // ==========================================
-  // FOOTER ON ALL PAGES
+  // FOOTER ON ALL PAGES WITH DYNAMIC BRANDING
   // ==========================================
   const range = doc.bufferedPageRange();
   for (let i = 0; i < range.count; i++) {
     doc.switchToPage(i);
-    doc.rect(40, doc.page.height - 30, 515, 0.75).fill(BORDER);
-    doc.fillColor(MUTED).fontSize(7.5).font('Helvetica').text(
-      `ARUI Assessment Report: ${institutionName} · Report ID: ${reportId} · Confidential · Page ${i + 1} of ${range.count}`,
+    doc.rect(40, doc.page.height - 28, 515, 0.75).fill(BORDER);
+    doc.fillColor(MUTED).fontSize(7).font('Helvetica').text(
+      `${branding.footer_text || `${productAcronym} Assessment Report`} · ${institutionName} · Report ID: ${reportId} · Page ${i + 1} of ${range.count}`,
       40,
-      doc.page.height - 22,
+      doc.page.height - 20,
       { align: 'center', width: 515 }
     );
   }

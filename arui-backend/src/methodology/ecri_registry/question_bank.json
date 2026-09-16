@@ -1,0 +1,2774 @@
+[
+  {
+    "domainCode": "D01",
+    "code": "D01-Q01",
+    "cardCode": "D01-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Dedicated Career & Employability Budget Allocation?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 1
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-Q02",
+    "cardCode": "D01-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Cross-Faculty Employability Deans Council?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 2
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-Q03",
+    "cardCode": "D01-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Strategic Industry Advisory Board at Governing Body Level?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 3
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-Q04",
+    "cardCode": "D01-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Equal Opportunity & Inclusive Career Access Framework?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 4
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-Q05",
+    "cardCode": "D01-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Institutional Student Employability Guarantee / Charter?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 5
+  },
+  {
+    "domainCode": "D01",
+    "code": "D01-Q06",
+    "cardCode": "D01-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Leadership Accountability & Board Review Cadence?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 6
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q01",
+    "cardCode": "D02-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Active Corporate Advisory Councils per Academic Department?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 7
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q02",
+    "cardCode": "D02-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Corporate Executive-in-Residence & Adjunct Faculty Program?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 8
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q03",
+    "cardCode": "D02-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Structured Annual Employer Roundtables & Skill Summits?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 9
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q04",
+    "cardCode": "D02-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: International Corporate Placement & Internship Linkages?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 10
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q05",
+    "cardCode": "D02-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Industry Partner Feedback Review Cadence?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 11
+  },
+  {
+    "domainCode": "D02",
+    "code": "D02-Q06",
+    "cardCode": "D02-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Corporate Partnership Longevity & Renewal Rate?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 12
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q01",
+    "cardCode": "D03-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Dynamic Skill Forecasting & Labor Market Intelligence Integration?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 13
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q02",
+    "cardCode": "D03-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Emerging Tech & AI Applied Literacy Across All Majors?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 14
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q03",
+    "cardCode": "D03-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Interdisciplinary Problem-Solving & Dual-Major Flexibility?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 15
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q04",
+    "cardCode": "D03-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Practical / Lab-to-Theory Credit Weighting Ratio?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 16
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q05",
+    "cardCode": "D03-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Continuous Syllabus Sunsetting & Obsolete Topic Removal?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 17
+  },
+  {
+    "domainCode": "D03",
+    "code": "D03-Q06",
+    "cardCode": "D03-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Faculty Course-File Co-Design Audits with Employers?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 18
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q01",
+    "cardCode": "D04-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Work-Integrated Learning (WIL) Pedagogical Architecture?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 19
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q02",
+    "cardCode": "D04-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Formalized Apprenticeship & Dual-Study Models?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 20
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q03",
+    "cardCode": "D04-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Academic Mentorship & On-Site Corporate Supervision Quality?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 21
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q04",
+    "cardCode": "D04-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Internship Reflection, Logbook & Portfolio Assessment?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 22
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q05",
+    "cardCode": "D04-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Virtual & Global Cross-Border Internship Framework?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 23
+  },
+  {
+    "domainCode": "D04",
+    "code": "D04-Q06",
+    "cardCode": "D04-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Internship Quality Assurance & Employer Site Audits?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 24
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q01",
+    "cardCode": "D05-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Comprehensive 4-Year Personalized Career Navigation Plans?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 25
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q02",
+    "cardCode": "D05-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Active Industry-Alumni Mentorship Pairing Program?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 26
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q03",
+    "cardCode": "D05-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Mock Interviews, Technical Round Drills & Soft-Skills Coaching?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 27
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q04",
+    "cardCode": "D05-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Higher Studies & Competitive Examination Guidance Desk?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 28
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q05",
+    "cardCode": "D05-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Student Career Ambassadors & Peer Learning Circles?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 29
+  },
+  {
+    "domainCode": "D05",
+    "code": "D05-Q06",
+    "cardCode": "D05-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Career Literacy & Workplace Readiness Micro-Courses?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 30
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q01",
+    "cardCode": "D06-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Domain Digital Proficiency & Software Tool Mastery?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 31
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q02",
+    "cardCode": "D06-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Complex Problem Solving & Quantitative Reasoning?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 32
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q03",
+    "cardCode": "D06-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Workplace Emotional Intelligence, Adaptability & Resilience?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 33
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q04",
+    "cardCode": "D06-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Leadership, Team Management & Conflict Resolution?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 34
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q05",
+    "cardCode": "D06-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Lifelong Self-Directed Learning & Meta-Learning Capability?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 35
+  },
+  {
+    "domainCode": "D06",
+    "code": "D06-Q06",
+    "cardCode": "D06-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Technical Writing, Reporting & Documentation Standards?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 36
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q01",
+    "cardCode": "D07-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Industry-Recognized Professional Micro-Credentials & Badges?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 37
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q02",
+    "cardCode": "D07-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Live Industry Assessment Rubrics & Employer Evaluators?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 38
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q03",
+    "cardCode": "D07-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Real-World Case Study Analysis & Simulation Exams?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 39
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q04",
+    "cardCode": "D07-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Continuous Formative Feedback & Competency Mastery Tracking?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 40
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q05",
+    "cardCode": "D07-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Industry-Standard Code Repositories & Engineering Portfolios?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 41
+  },
+  {
+    "domainCode": "D07",
+    "code": "D07-Q06",
+    "cardCode": "D07-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Assessment Transparency & Student Appeal Governance?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 42
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q01",
+    "cardCode": "D08-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Dedicated Student Seed Funding & Venture Capital Access?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 43
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q02",
+    "cardCode": "D08-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Startup Mentorship Network with Founders & Angel Investors?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 44
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q03",
+    "cardCode": "D08-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Academic Credits for Venture Creation & Startup Milestones?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 45
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q04",
+    "cardCode": "D08-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Campus Entrepreneurship Clubs, Pitch Competitions & Demo Days?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 46
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q05",
+    "cardCode": "D08-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Women & Diversity-Led Enterprise Acceleration Initiatives?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 47
+  },
+  {
+    "domainCode": "D08",
+    "code": "D08-Q06",
+    "cardCode": "D08-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Social Innovation & Community Enterprise Initiatives?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 48
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q01",
+    "cardCode": "D09-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Diversity of Visiting Employers (Core, Tech, Consulting, Public)?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 49
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q02",
+    "cardCode": "D09-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: High-Value Dream Offer & Super-Dream Offer Percentage?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 50
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q03",
+    "cardCode": "D09-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Corporate Relations Outreach Team & Sectoral Key Accounts?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 51
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q04",
+    "cardCode": "D09-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Salary Transparency, Audit Verification & Data Lineage?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 52
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q05",
+    "cardCode": "D09-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: International Job Placement & Expatriate Opportunities?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 53
+  },
+  {
+    "domainCode": "D09",
+    "code": "D09-Q06",
+    "cardCode": "D09-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Employer Repeat-Hiring Retention Rate (>80% target)?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 54
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q01",
+    "cardCode": "D10-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Alumni Giving, Endowment & Career Sponsorship Programs?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 55
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q02",
+    "cardCode": "D10-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Global Alumni Chapter Network & Professional Affinity Groups?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 56
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q03",
+    "cardCode": "D10-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Distinguished Alumni Career Milestone Recognition Awards?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 57
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q04",
+    "cardCode": "D10-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Alumni Startup Angel Syndicate & Co-Investment Circles?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 58
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q05",
+    "cardCode": "D10-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Alumni Net Promoter Score (NPS) on University Preparation?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 59
+  },
+  {
+    "domainCode": "D10",
+    "code": "D10-Q06",
+    "cardCode": "D10-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Alumni Career Transitions & Reskilling Advisory Support?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 60
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q01",
+    "cardCode": "D11-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Employer Satisfaction Index (ESI) Structured Longitudinal Audits?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 61
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q02",
+    "cardCode": "D11-CARD1",
+    "prompt": "How comprehensively does your institution implement and evaluate: Macroeconomic & Sectoral Industry Skill Gap Diagnostics?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Screening",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 62
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q03",
+    "cardCode": "D11-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Dean-Level Remediation Plans for Low-Performing Departments?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 63
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q04",
+    "cardCode": "D11-CARD2",
+    "prompt": "How comprehensively does your institution implement and evaluate: Benchmarking Against Top National & Global Peer Institutions?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 64
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q05",
+    "cardCode": "D11-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Predictive AI Analytics on Student Placement Risk Profiles?",
+    "inputType": "single",
+    "presentationKind": "single_choice",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 65
+  },
+  {
+    "domainCode": "D11",
+    "code": "D11-Q06",
+    "cardCode": "D11-CARD3",
+    "prompt": "How comprehensively does your institution implement and evaluate: Comprehensive 3-Year Employability Strategy Impact Review?",
+    "inputType": "matrix_likert",
+    "presentationKind": "matrix_likert",
+    "role": "Diagnostic",
+    "options": [
+      {
+        "id": "opt_0",
+        "label": "Level 0: No formalized mechanism or policy in place (Absent)",
+        "scoreWeight": 0
+      },
+      {
+        "id": "opt_1",
+        "label": "Level 1: Departmental ad-hoc initiatives without central framework (Reactive)",
+        "scoreWeight": 0.2
+      },
+      {
+        "id": "opt_2",
+        "label": "Level 2: Documented policy in select faculties with initial tracking (Emerging)",
+        "scoreWeight": 0.4
+      },
+      {
+        "id": "opt_3",
+        "label": "Level 3: Institution-wide formalized policy with dedicated resourcing (Structured)",
+        "scoreWeight": 0.6
+      },
+      {
+        "id": "opt_4",
+        "label": "Level 4: Co-designed with corporate partners & verified outcome metrics (Integrated)",
+        "scoreWeight": 0.8
+      },
+      {
+        "id": "opt_5",
+        "label": "Level 5: Sector-leading benchmark with continuous market calibration (Adaptive)",
+        "scoreWeight": 1
+      }
+    ],
+    "sortOrder": 66
+  }
+]

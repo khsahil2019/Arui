@@ -7,21 +7,77 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REGISTRY_DIR = path.join(__dirname, '../methodology/registry');
+const ECRI_REGISTRY_DIR = path.join(__dirname, '../methodology/ecri_registry');
 
 export async function seed() {
-  console.log('Seeding ARUI Methodology Registry and Initial Data into PostgreSQL...');
+  console.log('Seeding Multi-Product Assessment Platform & Methodologies into PostgreSQL...');
 
-  // 1. Create or get Methodology Version 'v4.0'
+  // 1. Seed Products Master (ARUI and ECRI)
+  await query(
+    `INSERT INTO products (code, name, tagline, description, category, is_active)
+     VALUES 
+       ($1, $2, $3, $4, $5, $6),
+       ($7, $8, $9, $10, $11, $12)
+     ON CONFLICT (code) DO UPDATE SET
+       name = EXCLUDED.name,
+       tagline = EXCLUDED.tagline,
+       description = EXCLUDED.description,
+       is_active = EXCLUDED.is_active`,
+    [
+      'arui',
+      'AI-Resilient University Index (ARUI)',
+      'Institutional Benchmark for AI Resilience, Governance & Transformation',
+      'An exhaustive, evidence-backed evaluation framework assessing higher education institutions across 11 critical domains of artificial intelligence readiness, academic integrity, pedagogical adaptation, and administrative transformation.',
+      'Higher Education',
+      true,
+      'ecri',
+      'Employability & Career Readiness Index (ECRI)',
+      'Comprehensive Institutional Benchmark for Graduate Employability, Industry Alignment & Career Readiness',
+      'An exhaustive, evidence-backed evaluation framework assessing higher education institutions across 11 critical dimensions of employability, curriculum co-design, experiential learning, and labor market integration.',
+      'Higher Education',
+      true
+    ]
+  );
+  console.log('Seeded Products Master (ARUI & ECRI).');
+
+  // Seed Product Pricing
+  await query(
+    `INSERT INTO product_pricing (product_code, tier_name, currency, amount, is_active, features_json)
+     VALUES 
+       ('arui', 'Comprehensive Institutional AI Resilience Assessment', 'USD', 4999.00, true, '["11 Domains Evaluation", "143 Metrics Deep Dive", "Executive PDF Report", "Scoreboard & Traceability", "Actionable Transformation Roadmap"]'),
+       ('ecri', 'Comprehensive Employability & Career Readiness Assessment', 'USD', 4999.00, true, '["11 Dimensions Evaluation", "132 Canonical Metrics", "Executive Assessment Report (PDF)", "Interactive Institutional Scoreboard", "Detailed Gap Analysis & Transformation Roadmap", "Evidence Traceability & Public Profile"]')
+     ON CONFLICT DO NOTHING`
+  );
+
+  // Seed Dynamic CTA Configurations
+  await query(
+    `INSERT INTO cta_configs (product_code, cta_text, cta_link, cta_visibility)
+     VALUES 
+       ('arui', 'Begin Institutional AI Assessment', '/assessment/arui', true),
+       ('ecri', 'Begin Institutional ECRI Assessment', '/assessment/ecri', true)
+     ON CONFLICT DO NOTHING`
+  );
+
+  // Seed Brand Configs
+  await query(
+    `INSERT INTO brand_configs (product_code, header_text, footer_text, contact_email, contact_phone)
+     VALUES 
+       ('arui', 'AI-Resilient University Index — Global Assessment Framework', 'Confidential & Proprietary © ARUI Global Higher Education Advisory', 'evaluations@arui.org', '+1 (800) 555-ARUI'),
+       ('ecri', 'Employability & Career Readiness Index — Institutional Assessment Framework', 'Confidential & Proprietary © ECRI Global Higher Education Benchmark', 'evaluations@ecri.org', '+1 (800) 555-ECRI')
+     ON CONFLICT DO NOTHING`
+  );
+
+  // 2. Seed ARUI Methodology Version 'v4.0'
   const mvRes = await query(
-    `INSERT INTO methodology_versions (version, name, is_active)
-     VALUES ($1, $2, $3)
-     ON CONFLICT (version) DO UPDATE SET is_active = true
+    `INSERT INTO methodology_versions (product_code, version, name, is_active)
+     VALUES ($1, $2, $3, $4)
+     ON CONFLICT (version) DO UPDATE SET is_active = true, product_code = EXCLUDED.product_code
      RETURNING id`,
-    ['v4.0', 'ARUI Master v4.0 - Exhaustive 11 Domains & 143 Metrics', true]
+    ['arui', 'v4.0', 'ARUI Master v4.0 - Exhaustive 11 Domains & 143 Metrics', true]
   );
   const versionId = mvRes.rows[0].id;
 
-  // 2. Read registry JSON files
+  // Read ARUI registry JSON files
   const domains = JSON.parse(fs.readFileSync(path.join(REGISTRY_DIR, 'domains.json'), 'utf8'));
   const capabilities = JSON.parse(fs.readFileSync(path.join(REGISTRY_DIR, 'capabilities.json'), 'utf8'));
   const metrics = JSON.parse(fs.readFileSync(path.join(REGISTRY_DIR, 'metrics.json'), 'utf8'));
@@ -32,7 +88,7 @@ export async function seed() {
   const antiGaming = JSON.parse(fs.readFileSync(path.join(REGISTRY_DIR, 'anti_gaming_rules.json'), 'utf8'));
   const crossDomain = JSON.parse(fs.readFileSync(path.join(REGISTRY_DIR, 'cross_domain_rules.json'), 'utf8'));
 
-  // Insert Domains
+  // Insert ARUI Domains
   for (let i = 0; i < domains.length; i++) {
     const d = domains[i];
     await query(
@@ -45,9 +101,8 @@ export async function seed() {
       [versionId, d.code, d.name, d.purpose, d.provisionalWeight, i + 1]
     );
   }
-  console.log(`Seeded ${domains.length} domains.`);
 
-  // Insert Capabilities
+  // Insert ARUI Capabilities
   for (let i = 0; i < capabilities.length; i++) {
     const c = capabilities[i];
     await query(
@@ -58,9 +113,8 @@ export async function seed() {
       [versionId, c.domainCode, c.code, c.fullCode, c.name, i + 1]
     );
   }
-  console.log(`Seeded ${capabilities.length} capabilities.`);
 
-  // Insert Metrics
+  // Insert ARUI Metrics
   for (let i = 0; i < metrics.length; i++) {
     const m = metrics[i];
     await query(
@@ -75,9 +129,8 @@ export async function seed() {
       [versionId, m.domainCode, m.code, m.fullCode, m.name, m.whatMeasured, m.measurementMethod, m.exposure, m.weight, m.hasOutcome, i + 1]
     );
   }
-  console.log(`Seeded ${metrics.length} metrics.`);
 
-  // Insert Anchors
+  // Insert ARUI Anchors
   await query(`DELETE FROM metric_anchors WHERE methodology_version_id = $1`, [versionId]);
   for (const a of anchors) {
     await query(
@@ -86,9 +139,8 @@ export async function seed() {
       [versionId, a.scope, a.level, a.label, a.description]
     );
   }
-  console.log(`Seeded ${anchors.length} anchors.`);
 
-  // Insert Assessment Cards
+  // Insert ARUI Assessment Cards
   await query(`DELETE FROM assessment_cards WHERE methodology_version_id = $1`, [versionId]);
   for (const card of cards) {
     await query(
@@ -97,9 +149,8 @@ export async function seed() {
       [versionId, card.domainCode, card.code, card.name, card.format, card.respondentAction, card.metricLink]
     );
   }
-  console.log(`Seeded ${cards.length} assessment cards.`);
 
-  // Insert Questions
+  // Insert ARUI Questions
   await query(`DELETE FROM questions WHERE methodology_version_id = $1`, [versionId]);
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
@@ -115,9 +166,8 @@ export async function seed() {
       [versionId, q.domainCode, q.code, q.cardCode, q.prompt, q.inputType, presKind, q.role, i + 1]
     );
   }
-  console.log(`Seeded ${questions.length} questions in bank.`);
 
-  // Insert Institutional Data definitions
+  // Insert ARUI Institutional Data definitions
   await query(`DELETE FROM institutional_data_definitions WHERE methodology_version_id = $1`, [versionId]);
   for (let i = 0; i < instData.length; i++) {
     const item = instData[i];
@@ -127,9 +177,8 @@ export async function seed() {
       [versionId, item.domainCode, item.code, item.label, item.inputType, item.requirement, i + 1]
     );
   }
-  console.log(`Seeded ${instData.length} institutional data items.`);
 
-  // Insert Anti-Gaming rules
+  // Insert ARUI Anti-Gaming rules
   await query(`DELETE FROM anti_gaming_rules WHERE methodology_version_id = $1`, [versionId]);
   for (const ag of antiGaming) {
     await query(
@@ -138,9 +187,8 @@ export async function seed() {
       [versionId, ag.code, ag.riskPattern, ag.detectionLogic, ag.evidenceSignal, ag.action, ag.scoringProtection]
     );
   }
-  console.log(`Seeded ${antiGaming.length} anti-gaming rules.`);
 
-  // Insert Cross-Domain rules
+  // Insert ARUI Cross-Domain rules
   await query(`DELETE FROM cross_domain_rules WHERE methodology_version_id = $1`, [versionId]);
   for (const cd of crossDomain) {
     await query(
@@ -149,9 +197,161 @@ export async function seed() {
       [versionId, cd.ruleId, cd.fromMetric, cd.toMetric, cd.fromScoreThreshold, cd.toScoreThreshold, cd.fromRequiredR]
     );
   }
-  console.log(`Seeded ${crossDomain.length} cross-domain rules.`);
+  console.log(`Seeded ARUI Methodology Registry (11 Domains, 143 Metrics).`);
 
-  // 3. Seed Demo Institution & Users
+  // 3. Seed ECRI Methodology Version 'ecri-v6.0'
+  const ecriMvRes = await query(
+    `INSERT INTO methodology_versions (product_code, version, name, is_active)
+     VALUES ($1, $2, $3, $4)
+     ON CONFLICT (version) DO UPDATE SET is_active = true, product_code = EXCLUDED.product_code
+     RETURNING id`,
+    ['ecri', 'ecri-v6.0', 'ECRI Master v6.0 - Calibrated & Repaired (11 Dimensions & 132 Canonical Metrics)', true]
+  );
+  const ecriVersionId = ecriMvRes.rows[0].id;
+
+  // Read ECRI registry JSON files
+  const ecriDomains = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'dimensions.json'), 'utf8'));
+  const ecriCapabilities = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'capabilities.json'), 'utf8'));
+  const ecriMetrics = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'metrics.json'), 'utf8'));
+  const ecriAnchors = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'anchors.json'), 'utf8'));
+  const ecriCards = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'cards.json'), 'utf8'));
+  const ecriQuestions = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'question_bank.json'), 'utf8'));
+  const ecriEvidence = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'evidence_requirements.json'), 'utf8'));
+  const ecriAntiGaming = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'anti_gaming_rules.json'), 'utf8'));
+  const ecriCrossDomain = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'cross_domain_rules.json'), 'utf8'));
+  const ecriCalibration = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'calibration_rules.json'), 'utf8'));
+  const ecriBadges = JSON.parse(fs.readFileSync(path.join(ECRI_REGISTRY_DIR, 'badge_definitions.json'), 'utf8'));
+
+  // Insert ECRI Dimensions
+  for (let i = 0; i < ecriDomains.length; i++) {
+    const d = ecriDomains[i];
+    await query(
+      `INSERT INTO domains (methodology_version_id, code, name, purpose, provisional_weight, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (methodology_version_id, code) DO UPDATE SET
+         name = EXCLUDED.name,
+         purpose = EXCLUDED.purpose,
+         provisional_weight = EXCLUDED.provisional_weight`,
+      [ecriVersionId, d.code, d.name, d.purpose, d.provisionalWeight, i + 1]
+    );
+  }
+
+  // Insert ECRI Capabilities
+  for (let i = 0; i < ecriCapabilities.length; i++) {
+    const c = ecriCapabilities[i];
+    await query(
+      `INSERT INTO capabilities (methodology_version_id, domain_code, code, full_code, name, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (methodology_version_id, full_code) DO UPDATE SET
+         name = EXCLUDED.name`,
+      [ecriVersionId, c.domainCode, c.code, c.fullCode, c.name, i + 1]
+    );
+  }
+
+  // Insert ECRI 132 Metrics
+  for (let i = 0; i < ecriMetrics.length; i++) {
+    const m = ecriMetrics[i];
+    await query(
+      `INSERT INTO metrics (methodology_version_id, domain_code, code, full_code, name, what_measured, measurement_method, exposure, weight, has_outcome, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       ON CONFLICT (methodology_version_id, full_code) DO UPDATE SET
+         name = EXCLUDED.name,
+         what_measured = EXCLUDED.what_measured,
+         measurement_method = EXCLUDED.measurement_method,
+         exposure = EXCLUDED.exposure,
+         weight = EXCLUDED.weight`,
+      [ecriVersionId, m.domainCode, m.code, m.fullCode, m.name, m.whatMeasured, m.measurementMethod, m.exposure, m.weight, m.hasOutcome, i + 1]
+    );
+  }
+
+  // Insert ECRI Anchors
+  await query(`DELETE FROM metric_anchors WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const a of ecriAnchors) {
+    await query(
+      `INSERT INTO metric_anchors (methodology_version_id, scope, level, label, description)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [ecriVersionId, a.scope, a.level, a.label, a.description]
+    );
+  }
+
+  // Insert ECRI Cards
+  await query(`DELETE FROM assessment_cards WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const card of ecriCards) {
+    await query(
+      `INSERT INTO assessment_cards (methodology_version_id, domain_code, code, name, format, respondent_action, metric_link)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [ecriVersionId, card.domainCode, card.code, card.name, card.format, card.respondentAction, card.metricLink]
+    );
+  }
+
+  // Insert ECRI Questions
+  await query(`DELETE FROM questions WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (let i = 0; i < ecriQuestions.length; i++) {
+    const q = ecriQuestions[i];
+    await query(
+      `INSERT INTO questions (methodology_version_id, domain_code, code, card_code, prompt, input_type, presentation_kind, role, options_json, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [ecriVersionId, q.domainCode, q.code, q.cardCode, q.prompt, q.inputType, q.presentationKind, q.role, JSON.stringify(q.options || []), i + 1]
+    );
+  }
+
+  // Insert ECRI Evidence Requirements
+  await query(`DELETE FROM evidence_requirements WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const ev of ecriEvidence) {
+    await query(
+      `INSERT INTO evidence_requirements (methodology_version_id, domain_code, code, title, quantity, requirement, metric_link)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [ecriVersionId, ev.domainCode, ev.code, ev.title, ev.quantity, ev.requirement, ev.metricLink]
+    );
+  }
+
+  // Insert ECRI Anti-Gaming
+  await query(`DELETE FROM anti_gaming_rules WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const ag of ecriAntiGaming) {
+    await query(
+      `INSERT INTO anti_gaming_rules (methodology_version_id, code, risk_pattern, detection_logic, evidence_signal, action, scoring_protection)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [ecriVersionId, ag.code, ag.riskPattern, ag.detectionLogic, ag.evidenceSignal, ag.action, ag.scoringProtection]
+    );
+  }
+
+  // Insert ECRI Cross-Domain
+  await query(`DELETE FROM cross_domain_rules WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const cd of ecriCrossDomain) {
+    await query(
+      `INSERT INTO cross_domain_rules (methodology_version_id, rule_id, from_metric, to_metric, from_score_threshold, to_score_threshold, from_required_r)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [ecriVersionId, cd.ruleId, cd.fromMetric, cd.toMetric, cd.fromScoreThreshold, cd.toScoreThreshold, cd.fromRequiredR]
+    );
+  }
+
+  // Insert ECRI Calibration Rules
+  await query(`DELETE FROM calibration_rules WHERE methodology_version_id = $1`, [ecriVersionId]);
+  for (const cal of ecriCalibration) {
+    await query(
+      `INSERT INTO calibration_rules (methodology_version_id, rule_code, domain_code, metric_full_code, category, decision_test, guidance_text)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [ecriVersionId, cal.ruleCode, cal.domainCode, cal.metricFullCode, cal.category, cal.decisionTest, cal.guidanceText]
+    );
+  }
+
+  // Insert Generic Badge Definitions
+  for (const b of ecriBadges) {
+    await query(
+      `INSERT INTO badge_definitions (product_code, code, name, meaning, difficulty, criteria_json, requirements_json, award_rule, validity_months, icon)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       ON CONFLICT (product_code, code) DO UPDATE SET
+         name = EXCLUDED.name,
+         meaning = EXCLUDED.meaning,
+         difficulty = EXCLUDED.difficulty,
+         criteria_json = EXCLUDED.criteria_json,
+         requirements_json = EXCLUDED.requirements_json`,
+      [b.productCode, b.code, b.name, b.meaning, b.difficulty, JSON.stringify(b.criteriaJson), JSON.stringify(b.requirementsJson), b.awardRule, b.validityMonths, b.icon]
+    );
+  }
+  console.log(`Seeded ECRI Methodology Registry (11 Dimensions, 132 Canonical Metrics, Badges & Calibration).`);
+
+  // 4. Seed Demo Institution & Users
   const instRes = await query(
     `INSERT INTO institutions (name, slug, country, state, district)
      VALUES ($1, $2, $3, $4, $5)
@@ -188,18 +388,27 @@ export async function seed() {
     [instId, 'sahilkh3014@gmail.com', sahilPasswordHash, 'Sahil Khan', 'INSTITUTION_ADMIN']
   );
 
-  console.log('Seeded demo users (sahilkh3014@gmail.com, lead@apex.edu, assessor@arui.org, admin@arui.org).');
+  console.log('Seeded demo users (sahilkh3014@gmail.com, lead@apex.edu, assessor@arui.org).');
 
-  // 4. Seed initial Assessment for Apex National University
+  // 5. Seed baseline ARUI Assessment
   const asmRes = await query(
-    `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, current_domain)
-     VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING id`,
-    [instId, versionId, 'Institutional AI Resilience Assessment (2026 Baseline)', 'DRAFT', 'profile', 'D01']
+    ['arui', instId, versionId, 'Institutional AI Resilience Assessment (2026 Baseline)', 'DRAFT', 'profile', 'D01']
   );
   const assessmentId = asmRes.rows[0].id;
 
-  // Seed exhaustive 25-field profile matching Excel Institution_Profile sheet
+  // Seed baseline ECRI Assessment
+  const ecriAsmRes = await query(
+    `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
+     RETURNING id`,
+    ['ecri', instId, ecriVersionId, 'ECRI Graduate Employability & Career Readiness Assessment (2026)', 'DRAFT', 'assessment', 'D01']
+  );
+  const ecriAssessmentId = ecriAsmRes.rows[0].id;
+
+  // Seed profile
   const profileValues = {
     IP01: 'Apex National University',
     IP02: 'Comprehensive University',
@@ -226,7 +435,7 @@ export async function seed() {
     IP23: ['Research Excellence', 'Industry Employability', 'Regional Development', 'Global Competitiveness'],
     IP24: 'Co-educational Residential Campus',
     IP25: 'Global Collaborations with Top 100 QS Institutions',
-    // Legacy field aliases for backwards compatibility
+    // Legacy aliases
     IP01_INST_NAME: 'Apex National University',
     IP02_INST_TYPE: 'comprehensive',
     IP03_MANDATE: 'balanced',
@@ -244,7 +453,14 @@ export async function seed() {
     [instId, assessmentId, 'complete', JSON.stringify(profileValues), 100.0]
   );
 
-  // Seed sample responses for Pulse & D01-D11 so the entire dashboard is live
+  await query(
+    `INSERT INTO institution_profiles (institution_id, assessment_id, status, values_json, completeness_score)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = EXCLUDED.values_json, completeness_score = 100.0`,
+    [instId, ecriAssessmentId, 'complete', JSON.stringify(profileValues), 100.0]
+  );
+
+  // Seed sample responses for ARUI
   const sampleResponses = [
     { prompt_id: 'Q01', state: 'answered', val: { choice: 'formal-institutional-priority' } },
     { prompt_id: 'Q02', state: 'answered', val: { choice: 'formal-institutional-priority' } },
@@ -265,6 +481,20 @@ export async function seed() {
        ON CONFLICT (assessment_id, prompt_id) DO UPDATE SET state = EXCLUDED.state, response_value_json = EXCLUDED.response_value_json`,
       [assessmentId, resp.prompt_id, resp.state, JSON.stringify(resp.val)]
     );
+  }
+
+  // Seed sample responses for ECRI
+  for (let d = 1; d <= 11; d++) {
+    const dCode = `D${d.toString().padStart(2, '0')}`;
+    for (let q = 1; q <= 6; q++) {
+      const qCode = `${dCode}-Q0${q}`;
+      await query(
+        `INSERT INTO assessment_responses (assessment_id, prompt_id, state, response_value_json, answered_at, updated_at)
+         VALUES ($1, $2, $3, $4, NOW(), NOW())
+         ON CONFLICT (assessment_id, prompt_id) DO UPDATE SET state = EXCLUDED.state, response_value_json = EXCLUDED.response_value_json`,
+        [ecriAssessmentId, qCode, 'answered', JSON.stringify({ choice: 'opt_4', maturityLevel: 4 })]
+      );
+    }
   }
 
   // Seed baseline evidence items
@@ -288,26 +518,28 @@ export async function seed() {
   const ev1Id = ev1.rows[0].id;
   await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D01-I01', true), ($1, 'D02-I01', false) ON CONFLICT DO NOTHING`, [ev1Id]);
 
-  const ev2 = await query(
+  // Seed ECRI Evidence
+  await query(`DELETE FROM evidence_items WHERE assessment_id = $1`, [ecriAssessmentId]);
+  const ecriEv1 = await query(
     `INSERT INTO evidence_items (assessment_id, title, file_name, file_path, file_size, mime_type, period_covered, description, source_origin, status, created_at)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW()) RETURNING id`,
     [
-      assessmentId,
-      'Academic Council Minutes — Authentic Assessment Redesign Mandate',
-      'Academic_Council_Assessment_Resolution_2025.pdf',
-      '/uploads/Academic_Council_Assessment_Resolution_2025.pdf',
-      1843200,
+      ecriAssessmentId,
+      'ECRI Corporate Advisory Council & Industry Curriculum Review 2025–2026',
+      'ECRI_Industry_Advisory_Curriculum_Minutes_2025.pdf',
+      '/uploads/ECRI_Industry_Advisory_Curriculum_Minutes_2025.pdf',
+      3145728,
       'application/pdf',
-      '2025-06 – 2026-06',
-      'Mandate requiring undergraduate modules to incorporate oral defense, process evaluation, and AI-resilient assessment rubrics.',
-      'committee_minutes_or_deliberation',
+      '2025-01 – 2026-06',
+      'Board of Studies minutes with Fortune 500 employer co-design feedback and mandatory 12-week internship credits.',
+      'policy_or_governance',
       'SUBMITTED',
     ]
   );
-  const ev2Id = ev2.rows[0].id;
-  await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D07-I01', true), ($1, 'D07-I02', false) ON CONFLICT DO NOTHING`, [ev2Id]);
+  const ecriEv1Id = ecriEv1.rows[0].id;
+  await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D01-M01', true), ($1, 'D02-M01', false), ($1, 'D03-M01', false) ON CONFLICT DO NOTHING`, [ecriEv1Id]);
 
-  console.log(`Created baseline assessment ${assessmentId} with full 25-field profile and live response data for Apex National University.`);
+  console.log(`Database seeding completed successfully for both ARUI (Assessment: ${assessmentId}) and ECRI (Assessment: ${ecriAssessmentId}).`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

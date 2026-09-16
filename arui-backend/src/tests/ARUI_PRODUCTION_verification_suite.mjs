@@ -80,35 +80,38 @@ async function runVerificationSuite() {
   // --------------------------------------------------------------------------
   console.log(`${colors.bold}[SUITE 01] Methodology Registry Integrity (11 / 143 / 69 / 63 / 25 / 23 / 413 / 10)${colors.reset}`);
 
-  const domainRes = await query(`SELECT COUNT(*) as count FROM domains;`);
+  const aruiVerRes = await query(`SELECT id FROM methodology_versions WHERE version = 'v4.0' LIMIT 1;`);
+  const aruiVerId = aruiVerRes.rows[0]?.id;
+
+  const domainRes = await query(`SELECT COUNT(*) as count FROM domains WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(domainRes.rows[0].count, 10) === 11, "11 Domains loaded into Registry (D01–D11)", `Got ${domainRes.rows[0].count}`);
 
-  const capRes = await query(`SELECT COUNT(*) as count FROM capabilities;`);
+  const capRes = await query(`SELECT COUNT(*) as count FROM capabilities WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(capRes.rows[0].count, 10) === 143, "143 Capabilities loaded into Registry", `Got ${capRes.rows[0].count}`);
 
-  const metricRes = await query(`SELECT COUNT(*) as count FROM metrics;`);
+  const metricRes = await query(`SELECT COUNT(*) as count FROM metrics WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(metricRes.rows[0].count, 10) === 143, "143 Metrics loaded into Registry", `Got ${metricRes.rows[0].count}`);
 
-  const cardRes = await query(`SELECT COUNT(*) as count FROM assessment_cards;`);
+  const cardRes = await query(`SELECT COUNT(*) as count FROM assessment_cards WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(cardRes.rows[0].count, 10) === 69, "69 Assessment Cards loaded into Registry", `Got ${cardRes.rows[0].count}`);
 
-  const questionRes = await query(`SELECT COUNT(*) as count FROM questions;`);
+  const questionRes = await query(`SELECT COUNT(*) as count FROM questions WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(questionRes.rows[0].count, 10) === 63, "63 Standard Questions loaded into Registry", `Got ${questionRes.rows[0].count}`);
 
-  const instDataRes = await query(`SELECT COUNT(*) as count FROM institutional_data_definitions;`);
+  const instDataRes = await query(`SELECT COUNT(*) as count FROM institutional_data_definitions WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(instDataRes.rows[0].count, 10) === 23, "23 Institutional-Data numeric items loaded", `Got ${instDataRes.rows[0].count}`);
 
-  const antiGamingRes = await query(`SELECT COUNT(*) as count FROM anti_gaming_rules;`);
+  const antiGamingRes = await query(`SELECT COUNT(*) as count FROM anti_gaming_rules WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(antiGamingRes.rows[0].count, 10) === 10, "10 Anti-Gaming Rules loaded (P0-6 compliance)", `Got ${antiGamingRes.rows[0].count}`);
 
-  const cdRes = await query(`SELECT COUNT(*) as count FROM cross_domain_rules;`);
+  const cdRes = await query(`SELECT COUNT(*) as count FROM cross_domain_rules WHERE methodology_version_id = $1;`, [aruiVerId]);
   assert(parseInt(cdRes.rows[0].count, 10) >= 400 || parseInt(cdRes.rows[0].count, 10) === 25, "Cross-Domain Rules / 413 Links loaded (CD01–CD25)", `Got ${cdRes.rows[0].count}`);
 
   // D03 A09 Rule: A09 is Student Reality Sample, not Q10
-  const d03QCount = await query(`SELECT COUNT(*) as count FROM questions WHERE domain_code = 'D03';`);
+  const d03QCount = await query(`SELECT COUNT(*) as count FROM questions WHERE methodology_version_id = $1 AND domain_code = 'D03';`, [aruiVerId]);
   assert(parseInt(d03QCount.rows[0].count, 10) === 9, "D03 has exactly 9 standard questions (Q01–Q09) without artificial Q10");
 
-  const d03Cards = await query(`SELECT * FROM assessment_cards WHERE domain_code = 'D03' AND code = 'A09';`);
+  const d03Cards = await query(`SELECT * FROM assessment_cards WHERE methodology_version_id = $1 AND domain_code = 'D03' AND code = 'A09';`, [aruiVerId]);
   assert(d03Cards.rows.length === 1, "D03 A09 registered as optional Student Reality Sample card");
 
   // --------------------------------------------------------------------------
@@ -136,8 +139,7 @@ async function runVerificationSuite() {
   // --------------------------------------------------------------------------
   console.log(`\n${colors.bold}[SUITE 03] Isolated Dynamic Test Fixtures (No Production Demo Credential Dependency)${colors.reset}`);
 
-  const methodVerRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1;`);
-  const activeMethodVerId = methodVerRes.rows[0]?.id;
+  const activeMethodVerId = aruiVerId;
 
   // Create isolated Institution A and Institution B
   const instARes = await query(

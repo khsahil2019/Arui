@@ -3,10 +3,12 @@ import { calculateScoreRun } from '../scoring/engine.js';
 
 export async function buildAssessmentReportPayload(assessmentId: string): Promise<any> {
   const aRes = await query(
-    `SELECT a.*, i.name as institution_name, i.state as institution_state, i.district as institution_district, m.version as methodology_version
+    `SELECT a.*, i.name as institution_name, i.state as institution_state, i.district as institution_district, 
+            m.version as methodology_version, m.product_code as mv_product_code, p.name as product_name, p.tagline as product_tagline
      FROM assessments a
      JOIN institutions i ON i.id = a.institution_id
      JOIN methodology_versions m ON m.id = a.methodology_version_id
+     LEFT JOIN products p ON p.code = a.product_code
      WHERE a.id = $1`,
     [assessmentId]
   );
@@ -16,18 +18,37 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
   }
 
   const assessment = aRes.rows[0];
+  const isEcri = assessment.product_code === 'ecri' || assessment.mv_product_code === 'ecri';
+  const productCode = isEcri ? 'ecri' : 'arui';
+  const productName = isEcri ? 'Employability & Career Readiness Index (ECRI)' : 'AI-Resilient University Index (ARUI)';
+  const productAcronym = isEcri ? 'ECRI' : 'ARUI';
 
-  // 1. Fetch 25-Field Institutional Profile
+  // 1. Fetch Dynamic Brand Configuration (Admin Controlled)
+  const brandRes = await query(
+    `SELECT * FROM brand_configs 
+     WHERE product_code = $1 AND (institution_id = $2 OR institution_id IS NULL)
+     ORDER BY institution_id DESC NULLS LAST LIMIT 1`,
+    [productCode, assessment.institution_id]
+  );
+  const brandConfig = brandRes.rows[0] || {
+    logo_url: null,
+    header_text: isEcri ? 'ECRI — Employability & Career Readiness Index' : 'ARUI — AI-Resilient University Index',
+    footer_text: isEcri ? 'Confidential & Proprietary © ECRI Global Higher Education Benchmark' : 'Confidential & Proprietary © ARUI Global Higher Education Advisory',
+    contact_email: isEcri ? 'evaluations@ecri.org' : 'evaluations@arui.org',
+    contact_phone: '+1 (800) 555-ARUI',
+  };
+
+  // 2. Fetch 25-Field Institutional Profile
   const profRes = await query(
     `SELECT values_json FROM institution_profiles WHERE assessment_id = $1 ORDER BY updated_at DESC LIMIT 1`,
     [assessmentId]
   );
   const pValues = profRes.rows[0]?.values_json || {};
 
-  // 2. Calculate Server-Side Scoring & Diagnostics
+  // 3. Calculate Server-Side Scoring & Diagnostics
   const calculation = await calculateScoreRun(assessmentId, assessment.methodology_version_id);
 
-  // 3. Fetch Metrics, Capabilities & Evidence Links for 143-Metric Traceability pinned to methodology version
+  // 4. Fetch Metrics, Capabilities & Evidence Links for Metric Traceability pinned to methodology version
   const metricsRes = await query(
     `SELECT m.*, d.name as domain_name, c.name as capability_name
      FROM metrics m
@@ -54,7 +75,7 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     metricEvidenceMap[el.metric_full_code].push(el);
   }
 
-  // Build Full 143-Metric Traceability Appendix
+  // Build Full Canonical Metric Traceability Appendix
   const metricAuditAppendix = metricsRes.rows.map((m: any) => {
     const calc = calculation.metricResults[m.full_code];
     const evLinks = metricEvidenceMap[m.full_code] || [];
@@ -87,7 +108,6 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     const domainMetrics = metricAuditAppendix.filter((m) => m.domainCode === d.code);
     const assessedDomainMetrics = domainMetrics.filter((m) => m.status === 'Assessed');
 
-    // Dynamic strengths & vulnerabilities for this specific domain
     const domainStrengths: string[] = [];
     const domainGaps: string[] = [];
 
@@ -120,10 +140,14 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
   const assessedCount = calculation.assessedDomainsCount;
   const isPartial = calculation.isPartial;
 
-  // 4. Construct Structured Priorities & Transformation Roadmap with clear separation of findings vs recommendations
+  // 5. Construct Structured Priorities & Transformation Roadmap
   const observedFindings: string[] = [];
   const diagnostics: string[] = [];
-  const genericRecommendations: string[] = [
+  const genericRecommendations: string[] = isEcri ? [
+    'Institutionalize senior corporate advisory councils across every major academic faculty.',
+    'Mandate 12-week credit-bearing internships with formal industry supervisor performance rubrics.',
+    'Align degree curricula with forward-looking industry skill forecasts on an annual Board of Studies cadence.'
+  ] : [
     'Establish an institutional AI observatory to monitor evolving technology and regulatory standards.',
     'Integrate multi-source authentic capability verification across core graduating cohorts.',
     'Maintain versioned audit trails and documentation for high-stakes institutional AI deployments.',
@@ -155,12 +179,90 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     observedFindings.push('Evaluated domains currently satisfy baseline context-calibrated maturity targets.');
   }
 
-  // Cross-domain diagnostics
   for (const c of calculation.contradictions) {
-    diagnostics.push(`Cross-domain signal (${c.title}): ${c.body}`);
+    diagnostics.push(`Cross-domain signal (${c.title || c.ruleId}): ${c.message || c.body}`);
   }
 
-  // 5. Build Canonical 25-Field Profile Object (Strict 1:1 Mapping to Registry IP01–IP25)
+  // 6. Build Detailed Gap Analysis Matrix
+  const gapAnalysis = domainsList.map((d) => {
+    const gap = d.transformationDistance || 0;
+    let priority = 'Low';
+    if (gap >= 2) priority = 'Critical';
+    else if (gap === 1) priority = 'High';
+    else if (gap === 0) priority = 'Satisfied';
+
+    return {
+      domainCode: d.code,
+      domainName: d.name,
+      observedMaturity: d.currentMaturity ?? 0,
+      requiredMaturity: d.requiredMaturity ?? 3,
+      gap,
+      priority,
+      recommendedAction: gap > 0 
+        ? `Accelerate ${d.name} through dedicated resourcing, faculty development, and verifiable evidence.`
+        : 'Maintain capability benchmarks and annual calibration reviews.'
+    };
+  });
+
+  // 7. Build Sequenced 3-Horizon Transformation Roadmap
+  const transformationRoadmap = [
+    {
+      horizon: 'Horizon 1 (0–6 Months)',
+      title: 'Foundation, Governance & Compliance Mandates',
+      interventions: [
+        `Formally establish ${productAcronym} Executive Oversight Council under Governing Board.`,
+        'Publish institutional guidelines and baseline quality audit rubrics across all academic faculties.',
+        'Address immediate high-vulnerability capability bottlenecks in ' + (underperformingDomains[0]?.name || 'core areas')
+      ]
+    },
+    {
+      horizon: 'Horizon 2 (6–18 Months)',
+      title: 'Operational Depth & Systematic Implementation',
+      interventions: [
+        'Roll out mandatory faculty upskilling and industry immersion programs.',
+        'Integrate authentic project-based and capstone evaluations into undergraduate degree requirements.',
+        'Establish automated outcome tracking and longitudinal graduate intelligence systems.'
+      ]
+    },
+    {
+      horizon: 'Horizon 3 (18–36 Months)',
+      title: 'Institutional Integration & Sector Leadership Benchmark',
+      interventions: [
+        'Achieve cross-domain integration with continuous labor market calibration.',
+        'Expand global corporate co-design partnerships and specialized research incubation hubs.',
+        'Benchmark institutional performance against national and international sector leaders.'
+      ]
+    }
+  ];
+
+  // 8. Evaluate Badges from Generic Badge Engine
+  const badgeRes = await query(`SELECT * FROM badge_definitions WHERE product_code = $1 AND is_active = true`, [productCode]);
+  const earnedBadges: any[] = [];
+  const overallScoreVal = calculation.overallScore || 0;
+
+  for (const b of badgeRes.rows) {
+    const crit = b.criteria_json || {};
+    let earned = false;
+    if (crit.minOverallScore && overallScoreVal >= crit.minOverallScore) {
+      earned = true;
+    } else if (crit.requiredDimensions && Array.isArray(crit.requiredDimensions)) {
+      const matchScores = domainsList.filter(d => crit.requiredDimensions.includes(d.code) && (d.domainScore || 0) >= (crit.minAverageScore || 70));
+      if (matchScores.length === crit.requiredDimensions.length) earned = true;
+    }
+    if (earned) {
+      earnedBadges.push({
+        code: b.code,
+        name: b.name,
+        meaning: b.meaning,
+        difficulty: b.difficulty,
+        icon: b.icon,
+        validityMonths: b.validity_months,
+        awardedDate: new Date().toISOString()
+      });
+    }
+  }
+
+  // 9. Build Canonical 25-Field Profile Object
   const fullProfileGroups = [
     {
       group: 'Institutional Identity & Demographics',
@@ -209,7 +311,7 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     },
   ];
 
-  // Derive evidence confidence strictly from evidence items and review records
+  // Derive evidence confidence
   const verifiedCount = evidenceItems.filter((e) => e.status === 'REVIEWED' || e.status === 'CORROBORATED').length;
   const submittedCount = evidenceItems.length;
   const e2PlusCount = evidenceItems.filter((e) => ['E2', 'E3', 'E4'].includes(e.evidence_level)).length;
@@ -223,22 +325,41 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     computedConfidence = 'unverified';
   }
 
+  // 10. Public Profile Slice
+  const publicProfile = {
+    institutionName: assessment.institution_name,
+    productCode,
+    productName,
+    assessmentYear: 2026,
+    overallScore: calculation.overallScore,
+    maturityTier: calculation.overallCurrentMaturity === 5 ? 'Sector-Leading' : (calculation.overallCurrentMaturity === 4 ? 'Integrated' : 'Structured'),
+    evaluatedDimensionsCount: assessedCount,
+    totalDimensionsCount: 11,
+    dimensionHighlights: domainsList.filter(d => (d.domainScore || 0) >= 75).map(d => ({ code: d.code, name: d.name, score: d.domainScore })),
+    badges: earnedBadges,
+    verificationStatus: computedConfidence === 'corroborated' ? 'Assessor Verified' : 'Preliminary Self-Assessment',
+    publishedDate: new Date().toISOString()
+  };
+
   const payload = {
+    branding: brandConfig,
     report: {
-      id: `ARUI-REP-${assessmentId.substring(0, 8).toUpperCase()}`,
+      id: `${productAcronym}-REP-${assessmentId.substring(0, 8).toUpperCase()}`,
+      productCode,
+      productName,
       kind: isPartial ? 'preliminary' : 'final',
       isPartial,
       assessedDomainsCount: assessedCount,
       totalDomainsCount: 11,
       generatedAt: new Date().toISOString(),
-      methodologyVersion: assessment.methodology_version || 'ARUI v4.0 P0-8',
+      methodologyVersion: assessment.methodology_version || (isEcri ? 'ECRI v6.0' : 'ARUI v4.0'),
       scoreRunId: `SR-${assessmentId.substring(0, 8)}`,
       templateVersion: '4.2.0',
       statusBanner: isPartial
-        ? `Preliminary Assessment Report (${assessedCount} of 11 Domains Evaluated)`
-        : 'Final Institutional AI Resilience Assessment Report (11-Domain Comprehensive)',
-      confidentiality: 'Confidential to institutional leadership. Strictly developmental diagnostic benchmark. Non-ranking / uncertified.',
-      audience: 'Vice-Chancellor, Provost, Registrar, Deans, IQAC Leadership, Academic Council',
+        ? `Preliminary Assessment Report (${assessedCount} of 11 Dimensions Evaluated)`
+        : `Final Institutional ${productAcronym} Assessment Report (11-Dimension Comprehensive)`,
+      confidentiality: `Confidential to institutional leadership. Strictly developmental diagnostic benchmark. Non-ranking / uncertified.`,
+      audience: 'Vice-Chancellor, Provost, Registrar, Deans, IQAC Leadership, Academic Council, Corporate Advisory Board',
     },
     institution: {
       id: assessment.institution_id,
@@ -250,17 +371,18 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     },
     assessment: {
       id: assessment.id,
+      productCode,
       cycle: '2026 Baseline',
-      scope: isPartial ? `Partial Scope (${assessedCount} Domains)` : 'Comprehensive 11-Domain Scope',
+      scope: isPartial ? `Partial Scope (${assessedCount} Dimensions)` : 'Comprehensive 11-Dimension Scope',
       status: assessment.status,
     },
     executiveSummary: {
       headline: isPartial
-        ? `Institutional AI Resilience Assessment — Preliminary Diagnostic Brief (${assessedCount}/11 Domains)`
-        : 'Institutional AI Resilience Assessment — Executive Diagnostic Report',
+        ? `Institutional ${productAcronym} Assessment — Preliminary Diagnostic Brief (${assessedCount}/11 Dimensions)`
+        : `Institutional ${productAcronym} Assessment — Executive Diagnostic Report`,
       narrative: isPartial
-        ? `This preliminary assessment evaluates ${assessedCount} of the 11 ARUI domains for ${assessment.institution_name}. An institution-wide overall ARUI score is withheld until full 11-domain assessment coverage is achieved. Individual assessed domains provide baseline operational guidance.`
-        : `${assessment.institution_name} has completed evaluation across all 11 core institutional resilience domains. The evaluation combines institutional profile parameters, adaptive diagnostic probes, verifiable evidence review, and independent rubric calibration.`,
+        ? `This preliminary assessment evaluates ${assessedCount} of the 11 ${productAcronym} dimensions for ${assessment.institution_name}. An institution-wide overall score is withheld until full 11-dimension assessment coverage is achieved. Individual assessed dimensions provide baseline operational guidance.`
+        : `${assessment.institution_name} has completed evaluation across all 11 core institutional dimensions. The evaluation combines institutional profile parameters, adaptive diagnostic probes, verifiable evidence review, and independent rubric calibration.`,
       overallIndex: calculation.overallScore,
       isPartial,
       currentMaturityLevel: calculation.overallCurrentMaturity,
@@ -278,7 +400,7 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     },
     domains: domainsList,
     crossDomain: {
-      ruleCount: 25,
+      ruleCount: calculation.crossDomainFindings.length,
       findings: calculation.crossDomainFindings,
     },
     evidence: {
@@ -288,6 +410,10 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     },
     strengths: calculation.strengths,
     vulnerabilities: calculation.vulnerabilities,
+    gapAnalysis,
+    transformationRoadmap,
+    badges: earnedBadges,
+    publicProfile,
     priorities: {
       observedFindings,
       diagnostics,
@@ -299,13 +425,13 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
     },
     metricAuditAppendix,
     methodologyNote: {
-      title: 'ARUI Measurement & Scoring Architecture (v4 P0-2 → P0-8)',
+      title: `${productAcronym} Measurement & Scoring Architecture`,
       description:
-        'ARUI measures holistic institutional capability across 11 domains, 143 capabilities, and 143 metrics using structured rubric anchors (M/I/O formula), context sensitivity, and cross-domain diagnostic controls.',
+        `${productName} measures holistic institutional capability across 11 dimensions and canonical metrics using structured rubric anchors (M/I/O formula), context sensitivity, and cross-domain diagnostic controls.`,
     },
     limitations: [
-      'Preliminary diagnostic assessment based on verified institutional evidence and self-assessment submissions.',
-      'ARUI is a developmental capability and resilience framework, not an accredited ranking or statutory accreditation.',
+      `Preliminary diagnostic assessment based on verified institutional evidence and self-assessment submissions.`,
+      `${productAcronym} is a developmental capability and resilience benchmark, not an accredited statutory ranking.`,
     ],
     reassessment: {
       recommendedCycle: '12 Months (2027 Reassessment)',

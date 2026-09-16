@@ -61,43 +61,86 @@ function WelcomePage() {
       <main className="mx-auto max-w-7xl px-6 pb-24 md:px-10">
         <section className="grid gap-14 pt-10 md:pt-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-20">
           <div>
-            <p className="eyebrow mb-6">Institutional AI Resilience Assessment</p>
+            <p className="eyebrow mb-4">Higher Education Assessment Platform</p>
             <h1 className="max-w-2xl text-[2.75rem] leading-[1.06] text-foreground md:text-[3.75rem] lg:text-[4.25rem]">
-              Understand how prepared your institution is for an{" "}
-              <em className="font-normal italic text-navy">AI-shaped</em> future.
+              Institutional evaluation &{" "}
+              <em className="font-normal italic text-navy">transformation</em> intelligence.
             </h1>
-            <p className="mt-8 max-w-xl text-[17px] leading-relaxed text-muted-foreground">
-              AI Resilient University examines the institution as a whole — not a single office,
-              policy or platform. It reads how strategy, governance, people, curriculum, students,
-              learning, technology, employability, research and institutional adaptability hold
-              together under AI-driven change.
+            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-muted-foreground">
+              A unified research-grade platform evaluating universities across artificial
+              intelligence resilience, graduate employability, curricular co-design, and governance.
             </p>
 
-            <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Link
-                to="/profile"
-                className="inline-flex h-12 items-center gap-3 rounded-md bg-navy px-6 text-[15px] font-medium text-primary-foreground shadow-raised transition-colors hover:bg-navy-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
-                Begin Institutional Assessment
-                <ArrowRight className="size-4" />
-              </Link>
-              <span className="text-sm text-muted-foreground">
-                No commitment. Your progress is saved as you go.
-              </span>
+            {/* Assessment Products Selection Grid */}
+            <div className="mt-10 grid gap-6 sm:grid-cols-2">
+              {/* Product 1: ARUI */}
+              <div className="flex flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-card transition-all hover:border-navy/40 hover:shadow-lg">
+                <div>
+                  <span className="rounded bg-navy/10 px-2.5 py-1 text-[11px] font-bold text-navy uppercase tracking-wider">
+                    ARUI Framework
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-foreground">
+                    AI-Resilient University Index
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    Exhaustive 11-domain assessment of AI strategy, governance, human capability,
+                    curriculum resilience, and academic integrity.
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+                  <Link
+                    to="/profile"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-navy hover:underline"
+                  >
+                    Start ARUI <ArrowRight className="size-3.5" />
+                  </Link>
+                  <span className="font-mono text-[11px] text-muted-foreground">
+                    11 Domains · 143 Metrics
+                  </span>
+                </div>
+              </div>
+
+              {/* Product 2: ECRI */}
+              <div className="flex flex-col justify-between rounded-xl border border-navy/30 bg-navy/5 p-6 shadow-card transition-all hover:border-navy hover:shadow-lg">
+                <div>
+                  <span className="rounded bg-navy text-white px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider">
+                    ECRI Benchmark
+                  </span>
+                  <h3 className="mt-3 text-lg font-bold text-foreground">
+                    Employability & Career Readiness Index
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    Rigorous 11-dimension evaluation of employer integration, curriculum co-design,
+                    internships (WIL), and graduate career progression.
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center justify-between border-t border-navy/15 pt-4">
+                  <Link
+                    to="/ecri"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-navy hover:underline"
+                  >
+                    Explore ECRI Product <ArrowRight className="size-3.5" />
+                  </Link>
+                  <span className="font-mono text-[11px] font-semibold text-navy">
+                    11 Dimensions · 132 Metrics
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-16 border-t border-border pt-8">
-              <p className="eyebrow mb-4">The assessment examines eleven domains</p>
-              <ul className="grid grid-cols-2 gap-x-8 gap-y-2.5 text-[15px] text-foreground/85 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
-                {assessmentAreas.map((a, i) => (
-                  <li key={a} className="flex items-baseline gap-3">
-                    <span className="font-mono text-[11px] text-muted-foreground">
-                      D{String(i + 1).padStart(2, "0")}
-                    </span>
-                    {a}
-                  </li>
-                ))}
-              </ul>
+            <div className="mt-12 border-t border-border pt-6">
+              <p className="eyebrow mb-3">Universal Platform Standards</p>
+              <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1.5">
+                  <FileCheck2 className="size-3.5 text-navy" /> Save & Resume Workflow
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Lock className="size-3.5 text-navy" /> Private & Verified Evidence
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <ScrollText className="size-3.5 text-navy" /> Single Canonical Report Payload
+                </span>
+              </div>
             </div>
           </div>
 

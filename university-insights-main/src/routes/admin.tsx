@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { 
-  Users, 
-  ShieldCheck, 
-  PlusCircle, 
-  Key, 
-  LogIn, 
-  Building2, 
-  CheckCircle2, 
-  FileText, 
-  BarChart3, 
-  ArrowLeft, 
+import {
+  Users,
+  ShieldCheck,
+  PlusCircle,
+  Key,
+  LogIn,
+  Building2,
+  CheckCircle2,
+  FileText,
+  BarChart3,
+  ArrowLeft,
   RefreshCw,
   Search,
   Database,
@@ -22,7 +22,7 @@ import {
   Lock,
   LogOut,
   Unlock,
-  ShieldAlert
+  ShieldAlert,
 } from "lucide-react";
 import { Wordmark, PageContainer } from "@/components/ari/workspace-shell";
 import { PageHeader } from "@/components/ari/page-header";
@@ -36,7 +36,11 @@ export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
       { title: "Super Admin Security & Database Explorer — AI Resilient University" },
-      { name: "description", content: "Super Admin Protected Management Panel for Users, Database Tables, and Assessment Progress." }
+      {
+        name: "description",
+        content:
+          "Super Admin Protected Management Panel for Users, Database Tables, and Assessment Progress.",
+      },
     ],
   }),
   component: AdminPage,
@@ -90,7 +94,7 @@ interface TableDataResponse {
     type: string;
     nullable: boolean;
   }>;
-  rows: any[];
+  rows: Record<string, unknown>[];
 }
 
 const ADMIN_TOKEN_KEY = "arui.admin_token";
@@ -98,7 +102,7 @@ const ADMIN_TOKEN_KEY = "arui.admin_token";
 function AdminPage() {
   const navigate = useNavigate();
   const login = useLogin();
-  
+
   // Admin Gate State
   const [adminToken, setAdminToken] = useState<string | null>(() => {
     if (typeof window !== "undefined") {
@@ -125,7 +129,9 @@ function AdminPage() {
   const [newPassword, setNewPassword] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
   const [showNewUserPassword, setShowNewUserPassword] = useState(false);
-  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(
+    null,
+  );
 
   // Database Explorer State
   const [tables, setTables] = useState<TableMetadata[]>([]);
@@ -147,7 +153,11 @@ function AdminPage() {
 
   const getBaseUrl = () => {
     if (typeof window !== "undefined") {
-      if (window.location.port === "8080" || window.location.port === "5173" || window.location.port === "3000") {
+      if (
+        window.location.port === "8080" ||
+        window.location.port === "5173" ||
+        window.location.port === "3000"
+      ) {
         return `${window.location.protocol}//${window.location.hostname}:4000`;
       }
       return window.location.origin;
@@ -156,13 +166,14 @@ function AdminPage() {
   };
 
   const getAuthHeaders = () => {
-    const token = adminToken || (typeof window !== "undefined" ? window.localStorage.getItem(ADMIN_TOKEN_KEY) : null);
+    const token =
+      adminToken ||
+      (typeof window !== "undefined" ? window.localStorage.getItem(ADMIN_TOKEN_KEY) : null);
     return {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
   };
-
 
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -188,8 +199,8 @@ function AdminPage() {
       window.localStorage.setItem(ADMIN_TOKEN_KEY, data.token);
       setAdminToken(data.token);
       setStatusMsg({ type: "success", text: "Super Admin authorized successfully." });
-    } catch (err: any) {
-      setAdminAuthError(err.message || "Authentication failed.");
+    } catch (err: unknown) {
+      setAdminAuthError(err instanceof Error ? err.message : "Authentication failed.");
     } finally {
       setAdminAuthPending(false);
     }
@@ -216,16 +227,19 @@ function AdminPage() {
           return r.json();
         }),
         fetch(`${root}/api/v1/admin/stats`, { headers }).then((r) => r.json()),
-        fetch(`${root}/api/v1/admin/tables`, { headers }).then((r) => r.json()).catch(() => ({ tables: [] })),
+        fetch(`${root}/api/v1/admin/tables`, { headers })
+          .then((r) => r.json())
+          .catch(() => ({ tables: [] })),
       ]);
 
       if (usersRes.users) setUsers(usersRes.users);
       if (statsRes) setStats(statsRes);
       if (tablesRes.tables) setTables(tablesRes.tables);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Failed to load admin data:", e);
-      if (e.message.includes("expired")) {
-        setAdminAuthError(e.message);
+      const msg = e instanceof Error ? e.message : "Error loading admin data";
+      if (msg.includes("expired")) {
+        setAdminAuthError(msg);
       }
     } finally {
       setLoading(false);
@@ -238,12 +252,15 @@ function AdminPage() {
     try {
       const root = getBaseUrl();
       const headers = getAuthHeaders();
-      const res = await fetch(`${root}/api/v1/admin/tables/${tableName}?limit=50&offset=${offset}`, { headers });
+      const res = await fetch(
+        `${root}/api/v1/admin/tables/${tableName}?limit=50&offset=${offset}`,
+        { headers },
+      );
       if (!res.ok) throw new Error("Failed to load table data");
       const data: TableDataResponse = await res.json();
       setTableData(data);
       setTableOffset(offset);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(`Error loading table ${tableName}:`, err);
     } finally {
       setTableLoading(false);
@@ -278,14 +295,13 @@ function AdminPage() {
           to: session.user.role === "assessor" ? "/assessor" : "/overview",
         });
       }
-    } catch (e: any) {
-      setStatusMsg({ 
-        type: "error", 
-        text: `Sign-in failed. Please verify password or use 'Reset Password' to set a new password.` 
+    } catch {
+      setStatusMsg({
+        type: "error",
+        text: `Sign-in failed. Please verify password or use 'Reset Password' to set a new password.`,
       });
     }
   };
-
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,11 +322,17 @@ function AdminPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Password reset failed");
 
-      setStatusMsg({ type: "success", text: `Password successfully updated for ${resetTargetUser.email}!` });
+      setStatusMsg({
+        type: "success",
+        text: `Password successfully updated for ${resetTargetUser.email}!`,
+      });
       setResetTargetUser(null);
       setNewPassword("");
-    } catch (e: any) {
-      setStatusMsg({ type: "error", text: e.message });
+    } catch (e: unknown) {
+      setStatusMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Password reset failed",
+      });
     }
   };
 
@@ -340,8 +362,11 @@ function AdminPage() {
         district: "Bengaluru Urban",
       });
       loadData();
-    } catch (e: any) {
-      setStatusMsg({ type: "error", text: e.message });
+    } catch (e: unknown) {
+      setStatusMsg({
+        type: "error",
+        text: e instanceof Error ? e.message : "Failed to create user",
+      });
     }
   };
 
@@ -383,7 +408,8 @@ function AdminPage() {
                 Super Admin Authentication
               </h1>
               <p className="text-xs text-muted-foreground mt-1.5">
-                Protected system console for registry maintenance, credentials and PostgreSQL access.
+                Protected system console for registry maintenance, credentials and PostgreSQL
+                access.
               </p>
             </div>
 
@@ -413,7 +439,11 @@ function AdminPage() {
                     onClick={() => setShowAdminPassword(!showAdminPassword)}
                     className="text-xs text-navy hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {showAdminPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                    {showAdminPassword ? (
+                      <EyeOff className="size-3.5" />
+                    ) : (
+                      <Eye className="size-3.5" />
+                    )}
                     {showAdminPassword ? "Hide" : "Show"}
                   </button>
                 </div>
@@ -460,7 +490,9 @@ function AdminPage() {
             </form>
 
             <div className="mt-6 border-t border-border pt-4 text-center text-xs text-muted-foreground">
-              <span>Authorized personnel only · All operations logged in PostgreSQL audit vault</span>
+              <span>
+                Authorized personnel only · All operations logged in PostgreSQL audit vault
+              </span>
             </div>
           </Panel>
         </main>
@@ -495,7 +527,9 @@ function AdminPage() {
               disabled={loading}
               className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-ivory-deep cursor-pointer"
             >
-              <RefreshCw className={cn("size-3.5 text-muted-foreground", loading && "animate-spin")} />
+              <RefreshCw
+                className={cn("size-3.5 text-muted-foreground", loading && "animate-spin")}
+              />
               Refresh
             </button>
             <Link
@@ -555,10 +589,14 @@ function AdminPage() {
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-[11px] font-semibold uppercase tracking-wider">Universities</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Universities
+                </span>
                 <Building2 className="size-4 text-navy" />
               </div>
-              <div className="mt-2 text-2xl font-semibold text-foreground">{stats.institutions}</div>
+              <div className="mt-2 text-2xl font-semibold text-foreground">
+                {stats.institutions}
+              </div>
             </Panel>
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
@@ -569,28 +607,40 @@ function AdminPage() {
             </Panel>
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-[11px] font-semibold uppercase tracking-wider">Assessments</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Assessments
+                </span>
                 <FileText className="size-4 text-navy" />
               </div>
               <div className="mt-2 text-2xl font-semibold text-foreground">{stats.assessments}</div>
             </Panel>
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-[11px] font-semibold uppercase tracking-wider">Responses</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Responses
+                </span>
                 <CheckCircle2 className="size-4 text-teal" />
               </div>
-              <div className="mt-2 text-2xl font-semibold text-foreground">{stats.answeredResponses}</div>
+              <div className="mt-2 text-2xl font-semibold text-foreground">
+                {stats.answeredResponses}
+              </div>
             </Panel>
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-[11px] font-semibold uppercase tracking-wider">Evidence Files</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Evidence Files
+                </span>
                 <FileCheck2 className="size-4 text-amber-600 dark:text-amber-400" />
               </div>
-              <div className="mt-2 text-2xl font-semibold text-foreground">{stats.evidenceItems}</div>
+              <div className="mt-2 text-2xl font-semibold text-foreground">
+                {stats.evidenceItems}
+              </div>
             </Panel>
             <Panel tone="card" className="p-4">
               <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-[11px] font-semibold uppercase tracking-wider">Score Runs</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Score Runs
+                </span>
                 <BarChart3 className="size-4 text-navy" />
               </div>
               <div className="mt-2 text-2xl font-semibold text-foreground">{stats.scoreRuns}</div>
@@ -678,19 +728,25 @@ function AdminPage() {
             ) : (
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                 {filteredUsers.map((user) => (
-                  <Panel key={user.id} tone="card" className="p-6 transition-all hover:border-navy/40">
+                  <Panel
+                    key={user.id}
+                    tone="card"
+                    className="p-6 transition-all hover:border-navy/40"
+                  >
                     {/* Header */}
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="flex items-center gap-2.5">
-                          <h3 className="font-serif text-lg font-medium text-foreground">{user.name}</h3>
+                          <h3 className="font-serif text-lg font-medium text-foreground">
+                            {user.name}
+                          </h3>
                           <StatusBadge
                             tone={
                               user.role === "SUPER_ADMIN"
                                 ? "teal"
                                 : user.role === "ASSESSOR"
-                                ? "amber"
-                                : "blue"
+                                  ? "amber"
+                                  : "blue"
                             }
                           >
                             {user.role}
@@ -731,10 +787,14 @@ function AdminPage() {
                       </div>
                       <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground border-t border-border/60 pt-2.5">
                         <span>
-                          Stage: <strong className="text-foreground capitalize">{user.assessmentStage}</strong>
+                          Stage:{" "}
+                          <strong className="text-foreground capitalize">
+                            {user.assessmentStage}
+                          </strong>
                         </span>
                         <span>
-                          Status: <strong className="text-foreground">{user.assessmentStatus}</strong>
+                          Status:{" "}
+                          <strong className="text-foreground">{user.assessmentStatus}</strong>
                         </span>
                       </div>
                     </div>
@@ -774,9 +834,12 @@ function AdminPage() {
           <div className="mt-8">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h2 className="font-serif text-2xl text-foreground">PostgreSQL Database Registry</h2>
+                <h2 className="font-serif text-2xl text-foreground">
+                  PostgreSQL Database Registry
+                </h2>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Browse and inspect raw records from all 26 authoritative tables stored in PostgreSQL.
+                  Browse and inspect raw records from all 26 authoritative tables stored in
+                  PostgreSQL.
                 </p>
               </div>
 
@@ -850,7 +913,8 @@ function AdminPage() {
                         ← Prev 50
                       </button>
                       <span className="text-muted-foreground">
-                        {tableOffset + 1}–{Math.min(tableOffset + 50, tableData.totalRows)} of {tableData.totalRows}
+                        {tableOffset + 1}–{Math.min(tableOffset + 50, tableData.totalRows)} of{" "}
+                        {tableData.totalRows}
                       </span>
                       <button
                         type="button"
@@ -872,7 +936,8 @@ function AdminPage() {
                 </div>
               ) : !tableData || tableData.rows.length === 0 ? (
                 <div className="p-16 text-center text-xs text-muted-foreground">
-                  Table <strong className="text-foreground">{selectedTable}</strong> currently contains 0 records.
+                  Table <strong className="text-foreground">{selectedTable}</strong> currently
+                  contains 0 records.
                 </div>
               ) : (
                 <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
@@ -880,9 +945,14 @@ function AdminPage() {
                     <thead className="sticky top-0 bg-ivory-deep/90 text-muted-foreground border-b border-border font-mono backdrop-blur">
                       <tr>
                         {tableData.columns.map((col) => (
-                          <th key={col.name} className="px-4 py-2.5 font-semibold whitespace-nowrap">
+                          <th
+                            key={col.name}
+                            className="px-4 py-2.5 font-semibold whitespace-nowrap"
+                          >
                             <div className="text-foreground">{col.name}</div>
-                            <div className="text-[10px] text-muted-foreground font-normal">{col.type}</div>
+                            <div className="text-[10px] text-muted-foreground font-normal">
+                              {col.type}
+                            </div>
                           </th>
                         ))}
                       </tr>
@@ -925,32 +995,77 @@ function AdminPage() {
         {activeTab === "methodology" && (
           <div className="mt-8">
             <div className="mb-6">
-              <h2 className="font-serif text-2xl text-foreground">Authoritative 143-Metric Registry</h2>
+              <h2 className="font-serif text-2xl text-foreground">
+                Authoritative 143-Metric Registry
+              </h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                Strict preservation of the 11 Domains, 143 Capabilities, 143 Metrics, 69 Cards, 63 Questions, and 25 Profile context fields.
+                Strict preservation of the 11 Domains, 143 Capabilities, 143 Metrics, 69 Cards, 63
+                Questions, and 25 Profile context fields.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { code: "D01", name: "Institutional Strategy & Leadership", capCount: 13, metrics: 13 },
+                {
+                  code: "D01",
+                  name: "Institutional Strategy & Leadership",
+                  capCount: 13,
+                  metrics: 13,
+                },
                 { code: "D02", name: "Policy, Integrity & Governance", capCount: 13, metrics: 13 },
-                { code: "D03", name: "Workforce & Talent Transformation", capCount: 13, metrics: 13 },
-                { code: "D04", name: "Curriculum Modernisation & Pedagogy", capCount: 13, metrics: 13 },
+                {
+                  code: "D03",
+                  name: "Workforce & Talent Transformation",
+                  capCount: 13,
+                  metrics: 13,
+                },
+                {
+                  code: "D04",
+                  name: "Curriculum Modernisation & Pedagogy",
+                  capCount: 13,
+                  metrics: 13,
+                },
                 { code: "D05", name: "Student AI Literacy & Readiness", capCount: 13, metrics: 13 },
                 { code: "D06", name: "Teaching Innovation & Learning", capCount: 13, metrics: 13 },
-                { code: "D07", name: "Institutional Technology & Infrastructure", capCount: 13, metrics: 13 },
-                { code: "D08", name: "Employability & Career Adaptability", capCount: 13, metrics: 13 },
-                { code: "D09", name: "Research, Innovation & Commercialisation", capCount: 13, metrics: 13 },
-                { code: "D10", name: "Operational Efficiency & Analytics", capCount: 13, metrics: 13 },
-                { code: "D11", name: "Future Readiness & Continuous Evolution", capCount: 13, metrics: 13 },
+                {
+                  code: "D07",
+                  name: "Institutional Technology & Infrastructure",
+                  capCount: 13,
+                  metrics: 13,
+                },
+                {
+                  code: "D08",
+                  name: "Employability & Career Adaptability",
+                  capCount: 13,
+                  metrics: 13,
+                },
+                {
+                  code: "D09",
+                  name: "Research, Innovation & Commercialisation",
+                  capCount: 13,
+                  metrics: 13,
+                },
+                {
+                  code: "D10",
+                  name: "Operational Efficiency & Analytics",
+                  capCount: 13,
+                  metrics: 13,
+                },
+                {
+                  code: "D11",
+                  name: "Future Readiness & Continuous Evolution",
+                  capCount: 13,
+                  metrics: 13,
+                },
               ].map((domain) => (
                 <Panel key={domain.code} tone="card" className="p-6">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-semibold text-navy">{domain.code}</span>
                     <StatusBadge tone="outline">Canonical</StatusBadge>
                   </div>
-                  <h3 className="mt-3 font-serif text-base font-medium text-foreground">{domain.name}</h3>
+                  <h3 className="mt-3 font-serif text-base font-medium text-foreground">
+                    {domain.name}
+                  </h3>
                   <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground border-t border-border pt-3">
                     <span>{domain.capCount} Capabilities</span>
                     <span>•</span>
@@ -967,14 +1082,19 @@ function AdminPage() {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/20 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-raised">
-            <h3 className="font-serif text-xl font-medium text-foreground">Create User & Institution</h3>
+            <h3 className="font-serif text-xl font-medium text-foreground">
+              Create User & Institution
+            </h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              New institutional accounts automatically receive an initialized 143-metric baseline assessment.
+              New institutional accounts automatically receive an initialized 143-metric baseline
+              assessment.
             </p>
 
             <form onSubmit={handleCreateUser} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Full Name</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Full Name
+                </label>
                 <input
                   type="text"
                   required
@@ -986,7 +1106,9 @@ function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email Address</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Email Address
+                </label>
                 <input
                   type="email"
                   required
@@ -999,13 +1121,19 @@ function AdminPage() {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Password</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Password
+                  </label>
                   <button
                     type="button"
                     onClick={() => setShowNewUserPassword(!showNewUserPassword)}
                     className="text-[11px] text-navy hover:underline flex items-center gap-1 cursor-pointer"
                   >
-                    {showNewUserPassword ? <EyeOff className="size-3" /> : <Eye className="size-3" />}
+                    {showNewUserPassword ? (
+                      <EyeOff className="size-3" />
+                    ) : (
+                      <Eye className="size-3" />
+                    )}
                     {showNewUserPassword ? "Hide" : "Show"}
                   </button>
                 </div>
@@ -1024,13 +1152,19 @@ function AdminPage() {
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
                     tabIndex={-1}
                   >
-                    {showNewUserPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                    {showNewUserPassword ? (
+                      <EyeOff className="size-3.5" />
+                    ) : (
+                      <Eye className="size-3.5" />
+                    )}
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Role</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Role
+                </label>
                 <select
                   value={newUser.role}
                   onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
@@ -1044,7 +1178,9 @@ function AdminPage() {
 
               {newUser.role === "INSTITUTION_ADMIN" && (
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">Institution Name</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Institution Name
+                  </label>
                   <input
                     type="text"
                     required
@@ -1082,13 +1218,16 @@ function AdminPage() {
           <div className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-raised">
             <h3 className="font-serif text-xl font-medium text-foreground">Reset Password</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Update password for <strong className="text-foreground font-mono">{resetTargetUser.email}</strong>.
+              Update password for{" "}
+              <strong className="text-foreground font-mono">{resetTargetUser.email}</strong>.
             </p>
 
             <form onSubmit={handleResetPassword} className="mt-5 space-y-4">
               <div>
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">New Password</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    New Password
+                  </label>
                   <button
                     type="button"
                     onClick={() => setShowResetPassword(!showResetPassword)}
@@ -1113,7 +1252,11 @@ function AdminPage() {
                     className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
                     tabIndex={-1}
                   >
-                    {showResetPassword ? <EyeOff className="size-3.5" /> : <Eye className="size-3.5" />}
+                    {showResetPassword ? (
+                      <EyeOff className="size-3.5" />
+                    ) : (
+                      <Eye className="size-3.5" />
+                    )}
                   </button>
                 </div>
               </div>

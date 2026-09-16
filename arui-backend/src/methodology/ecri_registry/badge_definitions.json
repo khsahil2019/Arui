@@ -1,0 +1,64 @@
+[
+  {
+    "productCode": "ecri",
+    "code": "ECRI_SECTOR_LEADER_PLATINUM",
+    "name": "Platinum Benchmark — Global Employability Excellence",
+    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 85.0 with zero critical dimension vulnerabilities.",
+    "difficulty": "Platinum",
+    "criteriaJson": {
+      "minOverallScore": 85,
+      "minDimensionScore": 70,
+      "requiredEvidenceLevel": "E3"
+    },
+    "requirementsJson": {
+      "auditedPlacementRate": 90,
+      "mandatoryInternshipCoverage": 95
+    },
+    "awardRule": "Overall ECRI >= 85 and all 11 Dimensions >= 70.",
+    "validityMonths": 24,
+    "icon": "trophy-gold"
+  },
+  {
+    "productCode": "ecri",
+    "code": "ECRI_INDUSTRY_CO_DESIGN_GOLD",
+    "name": "Gold Recognition — Industry Co-Designed Curriculum & WIL",
+    "meaning": "Recognizes exceptional institutional performance in D02 (Industry Ecosystem), D03 (Curriculum Co-Design) and D04 (Experiential Learning).",
+    "difficulty": "Gold",
+    "criteriaJson": {
+      "requiredDimensions": [
+        "D02",
+        "D03",
+        "D04"
+      ],
+      "minAverageScore": 80
+    },
+    "requirementsJson": {
+      "corporatePartners": 50,
+      "mandatoryCapstones": true
+    },
+    "awardRule": "Average of D02, D03, D04 >= 80.0.",
+    "validityMonths": 12,
+    "icon": "shield-check"
+  },
+  {
+    "productCode": "ecri",
+    "code": "ECRI_CAREER_SERVICES_EXCELLENCE",
+    "name": "Distinction — Career Navigation & Student Mentorship",
+    "meaning": "Awarded for outstanding 1-on-1 personalized career counseling, alumni mentoring, and career literacy infrastructure in D05 & D06.",
+    "difficulty": "Silver",
+    "criteriaJson": {
+      "requiredDimensions": [
+        "D05",
+        "D06"
+      ],
+      "minAverageScore": 75
+    },
+    "requirementsJson": {
+      "counselorRatio": "1:250",
+      "mentorshipCoverage": 80
+    },
+    "awardRule": "Average of D05, D06 >= 75.0.",
+    "validityMonths": 12,
+    "icon": "star"
+  }
+]

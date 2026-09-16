@@ -22,14 +22,15 @@ const DOMAIN_NAMES: Record<string, string> = {
 // Map database question to frontend Prompt contract (strictly registry-driven; respondent never sees internal weights or formulas)
 function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' = 'core', targetedReason?: string) {
   let presentation: any = {
-    kind: 'single_choice',
+    kind: q.presentation_kind || 'single_choice',
     provisionalOptions: true,
     options: [
-      { value: 'formal-institutional-priority', label: 'Formally established and active across departments' },
-      { value: 'emerging-school-faculty', label: 'Emerging initiative in selected faculties/schools' },
-      { value: 'under-active-committee-review', label: 'Under active committee review or formulation' },
-      { value: 'informally-addressed', label: 'Informally addressed / ad-hoc academic practice' },
-      { value: 'not-currently-initiated', label: 'Not currently initiated or planned' },
+      { value: 'opt_0', label: 'Level 0: Absent / Non-Existent' },
+      { value: 'opt_1', label: 'Level 1: Reactive / Ad-hoc initiatives' },
+      { value: 'opt_2', label: 'Level 2: Emerging in selected departments' },
+      { value: 'opt_3', label: 'Level 3: Structured institutional framework' },
+      { value: 'opt_4', label: 'Level 4: Integrated with industry & verified outcomes' },
+      { value: 'opt_5', label: 'Level 5: Adaptive / Sector-defining benchmark' },
     ],
     allowOther: true,
   };
@@ -39,7 +40,11 @@ function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' =
     presentation = {
       kind: q.presentation_kind || 'single_choice',
       provisionalOptions: true,
-      options: q.options_json,
+      options: q.options_json.map((opt: any) => ({
+        value: opt.id || opt.value,
+        label: opt.label,
+        scoreWeight: opt.scoreWeight,
+      })),
       allowOther: true,
     };
   } else if (q.presentation_kind === 'multi_choice' || (q.input_type && q.input_type.toLowerCase().includes('multi'))) {
@@ -47,48 +52,19 @@ function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' =
       kind: 'multi_choice',
       provisionalOptions: true,
       options: [
-        { value: 'governance_framework', label: 'Institutional AI Governance and Ethics Charter' },
-        { value: 'faculty_development', label: 'Structured faculty capability development pathways' },
-        { value: 'curriculum_integration', label: 'Disciplinary AI literacy and cognitive integration' },
-        { value: 'assessment_security', label: 'Redesigned authentic capability assessment models' },
-        { value: 'data_infrastructure', label: 'Enterprise data and learning analytics platform' },
+        { value: 'governance_framework', label: 'Institutional Governance & Mandate' },
+        { value: 'faculty_development', label: 'Faculty & Workforce Capability Pathways' },
+        { value: 'curriculum_integration', label: 'Curriculum & Programmatic Integration' },
+        { value: 'assessment_security', label: 'Authentic Assessment & Evaluation Systems' },
+        { value: 'data_infrastructure', label: 'Data, Analytics & Outcome Tracking Infrastructure' },
       ],
       allowOther: true,
-    };
-  } else if (q.presentation_kind === 'numbers' || (q.input_type && q.input_type.toLowerCase().includes('number'))) {
-    presentation = {
-      kind: 'numbers',
-      fields: [
-        { id: 'total_count', label: 'Total units / activities involved' },
-        { id: 'active_proportion', label: 'Active or validated proportion' },
-      ],
-      precision: true,
-    };
-  } else if (q.presentation_kind === 'records' || (q.input_type && q.input_type.toLowerCase().includes('record'))) {
-    presentation = {
-      kind: 'records',
-      recordLabel: 'Institutional Initiative Record',
-      fields: [
-        { id: 'name', label: 'Initiative or Decision Name', type: 'short_text', maxLength: 100 },
-        { id: 'impact', label: 'Primary Academic/Operational Area', type: 'select', options: [
-          { value: 'curriculum', label: 'Curriculum & Teaching' },
-          { value: 'assessment', label: 'Student Assessment' },
-          { value: 'research', label: 'Research & Innovation' },
-          { value: 'operations', label: 'Operations & Policy' },
-        ]},
-        { id: 'status', label: 'Implementation Status', type: 'select', options: [
-          { value: 'active', label: 'Active / Implemented' },
-          { value: 'pilot', label: 'Pilot Stage' },
-          { value: 'planned', label: 'Planned' },
-        ]},
-      ],
-      min: 1,
-      max: 5,
     };
   }
 
   const cardCode = q.card_code || '';
-  const theme = cardCode ? `Strategic Area ${cardCode}` : (q.domain_code ? `${q.domain_code} Strategic Area` : 'Strategic Direction & Capability');
+  const domainDisplayName = q.domain_name || (q.domain_code ? (DOMAIN_NAMES[q.domain_code] || `Dimension ${q.domain_code}`) : 'Institutional Screening');
+  const theme = cardCode ? `Strategic Area ${cardCode}` : `${domainDisplayName} Focus`;
   
   // Format globally unique prompt ID
   let promptId = q.code || q.id;
@@ -101,14 +77,14 @@ function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' =
   return {
     id: promptId,
     domainCode: q.domain_code || null,
-    domainName: q.domain_code ? (DOMAIN_NAMES[q.domain_code] || `Domain ${q.domain_code}`) : 'Institutional Pulse',
+    domainName: domainDisplayName,
     theme,
     prompt: q.prompt,
-    help: q.role ? `Methodology probe: Evaluates institutional ${q.role.toLowerCase()} evidence.` : undefined,
+    help: q.role ? `Methodology probe: Evaluates institutional ${q.role.toLowerCase()} evidence and maturity.` : undefined,
     presentation,
     evidenceHints: [
       'Official committee minutes, council mandate, or institutional strategy document',
-      'Operational guidelines or faculty approved assessment framework',
+      'Operational guidelines, employer co-design feedback, or approved assessment framework',
     ],
     origin,
     targetedReason,

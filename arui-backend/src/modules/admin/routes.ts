@@ -377,4 +377,155 @@ router.get('/admin/tables/:tableName', adminAuth, async (req, res) => {
   }
 });
 
+// Route: Capture Institutional Enquiry (Public)
+router.post(['/enquiries', '/admin/enquiries'], async (req, res) => {
+  const { productCode, name, institutionName, designation, email, phone, whatsapp, message } = req.body;
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required.' });
+  }
+
+  try {
+    const insRes = await query(
+      `INSERT INTO enquiries (product_code, name, institution_name, designation, email, phone, whatsapp, message)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING *`,
+      [productCode || 'ecri', name, institutionName || 'Not provided', designation || '', email, phone || '', whatsapp || '', message || '']
+    );
+    return res.status(201).json({ message: 'Enquiry submitted successfully.', enquiry: insRes.rows[0] });
+  } catch (err) {
+    console.error('Failed to submit enquiry:', err);
+    return res.status(500).json({ error: 'Failed to submit enquiry.' });
+  }
+});
+
+// Route: Get All Enquiries (Admin)
+router.get('/admin/enquiries', adminAuth, async (req, res) => {
+  try {
+    const enqRes = await query(`SELECT * FROM enquiries ORDER BY created_at DESC`);
+    return res.json(enqRes.rows);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch enquiries.' });
+  }
+});
+
+// Route: Update Enquiry Status (Admin)
+router.patch('/admin/enquiries/:id', adminAuth, async (req, res) => {
+  const { status } = req.body;
+  try {
+    const uRes = await query(
+      `UPDATE enquiries SET status = $1 WHERE id = $2 RETURNING *`,
+      [status, req.params.id]
+    );
+    return res.json(uRes.rows[0]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update enquiry status.' });
+  }
+});
+
+// Route: Get Brand Configuration (Admin or Public)
+router.get('/admin/branding', async (req, res) => {
+  const productCode = (req.query.product as string) || 'ecri';
+  try {
+    const brandRes = await query(
+      `SELECT * FROM brand_configs WHERE product_code = $1 AND institution_id IS NULL LIMIT 1`,
+      [productCode]
+    );
+    return res.json(brandRes.rows[0] || null);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch brand configuration.' });
+  }
+});
+
+// Route: Update Brand Configuration (Admin)
+router.put('/admin/branding', adminAuth, async (req, res) => {
+  const { productCode, logoUrl, headerText, footerText, contactEmail, contactPhone, contactWhatsapp } = req.body;
+  const pCode = productCode || 'ecri';
+
+  try {
+    const uRes = await query(
+      `INSERT INTO brand_configs (product_code, logo_url, header_text, footer_text, contact_email, contact_phone, contact_whatsapp, updated_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+       ON CONFLICT (id) DO UPDATE SET
+         logo_url = EXCLUDED.logo_url,
+         header_text = EXCLUDED.header_text,
+         footer_text = EXCLUDED.footer_text,
+         contact_email = EXCLUDED.contact_email,
+         contact_phone = EXCLUDED.contact_phone,
+         contact_whatsapp = EXCLUDED.contact_whatsapp,
+         updated_at = NOW()
+       RETURNING *`,
+      [pCode, logoUrl, headerText, footerText, contactEmail, contactPhone, contactWhatsapp]
+    );
+    return res.json(uRes.rows[0]);
+  } catch (err) {
+    console.error('Failed to update branding:', err);
+    return res.status(500).json({ error: 'Failed to update brand configuration.' });
+  }
+});
+
+// Route: Get Dynamic Pricing (Admin or Public)
+router.get('/admin/pricing', async (req, res) => {
+  try {
+    const pRes = await query(`SELECT * FROM product_pricing ORDER BY product_code ASC`);
+    return res.json(pRes.rows);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch product pricing.' });
+  }
+});
+
+// Route: Update Dynamic Pricing (Admin)
+router.put('/admin/pricing/:productCode', adminAuth, async (req, res) => {
+  const { productCode } = req.params;
+  const { amount, currency, tierName, isActive } = req.body;
+
+  try {
+    const uRes = await query(
+      `UPDATE product_pricing 
+       SET amount = COALESCE($1, amount),
+           currency = COALESCE($2, currency),
+           tier_name = COALESCE($3, tier_name),
+           is_active = COALESCE($4, is_active),
+           updated_at = NOW()
+       WHERE product_code = $5
+       RETURNING *`,
+      [amount, currency, tierName, isActive, productCode]
+    );
+    return res.json(uRes.rows[0]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update product pricing.' });
+  }
+});
+
+// Route: Get Dynamic CTA Configuration (Admin or Public)
+router.get('/admin/cta', async (req, res) => {
+  try {
+    const ctaRes = await query(`SELECT * FROM cta_configs ORDER BY product_code ASC`);
+    return res.json(ctaRes.rows);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch CTA configuration.' });
+  }
+});
+
+// Route: Update Dynamic CTA Configuration (Admin)
+router.put('/admin/cta/:productCode', adminAuth, async (req, res) => {
+  const { productCode } = req.params;
+  const { ctaText, ctaLink, ctaVisibility } = req.body;
+
+  try {
+    const uRes = await query(
+      `UPDATE cta_configs 
+       SET cta_text = COALESCE($1, cta_text),
+           cta_link = COALESCE($2, cta_link),
+           cta_visibility = COALESCE($3, cta_visibility),
+           updated_at = NOW()
+       WHERE product_code = $4
+       RETURNING *`,
+      [ctaText, ctaLink, ctaVisibility, productCode]
+    );
+    return res.json(uRes.rows[0]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update CTA configuration.' });
+  }
+});
+
 export default router;
