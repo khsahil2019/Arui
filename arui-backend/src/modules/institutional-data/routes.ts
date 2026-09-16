@@ -10,8 +10,12 @@ router.get('/assessments/:id/institutional-data/:domainCode', authenticate, requ
 
   try {
     const defsRes = await query(
-      `SELECT * FROM institutional_data_definitions WHERE domain_code = $1 ORDER BY sort_order ASC`,
-      [domainCode]
+      `SELECT def.* FROM institutional_data_definitions def
+       JOIN assessments a ON a.id = $1
+       WHERE (def.methodology_version_id = a.methodology_version_id OR def.methodology_version_id IS NULL)
+         AND def.domain_code = $2
+       ORDER BY def.sort_order ASC`,
+      [id, domainCode]
     );
 
     const valsRes = await query(

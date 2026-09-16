@@ -27,13 +27,15 @@ export async function buildAssessmentReportPayload(assessmentId: string): Promis
   // 2. Calculate Server-Side Scoring & Diagnostics
   const calculation = await calculateScoreRun(assessmentId, assessment.methodology_version_id);
 
-  // 3. Fetch Metrics, Capabilities & Evidence Links for 143-Metric Traceability
+  // 3. Fetch Metrics, Capabilities & Evidence Links for 143-Metric Traceability pinned to methodology version
   const metricsRes = await query(
     `SELECT m.*, d.name as domain_name, c.name as capability_name
      FROM metrics m
-     JOIN domains d ON d.code = m.domain_code
-     LEFT JOIN capabilities c ON c.full_code = CONCAT(m.domain_code, '-', m.code)
-     ORDER BY m.domain_code, m.sort_order ASC`
+     JOIN domains d ON d.code = m.domain_code AND (d.methodology_version_id = $1 OR d.methodology_version_id IS NULL)
+     LEFT JOIN capabilities c ON c.full_code = CONCAT(m.domain_code, '-', m.code) AND (c.methodology_version_id = $1 OR c.methodology_version_id IS NULL)
+     WHERE m.methodology_version_id = $1 OR m.methodology_version_id IS NULL
+     ORDER BY m.domain_code, m.sort_order ASC`,
+    [assessment.methodology_version_id]
   );
 
   const evidenceRes = await query(`SELECT * FROM evidence_items WHERE assessment_id = $1`, [assessmentId]);

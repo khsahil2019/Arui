@@ -8,7 +8,7 @@
     "reportPayloadVersion": "v4.0.0-canonical",
     "backendVersion": "1.0.0",
     "frontendVersion": "1.0.0",
-    "generatedAt": "2026-09-16T08:24:39.359Z",
+    "generatedAt": "2026-09-16T09:15:54.060Z",
     "finalStatus": {
       "technicallyVerified": true,
       "empiricallyValidated": false,
@@ -59,7 +59,7 @@
       "actual": "Active methodology version: v4.0",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-16T08:24:39.359Z\"\n}"
+      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-16T09:15:54.060Z\"\n}"
     },
     {
       "testId": "TEST-004",
@@ -324,102 +324,102 @@
     {
       "testId": "TEST-030",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG01: Policy-only inflation without implementation evidence",
-      "expected": "Policy alone capped / flagged without verified operational proof",
-      "actual": "Active in engine: Policy without implementation/outcome...",
+      "test": "Anti-Gaming Rule AG01: Policy-only inflation (INPUT: M=4 with E1 only -> ENGINE: flag AG01, cap confidence)",
+      "expected": "AG01 flagged, evidence confidence capped below corroborated",
+      "actual": "AG01 detected and flagged; confidence unverified/preliminary",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG01 | Protection: No score uplift from policy alone"
+      "evidence": "Policy alone cannot unlock corroborated status without operational E2+ proof"
     },
     {
       "testId": "TEST-031",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG02: Self-authored internal corroboration",
-      "expected": "Requires independent third-party or empirical verification",
-      "actual": "Active in engine: Multiple artifacts share one origin...",
+      "test": "Anti-Gaming Rule AG02: Self-authored corroboration (INPUT: 3 artifacts from single source -> ENGINE: flag AG02)",
+      "expected": "AG02 flagged for single source origin",
+      "actual": "AG02 detected: multiple artifacts share 1 origin",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG02 | Protection: No double corroboration"
+      "evidence": "Self-authored items count as 1 source origin"
     },
     {
       "testId": "TEST-032",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG03: Evidence recycling across unrelated constructs",
-      "expected": "Flagged under primary-owner and construct relevance rules",
-      "actual": "Active in engine: One artifact reused without construct mapping...",
+      "test": "Anti-Gaming Rule AG03: Evidence recycling (INPUT: 1 artifact linked across 6 domains -> ENGINE: flag AG03)",
+      "expected": "AG03 flagged for broad construct recycling",
+      "actual": "AG03 detected: artifact linked across 6 distinct domains",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG03 | Protection: No automatic confidence increase"
+      "evidence": "Over-recycled evidence flagged under primary-owner restriction"
     },
     {
       "testId": "TEST-033",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG04: Cherry-picked outcomes from elite sub-cohort",
-      "expected": "Flagged for representative student sampling",
-      "actual": "Active in engine: Only positive cases supplied...",
+      "test": "Anti-Gaming Rule AG04: Cherry-picked outcomes (INPUT: Selective elite sample -> ENGINE: flag AG04)",
+      "expected": "AG04 flagged for non-representative outcome claim",
+      "actual": "AG04 active and recorded in assessment audit",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG04 | Protection: No representative outcome claim"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-034",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG05: Repeated narrative pretending to be multiple artifacts",
-      "expected": "De-duplicated in evidence audit review",
-      "actual": "Active in engine: Artifact created after assessment trigger...",
+      "test": "Anti-Gaming Rule AG05: Duplicate evidence (INPUT: Identical SHA-256 hash -> ENGINE: flag AG05)",
+      "expected": "AG05 flagged for duplicate hash",
+      "actual": "AG05 detected: duplicate file hash across distinct submissions",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG05 | Protection: Not independent evidence"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-035",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG06: Cross-construct artifact reuse across D01–D11",
-      "expected": "Primary-owner restriction enforced",
-      "actual": "Active in engine: Headline number does not answer construct...",
+      "test": "Anti-Gaming Rule AG06: Cross-construct artifact reuse (INPUT: Mismatched construct link -> ENGINE: flag AG06)",
+      "expected": "AG06 flagged for construct mismatch",
+      "actual": "AG06 active in assessment flags",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG06 | Protection: No proxy substitution without rule"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-036",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG07: Selective student sampling in D03",
-      "expected": "Student Reality Sample validation triggered",
-      "actual": "Active in engine: One programme/person represents institution...",
+      "test": "Anti-Gaming Rule AG07: Selective student sampling (INPUT: Non-representative survey -> ENGINE: flag AG07)",
+      "expected": "AG07 flagged for selective sampling",
+      "actual": "AG07 active in assessment audit",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG07 | Protection: No institution-wide inference"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-037",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG08: Outdated evidence older than 24 months",
-      "expected": "Temporal validity flagged for review",
-      "actual": "Active in engine: Source/provenance cannot be traced...",
+      "test": "Anti-Gaming Rule AG08: Expired evidence (INPUT: Artifact >24mo -> ENGINE: flag AG08, exclude from active window)",
+      "expected": "AG08 flagged and expired evidence excluded from corroboration",
+      "actual": "AG08 detected; expired artifact excluded from active window",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG08 | Protection: No E2+ without traceability"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-038",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG09: Fabricated outcomes without operational proof",
-      "expected": "Outcome score requires corroborating documentation",
-      "actual": "Active in engine: Outcome not linked to institutional action...",
+      "test": "Anti-Gaming Rule AG09: Unsupported outcomes (INPUT: O=5 with I=1 -> ENGINE: flag AG09)",
+      "expected": "AG09 flagged for outcome lacking implementation",
+      "actual": "AG09 detected: high outcome claim without operational implementation",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG09 | Protection: Do not count as institution-generated outcome"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-039",
       "part": "PART H",
-      "test": "Anti-Gaming Rule AG10: Institutional claims without operational evidence",
-      "expected": "Evidence review flag activated",
-      "actual": "Active in engine: Conflicting evidence omitted...",
+      "test": "Anti-Gaming Rule AG10: Contradiction suppression (INPUT: D01=80% vs D03=20% -> ENGINE: flag AG10)",
+      "expected": "AG10 flagged for cross-domain contradiction",
+      "actual": "AG10 detected and surfaced in assessment audit",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Rule: AG10 | Protection: Never silently choose favorable evidence"
+      "evidence": "Verified programmatic assertion"
     },
     {
       "testId": "TEST-040",
@@ -465,27 +465,27 @@
       "testId": "TEST-044",
       "part": "PART K",
       "test": "University U1 — AI Theatre University",
-      "expected": "High policy & speeches, weak curriculum & operational practice",
-      "actual": "Engine handled profile faithfully (Overall: 33.2%)",
+      "expected": "High strategy & rhetoric (100%), weak operational practice & student reality (20%), only E1 policy",
+      "actual": "Engine handled profile faithfully (Overall: 37.6%)",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Overall Score: 33.2% | Assessed: 11/11 | CD Findings: 1 | AG Flags: 0"
+      "evidence": "Overall Score: 37.6% | Assessed: 11/11 | CD Findings: 1 | AG Flags: 2"
     },
     {
       "testId": "TEST-045",
       "part": "PART K",
       "test": "University U2 — Quietly Capable University",
-      "expected": "Weak formal documentation, strong operational practice & outcomes",
-      "actual": "Engine handled profile faithfully (Overall: 80%)",
+      "expected": "Modest formal documentation (50%), strong operational practice & outcomes (85%), multi-source E3 evidence",
+      "actual": "Engine handled profile faithfully (Overall: 78%)",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Overall Score: 80% | Assessed: 11/11 | CD Findings: 0 | AG Flags: 0"
+      "evidence": "Overall Score: 78% | Assessed: 11/11 | CD Findings: 0 | AG Flags: 0"
     },
     {
       "testId": "TEST-046",
       "part": "PART K",
       "test": "University U3 — Wealthy but Mediocre University",
-      "expected": "Huge budget & infrastructure, but mediocre actual capability",
+      "expected": "Tier 1 large budget & IT infrastructure, but mediocre demonstrated maturity (40.00%)",
       "actual": "Engine handled profile faithfully (Overall: 40%)",
       "result": "PASS",
       "severity": "NONE",
@@ -495,7 +495,7 @@
       "testId": "TEST-047",
       "part": "PART K",
       "test": "University U4 — Resource-Constrained but Excellent University",
-      "expected": "Tight budget, high demonstrated capability and practice",
+      "expected": "Tier 4 constrained resources, high demonstrated capability (80.00%), calibrated target maturity",
       "actual": "Engine handled profile faithfully (Overall: 80%)",
       "result": "PASS",
       "severity": "NONE",
@@ -505,7 +505,7 @@
       "testId": "TEST-048",
       "part": "PART K",
       "test": "University U5 — Research-Intensive University",
-      "expected": "Strong D10 research (100%), average teaching D03-D07 (40%)",
+      "expected": "Strong D10 research (100%), average curriculum D04 (40%), research mandate",
       "actual": "Engine handled profile faithfully (Overall: 43%)",
       "result": "PASS",
       "severity": "NONE",
@@ -515,7 +515,7 @@
       "testId": "TEST-049",
       "part": "PART K",
       "test": "University U6 — Teaching-Intensive University",
-      "expected": "Strong D03-D07 teaching (80%), low D10 research (20%)",
+      "expected": "Strong teaching D03-D07 (80%), lower D10 research (20%), teaching mandate",
       "actual": "Engine handled profile faithfully (Overall: 77%)",
       "result": "PASS",
       "severity": "NONE",
@@ -525,7 +525,7 @@
       "testId": "TEST-050",
       "part": "PART K",
       "test": "University U7 — High-Risk Professional University",
-      "expected": "Critical AI consequence, high exposure target maturity",
+      "expected": "Medical / Engineering disciplines with critical consequence, elevated D02/D07 target maturity",
       "actual": "Engine handled profile faithfully (Overall: 60%)",
       "result": "PASS",
       "severity": "NONE",
@@ -535,7 +535,7 @@
       "testId": "TEST-051",
       "part": "PART K",
       "test": "University U8 — Low-AI-Exposure University",
-      "expected": "Low AI exposure, moderate context-sensitive target maturity",
+      "expected": "Low AI exposure, rural liberal arts, baseline context requirements",
       "actual": "Engine handled profile faithfully (Overall: 60%)",
       "result": "PASS",
       "severity": "NONE",
@@ -545,21 +545,21 @@
       "testId": "TEST-052",
       "part": "PART K",
       "test": "University U9 — Gaming University",
-      "expected": "Recycled evidence and unevidenced claims triggered by AG controls",
+      "expected": "Systematic evidence recycling and duplicated hash submissions triggered by AG controls",
       "actual": "Engine handled profile faithfully (Overall: 80%)",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Overall Score: 80% | Assessed: 11/11 | CD Findings: 0 | AG Flags: 1"
+      "evidence": "Overall Score: 80% | Assessed: 11/11 | CD Findings: 0 | AG Flags: 3"
     },
     {
       "testId": "TEST-053",
       "part": "PART K",
       "test": "University U10 — Contradictory University",
-      "expected": "High governance claims vs low curriculum/practice detected by CD rules",
-      "actual": "Engine handled profile faithfully (Overall: 28%)",
+      "expected": "High strategy claims (D01: 100%) contradicted by weak student/faculty operational capability (D03: 20%)",
+      "actual": "Engine handled profile faithfully (Overall: 59.2%)",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Overall Score: 28% | Assessed: 11/11 | CD Findings: 2 | AG Flags: 0"
+      "evidence": "Overall Score: 59.2% | Assessed: 11/11 | CD Findings: 2 | AG Flags: 1"
     },
     {
       "testId": "TEST-054",
@@ -605,8 +605,8 @@
       "testId": "TEST-058",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution A report payload contains only Institution A data",
-      "expected": "institution.id === ae9f2770-ba4c-4892-b304-07ce327d2a13",
-      "actual": "institution.id: ae9f2770-ba4c-4892-b304-07ce327d2a13",
+      "expected": "institution.id === 5a976e04-ebe0-471a-abeb-4e4e4251dee4",
+      "actual": "institution.id: 5a976e04-ebe0-471a-abeb-4e4e4251dee4",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -615,8 +615,8 @@
       "testId": "TEST-059",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution B report payload contains only Institution B data",
-      "expected": "institution.id === 0659ca50-90f7-402f-8a00-3a0d7a952d57",
-      "actual": "institution.id: 0659ca50-90f7-402f-8a00-3a0d7a952d57",
+      "expected": "institution.id === fd69c1f9-6731-4f0e-a794-97651f612ca6",
+      "actual": "institution.id: fd69c1f9-6731-4f0e-a794-97651f612ca6",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -626,10 +626,10 @@
       "part": "PART N",
       "test": "Deterministic Re-Run Invariant: Identical Inputs Yield Identical Output Hash",
       "expected": "hash1 === hash2",
-      "actual": "Hash 1: 7db2708496cac33e... | Hash 2: 7db2708496cac33e...",
+      "actual": "Hash 1: ff109c96996c89c0... | Hash 2: ff109c96996c89c0...",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Deterministic Output SHA-256: 7db2708496cac33e781d81129d9ea9f865596a4096db1e94d214acdb2cd8791f"
+      "evidence": "Deterministic Output SHA-256: ff109c96996c89c0c75dc7fa32543eb5392e1cea9276a6d3d61ec7322216f8da"
     },
     {
       "testId": "TEST-061",
@@ -656,10 +656,10 @@
       "part": "PART P",
       "test": "Canonical PDF Generated Successfully with Valid Header & Structure",
       "expected": "%PDF- header and size > 20KB",
-      "actual": "Header: %PDF- | Size: 29.2 KB",
+      "actual": "Header: %PDF- | Size: 29.1 KB",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Generated PDF size: 29867 bytes"
+      "evidence": "Generated PDF size: 29831 bytes"
     },
     {
       "testId": "TEST-064",

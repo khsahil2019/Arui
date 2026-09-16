@@ -278,6 +278,94 @@ async function runVerificationSuite() {
   const bypassAttempt = await apiReq('GET', `/api/v1/admin/users`, null, null, { 'x-admin-key': 'arui@2026' });
   assert(bypassAttempt.status === 401, "Production path strictly rejects legacy master bypass header x-admin-key (HTTP 401)");
 
+  // 12. Security Test: Missing Authorization Token -> HTTP 401
+  const missingToken = await apiReq('GET', `/assessments/${asmA_Id}/status`, null);
+  assert(missingToken.status === 401, "Missing authorization token returns HTTP 401 Unauthorized");
+
+  // 13. Security Test: Invalid / Corrupt Token -> HTTP 401
+  const invalidToken = await apiReq('GET', `/assessments/${asmA_Id}/status`, 'invalid.jwt.token.here');
+  assert(invalidToken.status === 401, "Invalid / Corrupt token returns HTTP 401 Unauthorized");
+
+  // 14. Security Test: Expired Token -> HTTP 401
+  const expiredToken = jwt.sign(
+    { id: userA.id, email: userA.email, name: 'Admin Alpha', role: 'INSTITUTION_ADMIN', institutionId: instAId, assessmentId: asmA_Id },
+    secret,
+    { expiresIn: '-1s' }
+  );
+  const expiredRes = await apiReq('GET', `/assessments/${asmA_Id}/status`, expiredToken);
+  assert(expiredRes.status === 401, "Expired token returns HTTP 401 Unauthorized");
+
+  // 15. Security Test: Direct Client Score Mutation Attempt -> Rejected HTTP 400
+  const scoreMutation = await apiReq('PATCH', `/assessments/${asmA_Id}`, tokenA, { overallScore: 99.5 });
+  assert(scoreMutation.status === 400, "Client attempt to mutate calculated score directly is rejected (HTTP 400)");
+
+  // 16. Security Test: Methodology Version Mutation Attempt -> Rejected HTTP 400
+  const versionMutation = await apiReq('PATCH', `/assessments/${asmA_Id}`, tokenA, { methodologyVersionId: '00000000-0000-0000-0000-000000000000' });
+  assert(versionMutation.status === 400, "Client attempt to mutate pinned methodology version is rejected (HTTP 400)");
+
+  // 17. Real Multipart Evidence Upload (Multer, MIME/Extension validation, SHA-256 computation)
+  const pdfBytes = Buffer.from('%PDF-1.4\n1 0 obj\n<< /Title (Real Upload Test) >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF');
+  const expectedHash = crypto.createHash('sha256').update(pdfBytes).digest('hex');
+
+  const formData = new FormData();
+  formData.append('title', 'Authentic Executive AI Charter');
+  formData.append('evidenceType', 'policy');
+  formData.append('proposedSupports', JSON.stringify(['D01-I01']));
+  formData.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), 'executive_charter.pdf');
+
+  const uploadRes = await fetch(`${baseUrl}/assessments/${asmA_Id}/evidence`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${tokenA}` },
+    body: formData,
+  });
+  const uploadData = await uploadRes.json();
+  assert(uploadRes.status === 201 && uploadData.fileHash === expectedHash, "Real multipart PDF upload succeeds with authentic SHA-256 checksum (HTTP 201)");
+  const uploadedEvidenceId = uploadData.id;
+
+  // 18. Authenticated Secure Evidence Download / View
+  const downloadRes = await fetch(`${baseUrl}/assessments/${asmA_Id}/evidence/${uploadedEvidenceId}/file`, {
+    headers: { Authorization: `Bearer ${tokenA}` },
+  });
+  const downloadedBytes = Buffer.from(await downloadRes.arrayBuffer());
+  const downloadedHash = crypto.createHash('sha256').update(downloadedBytes).digest('hex');
+  assert(downloadRes.status === 200 && downloadedHash === expectedHash, "Authenticated secure evidence download returns matching original file stream (HTTP 200)");
+
+  // 19. Duplicate Evidence Detection (Same file uploaded twice -> HTTP 409 Conflict)
+  const formDataDup = new FormData();
+  formDataDup.append('title', 'Duplicate Submission Attempt');
+  formDataDup.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), 'executive_charter.pdf');
+  const dupRes = await fetch(`${baseUrl}/assessments/${asmA_Id}/evidence`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${tokenA}` },
+    body: formDataDup,
+  });
+  assert(dupRes.status === 409, "Duplicate file upload within same assessment is rejected with HTTP 409 Conflict");
+
+  // 20. Cross-Tenant Evidence Download Protection (User B cannot download User A evidence)
+  const crossDownload = await fetch(`${baseUrl}/assessments/${asmA_Id}/evidence/${uploadedEvidenceId}/file`, {
+    headers: { Authorization: `Bearer ${tokenB}` },
+  });
+  assert(crossDownload.status === 403, "Institution B user receives HTTP 403 Forbidden attempting to download Institution A evidence file");
+
+  // 21. Methodology Version Pinning Regression Test (v4.0 score invariant when v5.0 is active)
+  const preV5Score = await calculateScoreRun(asmA_Id, activeMethodVerId);
+  const v5Insert = await query(
+    `INSERT INTO methodology_versions (version, name, is_active)
+     VALUES ('v5.0-experimental', 'ARUI Experimental v5.0', true)
+     ON CONFLICT (version) DO UPDATE SET is_active = true
+     RETURNING id`
+  );
+  const v5Id = v5Insert.rows[0].id;
+  const postV5Score = await calculateScoreRun(asmA_Id); // Will use pinned version from assessment
+  assert(
+    postV5Score.overallRequiredMaturity === preV5Score.overallRequiredMaturity &&
+    postV5Score.totalDomainsCount === preV5Score.totalDomainsCount,
+    "Methodology Version Pinning Invariant: Assessment pinned to v4.0 is 100% invariant when v5.0 becomes active"
+  );
+  // Restore v4.0 as active
+  await query(`UPDATE methodology_versions SET is_active = false WHERE id = $1`, [v5Id]);
+  await query(`UPDATE methodology_versions SET is_active = true WHERE id = $1`, [activeMethodVerId]);
+
   // --------------------------------------------------------------------------
   // SUITE 05: P0-4 CANONICAL 25-FIELD CONTEXT CALIBRATION & REQUIRED MATURITY
   // --------------------------------------------------------------------------
@@ -395,6 +483,9 @@ async function runVerificationSuite() {
   // SUITE 07: EVIDENCE CONFIDENCE INDEPENDENT OF CAPABILITY SCORE
   // --------------------------------------------------------------------------
   console.log(`\n${colors.bold}[SUITE 07] Evidence Confidence Derived From Evidence (Separate From Score)${colors.reset}`);
+
+  // Clear evidence before Case A (0 evidence)
+  await query(`DELETE FROM evidence_items WHERE assessment_id = $1`, [asmA_Id]);
 
   // Case A: High score (76%), 0 verified evidence items -> unverified
   const calcUnverified = await calculateScoreRun(asmA_Id, activeMethodVerId);

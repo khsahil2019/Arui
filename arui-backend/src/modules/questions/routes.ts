@@ -145,7 +145,12 @@ router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess,
   const { id } = req.params;
   try {
     const qRes = await query(
-      `SELECT * FROM questions WHERE role = 'Diagnostic' OR code IN ('Q01', 'Q02', 'Q03', 'Q04', 'Q05') ORDER BY domain_code, sort_order LIMIT 30`
+      `SELECT q.* FROM questions q
+       JOIN assessments a ON a.id = $1
+       WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
+         AND (q.role = 'Diagnostic' OR q.code IN ('Q01', 'Q02', 'Q03', 'Q04', 'Q05'))
+       ORDER BY q.domain_code, q.sort_order LIMIT 30`,
+      [id]
     );
 
     // Fetch existing responses
@@ -187,8 +192,12 @@ router.get('/assessments/:id/domains/:code/next', authenticate, requireInstituti
 
   try {
     const domainQuestionsRes = await query(
-      `SELECT * FROM questions WHERE domain_code = $1 ORDER BY sort_order ASC, code ASC`,
-      [code]
+      `SELECT q.* FROM questions q
+       JOIN assessments a ON a.id = $1
+       WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
+         AND q.domain_code = $2
+       ORDER BY q.sort_order ASC, q.code ASC`,
+      [id, code]
     );
 
     const questions = domainQuestionsRes.rows;
@@ -262,8 +271,12 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, req
 
   try {
     const domainQuestionsRes = await query(
-      `SELECT * FROM questions WHERE domain_code = $1 ORDER BY sort_order ASC, code ASC`,
-      [code]
+      `SELECT q.* FROM questions q
+       JOIN assessments a ON a.id = $1
+       WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
+         AND q.domain_code = $2
+       ORDER BY q.sort_order ASC, q.code ASC`,
+      [id, code]
     );
 
     const questions = domainQuestionsRes.rows;

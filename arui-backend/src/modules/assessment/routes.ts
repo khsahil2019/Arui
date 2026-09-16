@@ -94,7 +94,12 @@ export async function getAssessmentStatusView(assessmentId: string) {
   ];
 
   // Domains (D01 to D11)
-  const allDomainsRes = await query(`SELECT code, name FROM domains ORDER BY sort_order ASC`);
+  const allDomainsRes = await query(
+    `SELECT code, name FROM domains 
+     WHERE methodology_version_id = $1 OR methodology_version_id IS NULL 
+     ORDER BY sort_order ASC`,
+    [assessment.methodology_version_id]
+  );
   const scopeDomains: string[] = assessment.scope_domains_json || [
     'D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'
   ];
@@ -226,6 +231,37 @@ router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, asy
     return res.json(uRes.rows[0]);
   } catch (err) {
     return res.status(500).json({ error: 'Failed to update scope' });
+  }
+});
+
+// Route: Update Assessment (Guards against methodology version or direct score mutation)
+router.patch('/assessments/:id', authenticate, requireInstitutionAccess, async (req, res) => {
+  const { methodologyVersionId, methodology_version_id, overallScore, score } = req.body;
+
+  if (methodologyVersionId || methodology_version_id) {
+    return res.status(400).json({ error: 'Methodology version is immutable once pinned to an assessment.' });
+  }
+
+  if (overallScore !== undefined || score !== undefined) {
+    return res.status(400).json({ error: 'Scores are server-computed and cannot be directly mutated by client.' });
+  }
+
+  const { title, stage, status } = req.body;
+  try {
+    const uRes = await query(
+      `UPDATE assessments 
+       SET title = COALESCE($1, title),
+           stage = COALESCE($2, stage),
+           status = COALESCE($3, status),
+           updated_at = NOW()
+       WHERE id = $4
+       RETURNING *`,
+      [title, stage, status, req.params.id]
+    );
+    if (uRes.rows.length === 0) return res.status(404).json({ error: 'Assessment not found' });
+    return res.json(uRes.rows[0]);
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update assessment' });
   }
 });
 
