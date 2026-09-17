@@ -758,6 +758,26 @@ export function createMockApi(): ArUiApi {
         user: { id: `u-${role}`, name, email, role },
         institution: role === "assessor" ? null : INSTITUTION,
         assessmentId: role === "assessor" ? null : ASSESSMENT_ID,
+        engineEntitlements: {
+          arui: "ACTIVE",
+          ecri: "ACTIVE",
+        },
+        expiresAt: new Date(Date.now() + 8 * 3600_000).toISOString(),
+      };
+      persist();
+      return clone(s.session);
+    },
+    async register(input) {
+      await wait(350);
+      const s = load();
+      s.session = {
+        token: `mock-${Date.now()}`,
+        user: { id: "u-institution_admin", name: input.name, email: input.email, role: "institution_admin" },
+        institution: { id: "inst-mock-001", name: input.institutionName },
+        assessmentId: null,
+        engineEntitlements: {
+          [input.productCode || "ecri"]: "NOT_PURCHASED",
+        },
         expiresAt: new Date(Date.now() + 8 * 3600_000).toISOString(),
       };
       persist();
@@ -770,6 +790,49 @@ export function createMockApi(): ArUiApi {
     },
     async getSession() {
       return clone(load().session);
+    },
+    async getPortfolio() {
+      await wait(200);
+      return {
+        institutionId: "inst-mock-001",
+        institutionName: "Apex Institute of Technology",
+        totalActiveEngagements: 2,
+        totalAvailableEngagements: 2,
+        entitlements: [
+          {
+            id: "ent-1",
+            institutionId: "inst-mock-001",
+            productCode: "arui",
+            productName: "AI-Resilient University Index (ARUI)",
+            status: "ACTIVE",
+            cycle: "2026-2027",
+            pricingAmount: 4999,
+            currency: "USD",
+          },
+          {
+            id: "ent-2",
+            institutionId: "inst-mock-001",
+            productCode: "ecri",
+            productName: "Employability & Career Readiness Index (ECRI)",
+            status: "ACTIVE",
+            cycle: "2026-2027",
+            pricingAmount: 4999,
+            currency: "USD",
+          },
+        ],
+      };
+    },
+    async purchaseEngine(productCode, _input) {
+      await wait(300);
+      const s = load();
+      if (s.session) {
+        s.session.engineEntitlements = {
+          ...(s.session.engineEntitlements || {}),
+          [productCode]: "ACTIVE",
+        };
+        persist();
+      }
+      return { success: true, message: `${productCode.toUpperCase()} engagement activated` };
     },
 
     async getStatus(assessmentId) {
@@ -1249,6 +1312,98 @@ export function createMockApi(): ArUiApi {
     async getExecutionLog() {
       await wait();
       return clone(load().log).sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+    },
+    async getBenchmarkSummary(assessmentId, _peerGroupId) {
+      await wait();
+      return {
+        assessmentId,
+        institutionId: "inst-mock-001",
+        productCode: "ecri",
+        methodologyVersion: "ecri-v6.0",
+        overallScore: 68.4,
+        maturityBand: 3,
+        dimensionScores: {
+          D01: 72,
+          D02: 65,
+          D03: 78,
+          D04: 60,
+          D05: 70,
+          D06: 64,
+          D07: 68,
+          D08: 74,
+          D09: 58,
+          D10: 71,
+          D11: 67,
+        },
+        level1Baseline: {
+          previousAssessmentId: null,
+          previousAssessmentDate: null,
+          previousOverallScore: null,
+          previousMaturityBand: null,
+          scoreDelta: null,
+          dimensionDeltas: {},
+          progressionPace: "First Cycle",
+        },
+        level2PeerBenchmark: {
+          peerGroupId: "PG-COMP",
+          peerGroupName: "Comprehensive Research & Teaching Universities",
+          sampleSize: 4,
+          minSampleThreshold: 10,
+          status: "DATASET_GROWING",
+          isStatisticallyValid: false,
+          peerMedianOverall: null,
+          peerIqrRange: null,
+          deltaToPeerMedian: null,
+          peerDimensionMedians: {},
+          strongestRelativeDimension: null,
+          largestOpportunityDimension: null,
+        },
+        level3CohortComparison: {
+          cohortName: "Tier-1 / High-Volume Student Intake",
+          sampleSize: 3,
+          status: "DATASET_GROWING",
+          cohortMedian: null,
+          deltaToCohortMedian: null,
+        },
+        level4SectorReference: {
+          sectorName: "Higher Education Sector Aggregate",
+          sampleSize: 7,
+          status: "DATASET_GROWING",
+          sectorMedian: null,
+          deltaToSectorMedian: null,
+        },
+        distributionProfile: {
+          status: "DATASET_GROWING",
+          sampleSize: 4,
+          distribution: null,
+        },
+        governanceNote:
+          "Statistical Validity Policy: Zero Fake Rankings Guarantee. Benchmarking distributions activate when sample size N >= 10 verified assessments.",
+        isIllustrativeSample: true,
+      };
+    },
+    async getPeerGroups(_productCode) {
+      await wait();
+      return [
+        {
+          id: "pg-1",
+          productCode: "ecri",
+          code: "PG-COMP",
+          name: "Comprehensive Research & Teaching Universities",
+          description: "Multi-faculty institutions with substantial undergraduate & postgraduate programs",
+          minSampleSize: 10,
+          isActive: true,
+        },
+        {
+          id: "pg-2",
+          productCode: "ecri",
+          code: "PG-TECH",
+          name: "Technical & STEM-Focused Universities",
+          description: "Institutions with >= 60% STEM, engineering, or computing discipline profile",
+          minSampleSize: 10,
+          isActive: true,
+        },
+      ];
     },
   };
 }

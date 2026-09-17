@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { PageHeader } from "@/components/ari/page-header";
 import { Panel } from "@/components/ari/panel";
@@ -8,10 +8,12 @@ import { queries } from "@/api/hooks";
 import { ArrowRight, ShieldCheck, Award, Briefcase } from "lucide-react";
 
 export const Route = createFileRoute("/ecri/orientation")({
-  loader: ({ context }) =>
-    context.queryClient
-      .ensureQueryData(queries.status((context as any).assessmentId))
-      .then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -27,8 +29,15 @@ export const Route = createFileRoute("/ecri/orientation")({
 
 function EcriOrientationPage() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const { data: status } = useSuspenseQuery(queries.status(assessmentId));
+  const assessmentId = (ctx as any)?.assessmentId;
+  const { data: status } = useQuery({
+    ...queries.status(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+
+  if (!status) {
+    return <PagePending />;
+  }
 
   return (
     <PageContainer width="wide">

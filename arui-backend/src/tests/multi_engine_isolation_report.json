@@ -1,0 +1,166 @@
+{
+  "timestamp": "2026-09-17T08:13:54.989Z",
+  "platform": "Higher Education Advisory - Multi-Engine Platform",
+  "engines": [
+    "arui",
+    "ecri"
+  ],
+  "summary": {
+    "totalTests": 28,
+    "passed": 26,
+    "failed": 0,
+    "barriersEnforced": 2,
+    "overallStatus": "ALL_TESTS_PASSED"
+  },
+  "isolationMatrix": {
+    "ARUI -> ARUI": "PASS",
+    "ECRI -> ECRI": "PASS",
+    "ARUI -> ECRI Contamination": "BLOCKED",
+    "ECRI -> ARUI Contamination": "BLOCKED",
+    "End-to-End ECRI Pipeline": "PASS"
+  },
+  "detailedResults": [
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "Active ECRI methodology version exists",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "ECRI contains exactly 11 Dimensions",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "D01 is \"Employer Demand Intelligence\"",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "D04 is \"Experiential & Practice-Based Learning\"",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "D10 is \"Employment Outcome Quality\"",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "ECRI contains exactly 132 Canonical Metrics",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_REGISTRY",
+      "test": "ECRI question bank contains exactly 153 Questions",
+      "status": "PASS"
+    },
+    {
+      "suite": "ARUI_REGISTRY",
+      "test": "Active ARUI methodology version exists",
+      "status": "PASS"
+    },
+    {
+      "suite": "ARUI_REGISTRY",
+      "test": "ARUI contains exactly 11 Domains",
+      "status": "PASS"
+    },
+    {
+      "suite": "ARUI_REGISTRY",
+      "test": "ARUI contains exactly 143 Metrics",
+      "status": "PASS"
+    },
+    {
+      "suite": "ARUI_REGISTRY",
+      "test": "ARUI question bank contains exactly 63 Questions",
+      "status": "PASS"
+    },
+    {
+      "suite": "ENGINE_RESOLUTION",
+      "test": "ARUI and ECRI generate distinct assessment UUIDs",
+      "status": "PASS"
+    },
+    {
+      "suite": "ENGINE_RESOLUTION",
+      "test": "ECRI query returns only ECRI assessment",
+      "status": "PASS"
+    },
+    {
+      "suite": "ENGINE_RESOLUTION",
+      "test": "ECRI assessment has product_code=ecri",
+      "status": "PASS"
+    },
+    {
+      "suite": "ENGINE_RESOLUTION",
+      "test": "ARUI query returns only ARUI assessment",
+      "status": "PASS"
+    },
+    {
+      "suite": "ENGINE_RESOLUTION",
+      "test": "ARUI assessment has product_code=arui",
+      "status": "PASS"
+    },
+    {
+      "suite": "CONTAMINATION_BARRIER",
+      "test": "ECRI assessment loads ZERO ARUI-specific AI questions",
+      "status": "PASS"
+    },
+    {
+      "suite": "CONTAMINATION_BARRIER",
+      "test": "ARUI -> ECRI Contamination",
+      "status": "BLOCKED",
+      "details": "ECRI cannot resolve ARUI prompts"
+    },
+    {
+      "suite": "CONTAMINATION_BARRIER",
+      "test": "ARUI assessment loads ZERO ECRI-specific employability questions",
+      "status": "PASS"
+    },
+    {
+      "suite": "CONTAMINATION_BARRIER",
+      "test": "ECRI -> ARUI Contamination",
+      "status": "BLOCKED",
+      "details": "ARUI cannot resolve ECRI prompts"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Profile saved successfully",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Metric assessments populated for all 11 dimensions",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Evidence item reviewed and corroborated at E2",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Overall Score computed: 80%",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Score evaluated across all 11 Dimensions",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "D01 in Score Run matches authoritative ECRI name",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Score Run persisted to database",
+      "status": "PASS"
+    },
+    {
+      "suite": "ECRI_E2E",
+      "test": "ECRI Executive PDF Report generated successfully (8 KB)",
+      "status": "PASS"
+    }
+  ]
+}

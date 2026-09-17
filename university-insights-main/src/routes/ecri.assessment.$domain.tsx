@@ -22,14 +22,19 @@ export const Route = createFileRoute("/ecri/assessment/$domain")({
     return { domain: params.domain };
   },
   loaderDeps: ({ search }) => ({ p: search.p }),
-  loader: ({ context, deps }) =>
-    context.queryClient
-      .ensureQueryData(
-        deps.p
-          ? queries.promptById((context as any).assessmentId, (context as any).domain, deps.p)
-          : queries.nextPrompt((context as any).assessmentId, (context as any).domain, null),
-      )
-      .then(() => undefined),
+  loader: async ({ context, deps }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    const domain = (context as any)?.domain;
+    if (assessmentId && domain) {
+      await context.queryClient
+        .ensureQueryData(
+          deps.p
+            ? queries.promptById(assessmentId, domain, deps.p)
+            : queries.nextPrompt(assessmentId, domain, null),
+        )
+        .catch(() => undefined);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: ({ params }) => {
     const name = isDomain(params.domain) ? domainNames[params.domain] : "Assessment";
@@ -45,16 +50,21 @@ export const Route = createFileRoute("/ecri/assessment/$domain")({
 
 function EcriDomainRunner() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const domain = (ctx as any).domain as DomainCode;
+  const assessmentId = (ctx as any)?.assessmentId;
+  const domain = (ctx as any)?.domain as DomainCode;
   const { p } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const { data } = useSuspenseQuery(
-    p
-      ? queries.promptById(assessmentId, domain, p)
-      : queries.nextPrompt(assessmentId, domain, null),
-  );
-  const save = useSaveResponse(assessmentId);
+  const { data } = useQuery({
+    ...(p
+      ? queries.promptById(assessmentId || "", domain, p)
+      : queries.nextPrompt(assessmentId || "", domain, null)),
+    enabled: !!assessmentId && !!domain,
+  });
+  const save = useSaveResponse(assessmentId || "");
+
+  if (!data) {
+    return <PagePending />;
+  }
 
   const priorId =
     data.prompt?.presentation.kind === "matrix" &&

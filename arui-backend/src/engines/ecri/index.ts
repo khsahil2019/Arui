@@ -13,8 +13,11 @@ export const ECRI_METADATA = {
   dimensionsCount: 11,
   metricsCount: 132,
   capabilitiesCount: 132,
-  cardsCount: 66,
-  questionsCount: 66,
+  cardsCount: 132,
+  questionsCount: 153,
   calibrationRulesCount: 22,
+  antiGamingRulesCount: 10,
+  crossDomainRulesCount: 25,
   badgesCount: 12,
 };
+

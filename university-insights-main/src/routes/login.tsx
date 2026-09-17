@@ -205,8 +205,8 @@ function LoginPage() {
                 className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
               >
                 <div>
-                  <p className="font-semibold text-navy">Apex National University (Institution Admin)</p>
-                  <p className="text-[11px] text-muted-foreground">lead@apex.edu · Complete 11-Domain Assessment</p>
+                  <p className="font-semibold text-navy">🎓 Apex National University (ARUI Lead)</p>
+                  <p className="text-[11px] text-muted-foreground">lead@apex.edu / apex123 · 11 Domains · 143 Metrics</p>
                 </div>
                 <ArrowRight className="size-3.5 text-navy shrink-0" />
               </button>
@@ -214,12 +214,38 @@ function LoginPage() {
               <button
                 type="button"
                 onClick={async () => {
+                  setEmail("lead@horizon.edu");
+                  setPassword("horizon123");
+                  try {
+                    const session = await login.mutateAsync({
+                      email: "lead@horizon.edu",
+                      password: "horizon123",
+                    });
+                    navigate({
+                      to: back ?? (session.user.role === "assessor" ? "/assessor" : "/portfolio"),
+                      replace: true,
+                    });
+                  } catch {}
+                }}
+                disabled={login.isPending}
+                className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-teal hover:bg-card/80 transition-all cursor-pointer text-left"
+              >
+                <div>
+                  <p className="font-semibold text-teal">💼 Horizon State University (ECRI Lead)</p>
+                  <p className="text-[11px] text-muted-foreground">lead@horizon.edu / horizon123 · Career & WIL</p>
+                </div>
+                <ArrowRight className="size-3.5 text-teal shrink-0" />
+              </button>
+
+              <button
+                type="button"
+                onClick={async () => {
                   setEmail("sahilkh3014@gmail.com");
-                  setPassword("password123");
+                  setPassword("123456");
                   try {
                     const session = await login.mutateAsync({
                       email: "sahilkh3014@gmail.com",
-                      password: "password123",
+                      password: "123456",
                     });
                     navigate({
                       to: back ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
@@ -231,8 +257,8 @@ function LoginPage() {
                 className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
               >
                 <div>
-                  <p className="font-semibold text-foreground">Global Higher Ed Admin</p>
-                  <p className="text-[11px] text-muted-foreground">sahilkh3014@gmail.com · Full Platform Access</p>
+                  <p className="font-semibold text-foreground">🛡️ Global Higher Ed Admin</p>
+                  <p className="text-[11px] text-muted-foreground">sahilkh3014@gmail.com / 123456 · Full Platform</p>
                 </div>
                 <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
               </button>
@@ -257,8 +283,8 @@ function LoginPage() {
                 className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
               >
                 <div>
-                  <p className="font-semibold text-foreground">Independent Assessor</p>
-                  <p className="text-[11px] text-muted-foreground">assessor@arui.org · Scoring & Verification Queue</p>
+                  <p className="font-semibold text-foreground">🔍 Independent Assessor</p>
+                  <p className="text-[11px] text-muted-foreground">assessor@arui.org / assessor123 · Audit Queue</p>
                 </div>
                 <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
               </button>

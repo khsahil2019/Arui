@@ -1,5 +1,5 @@
 import { createFileRoute, Link, type LinkProps } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Check } from "lucide-react";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { PageHeader } from "@/components/ari/page-header";
@@ -11,8 +11,12 @@ import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_workspace/overview")({
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(queries.status(context.assessmentId)).then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -45,8 +49,15 @@ const stageLinks = {
 } as const satisfies Record<StageId, LinkProps["to"]>;
 
 function OverviewPage() {
-  const { assessmentId } = Route.useRouteContext();
-  const { data: status } = useSuspenseQuery(queries.status(assessmentId));
+  const { session, assessmentId } = Route.useRouteContext();
+  const { data: status } = useQuery({
+    ...queries.status(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+
+  if (!status) {
+    return <PagePending />;
+  }
   const routerState = useRouterState();
   const rawEngine = new URLSearchParams(routerState.location.search).get("engine");
   const engine: EngineType = rawEngine?.toLowerCase() === "ecri" ? "ecri" : "arui";

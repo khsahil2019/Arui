@@ -14,6 +14,8 @@ import reportRoutes from './modules/reports/routes.js';
 import methodologyRoutes from './modules/methodology/routes.js';
 import dashboardRoutes from './modules/docs/dashboard.js';
 import adminRoutes from './modules/admin/routes.js';
+import benchmarkingRoutes from './modules/benchmarking/routes.js';
+import entitlementRoutes from './modules/entitlements/routes.js';
 import { getJwtSecret } from './middleware/auth.js';
 
 dotenv.config();
@@ -125,6 +127,12 @@ app.use('/', methodologyRoutes);
 
 app.use('/api/v1', adminRoutes);
 app.use('/', adminRoutes);
+
+app.use('/api/v1/benchmarking', benchmarkingRoutes);
+app.use('/benchmarking', benchmarkingRoutes);
+
+app.use('/api/v1/entitlements', entitlementRoutes);
+app.use('/entitlements', entitlementRoutes);
 
 // Global error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

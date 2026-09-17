@@ -36,10 +36,13 @@ export interface SessionUser {
 
 export interface Session {
   token: string;
+  engine?: "arui" | "ecri" | string;
+  productCode?: "arui" | "ecri" | string;
   user: SessionUser;
   institution: { id: string; name: string } | null;
   /** Institutional assessment the user is currently working in (null for assessors). */
   assessmentId: string | null;
+  engineEntitlements?: Record<string, string>;
   expiresAt: string;
 }
 
@@ -50,6 +53,48 @@ export interface LoginRequest {
   roleHint?: Role;
   productCode?: string;
   engine?: string;
+}
+
+export interface RegisterRequest {
+  institutionName: string;
+  email: string;
+  password: string;
+  name: string;
+  designation?: string;
+  phone?: string;
+  productCode?: string;
+}
+
+export interface EngineEntitlementItem {
+  id: string;
+  institutionId: string;
+  productCode: string;
+  productName: string;
+  status: "NOT_PURCHASED" | "PAYMENT_PENDING" | "ACTIVE" | "SUSPENDED" | "EXPIRED";
+  cycle: string;
+  paymentId?: string;
+  activatedAt?: string;
+  expiresAt?: string;
+  assessmentId?: string;
+  assessmentStatus?: string;
+  pricingAmount?: number;
+  currency?: string;
+}
+
+export interface PortfolioView {
+  institutionId: string;
+  institutionName: string;
+  entitlements: EngineEntitlementItem[];
+  totalActiveEngagements: number;
+  totalAvailableEngagements: number;
+}
+
+export interface PurchaseEngagementInput {
+  productCode: string;
+  paymentMethod?: string;
+  amount?: number;
+  currency?: string;
+  notes?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -593,4 +638,95 @@ export interface AssessorAssessmentView {
     metricsTotal: number;
     openFlags: number;
   };
+}
+
+/* ------------------------------------------------------------------ */
+/* Benchmarking & Comparative Intelligence (Instructions #40–#55)   */
+/* ------------------------------------------------------------------ */
+
+export type StatisticalValidityStatus = "DATASET_GROWING" | "STATISTICALLY_VALID";
+
+export interface Level1HistoricalBaseline {
+  previousAssessmentId: string | null;
+  previousAssessmentDate: string | null;
+  previousOverallScore: number | null;
+  previousMaturityBand: number | null;
+  scoreDelta: number | null;
+  dimensionDeltas: Record<string, number>;
+  progressionPace: "Accelerating" | "Steady" | "Plateauing" | "First Cycle";
+}
+
+export interface Level2PeerBenchmark {
+  peerGroupId: string;
+  peerGroupName: string;
+  sampleSize: number;
+  minSampleThreshold: number;
+  status: StatisticalValidityStatus;
+  isStatisticallyValid: boolean;
+  peerMedianOverall: number | null;
+  peerIqrRange: [number, number] | null;
+  deltaToPeerMedian: number | null;
+  peerDimensionMedians: Record<string, number>;
+  strongestRelativeDimension: string | null;
+  largestOpportunityDimension: string | null;
+}
+
+export interface Level3CohortComparison {
+  cohortName: string;
+  sampleSize: number;
+  status: StatisticalValidityStatus;
+  cohortMedian: number | null;
+  deltaToCohortMedian: number | null;
+}
+
+export interface Level4SectorReference {
+  sectorName: string;
+  sampleSize: number;
+  status: StatisticalValidityStatus;
+  sectorMedian: number | null;
+  deltaToSectorMedian: number | null;
+}
+
+export interface DistributionStatistics {
+  sampleSize: number;
+  min: number;
+  max: number;
+  mean: number;
+  median: number;
+  q1: number;
+  q3: number;
+  iqr: number;
+  p10: number;
+  p90: number;
+}
+
+export interface BenchmarkSummary {
+  assessmentId: string;
+  institutionId: string;
+  productCode: "ecri" | "arui";
+  methodologyVersion: string;
+  overallScore: number;
+  maturityBand: number;
+  dimensionScores: Record<string, number>;
+  level1Baseline: Level1HistoricalBaseline;
+  level2PeerBenchmark: Level2PeerBenchmark;
+  level3CohortComparison: Level3CohortComparison;
+  level4SectorReference: Level4SectorReference;
+  distributionProfile: {
+    status: StatisticalValidityStatus;
+    sampleSize: number;
+    distribution: DistributionStatistics | null;
+  };
+  governanceNote: string;
+  isIllustrativeSample?: boolean;
+}
+
+export interface PeerGroupDefinition {
+  id: string;
+  productCode: string;
+  code: string;
+  name: string;
+  description: string;
+  minSampleSize: number;
+  isActive: boolean;
 }

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Check, FileText, Link2, Plus, StickyNote, UploadCloud } from "lucide-react";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { PageHeader } from "@/components/ari/page-header";
@@ -15,10 +15,12 @@ import type { EvidenceKind } from "@/api/types";
 import { queries, useCreateEvidence, useSubmitEvidence } from "@/api/hooks";
 
 export const Route = createFileRoute("/arui/evidence")({
-  loader: ({ context }) =>
-    context.queryClient
-      .ensureQueryData(queries.evidence((context as any).assessmentId))
-      .then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await context.queryClient.ensureQueryData(queries.evidence(assessmentId)).catch(() => undefined);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -51,10 +53,17 @@ const kinds: { value: EvidenceKind; label: string; icon: typeof FileText; hint: 
 
 function AruiEvidencePage() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const { data: view } = useSuspenseQuery(queries.evidence(assessmentId));
-  const create = useCreateEvidence(assessmentId);
-  const submit = useSubmitEvidence(assessmentId);
+  const assessmentId = (ctx as any)?.assessmentId;
+  const { data: view } = useQuery({
+    ...queries.evidence(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+  const create = useCreateEvidence(assessmentId || "");
+  const submit = useSubmitEvidence(assessmentId || "");
+
+  if (!view) {
+    return <PagePending />;
+  }
 
   const [kind, setKind] = useState<EvidenceKind>("document");
   const [title, setTitle] = useState("");

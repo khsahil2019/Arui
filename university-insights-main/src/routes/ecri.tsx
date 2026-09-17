@@ -6,19 +6,22 @@ import { queries } from "@/api/hooks";
 export const Route = createFileRoute("/ecri")({
   ssr: false,
   beforeLoad: async ({ context, location }) => {
-    // If accessing the public product page (/ecri or /ecri/) or login (/ecri/login), allow without workspace auth
-    if (location.pathname === "/ecri" || location.pathname === "/ecri/" || location.pathname.startsWith("/ecri/login")) {
+    // Public routes under /ecri do not require session
+    if (
+      location.pathname === "/ecri" ||
+      location.pathname === "/ecri/" ||
+      location.pathname.startsWith("/ecri/login")
+    ) {
       return {};
     }
-    const session = await context.queryClient.ensureQueryData(queries.session());
-    // Require session specifically for Horizon State University / ECRI tenant
-    if (!session || !session.institution?.name?.toLowerCase().includes("horizon")) {
+    const session = await context.queryClient.ensureQueryData(queries.session("ecri"));
+    if (!session || (session.engine && session.engine !== "ecri")) {
       throw redirect({ to: "/ecri/login", search: { redirect: location.href } });
     }
     if (session.user.role === "assessor") {
       throw redirect({ to: "/assessor" });
     }
-    return { session, assessmentId: session.assessmentId || "1e2e9604-6b6c-4a13-a5ee-4628284065f6" };
+    return { session, assessmentId: session.assessmentId };
   },
   component: EcriLayout,
 });
@@ -27,14 +30,22 @@ function EcriLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const ctx = Route.useRouteContext();
   const session = (ctx as any)?.session;
-  const assessmentId = (ctx as any)?.assessmentId ?? "1e2e9604-6b6c-4a13-a5ee-4628284065f6";
+  const assessmentId = (ctx as any)?.assessmentId;
+  const isPublic =
+    pathname === "/ecri" ||
+    pathname === "/ecri/" ||
+    pathname.startsWith("/ecri/login") ||
+    !session;
 
-  // For exact public /ecri page or login, render Outlet directly without the workspace shell
-  if (pathname === "/ecri" || pathname === "/ecri/" || pathname.startsWith("/ecri/login") || !session) {
+  const status = useQuery({
+    ...queries.status(assessmentId || ""),
+    enabled: !isPublic && !!assessmentId,
+  });
+
+  if (isPublic) {
     return <Outlet />;
   }
 
-  const status = useQuery(queries.status(assessmentId));
   return (
     <WorkspaceShell
       session={session}
@@ -47,3 +58,4 @@ function EcriLayout() {
     </WorkspaceShell>
   );
 }
+

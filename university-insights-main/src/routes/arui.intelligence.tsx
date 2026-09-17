@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Hourglass } from "lucide-react";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { PageHeader, SectionHeading } from "@/components/ari/page-header";
@@ -20,11 +20,15 @@ import { apiMode } from "@/api/client";
 import { queries } from "@/api/hooks";
 
 export const Route = createFileRoute("/arui/intelligence")({
-  loader: ({ context }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(queries.results((context as any).assessmentId)),
-      context.queryClient.ensureQueryData(queries.status((context as any).assessmentId)),
-    ]).then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData(queries.results(assessmentId)).catch(() => undefined),
+        context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined),
+      ]);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -41,9 +45,19 @@ export const Route = createFileRoute("/arui/intelligence")({
 
 function AruiIntelligencePage() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const { data: results } = useSuspenseQuery(queries.results(assessmentId));
-  const { data: status } = useSuspenseQuery(queries.status(assessmentId));
+  const assessmentId = (ctx as any)?.assessmentId;
+  const { data: results } = useQuery({
+    ...queries.results(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+  const { data: status } = useQuery({
+    ...queries.status(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+
+  if (!status) {
+    return <PagePending />;
+  }
 
   if (!results) {
     return (

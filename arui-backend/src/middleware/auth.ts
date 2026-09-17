@@ -22,6 +22,8 @@ export interface AuthenticatedUser {
   role: UserRole;
   institutionId: string | null;
   assessmentId?: string | null;
+  engine?: string;
+  productCode?: string;
 }
 
 declare global {
@@ -53,6 +55,8 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
       role: normalizedRole,
       institutionId: decoded.institutionId || null,
       assessmentId: decoded.assessmentId || null,
+      engine: decoded.engine || decoded.productCode || 'arui',
+      productCode: decoded.productCode || decoded.engine || 'arui',
     };
     next();
   } catch (err: any) {

@@ -466,6 +466,125 @@ export async function migrate() {
       details_json JSONB DEFAULT '{}',
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
+
+    -- =========================================================================
+    -- BENCHMARKING & COMPARATIVE INTELLIGENCE ARCHITECTURE (Instructions #40-55)
+    -- =========================================================================
+
+    -- Institutional Data Participation & Governance Consents
+    CREATE TABLE IF NOT EXISTS benchmark_consents (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
+      product_code VARCHAR(50) NOT NULL,
+      participation_level VARCHAR(50) DEFAULT 'ANONYMOUS_BENCHMARK', -- OPT_OUT, ANONYMOUS_BENCHMARK, CONFIDENTIAL_PEER, PUBLIC_DISCLOSURE
+      is_consented BOOLEAN DEFAULT true,
+      governance_contact_email VARCHAR(255),
+      consented_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      UNIQUE(institution_id, product_code)
+    );
+
+    -- Configurable Peer Groups
+    CREATE TABLE IF NOT EXISTS peer_groups (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      code VARCHAR(50) NOT NULL,
+      name VARCHAR(255) NOT NULL,
+      description TEXT,
+      category VARCHAR(100) DEFAULT 'Institutional Type',
+      min_sample_threshold INT DEFAULT 10,
+      is_active BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      UNIQUE(product_code, code)
+    );
+
+    -- Configurable Peer Group Rules (Multi-dimensional criteria)
+    CREATE TABLE IF NOT EXISTS peer_group_rules (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      peer_group_id UUID NOT NULL REFERENCES peer_groups(id) ON DELETE CASCADE,
+      dimension_name VARCHAR(100) NOT NULL,
+      operator VARCHAR(20) DEFAULT 'IN',
+      rule_value_json JSONB NOT NULL,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Structured Anonymised / Governed Institutional Benchmark Snapshots
+    CREATE TABLE IF NOT EXISTS benchmark_dataset_snapshots (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      assessment_id UUID REFERENCES assessments(id) ON DELETE SET NULL,
+      institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
+      methodology_version VARCHAR(50) NOT NULL,
+      assessment_date TIMESTAMP WITH TIME ZONE NOT NULL,
+      anonymized_id VARCHAR(64) NOT NULL,
+      context_profile_json JSONB NOT NULL,
+      overall_score NUMERIC(5,2) NOT NULL,
+      maturity_band INT NOT NULL,
+      dimension_scores_json JSONB NOT NULL,
+      metric_scores_json JSONB NOT NULL,
+      is_verified_audit BOOLEAN DEFAULT false,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Benchmark Statistical Distributions (Precalculated when N >= N_min)
+    CREATE TABLE IF NOT EXISTS benchmark_distributions (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      peer_group_id UUID REFERENCES peer_groups(id) ON DELETE CASCADE,
+      level VARCHAR(50) NOT NULL, -- SECTOR_ALL, PEER_GROUP, COHORT
+      sample_size INT NOT NULL,
+      is_statistically_valid BOOLEAN DEFAULT false,
+      overall_distribution_json JSONB NOT NULL,
+      dimension_distributions_json JSONB NOT NULL,
+      metric_distributions_json JSONB DEFAULT '{}',
+      calculated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Platform Engine Entitlements (Instructions #56-#80)
+    CREATE TABLE IF NOT EXISTS engine_entitlements (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
+      product_code VARCHAR(50) NOT NULL,
+      status VARCHAR(50) NOT NULL DEFAULT 'NOT_PURCHASED', -- NOT_PURCHASED, PAYMENT_PENDING, ACTIVE, SUSPENDED, EXPIRED
+      cycle VARCHAR(50) DEFAULT '2026-2027',
+      payment_id UUID,
+      activated_at TIMESTAMP WITH TIME ZONE,
+      expires_at TIMESTAMP WITH TIME ZONE,
+      notes TEXT,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      UNIQUE(institution_id, product_code, cycle)
+    );
+
+    -- Platform Payments & Transactions (Instructions #58, #64, #73)
+    CREATE TABLE IF NOT EXISTS payments (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      institution_id UUID NOT NULL REFERENCES institutions(id) ON DELETE CASCADE,
+      user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+      product_code VARCHAR(50) NOT NULL,
+      amount NUMERIC(10,2) NOT NULL,
+      currency VARCHAR(10) DEFAULT 'USD',
+      payment_method VARCHAR(50) DEFAULT 'CARD', -- CARD, WIRE_TRANSFER, INVOICE, SIMULATED
+      transaction_reference VARCHAR(100) UNIQUE NOT NULL,
+      status VARCHAR(50) NOT NULL DEFAULT 'SUCCESS', -- PENDING, SUCCESS, FAILED, REFUNDED
+      invoice_number VARCHAR(100),
+      notes TEXT,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    -- Add phone & designation to users if not present
+    DO $$ 
+    BEGIN
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='phone') THEN
+        ALTER TABLE users ADD COLUMN phone VARCHAR(100);
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='designation') THEN
+        ALTER TABLE users ADD COLUMN designation VARCHAR(255);
+      END IF;
+    END $$;
+
+    ALTER TABLE benchmark_dataset_snapshots DROP CONSTRAINT IF EXISTS benchmark_dataset_snapshots_assessment_id_fkey;
+    ALTER TABLE benchmark_dataset_snapshots ALTER COLUMN assessment_id DROP NOT NULL;
   `;
 
   await query(sql);

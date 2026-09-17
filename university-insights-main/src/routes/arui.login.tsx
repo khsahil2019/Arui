@@ -9,11 +9,10 @@ export const Route = createFileRoute("/arui/login")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
     typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
   beforeLoad: async ({ context, search }) => {
-    const session = await context.queryClient.ensureQueryData(queries.session());
-    if (session)
+    const session = await context.queryClient.ensureQueryData(queries.session("arui"));
+    if (session && (session.engine === "arui" || !session.engine))
       throw redirect({
-        to: search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/overview"),
-        search: { engine: "arui" },
+        to: search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/arui/overview"),
       });
   },
   head: () => ({
@@ -45,8 +44,7 @@ function AruiLoginPage() {
         engine: "arui",
       });
       navigate({
-        to: (back ?? (session.user.role === "assessor" ? "/assessor" : "/overview")) as any,
-        search: { engine: "arui" } as any,
+        to: (back ?? (session.user.role === "assessor" ? "/assessor" : "/arui/overview")) as any,
         replace: true,
       });
     } catch {

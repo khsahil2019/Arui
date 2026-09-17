@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Info } from "lucide-react";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { PageHeader } from "@/components/ari/page-header";
@@ -15,11 +15,15 @@ import type { ProfileFieldDefinition, ProfileValue, ProfileValues } from "@/api/
 import { queries, useSaveProfile } from "@/api/hooks";
 
 export const Route = createFileRoute("/ecri/profile")({
-  loader: ({ context }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(queries.profileForm()),
-      context.queryClient.ensureQueryData(queries.profile((context as any).assessmentId)),
-    ]).then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await Promise.all([
+        context.queryClient.ensureQueryData(queries.profileForm()).catch(() => undefined),
+        context.queryClient.ensureQueryData(queries.profile(assessmentId)).catch(() => undefined),
+      ]);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -36,15 +40,29 @@ export const Route = createFileRoute("/ecri/profile")({
 
 function EcriProfilePage() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const { data: form } = useSuspenseQuery(queries.profileForm());
-  const { data: profile } = useSuspenseQuery(queries.profile(assessmentId));
-  const save = useSaveProfile(assessmentId);
+  const assessmentId = (ctx as any)?.assessmentId;
+  const { data: form } = useQuery(queries.profileForm());
+  const { data: profile } = useQuery({
+    ...queries.profile(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+  const save = useSaveProfile(assessmentId || "");
 
   const [step, setStep] = useState(0);
-  const [values, setValues] = useState<ProfileValues>(profile.values);
+  const [values, setValues] = useState<ProfileValues>({});
+
+  useEffect(() => {
+    if (profile?.values) {
+      setValues(profile.values);
+    }
+  }, [profile?.values]);
+
   const pending = useRef<ProfileValues>({});
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  if (!form || !profile) {
+    return <PagePending />;
+  }
 
   const flush = () => {
     if (Object.keys(pending.current).length === 0) return;

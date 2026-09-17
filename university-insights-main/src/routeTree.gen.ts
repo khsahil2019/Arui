@@ -16,6 +16,7 @@ import { Route as AruiRouteImport } from './routes/arui'
 import { Route as AssessorRouteImport } from './routes/assessor'
 import { Route as EcriRouteImport } from './routes/ecri'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as WorkspaceEvidenceRouteImport } from './routes/_workspace.evidence'
 import { Route as WorkspaceIntelligenceRouteImport } from './routes/_workspace.intelligence'
 import { Route as WorkspaceOrientationRouteImport } from './routes/_workspace.orientation'
@@ -33,6 +34,7 @@ import { Route as AruiPulseRouteImport } from './routes/arui.pulse'
 import { Route as AssessorIndexRouteImport } from './routes/assessor.index'
 import { Route as AssessorIdRouteImport } from './routes/assessor.$id'
 import { Route as EcriIndexRouteImport } from './routes/ecri.index'
+import { Route as EcriEngagementRouteImport } from './routes/ecri.engagement'
 import { Route as EcriEvidenceRouteImport } from './routes/ecri.evidence'
 import { Route as EcriIntelligenceRouteImport } from './routes/ecri.intelligence'
 import { Route as EcriLoginRouteImport } from './routes/ecri.login'
@@ -85,6 +87,11 @@ const EcriRoute = EcriRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WorkspaceEvidenceRoute = WorkspaceEvidenceRouteImport.update({
@@ -170,6 +177,11 @@ const AssessorIdRoute = AssessorIdRouteImport.update({
 const EcriIndexRoute = EcriIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => EcriRoute,
+} as any)
+const EcriEngagementRoute = EcriEngagementRouteImport.update({
+  id: '/engagement',
+  path: '/engagement',
   getParentRoute: () => EcriRoute,
 } as any)
 const EcriEvidenceRoute = EcriEvidenceRouteImport.update({
@@ -277,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/assessor': typeof AssessorRouteWithChildren
   '/ecri': typeof EcriRouteWithChildren
   '/login': typeof LoginRoute
+  '/portfolio': typeof PortfolioRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
   '/orientation': typeof WorkspaceOrientationRoute
@@ -291,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/arui/profile': typeof AruiProfileRoute
   '/arui/pulse': typeof AruiPulseRoute
   '/assessor/$id': typeof AssessorIdRouteWithChildren
+  '/ecri/engagement': typeof EcriEngagementRoute
   '/ecri/evidence': typeof EcriEvidenceRoute
   '/ecri/intelligence': typeof EcriIntelligenceRoute
   '/ecri/login': typeof EcriLoginRoute
@@ -318,6 +332,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
+  '/portfolio': typeof PortfolioRoute
   '/evidence': typeof WorkspaceEvidenceRoute
   '/intelligence': typeof WorkspaceIntelligenceRoute
   '/orientation': typeof WorkspaceOrientationRoute
@@ -331,6 +346,7 @@ export interface FileRoutesByTo {
   '/arui/overview': typeof AruiOverviewRoute
   '/arui/profile': typeof AruiProfileRoute
   '/arui/pulse': typeof AruiPulseRoute
+  '/ecri/engagement': typeof EcriEngagementRoute
   '/ecri/evidence': typeof EcriEvidenceRoute
   '/ecri/intelligence': typeof EcriIntelligenceRoute
   '/ecri/login': typeof EcriLoginRoute
@@ -363,6 +379,7 @@ export interface FileRoutesById {
   '/assessor': typeof AssessorRouteWithChildren
   '/ecri': typeof EcriRouteWithChildren
   '/login': typeof LoginRoute
+  '/portfolio': typeof PortfolioRoute
   '/_workspace/evidence': typeof WorkspaceEvidenceRoute
   '/_workspace/intelligence': typeof WorkspaceIntelligenceRoute
   '/_workspace/orientation': typeof WorkspaceOrientationRoute
@@ -377,6 +394,7 @@ export interface FileRoutesById {
   '/arui/profile': typeof AruiProfileRoute
   '/arui/pulse': typeof AruiPulseRoute
   '/assessor/$id': typeof AssessorIdRouteWithChildren
+  '/ecri/engagement': typeof EcriEngagementRoute
   '/ecri/evidence': typeof EcriEvidenceRoute
   '/ecri/intelligence': typeof EcriIntelligenceRoute
   '/ecri/login': typeof EcriLoginRoute
@@ -409,6 +427,7 @@ export interface FileRouteTypes {
     | '/assessor'
     | '/ecri'
     | '/login'
+    | '/portfolio'
     | '/evidence'
     | '/intelligence'
     | '/orientation'
@@ -423,6 +442,7 @@ export interface FileRouteTypes {
     | '/arui/profile'
     | '/arui/pulse'
     | '/assessor/$id'
+    | '/ecri/engagement'
     | '/ecri/evidence'
     | '/ecri/intelligence'
     | '/ecri/login'
@@ -450,6 +470,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/login'
+    | '/portfolio'
     | '/evidence'
     | '/intelligence'
     | '/orientation'
@@ -463,6 +484,7 @@ export interface FileRouteTypes {
     | '/arui/overview'
     | '/arui/profile'
     | '/arui/pulse'
+    | '/ecri/engagement'
     | '/ecri/evidence'
     | '/ecri/intelligence'
     | '/ecri/login'
@@ -494,6 +516,7 @@ export interface FileRouteTypes {
     | '/assessor'
     | '/ecri'
     | '/login'
+    | '/portfolio'
     | '/_workspace/evidence'
     | '/_workspace/intelligence'
     | '/_workspace/orientation'
@@ -508,6 +531,7 @@ export interface FileRouteTypes {
     | '/arui/profile'
     | '/arui/pulse'
     | '/assessor/$id'
+    | '/ecri/engagement'
     | '/ecri/evidence'
     | '/ecri/intelligence'
     | '/ecri/login'
@@ -540,6 +564,7 @@ export interface RootRouteChildren {
   AssessorRoute: typeof AssessorRouteWithChildren
   EcriRoute: typeof EcriRouteWithChildren
   LoginRoute: typeof LoginRoute
+  PortfolioRoute: typeof PortfolioRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -591,6 +616,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_workspace/evidence': {
@@ -710,6 +742,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/ecri/'
       preLoaderRoute: typeof EcriIndexRouteImport
+      parentRoute: typeof EcriRoute
+    }
+    '/ecri/engagement': {
+      id: '/ecri/engagement'
+      path: '/engagement'
+      fullPath: '/ecri/engagement'
+      preLoaderRoute: typeof EcriEngagementRouteImport
       parentRoute: typeof EcriRoute
     }
     '/ecri/evidence': {
@@ -939,6 +978,7 @@ const AssessorRouteWithChildren = AssessorRoute._addFileChildren(
 )
 
 interface EcriRouteChildren {
+  EcriEngagementRoute: typeof EcriEngagementRoute
   EcriEvidenceRoute: typeof EcriEvidenceRoute
   EcriIntelligenceRoute: typeof EcriIntelligenceRoute
   EcriLoginRoute: typeof EcriLoginRoute
@@ -952,6 +992,7 @@ interface EcriRouteChildren {
 }
 
 const EcriRouteChildren: EcriRouteChildren = {
+  EcriEngagementRoute: EcriEngagementRoute,
   EcriEvidenceRoute: EcriEvidenceRoute,
   EcriIntelligenceRoute: EcriIntelligenceRoute,
   EcriLoginRoute: EcriLoginRoute,
@@ -974,6 +1015,7 @@ const rootRouteChildren: RootRouteChildren = {
   AssessorRoute: AssessorRouteWithChildren,
   EcriRoute: EcriRouteWithChildren,
   LoginRoute: LoginRoute,
+  PortfolioRoute: PortfolioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -6,18 +6,22 @@ import { queries } from "@/api/hooks";
 export const Route = createFileRoute("/arui")({
   ssr: false,
   beforeLoad: async ({ context, location }) => {
-    // If accessing the public product specs page (/arui or /arui/) or login (/arui/login), allow without authentication
-    if (location.pathname === "/arui" || location.pathname === "/arui/" || location.pathname.startsWith("/arui/login")) {
+    // Public routes under /arui do not require session
+    if (
+      location.pathname === "/arui" ||
+      location.pathname === "/arui/" ||
+      location.pathname.startsWith("/arui/login")
+    ) {
       return {};
     }
-    const session = await context.queryClient.ensureQueryData(queries.session());
-    if (!session || session.institution?.name?.toLowerCase().includes("horizon")) {
+    const session = await context.queryClient.ensureQueryData(queries.session("arui"));
+    if (!session || (session.engine && session.engine !== "arui")) {
       throw redirect({ to: "/arui/login", search: { redirect: location.href } });
     }
     if (session.user.role === "assessor") {
       throw redirect({ to: "/assessor" });
     }
-    return { session, assessmentId: session.assessmentId || "31d74aad-331b-4124-8b63-17a757448c42" };
+    return { session, assessmentId: session.assessmentId };
   },
   component: AruiLayout,
 });
@@ -26,13 +30,22 @@ function AruiLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const ctx = Route.useRouteContext();
   const session = (ctx as any)?.session;
-  const assessmentId = (ctx as any)?.assessmentId ?? "31d74aad-331b-4124-8b63-17a757448c42";
+  const assessmentId = (ctx as any)?.assessmentId;
+  const isPublic =
+    pathname === "/arui" ||
+    pathname === "/arui/" ||
+    pathname.startsWith("/arui/login") ||
+    !session;
 
-  if (pathname === "/arui" || pathname === "/arui/" || pathname.startsWith("/arui/login") || !session) {
+  const status = useQuery({
+    ...queries.status(assessmentId || ""),
+    enabled: !isPublic && !!assessmentId,
+  });
+
+  if (isPublic) {
     return <Outlet />;
   }
 
-  const status = useQuery(queries.status(assessmentId));
   return (
     <WorkspaceShell
       session={session}

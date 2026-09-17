@@ -380,12 +380,19 @@ export async function seed() {
   const ecriAssessorHash = await bcrypt.hash('assessor123', 10);
 
   // --- ARUI DEMO USERS ---
-  // 1. Apex University Lead
+  // 1. Apex University Lead & Admin
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
     [instId, 'lead@apex.edu', apexPasswordHash, 'Dr. Aris Thorne (Institutional Lead)', 'INSTITUTION_ADMIN']
+  );
+
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [instId, 'admin@apex.edu', apexPasswordHash, 'Apex University Administrator', 'INSTITUTION_ADMIN']
   );
 
   // 2. Global Super Admin
@@ -403,6 +410,13 @@ export async function seed() {
     [null, 'admin@arui.org', await bcrypt.hash('admin123', 10), 'Chief Platform Administrator', 'SUPER_ADMIN']
   );
 
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [null, 'admin@ecri.org', await bcrypt.hash('admin123', 10), 'Chief ECRI Administrator', 'SUPER_ADMIN']
+  );
+
   // 3. ARUI External Assessor
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
@@ -412,12 +426,19 @@ export async function seed() {
   );
 
   // --- ECRI DEMO USERS ---
-  // 4. Horizon University Career & Employability Lead
+  // 4. Horizon University Career & Employability Lead & Admin
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
     [horizonInstId, 'lead@horizon.edu', horizonPasswordHash, 'Prof. Marcus Vance (Dean of Career & WIL)', 'INSTITUTION_ADMIN']
+  );
+
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [horizonInstId, 'admin@horizon.edu', horizonPasswordHash, 'Horizon University Administrator', 'INSTITUTION_ADMIN']
   );
 
   // 5. Horizon University Industry Relations & WIL Officer
@@ -585,9 +606,111 @@ export async function seed() {
     ]
   );
   const ecriEv1Id = ecriEv1.rows[0].id;
-  await query(`INSERT INTO evidence_metric_links (evidence_id, metric_full_code, is_primary) VALUES ($1, 'D01-M01', true), ($1, 'D02-M01', false), ($1, 'D03-M01', false) ON CONFLICT DO NOTHING`, [ecriEv1Id]);
+  // Seed Benchmark Consents & Engine Entitlements
+  for (const iId of [instId, horizonInstId]) {
+    await query(
+      `INSERT INTO benchmark_consents (institution_id, product_code, participation_level, is_consented)
+       VALUES ($1, 'arui', 'ANONYMOUS_BENCHMARK', true), ($1, 'ecri', 'ANONYMOUS_BENCHMARK', true)
+       ON CONFLICT (institution_id, product_code) DO NOTHING`,
+      [iId]
+    );
+  }
 
-  console.log(`Database seeding completed successfully for both ARUI (Assessment: ${assessmentId}) and ECRI (Assessment: ${ecriAssessmentId}).`);
+  // Seed Multi-Engine Entitlements (Instructions #56-#80)
+  // Apex Institute has both ARUI and ECRI active
+  await query(
+    `INSERT INTO engine_entitlements (institution_id, product_code, status, cycle, activated_at)
+     VALUES 
+       ($1, 'arui', 'ACTIVE', '2026-2027', NOW()),
+       ($1, 'ecri', 'ACTIVE', '2026-2027', NOW())
+     ON CONFLICT (institution_id, product_code, cycle) DO UPDATE SET status = 'ACTIVE'`,
+    [instId]
+  );
+
+  // Horizon State University has ARUI active, ECRI not purchased
+  await query(
+    `INSERT INTO engine_entitlements (institution_id, product_code, status, cycle, activated_at)
+     VALUES 
+       ($1, 'arui', 'ACTIVE', '2026-2027', NOW()),
+       ($1, 'ecri', 'NOT_PURCHASED', '2026-2027', NULL)
+     ON CONFLICT (institution_id, product_code, cycle) DO UPDATE SET status = EXCLUDED.status`,
+    [horizonInstId]
+  );
+
+  // Seed sample payments
+  await query(
+    `INSERT INTO payments (institution_id, product_code, amount, currency, payment_method, transaction_reference, status, invoice_number)
+     VALUES 
+       ($1, 'arui', 4999.00, 'USD', 'CARD', 'tx_arui_apex_2026', 'SUCCESS', 'INV-ARUI-2026-001'),
+       ($1, 'ecri', 4999.00, 'USD', 'CARD', 'tx_ecri_apex_2026', 'SUCCESS', 'INV-ECRI-2026-001'),
+       ($2, 'arui', 4999.00, 'USD', 'WIRE_TRANSFER', 'tx_arui_horizon_2026', 'SUCCESS', 'INV-ARUI-2026-002')
+     ON CONFLICT (transaction_reference) DO NOTHING`,
+    [instId, horizonInstId]
+  );
+
+  const defaultPeerGroups = [
+    {
+      productCode: 'ecri',
+      code: 'PG-COMP',
+      name: 'Comprehensive Multidisciplinary Universities',
+      category: 'Institutional Type',
+      description: 'Universities offering a broad range of humanities, sciences, commerce, and engineering programs.',
+      minSampleThreshold: 10,
+      rules: [{ dimensionName: 'institution_type', operator: 'IN', ruleValueJson: ['Comprehensive University', 'State University', 'Multidisciplinary'] }],
+    },
+    {
+      productCode: 'ecri',
+      code: 'PG-TECH',
+      name: 'Technical, Engineering & Applied Science Institutes',
+      category: 'Discipline Profile',
+      description: 'Institutions with heavy concentration in engineering, computing, and technology programs.',
+      minSampleThreshold: 10,
+      rules: [{ dimensionName: 'discipline_profile', operator: 'IN', ruleValueJson: ['Technical', 'Engineering', 'STEM-focused'] }],
+    },
+    {
+      productCode: 'ecri',
+      code: 'PG-PRIV',
+      name: 'Private Autonomous & Deemed Universities',
+      category: 'Ownership & Scale',
+      description: 'Autonomous institutions with flexible curriculum structures and agile industry advisory boards.',
+      minSampleThreshold: 10,
+      rules: [{ dimensionName: 'ownership', operator: 'IN', ruleValueJson: ['Private', 'Deemed', 'Autonomous'] }],
+    },
+    {
+      productCode: 'arui',
+      code: 'PG-ARUI-COMP',
+      name: 'Comprehensive Research & Teaching Universities',
+      category: 'Institutional Type',
+      description: 'Whole-institution AI resilience benchmark for multidisciplinary universities.',
+      minSampleThreshold: 10,
+      rules: [{ dimensionName: 'institution_type', operator: 'IN', ruleValueJson: ['Comprehensive University', 'State University'] }],
+    },
+  ];
+
+  for (const pg of defaultPeerGroups) {
+    const pgRes = await query(
+      `INSERT INTO peer_groups (product_code, code, name, description, category, min_sample_threshold)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       ON CONFLICT (product_code, code) DO UPDATE SET
+         name = EXCLUDED.name,
+         description = EXCLUDED.description,
+         category = EXCLUDED.category,
+         min_sample_threshold = EXCLUDED.min_sample_threshold
+       RETURNING id`,
+      [pg.productCode, pg.code, pg.name, pg.description, pg.category, pg.minSampleThreshold]
+    );
+    const pgId = pgRes.rows[0].id;
+    await query(`DELETE FROM peer_group_rules WHERE peer_group_id = $1`, [pgId]);
+    for (const r of pg.rules) {
+      await query(
+        `INSERT INTO peer_group_rules (peer_group_id, dimension_name, operator, rule_value_json)
+         VALUES ($1, $2, $3, $4)`,
+        [pgId, r.dimensionName, r.operator, JSON.stringify(r.ruleValueJson)]
+      );
+    }
+  }
+
+  console.log(`Database seeding completed successfully for both ARUI (Assessment: ${assessmentId}) and ECRI (Assessment: ${ecriAssessmentId}) with Benchmarking infrastructure.`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

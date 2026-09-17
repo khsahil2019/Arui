@@ -14,10 +14,10 @@ import type {
 } from "./types";
 
 export const queries = {
-  session: () =>
+  session: (engine?: string) =>
     queryOptions({
-      queryKey: ["session"],
-      queryFn: () => getApi().getSession(),
+      queryKey: ["session", engine ?? "active"],
+      queryFn: () => getApi().getSession(engine),
       staleTime: 60_000,
     }),
   status: (id: string) =>

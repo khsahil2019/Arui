@@ -9,9 +9,8 @@ export const Route = createFileRoute("/ecri/login")({
   validateSearch: (search: Record<string, unknown>): { redirect?: string } =>
     typeof search["redirect"] === "string" ? { redirect: search["redirect"] } : {},
   beforeLoad: async ({ context, search }) => {
-    const session = await context.queryClient.ensureQueryData(queries.session());
-    // Only auto-redirect if session is already an ECRI tenant
-    if (session && session.institution?.name?.toLowerCase().includes("horizon")) {
+    const session = await context.queryClient.ensureQueryData(queries.session("ecri"));
+    if (session && session.engine === "ecri") {
       throw redirect({
         to: search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/ecri/overview"),
       });
@@ -45,6 +44,13 @@ function EcriLoginPage() {
         productCode: "ecri",
         engine: "ecri",
       });
+      if (session.engineEntitlements && session.engineEntitlements["ecri"] === "NOT_PURCHASED") {
+        navigate({
+          to: "/ecri/engagement",
+          replace: true,
+        });
+        return;
+      }
       navigate({
         to: (back ?? (session.user.role === "assessor" ? "/assessor" : "/ecri/overview")) as any,
         replace: true,
@@ -186,6 +192,12 @@ function EcriLoginPage() {
               {login.isPending ? "Signing in…" : "Sign in to ECRI Workspace"}
               <ArrowRight className="size-4" />
             </button>
+
+            <div className="text-center pt-2">
+              <Link to="/ecri/engagement" className="text-xs font-semibold text-teal hover:underline">
+                New institution? Register Institutional Account & Activate Engagement →
+              </Link>
+            </div>
           </form>
 
           {/* Quick Demo Sign-In Options for ECRI */}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { PageContainer, PagePending } from "@/components/ari/workspace-shell";
 import { QuestionCard } from "@/components/ari/question-card";
@@ -10,13 +10,15 @@ import { ResponseControls, ResponsePanel } from "@/components/ari/response-contr
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { queries, useSaveResponse } from "@/api/hooks";
-import { domainNames } from "@/lib/catalogue";
+import { ecriDimensionNames } from "@/lib/catalogue";
 
 export const Route = createFileRoute("/ecri/pulse")({
-  loader: ({ context }) =>
-    context.queryClient
-      .ensureQueryData(queries.screening((context as any).assessmentId))
-      .then(() => undefined),
+  loader: async ({ context }) => {
+    const assessmentId = (context as any)?.assessmentId;
+    if (assessmentId) {
+      await context.queryClient.ensureQueryData(queries.screening(assessmentId)).catch(() => undefined);
+    }
+  },
   pendingComponent: () => <PagePending />,
   head: () => ({
     meta: [
@@ -33,9 +35,17 @@ export const Route = createFileRoute("/ecri/pulse")({
 
 function EcriPulsePage() {
   const ctx = Route.useRouteContext();
-  const assessmentId = (ctx as any).assessmentId;
-  const { data: screening } = useSuspenseQuery(queries.screening(assessmentId));
-  const save = useSaveResponse(assessmentId);
+  const assessmentId = (ctx as any)?.assessmentId;
+  const { data: screening } = useQuery({
+    ...queries.screening(assessmentId || ""),
+    enabled: !!assessmentId,
+  });
+  const save = useSaveResponse(assessmentId || "");
+
+  if (!screening) {
+    return <PagePending />;
+  }
+
   const prompts = screening.prompts;
   const responded = new Set(screening.responses.map((r) => r.promptId));
   const firstOpen = prompts.findIndex((p) => !responded.has(p.id));
@@ -61,7 +71,7 @@ function EcriPulsePage() {
           <p className="eyebrow mt-8 text-emerald-800">{screening.title}</p>
           <h1 className="mt-3 text-3xl md:text-4xl font-serif">{prompts.length} career signals captured.</h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            The benchmark now has an early reading of employer integration across the institution. The next stage explores each dimension in turn, beginning with D01 · {domainNames.D01}.
+            The benchmark now has an early reading of employer integration across the institution. The next stage explores each dimension in turn, beginning with D01 · {ecriDimensionNames.D01}.
           </p>
           {screening.earlySignal && (
             <div className="mt-10 text-left">
