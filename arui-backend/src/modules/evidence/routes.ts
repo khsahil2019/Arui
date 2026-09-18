@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { query } from '../../db/index.js';
 import { authenticate, requireInstitutionAccess, requireRole } from '../../middleware/auth.js';
+import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 
 const router = Router();
 
@@ -50,7 +51,7 @@ const upload = multer({
 });
 
 // Route: Get Evidence View
-router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -108,9 +109,14 @@ router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, 
       fulfilledByIds: items.filter((it) => it.proposedSupports.includes(r.domain_code)).map((it) => it.id),
     }));
 
+    // The institution-facing evidence queue is intentionally execution-light.
+    // Keep the full 132 requirements internal; expose only a small representative
+    // set at a time so one artifact can satisfy multiple metric links.
+    const visibleRequests = requests.slice(0, 12);
+
     return res.json({
       items,
-      requests,
+      requests: visibleRequests,
       coreTarget: { min: 8, max: 12 },
       evidenceTypes: [
         { value: 'policy', label: 'Institutional Policy / Charter / Senate Resolution' },
@@ -142,6 +148,7 @@ router.post(
   '/assessments/:id/evidence',
   authenticate,
   requireInstitutionAccess,
+  requireAssessmentEngineAccess(),
   upload.single('file'),
   async (req: any, res: any) => {
     const { id } = req.params;
@@ -272,6 +279,7 @@ router.get(
   '/assessments/:id/evidence/:evidenceId/file',
   authenticate,
   requireInstitutionAccess,
+  requireAssessmentEngineAccess(),
   async (req, res) => {
     const { id, evidenceId } = req.params;
 
@@ -312,7 +320,7 @@ router.get(
 );
 
 // Route: Submit Evidence Item
-router.post('/assessments/:id/evidence/:evidenceId/submit', authenticate, requireInstitutionAccess, async (req, res) => {
+router.post('/assessments/:id/evidence/:evidenceId/submit', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id, evidenceId } = req.params;
 
   try {

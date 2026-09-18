@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { authenticate } from '../../middleware/auth.js';
+import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 import { query } from '../../db/index.js';
 import { BenchmarkingService } from './service.js';
 
 const router = Router();
 
 // 1. Get Benchmark & Comparative Summary for an assessment
-router.get('/:productCode/assessments/:assessmentId/summary', authenticate, async (req, res) => {
+router.get('/:productCode/assessments/:assessmentId/summary', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
   const assessmentId = req.params.assessmentId as string;
   try {
     const summary = await BenchmarkingService.getBenchmarkSummary(assessmentId);
@@ -37,7 +38,7 @@ router.get('/:productCode/peer-groups', authenticate, async (req, res) => {
 });
 
 // 3. Record/Update Assessment Benchmark Snapshot
-router.post('/:productCode/assessments/:assessmentId/snapshot', authenticate, async (req, res) => {
+router.post('/:productCode/assessments/:assessmentId/snapshot', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
   const assessmentId = req.params.assessmentId as string;
   try {
     const snapshot = await BenchmarkingService.recordAssessmentSnapshot(assessmentId);

@@ -193,19 +193,7 @@ export async function migrate() {
     );
 
     -- Dynamic Report Branding Configuration (Admin Controlled)
-    CREATE TABLE IF NOT EXISTS brand_configs (
-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-      product_code VARCHAR(50) NOT NULL,
-      institution_id UUID REFERENCES institutions(id) ON DELETE CASCADE,
-      logo_url TEXT,
-      header_text TEXT,
-      footer_text TEXT,
-      contact_email VARCHAR(255),
-      contact_phone VARCHAR(100),
-      contact_whatsapp VARCHAR(100),
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-    );
+    
 
     -- Dynamic Pricing (Admin / Backend Controlled)
     CREATE TABLE IF NOT EXISTS product_pricing (
@@ -254,6 +242,20 @@ export async function migrate() {
       country VARCHAR(100) DEFAULT 'India',
       state VARCHAR(100),
       district VARCHAR(100),
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+CREATE TABLE IF NOT EXISTS brand_configs (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      product_code VARCHAR(50) NOT NULL,
+      institution_id UUID REFERENCES institutions(id) ON DELETE CASCADE,
+      logo_url TEXT,
+      header_text TEXT,
+      footer_text TEXT,
+      contact_email VARCHAR(255),
+      contact_phone VARCHAR(100),
+      contact_whatsapp VARCHAR(100),
       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );

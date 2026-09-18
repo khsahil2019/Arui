@@ -27,12 +27,20 @@ async function runBenchmarkingTestSuite() {
 
   // 1. Setup Fixture & Baseline Assessment for ECRI
   const ecriAssessmentRes = await query(
-    `SELECT a.id, a.institution_id, a.methodology_version_id FROM assessments a WHERE a.product_code = 'ecri' LIMIT 1`
+    `SELECT a.id, a.institution_id, a.methodology_version_id FROM assessments a WHERE a.product_code = 'ecri' ORDER BY a.created_at DESC LIMIT 1`
   );
   assert(ecriAssessmentRes.rows.length > 0, 'ECRI assessment exists for benchmarking test');
   const ecriAssessmentId = ecriAssessmentRes.rows[0].id;
   const institutionId = ecriAssessmentRes.rows[0].institution_id;
   const ecriVersionId = ecriAssessmentRes.rows[0].methodology_version_id;
+
+  // Ensure institutional profile with peer-matching context exists
+  await query(
+    `INSERT INTO institution_profiles (institution_id, assessment_id, status, values_json, completeness_score)
+     VALUES ($1, $2, 'complete', '{"institution_type": "Comprehensive University", "IP02": "Comprehensive University"}', 100)
+     ON CONFLICT (institution_id, assessment_id) DO UPDATE SET values_json = EXCLUDED.values_json`,
+    [institutionId, ecriAssessmentId]
+  );
 
   // Clean up any lingering synthetic test snapshots from prior test runs
   await query(`DELETE FROM benchmark_dataset_snapshots WHERE anonymized_id LIKE 'syn_anon_%'`);

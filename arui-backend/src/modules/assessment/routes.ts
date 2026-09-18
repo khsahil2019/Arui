@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
 import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
+import { requireEngineEntitlement, requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 
 const router = Router();
 
@@ -136,9 +137,9 @@ export async function getAssessmentStatusView(assessmentId: string) {
   return {
     assessmentId: assessment.id,
     institutionName: assessment.institution_name,
-    cycle: '2026 Baseline',
+    cycle: `${assessment.methodology_version || 'Current'} Baseline`,
     status: assessment.status || 'DRAFT',
-    methodologyVersion: assessment.methodology_version || 'v4.0',
+    methodologyVersion: assessment.methodology_version || 'unknown',
     stages,
     domains,
     evidence: {
@@ -177,7 +178,7 @@ router.get('/products', async (req, res) => {
 });
 
 // Route: Get Assessment Status
-router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   try {
     const statusView = await getAssessmentStatusView(req.params.id as string);
     if (!statusView) {
@@ -229,7 +230,11 @@ router.get('/assessments', authenticate, async (req, res) => {
 // Route: Get or Create active assessment for given product
 router.get('/assessments/active', authenticate, async (req, res) => {
   try {
-    const productCode = (req.query.product as string) || 'arui';
+    const productCode = ((req.query.product as string) || 'arui').toLowerCase();
+    if (req.user?.institutionId && !['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN'].includes(req.user.role || '')) {
+      const access = await (await import('../../modules/entitlements/service.js')).EntitlementService.checkEngineAccess(req.user.institutionId, productCode);
+      if (!access.isAllowed) return res.status(403).json({ error: 'ENGINE_NOT_PURCHASED', productCode, status: access.status, message: access.reason });
+    }
     let aRes;
     if (req.user?.institutionId) {
       aRes = await query(
@@ -251,10 +256,11 @@ router.get('/assessments/active', authenticate, async (req, res) => {
       // Create one if none exists for this institution/product
       const instId = req.user?.institutionId || (await query(`SELECT id FROM institutions LIMIT 1`)).rows[0]?.id;
       const mvRes = await query(
-        `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true LIMIT 1`,
+        `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true ORDER BY created_at DESC LIMIT 1`,
         [productCode]
       );
-      const versionId = mvRes.rows[0]?.id || (await query(`SELECT id FROM methodology_versions LIMIT 1`)).rows[0]?.id;
+      const versionId = mvRes.rows[0]?.id;
+      if (!versionId) return res.status(409).json({ error: 'NO_ACTIVE_METHODOLOGY', productCode });
 
       const title = productCode === 'ecri' 
         ? 'Graduate Employability & Career Readiness Assessment' 
@@ -278,8 +284,12 @@ router.get('/assessments/active', authenticate, async (req, res) => {
 // Route: Create New Assessment
 router.post('/assessments', authenticate, async (req, res) => {
   const { institutionId, title, scopeDomains, productCode } = req.body;
-  const targetProduct = productCode || 'arui';
+  const targetProduct = String(productCode || 'arui').toLowerCase();
   let targetInstitutionId = institutionId || req.user?.institutionId;
+  if (req.user?.institutionId && !['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN'].includes(req.user.role || '')) {
+    const access = await (await import('../entitlements/service.js')).EntitlementService.checkEngineAccess(req.user.institutionId, targetProduct);
+    if (!access.isAllowed) return res.status(403).json({ error: 'ENGINE_NOT_PURCHASED', productCode: targetProduct, status: access.status, message: access.reason });
+  }
 
   if (req.user?.role === 'INSTITUTION_ADMIN') {
     if (institutionId && req.user.institutionId && institutionId !== req.user.institutionId) {
@@ -294,10 +304,11 @@ router.post('/assessments', authenticate, async (req, res) => {
 
   try {
     const mvRes = await query(
-      `SELECT id FROM methodology_versions WHERE (product_code = $1 OR product_code IS NULL) AND is_active = true ORDER BY created_at DESC LIMIT 1`,
+      `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true ORDER BY created_at DESC LIMIT 1`,
       [targetProduct]
     );
     const versionId = mvRes.rows[0]?.id;
+    if (!versionId) return res.status(409).json({ error: 'NO_ACTIVE_METHODOLOGY', productCode: targetProduct });
 
     const defaultScope = ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'];
     const insRes = await query(
@@ -314,7 +325,7 @@ router.post('/assessments', authenticate, async (req, res) => {
 });
 
 // Route: Update Assessment Scope
-router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, async (req, res) => {
+router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { scopeDomains } = req.body;
   try {
     const uRes = await query(
@@ -328,7 +339,7 @@ router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, asy
 });
 
 // Route: Update Assessment
-router.patch('/assessments/:id', authenticate, requireInstitutionAccess, async (req, res) => {
+router.patch('/assessments/:id', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { methodologyVersionId, methodology_version_id, overallScore, score } = req.body;
 
   if (methodologyVersionId || methodology_version_id) {

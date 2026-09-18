@@ -186,7 +186,12 @@ export class BenchmarkingService {
 
       let matchesAll = true;
       for (const rule of rules) {
-        const val = contextProfile[rule.dimension_name];
+        const val = contextProfile[rule.dimension_name] 
+          ?? contextProfile[rule.dimension_name.toLowerCase()]
+          ?? (rule.dimension_name === 'institution_type' ? (contextProfile['IP02'] ?? contextProfile['IP02_INST_TYPE']) : undefined)
+          ?? (rule.dimension_name === 'discipline_profile' ? (contextProfile['IP14'] ?? contextProfile['IP14_DISCIPLINE_PROFILE']) : undefined)
+          ?? (rule.dimension_name === 'ownership' ? (contextProfile['IP03'] ?? contextProfile['IP03_MANDATE']) : undefined);
+
         if (val === undefined || val === null) {
           matchesAll = false;
           break;
@@ -271,7 +276,7 @@ export class BenchmarkingService {
 
     // 4. Query dataset snapshots for peer group & overall sector
     const sectorSnapshotsRes = await query(
-      `SELECT overall_score, dimension_scores_json, institution_id
+      `SELECT overall_score, dimension_scores_json, context_profile_json, institution_id
        FROM benchmark_dataset_snapshots
        WHERE product_code = $1`,
       [productCode]
@@ -282,9 +287,32 @@ export class BenchmarkingService {
     const sectorScores = sectorSnapshotsRes.rows.map((r) => Number(r.overall_score));
     const sectorDist = computeDistribution(sectorScores);
 
-    // Peer group sample calculations
-    const peerSampleScores = sectorScores; // Fallback to sector pool until peer criteria scale
-    const peerSampleSize = sectorSnapshotsRes.rows.length;
+    // Peer group sample calculations. Never substitute the full sector for a configured
+    // peer group: if the configured criteria cannot be evaluated, the peer result remains unavailable.
+    const peerRows = peerGroup
+      ? sectorSnapshotsRes.rows.filter((row: any) => {
+          const profile = typeof row.context_profile_json === 'string' ? JSON.parse(row.context_profile_json) : (row.context_profile_json || {});
+          const rules = peerGroup.rules || [];
+          return rules.every((rule: any) => {
+            const val = profile[rule.dimension_name]
+              ?? profile[rule.dimension_name.toLowerCase()]
+              ?? (rule.dimension_name === 'institution_type' ? (profile['IP02'] ?? profile['IP02_INST_TYPE']) : undefined)
+              ?? (rule.dimension_name === 'discipline_profile' ? (profile['IP14'] ?? profile['IP14_DISCIPLINE_PROFILE']) : undefined)
+              ?? (rule.dimension_name === 'ownership' ? (profile['IP03'] ?? profile['IP03_MANDATE']) : undefined);
+
+            if (val === undefined || val === null) return false;
+            const ruleVal = rule.rule_value_json;
+            if (rule.operator === 'EQ') return String(val).toLowerCase() === String(ruleVal).toLowerCase();
+            if (rule.operator === 'IN') {
+              const arr = Array.isArray(ruleVal) ? ruleVal : [ruleVal];
+              return arr.some((item: any) => String(item).toLowerCase() === String(val).toLowerCase());
+            }
+            return false;
+          });
+        })
+      : [];
+    const peerSampleScores = peerRows.map((r: any) => Number(r.overall_score));
+    const peerSampleSize = peerRows.length;
     const isPeerValid = peerSampleSize >= minRequiredSample;
 
     const peerDist = computeDistribution(peerSampleScores);
@@ -314,7 +342,7 @@ export class BenchmarkingService {
       }
 
       const dimScoresForPeers: number[] = [];
-      for (const s of sectorSnapshotsRes.rows) {
+      for (const s of peerRows) {
         const dJson = s.dimension_scores_json || {};
         if (dJson[code] !== undefined) dimScoresForPeers.push(Number(dJson[code]));
       }

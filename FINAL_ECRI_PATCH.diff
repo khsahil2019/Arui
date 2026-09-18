@@ -1,0 +1,904 @@
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/db/migrate.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/db/migrate.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/db/migrate.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/db/migrate.ts	2026-09-18 11:55:03.645044347 +0000
+@@ -193,19 +193,7 @@
+     );
+ 
+     -- Dynamic Report Branding Configuration (Admin Controlled)
+-    CREATE TABLE IF NOT EXISTS brand_configs (
+-      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+-      product_code VARCHAR(50) NOT NULL,
+-      institution_id UUID REFERENCES institutions(id) ON DELETE CASCADE,
+-      logo_url TEXT,
+-      header_text TEXT,
+-      footer_text TEXT,
+-      contact_email VARCHAR(255),
+-      contact_phone VARCHAR(100),
+-      contact_whatsapp VARCHAR(100),
+-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+-      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+-    );
++    
+ 
+     -- Dynamic Pricing (Admin / Backend Controlled)
+     CREATE TABLE IF NOT EXISTS product_pricing (
+@@ -257,6 +245,20 @@
+       created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+       updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+     );
++
++CREATE TABLE IF NOT EXISTS brand_configs (
++      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
++      product_code VARCHAR(50) NOT NULL,
++      institution_id UUID REFERENCES institutions(id) ON DELETE CASCADE,
++      logo_url TEXT,
++      header_text TEXT,
++      footer_text TEXT,
++      contact_email VARCHAR(255),
++      contact_phone VARCHAR(100),
++      contact_whatsapp VARCHAR(100),
++      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
++      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
++    );
+ 
+     -- Users & RBAC (INSTITUTION_ADMIN, ASSESSOR, LEAD_AUDITOR, SUPER_ADMIN)
+     CREATE TABLE IF NOT EXISTS users (
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/engines/ecri/index.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/engines/ecri/index.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/engines/ecri/index.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/engines/ecri/index.ts	2026-09-18 11:55:03.643525948 +0000
+@@ -15,9 +15,9 @@
+   capabilitiesCount: 132,
+   cardsCount: 132,
+   questionsCount: 153,
+-  calibrationRulesCount: 22,
+-  antiGamingRulesCount: 10,
+-  crossDomainRulesCount: 25,
+-  badgesCount: 12,
++  calibrationRulesCount: 132,
++  antiGamingRulesCount: 13,
++  crossDomainRulesCount: 10,
++  badgesCount: 3,
+ };
+ 
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/middleware/entitlement.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/middleware/entitlement.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/middleware/entitlement.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/middleware/entitlement.ts	2026-09-18 11:55:57.720170887 +0000
+@@ -1,5 +1,6 @@
+ import type { Request, Response, NextFunction } from 'express';
+ import { EntitlementService } from '../modules/entitlements/service.js';
++import { query } from '../db/index.js';
+ 
+ /**
+  * Server-Side Independent Verification of Engine Entitlement (Instructions #73, #74, #75)
+@@ -38,5 +39,51 @@
+     } catch (err: any) {
+       return res.status(500).json({ error: 'Entitlement verification failed', message: err.message });
+     }
++  };
++}
++
++
++/**
++ * Resolve the product from the assessment itself and then enforce entitlement.
++ * This prevents an ARUI/ECRI session from crossing engine boundaries and avoids
++ * trusting productCode supplied by the browser for assessment-scoped operations.
++ */
++export function requireAssessmentEngineAccess() {
++  return async (req: Request, res: Response, next: NextFunction) => {
++    // Institution-scoped profile endpoints are not assessment-scoped.
++    if (String(req.path).includes('/institutions/')) return next();
++    const assessmentId = (req.params.id || req.params.assessmentId) as string | undefined;
++    const role = req.user?.role;
++    if (role === 'ASSESSOR' || role === 'LEAD_AUDITOR' || role === 'SUPER_ADMIN') return next();
++    if (!assessmentId) return res.status(400).json({ error: 'ASSESSMENT_ID_REQUIRED' });
++    const institutionId = req.user?.institutionId;
++    if (!institutionId) return res.status(403).json({ error: 'INSTITUTION_REQUIRED' });
++
++    try {
++      const assessmentRes = await query(`
++        SELECT product_code, institution_id
++        FROM assessments
++        WHERE id = $1
++      `, [assessmentId]);
++      if (assessmentRes.rows.length === 0) return res.status(404).json({ error: 'ASSESSMENT_NOT_FOUND' });
++      const assessment = assessmentRes.rows[0];
++      if (assessment.institution_id !== institutionId) return res.status(403).json({ error: 'FORBIDDEN' });
++      const productCode = String(assessment.product_code || '').toLowerCase();
++      if (!productCode) return res.status(409).json({ error: 'ASSESSMENT_PRODUCT_UNDEFINED' });
++
++      const check = await EntitlementService.checkEngineAccess(institutionId, productCode);
++      if (!check.isAllowed) {
++        return res.status(403).json({
++          error: 'ENGINE_NOT_PURCHASED',
++          productCode,
++          status: check.status,
++          message: check.reason || `${productCode.toUpperCase()} assessment access is not active.`,
++          engagementUrl: `/ecri/engagement`,
++        });
++      }
++      return next();
++    } catch (err: any) {
++      return res.status(500).json({ error: 'Entitlement verification failed', message: err.message });
++    }
+   };
+ }
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/assessment/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/assessment/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/assessment/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/assessment/routes.ts	2026-09-18 12:02:58.748620595 +0000
+@@ -1,6 +1,7 @@
+ import { Router } from 'express';
+ import { query } from '../../db/index.js';
+ import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
++import { requireEngineEntitlement, requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ 
+ const router = Router();
+ 
+@@ -136,9 +137,9 @@
+   return {
+     assessmentId: assessment.id,
+     institutionName: assessment.institution_name,
+-    cycle: '2026 Baseline',
++    cycle: `${assessment.methodology_version || 'Current'} Baseline`,
+     status: assessment.status || 'DRAFT',
+-    methodologyVersion: assessment.methodology_version || 'v4.0',
++    methodologyVersion: assessment.methodology_version || 'unknown',
+     stages,
+     domains,
+     evidence: {
+@@ -177,7 +178,7 @@
+ });
+ 
+ // Route: Get Assessment Status
+-router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, async (req, res) => {
++router.get('/assessments/:id/status', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   try {
+     const statusView = await getAssessmentStatusView(req.params.id as string);
+     if (!statusView) {
+@@ -229,7 +230,11 @@
+ // Route: Get or Create active assessment for given product
+ router.get('/assessments/active', authenticate, async (req, res) => {
+   try {
+-    const productCode = (req.query.product as string) || 'arui';
++    const productCode = ((req.query.product as string) || 'arui').toLowerCase();
++    if (req.user?.institutionId && !['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN'].includes(req.user.role || '')) {
++      const access = await (await import('../../modules/entitlements/service.js')).EntitlementService.checkEngineAccess(req.user.institutionId, productCode);
++      if (!access.isAllowed) return res.status(403).json({ error: 'ENGINE_NOT_PURCHASED', productCode, status: access.status, message: access.reason });
++    }
+     let aRes;
+     if (req.user?.institutionId) {
+       aRes = await query(
+@@ -251,10 +256,11 @@
+       // Create one if none exists for this institution/product
+       const instId = req.user?.institutionId || (await query(`SELECT id FROM institutions LIMIT 1`)).rows[0]?.id;
+       const mvRes = await query(
+-        `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true LIMIT 1`,
++        `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true ORDER BY created_at DESC LIMIT 1`,
+         [productCode]
+       );
+-      const versionId = mvRes.rows[0]?.id || (await query(`SELECT id FROM methodology_versions LIMIT 1`)).rows[0]?.id;
++      const versionId = mvRes.rows[0]?.id;
++      if (!versionId) return res.status(409).json({ error: 'NO_ACTIVE_METHODOLOGY', productCode });
+ 
+       const title = productCode === 'ecri' 
+         ? 'Graduate Employability & Career Readiness Assessment' 
+@@ -278,8 +284,12 @@
+ // Route: Create New Assessment
+ router.post('/assessments', authenticate, async (req, res) => {
+   const { institutionId, title, scopeDomains, productCode } = req.body;
+-  const targetProduct = productCode || 'arui';
++  const targetProduct = String(productCode || 'arui').toLowerCase();
+   let targetInstitutionId = institutionId || req.user?.institutionId;
++  if (req.user?.institutionId && !['ASSESSOR', 'LEAD_AUDITOR', 'SUPER_ADMIN'].includes(req.user.role || '')) {
++    const access = await (await import('../entitlements/service.js')).EntitlementService.checkEngineAccess(req.user.institutionId, targetProduct);
++    if (!access.isAllowed) return res.status(403).json({ error: 'ENGINE_NOT_PURCHASED', productCode: targetProduct, status: access.status, message: access.reason });
++  }
+ 
+   if (req.user?.role === 'INSTITUTION_ADMIN') {
+     if (institutionId && req.user.institutionId && institutionId !== req.user.institutionId) {
+@@ -294,10 +304,11 @@
+ 
+   try {
+     const mvRes = await query(
+-      `SELECT id FROM methodology_versions WHERE (product_code = $1 OR product_code IS NULL) AND is_active = true ORDER BY created_at DESC LIMIT 1`,
++      `SELECT id FROM methodology_versions WHERE product_code = $1 AND is_active = true ORDER BY created_at DESC LIMIT 1`,
+       [targetProduct]
+     );
+     const versionId = mvRes.rows[0]?.id;
++    if (!versionId) return res.status(409).json({ error: 'NO_ACTIVE_METHODOLOGY', productCode: targetProduct });
+ 
+     const defaultScope = ['D01', 'D02', 'D03', 'D04', 'D05', 'D06', 'D07', 'D08', 'D09', 'D10', 'D11'];
+     const insRes = await query(
+@@ -314,7 +325,7 @@
+ });
+ 
+ // Route: Update Assessment Scope
+-router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, async (req, res) => {
++router.put('/assessments/:id/scope', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { scopeDomains } = req.body;
+   try {
+     const uRes = await query(
+@@ -328,7 +339,7 @@
+ });
+ 
+ // Route: Update Assessment
+-router.patch('/assessments/:id', authenticate, requireInstitutionAccess, async (req, res) => {
++router.patch('/assessments/:id', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { methodologyVersionId, methodology_version_id, overallScore, score } = req.body;
+ 
+   if (methodologyVersionId || methodology_version_id) {
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/benchmarking/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/benchmarking/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/benchmarking/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/benchmarking/routes.ts	2026-09-18 11:55:03.644562356 +0000
+@@ -1,12 +1,13 @@
+ import { Router } from 'express';
+ import { authenticate } from '../../middleware/auth.js';
++import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ import { query } from '../../db/index.js';
+ import { BenchmarkingService } from './service.js';
+ 
+ const router = Router();
+ 
+ // 1. Get Benchmark & Comparative Summary for an assessment
+-router.get('/:productCode/assessments/:assessmentId/summary', authenticate, async (req, res) => {
++router.get('/:productCode/assessments/:assessmentId/summary', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
+   const assessmentId = req.params.assessmentId as string;
+   try {
+     const summary = await BenchmarkingService.getBenchmarkSummary(assessmentId);
+@@ -37,7 +38,7 @@
+ });
+ 
+ // 3. Record/Update Assessment Benchmark Snapshot
+-router.post('/:productCode/assessments/:assessmentId/snapshot', authenticate, async (req, res) => {
++router.post('/:productCode/assessments/:assessmentId/snapshot', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
+   const assessmentId = req.params.assessmentId as string;
+   try {
+     const snapshot = await BenchmarkingService.recordAssessmentSnapshot(assessmentId);
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/benchmarking/service.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/benchmarking/service.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/benchmarking/service.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/benchmarking/service.ts	2026-09-18 11:55:57.720234311 +0000
+@@ -271,7 +271,7 @@
+ 
+     // 4. Query dataset snapshots for peer group & overall sector
+     const sectorSnapshotsRes = await query(
+-      `SELECT overall_score, dimension_scores_json, institution_id
++      `SELECT overall_score, dimension_scores_json, context_profile_json, institution_id
+        FROM benchmark_dataset_snapshots
+        WHERE product_code = $1`,
+       [productCode]
+@@ -282,9 +282,27 @@
+     const sectorScores = sectorSnapshotsRes.rows.map((r) => Number(r.overall_score));
+     const sectorDist = computeDistribution(sectorScores);
+ 
+-    // Peer group sample calculations
+-    const peerSampleScores = sectorScores; // Fallback to sector pool until peer criteria scale
+-    const peerSampleSize = sectorSnapshotsRes.rows.length;
++    // Peer group sample calculations. Never substitute the full sector for a configured
++    // peer group: if the configured criteria cannot be evaluated, the peer result remains unavailable.
++    const peerRows = peerGroup
++      ? sectorSnapshotsRes.rows.filter((row: any) => {
++          const profile = typeof row.context_profile_json === 'string' ? JSON.parse(row.context_profile_json) : (row.context_profile_json || {});
++          const rules = peerGroup.rules || [];
++          return rules.every((rule: any) => {
++            const val = profile[rule.dimension_name];
++            if (val === undefined || val === null) return false;
++            const ruleVal = rule.rule_value_json;
++            if (rule.operator === 'EQ') return String(val).toLowerCase() === String(ruleVal).toLowerCase();
++            if (rule.operator === 'IN') {
++              const arr = Array.isArray(ruleVal) ? ruleVal : [ruleVal];
++              return arr.some((item: any) => String(item).toLowerCase() === String(val).toLowerCase());
++            }
++            return false;
++          });
++        })
++      : [];
++    const peerSampleScores = peerRows.map((r: any) => Number(r.overall_score));
++    const peerSampleSize = peerRows.length;
+     const isPeerValid = peerSampleSize >= minRequiredSample;
+ 
+     const peerDist = computeDistribution(peerSampleScores);
+@@ -314,7 +332,7 @@
+       }
+ 
+       const dimScoresForPeers: number[] = [];
+-      for (const s of sectorSnapshotsRes.rows) {
++      for (const s of peerRows) {
+         const dJson = s.dimension_scores_json || {};
+         if (dJson[code] !== undefined) dimScoresForPeers.push(Number(dJson[code]));
+       }
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/entitlements/service.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/entitlements/service.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/entitlements/service.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/entitlements/service.ts	2026-09-18 11:55:03.644907916 +0000
+@@ -227,8 +227,12 @@
+       `SELECT amount, currency FROM product_pricing WHERE product_code = $1 AND is_active = true LIMIT 1`,
+       [code]
+     );
+-    const amount = input.amount || Number(priceRes.rows[0]?.amount || 4999.0);
+-    const currency = input.currency || priceRes.rows[0]?.currency || 'USD';
++    if (priceRes.rows.length === 0) throw new Error(`No active price configured for ${code}`);
++    const amount = Number(priceRes.rows[0].amount);
++    const currency = String(priceRes.rows[0].currency);
++    if (input.amount !== undefined && Number(input.amount) !== amount) throw new Error('PRICE_MISMATCH');
++    if (input.currency !== undefined && String(input.currency).toUpperCase() !== currency.toUpperCase()) throw new Error('CURRENCY_MISMATCH');
++    const paymentMode = process.env.PAYMENT_MODE || 'manual';
+ 
+     const txRef = `tx_${code}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+     const invoiceNum = `INV-${code.toUpperCase()}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+@@ -238,7 +242,7 @@
+          institution_id, user_id, product_code, amount, currency, payment_method,
+          transaction_reference, status, invoice_number, notes
+        )
+-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'SUCCESS', $8, $9)
++       VALUES ($1, $2, $3, $4, $5, $6, $7, $10, $8, $9)
+        RETURNING *`,
+       [
+         institutionId,
+@@ -250,6 +254,7 @@
+         txRef,
+         invoiceNum,
+         input.notes || `Institutional assessment engagement activation for ${code.toUpperCase()}`,
++        paymentMode === 'manual' ? 'SUCCESS' : 'PENDING',
+       ]
+     );
+ 
+@@ -268,6 +273,9 @@
+       createdAt: payRow.created_at,
+     };
+ 
++    if (payRow.status !== 'SUCCESS') {
++      throw new Error('PAYMENT_PENDING_PROVIDER_CONFIRMATION');
++    }
+     const entitlement = await this.activateEngineEntitlement(institutionId, code, transaction.id);
+ 
+     return { transaction, entitlement };
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/evidence/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/evidence/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/evidence/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/evidence/routes.ts	2026-09-18 11:57:19.818900901 +0000
+@@ -5,6 +5,7 @@
+ import fs from 'fs';
+ import { query } from '../../db/index.js';
+ import { authenticate, requireInstitutionAccess, requireRole } from '../../middleware/auth.js';
++import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ 
+ const router = Router();
+ 
+@@ -50,7 +51,7 @@
+ });
+ 
+ // Route: Get Evidence View
+-router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, async (req, res) => {
++router.get('/assessments/:id/evidence', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id } = req.params;
+ 
+   try {
+@@ -108,9 +109,14 @@
+       fulfilledByIds: items.filter((it) => it.proposedSupports.includes(r.domain_code)).map((it) => it.id),
+     }));
+ 
++    // The institution-facing evidence queue is intentionally execution-light.
++    // Keep the full 132 requirements internal; expose only a small representative
++    // set at a time so one artifact can satisfy multiple metric links.
++    const visibleRequests = requests.slice(0, 12);
++
+     return res.json({
+       items,
+-      requests,
++      requests: visibleRequests,
+       coreTarget: { min: 8, max: 12 },
+       evidenceTypes: [
+         { value: 'policy', label: 'Institutional Policy / Charter / Senate Resolution' },
+@@ -142,6 +148,7 @@
+   '/assessments/:id/evidence',
+   authenticate,
+   requireInstitutionAccess,
++  requireAssessmentEngineAccess(),
+   upload.single('file'),
+   async (req: any, res: any) => {
+     const { id } = req.params;
+@@ -272,6 +279,7 @@
+   '/assessments/:id/evidence/:evidenceId/file',
+   authenticate,
+   requireInstitutionAccess,
++  requireAssessmentEngineAccess(),
+   async (req, res) => {
+     const { id, evidenceId } = req.params;
+ 
+@@ -312,7 +320,7 @@
+ );
+ 
+ // Route: Submit Evidence Item
+-router.post('/assessments/:id/evidence/:evidenceId/submit', authenticate, requireInstitutionAccess, async (req, res) => {
++router.post('/assessments/:id/evidence/:evidenceId/submit', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id, evidenceId } = req.params;
+ 
+   try {
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/profile/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/profile/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/profile/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/profile/routes.ts	2026-09-18 11:55:57.720032733 +0000
+@@ -1,6 +1,7 @@
+ import { Router } from 'express';
+ import { query } from '../../db/index.js';
+ import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
++import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ 
+ const router = Router();
+ 
+@@ -335,7 +336,7 @@
+ });
+ 
+ // Route: Get Profile Values for Assessment/Institution
+-router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
++router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id } = req.params;
+   try {
+     const pRes = await query(
+@@ -367,7 +368,7 @@
+ });
+ 
+ // Route: Save Profile Values
+-router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
++router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id } = req.params;
+   const { values } = req.body;
+ 
+@@ -394,13 +395,17 @@
+ 
+     // Calculate completeness based on key fields
+     let filledCount = 0;
+-    const requiredKeys = ['IP01_INST_NAME', 'IP02_INST_TYPE', 'IP03_MANDATE', 'IP04_STATE', 'IP05_DISTRICT', 'IP08_STUDENT_ENROLLMENT', 'IP09_FACULTY_COUNT', 'IP15_RESEARCH_INTENSITY', 'IP10_AI_EXPOSURE', 'IP11_DISCIPLINARY_CONSEQUENCE', 'IP16_RESOURCE_ENVELOPE'];
+-    for (const key of requiredKeys) {
+-      if (values[key] !== undefined && values[key] !== null && values[key] !== '') {
+-        filledCount++;
+-      }
++    // ECRI/ARUI share the canonical 25-field institutional profile registry.
++    // Completeness must be based on those canonical IP01â€“IP25 fields, never on
++    // ARUI-only AI exposure / disciplinary-consequence aliases.
++    const registryPath = new URL('../../methodology/registry/institution_profile_fields.json', import.meta.url);
++    const registry = JSON.parse(await (await import('fs/promises')).readFile(registryPath, 'utf8'));
++    const requiredCodes = registry.filter((f: any) => f.requirement === 'Required').map((f: any) => f.code);
++    for (const code of requiredCodes) {
++      const value = values[code] ?? values[`${code}_${String(code).replace(/^IP\d+_?/, '').toUpperCase()}`];
++      if (value !== undefined && value !== null && value !== '' && !(Array.isArray(value) && value.length === 0)) filledCount++;
+     }
+-    const completenessScore = Math.round((filledCount / requiredKeys.length) * 100);
++    const completenessScore = requiredCodes.length ? Math.round((filledCount / requiredCodes.length) * 100) : 0;
+ 
+     const upsertRes = await query(
+       `INSERT INTO institution_profiles (institution_id, assessment_id, status, values_json, completeness_score, updated_at)
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/questions/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/questions/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/questions/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/questions/routes.ts	2026-09-18 12:02:58.748424136 +0000
+@@ -1,6 +1,7 @@
+ import { Router } from 'express';
+ import { query } from '../../db/index.js';
+ import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
++import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ 
+ const router = Router();
+ 
+@@ -117,14 +118,14 @@
+ }
+ 
+ // Route: Get Pulse / Screening Prompts (â‰¤30 prompts)
+-router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, async (req, res) => {
++router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id } = req.params;
+   try {
+     const qRes = await query(
+       `SELECT q.* FROM questions q
+        JOIN assessments a ON a.id = $1
+        WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
+-         AND (q.role = 'Diagnostic' OR q.code IN ('Q01', 'Q02', 'Q03', 'Q04', 'Q05'))
++         AND q.role = 'Screening'
+        ORDER BY q.domain_code, q.sort_order LIMIT 30`,
+       [id]
+     );
+@@ -144,9 +145,13 @@
+     const respondedIds = new Set(responses.map((r) => r.promptId));
+     const complete = prompts.length > 0 && prompts.every((p) => respondedIds.has(p.id));
+ 
++    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
++    const isEcri = String(productRes.rows[0]?.product_code || '').toLowerCase() === 'ecri';
+     return res.json({
+-      title: 'Institutional Pulse',
+-      intro: 'A short set of strategic signals that give the assessment an early read of how AI is positioned, governed and practised across the institution.',
++      title: isEcri ? 'Institutional Employability Pulse' : 'Institutional Pulse',
++      intro: isEcri
++        ? 'A short set of high-information signals about employer demand sensing, curriculum relevance, work-integrated learning and career outcomes.'
++        : 'A short set of strategic signals that give the assessment an early read of how AI is positioned, governed and practised across the institution.',
+       prompts,
+       responses,
+       earlySignal: {
+@@ -162,7 +167,7 @@
+ });
+ 
+ // Route: Next Adaptive Prompt for a Domain
+-router.get('/assessments/:id/domains/:code/next', authenticate, requireInstitutionAccess, async (req, res) => {
++router.get('/assessments/:id/domains/:code/next', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id, code } = req.params;
+   const after = req.query.after as string | undefined;
+ 
+@@ -187,7 +192,25 @@
+       });
+     }
+ 
+-    const mappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
++    // Fetch responses for this assessment
++    const screeningRes = await query(
++      `SELECT prompt_id, response_value_json, state FROM assessment_responses WHERE assessment_id = $1`,
++      [id]
++    );
++    const screeningSignals = new Set<string>();
++    for (const r of screeningRes.rows) {
++      const value = r.response_value_json;
++      const raw = typeof value === 'string' ? value : JSON.stringify(value || '');
++      // Screening is intentionally high-information: only non-affirmative / uncertain
++      // signals trigger a targeted deep dive.
++      if (r.state === 'answered' && !/opt_yes|yes|fully established|maturityLevel\":4/i.test(raw)) {
++        const match = String(r.prompt_id).match(/^(D\d{2})-/);
++        if (match) screeningSignals.add(match[1]);
++      }
++    }
++    const allMappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
++    const targeted = allMappedPrompts.filter((p) => screeningSignals.has(p.domainCode || ''));
++    const mappedPrompts = targeted.length > 0 ? targeted : allMappedPrompts;
+ 
+     // Fetch responses for this assessment
+     const rRes = await query(
+@@ -242,7 +265,7 @@
+ });
+ 
+ // Route: Get Prompt By ID for a Domain (handles direct navigation)
+-router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
++router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id, code, promptId } = req.params;
+ 
+   try {
+@@ -300,7 +323,7 @@
+ });
+ 
+ // Route: Save Response for a Prompt (Preserving all four distinct response states)
+-router.put('/assessments/:id/responses/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
++router.put('/assessments/:id/responses/:promptId', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
+   const { id, promptId } = req.params;
+   const { state, value, note, notApplicableRationale } = req.body;
+ 
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/reports/routes.ts /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/reports/routes.ts
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/modules/reports/routes.ts	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/modules/reports/routes.ts	2026-09-18 11:55:03.644495788 +0000
+@@ -2,6 +2,7 @@
+ import { buildAssessmentReportPayload } from './payload.js';
+ import { generateAssessmentPdfStream } from './pdf.js';
+ import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
++import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
+ 
+ const router = Router();
+ 
+@@ -10,6 +11,7 @@
+   ['/assessments/:id/report/preliminary', '/assessments/:id/report', '/reports/:id/json', '/reports/:id'],
+   authenticate,
+   requireInstitutionAccess,
++  requireAssessmentEngineAccess(),
+   async (req, res) => {
+     const id = req.params.id as string;
+     try {
+@@ -27,6 +29,7 @@
+   ['/reports/:id/pdf', '/assessments/:id/report/preliminary.pdf', '/assessments/:id/report/pdf', '/assessments/:id/pdf'],
+   authenticate,
+   requireInstitutionAccess,
++  requireAssessmentEngineAccess(),
+   async (req, res) => {
+     const id = req.params.id as string;
+     try {
+@@ -36,7 +39,7 @@
+       res.setHeader('Content-Type', 'application/pdf');
+       res.setHeader(
+         'Content-Disposition',
+-        `inline; filename="ARUI_Assessment_Report_${sanitizedName}.pdf"`
++        `inline; filename="${payload.report?.productCode === 'ecri' ? 'ECRI' : 'ARUI'}_Assessment_Report_${sanitizedName}.pdf"`
+       );
+ 
+       generateAssessmentPdfStream(payload, res);
+diff -ruN /mnt/data/ecri_original/Arui-main/arui-backend/src/tests/ecri_final_release_validation.mjs /mnt/data/ecri_work/Arui-main/arui-backend/src/tests/ecri_final_release_validation.mjs
+--- /mnt/data/ecri_original/Arui-main/arui-backend/src/tests/ecri_final_release_validation.mjs	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/arui-backend/src/tests/ecri_final_release_validation.mjs	2026-09-18 12:02:58.892112003 +0000
+@@ -0,0 +1,44 @@
++import fs from 'node:fs';
++import path from 'node:path';
++
++const root = path.resolve(process.cwd(), '..');
++const backend = path.join(root, 'arui-backend');
++const registry = path.join(backend, 'src', 'methodology', 'ecri_registry');
++const readJson = (name) => JSON.parse(fs.readFileSync(path.join(registry, name), 'utf8'));
++const count = (name) => readJson(name).length;
++
++const expected = {
++  dimensions: 11,
++  metrics: 132,
++  cards: 132,
++  anchors: 792,
++  calibration_rules: 132,
++  anti_gaming_rules: 13,
++  cross_domain_rules: 10,
++  question_bank: 153,
++  evidence_requirements: 132,
++  badge_definitions: 3,
++};
++
++for (const [name, value] of Object.entries(expected)) {
++  if (count(`${name}.json`) !== value) throw new Error(`${name}: expected ${value}, got ${count(`${name}.json`)}`);
++}
++
++const questions = readJson('question_bank.json');
++if (questions.filter(q => q.role === 'Screening').length !== 21) throw new Error('Screening bank must contain 21 items');
++if (questions.filter(q => q.role === 'Diagnostic').length !== 132) throw new Error('Diagnostic bank must contain 132 items');
++
++const ecriIndex = fs.readFileSync(path.join(root, 'university-insights-main/src/routes/ecri.index.tsx'), 'utf8');
++if (!ecriIndex.includes('/samples/ECRI_Sample_Executive_Report.pdf')) throw new Error('Public sample report link missing');
++
++const entitlement = fs.readFileSync(path.join(backend, 'src/middleware/entitlement.ts'), 'utf8');
++if (!entitlement.includes('requireAssessmentEngineAccess')) throw new Error('Assessment-scoped entitlement guard missing');
++
++const payment = fs.readFileSync(path.join(backend, 'src/modules/entitlements/service.ts'), 'utf8');
++if (!payment.includes('PRICE_MISMATCH') || !payment.includes('CURRENCY_MISMATCH')) throw new Error('Authoritative server-side pricing checks missing');
++
++const benchmark = fs.readFileSync(path.join(backend, 'src/modules/benchmarking/service.ts'), 'utf8');
++if (!benchmark.includes('peerRows')) throw new Error('Peer-group filtered benchmark sample missing');
++
++console.log('ECRI FINAL RELEASE VALIDATION: PASS');
++console.log(JSON.stringify(expected, null, 2));
+diff -ruN /mnt/data/ecri_original/Arui-main/university-insights-main/public/samples/ECRI_Sample_Executive_Report.pdf /mnt/data/ecri_work/Arui-main/university-insights-main/public/samples/ECRI_Sample_Executive_Report.pdf
+--- /mnt/data/ecri_original/Arui-main/university-insights-main/public/samples/ECRI_Sample_Executive_Report.pdf	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/university-insights-main/public/samples/ECRI_Sample_Executive_Report.pdf	2026-09-18 12:00:12.971297702 +0000
+@@ -0,0 +1,213 @@
++%PDF-1.4
++%“Œ‹ž ReportLab Generated PDF document (opensource)
++1 0 obj
++<<
++/F1 2 0 R /F2 3 0 R /F3 9 0 R
++>>
++endobj
++2 0 obj
++<<
++/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
++>>
++endobj
++3 0 obj
++<<
++/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
++>>
++endobj
++4 0 obj
++<<
++/Contents 16 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++5 0 obj
++<<
++/Contents 17 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++6 0 obj
++<<
++/Contents 18 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++7 0 obj
++<<
++/Contents 19 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++8 0 obj
++<<
++/Contents 20 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++9 0 obj
++<<
++/BaseFont /ZapfDingbats /Name /F3 /Subtype /Type1 /Type /Font
++>>
++endobj
++10 0 obj
++<<
++/Contents 21 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++11 0 obj
++<<
++/Contents 22 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++12 0 obj
++<<
++/Contents 23 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 15 0 R /Resources <<
++/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
++>> /Rotate 0 /Trans <<
++
++>> 
++  /Type /Page
++>>
++endobj
++13 0 obj
++<<
++/PageMode /UseNone /Pages 15 0 R /Type /Catalog
++>>
++endobj
++14 0 obj
++<<
++/Author (\(anonymous\)) /CreationDate (D:20260918120012+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260918120012+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
++  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
++>>
++endobj
++15 0 obj
++<<
++/Count 8 /Kids [ 4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 10 0 R 11 0 R 12 0 R ] /Type /Pages
++>>
++endobj
++16 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 765
++>>
++stream
++GatUp9on!^&;KZOME+\D.ULl7S^8=f@O7gNC3S-20531,WfTK9;#'c*4+)]eBNH[G8<iprk+-JpE4U`&:KIPj1#+o!&/*t_#fRLrT4&WK2M6W.AD3HkL\FK!Z/H9KV*_?*^bhr*!pYII&;TUEZTtQ6!3)A%+qbHj?oWRZR_]MK6?l7+lN1M+_mF:O/],G0[!%.7"&HG0lDF0B'h)o-3cR@P+oVZ8#7&YWUnqKd#LR+ZYK6i3oHM"H6`1K8J.#r,6l8H-ie@Qu-\orsHh1gD*0_supF&<WVj!(0:f;tj#d)2iB3jOfR*hbTZX#/#N9h:/>uMRUR8B;(:KR;7EJ11J,^$LjIca)Um,8sI,W0%*1+-42P3=SM1YePj0%9e'0/,OO-HD"n#8[(Vh4mLFqNY6q;i;Ddpk:Ma>%l#Ec&ZW<HTBBU(Ql18of->K'@3dPlgX91;JbKhKfTQ'mS:]'iVo-0?J6`E#eVWOGtuuY+_1jcYc4[G7AECGR&k94hb/j,/^<Ee?*@2ls.J_XR-rE)YL#in%GW<H$ec!hmk?lZHT?l2`NmXdU0?oeAF[]fCD_Og6\63`_W^,e<2<;"Rl>eD\6#A.ZcI'QE2&:Nj'6<pWl2Y\(b]q<[bJ.t=&nJiL_cF*!^4#,e(+drR?9MS/WFi$>+E'U5;Ui[9O4R0JL:UH-^>QCMP>$C10L=L#WAf"GG"%ES\TqBb/?H1X,,Lm__OZZEK7GRZBU0lLcMNaedmn'1$$$m@kZnt_&r'fIGF~>endstream
++endobj
++17 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 1135
++>>
++stream
++Gatm:?$"^Z'Rf.GgdcN8;(VMFq.Za"g`:Rl,fQA2QbKD#!O_p"Q3bUIn!1,6]aKNf)87A%8b\`r0,uBbpn7&';$-Z`_9I<6PX5!K1`ug0+!AZpha_No6:)WKgN=.U3:]%j+IIC^$mbIaJO6]M#AAI2&/%29HllH]6:s7lXFtRKS^64MM^FOCEa;4,T&jEke<>Q0>"btj=W*UMFkrG@^0+<LZtY3Lo,D4I+oC)Ik[b*(6tkfU@AX:7Pe_Sm4s?Wu&__i+9IL3eLdGM%F5\8Q%g%+8c$KZEaZuC,@nM("B9bBti4,pX!=uS=FuW$A35$E*9M`3a^N>`sGEni(7,r*;qH6,'X*!YsCAcR(.T!=IY.#mIn>,+\l:4r7,2WYN6"1;g(\'p/b.Lue;qZ[Le?ZCS?$..,gUd3(XXYRcY`Up[;DaZ=Q<1:%NPmWQH>E^bC9oU`7bZsHHSK3H9b[d!7Tar*`kec9Al4mmPN,h8,`5`@#KKHu]%;#?Y^Pt`k9Eq6&+32`f=E$uS`&;Z8tFa4lA,7YQHejdNoFWY?82t@qU*X3b.=`b%QSUOGsH$W@b9XD%c^,G38>W8Y=j(&h!r/G&]F3.aPP3+-?gmO:#TBH-MY5:9f`2e,9LG9F5lj0@s6p+pN22L"*DH&7Hf1oZMA=*_X%c\l2<tiRVU"$b`u'ui[ET'p%L[Hf>Gr9Si"(ccftBjJ`NHVD/qR0+AK-tqUg.A)flXs?;Wj^7[EnYM$NQWlG)l^F[UJtOS^3=Sg$;XS-:VHCP3mJ8!V=>E@<!gP].[b2_?.p+g3!W#0U=k@rKPQM^XJf+e3^!e>3tt=Vh?G5Cg(GJ5NaRdjEgF\n%Fnq*XBCK_!b2i,IJ0](k%8l[on^D"L?%iVQ)ZCCt4tH&h<dAU`@C!rG'$,4RDBqFi7Mpie#'#tfh9'C-MNjK_0)cLB46"pWVe'N=2Sjc;3J7_]@2/QRr`Zn(NCd]7][:a=&m>,$7ir+Q+W&)<T/'0:'>OQU!\/g;e!EF5]A=DOiSfLk\9o@qiY2(WKq<Z,Q7k9+:O;0/[;0%[D7)Caq#h%];77G"1&=d5pI90_m3d0\8Fp`a([&+HM9D6BOpcc-^-I_n<3[Kd/o!B?<<q-SY+q>lDPaF4~>endstream
++endobj
++18 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 1317
++>>
++stream
++GatUs9lK&M&;KZL'ls`1"etKjdP74NXc!2(LOicXiQAOFXXn`H.G=Xr%V;,mgdH<k"HH1c.D?=J1E9:8pda*=fa?['%'K"H:^460:_=#$h8<cHp>]t)M'M7Zl1TBJBW=T)OUs70.7B?W!t&r1#LMkmKoEMUS-+t;Ubnc!>J\;>k%P0P0bqU4?EJ8NPFj1;CAVc(\uJG(X\;U0P?F6ThXm<"GuN6gq`_d1loWG*GS.WW,Z>;?4;lH:TU,k-Do<k%KctOg/rjWknL#plRRq99EY&f]I91V$BY+\[?&&e'_'CtCVRX:H.(Z]q!RFp5bdUK^q-`'qb\8>*//>;un')guBgOe^AP-Kr0`5N^Wmkf5E#bc(,?>Cd7)C5`i!_0N%.njsai737PP9E^Uk#;iRrN.[b5#[C)+T@"`Hn'Wh8^b%+B")ShMAnd?sQgArmthuX2`,uA2c`H]s58)$rW?/p"ngoI`?IkA%TQ1-Fj)uGN7W4XE61PBi1?^[nBY1B$YmRhDE3"018TES6SoX5$f9U&L*=@"!iKr%heick-f_o)nk,,]Q8C1hFdP:0g%a7bXQkk&pX0P*]b?DTCGU5\_f[@Qe1G]_T^u9ER&/jhQ2_<#m(c$#!u6(5f>Vf9p,t,8,>0=HPAPFFNi(=E>C@!eN'/;K@<t?1NW@l=%IIPZn#st4G'Q]Wo?l&V#liC^kA=YS9(HrBnPQujQ3sIf@+3f1ch_[lGahX4.XStNT,aH$`F.e>b0rM#?NPIfYJ!H]'-U-F$UU/el9]J"IZM3`M$QeL_&E?EY?["?.uk9\Xm,&S;'6_qXH\uF'BdL0ebn(4;pCTQNiUmQ:.8*)(Ye(ASt.ol/f9b9F2X/oMKTA7&k?f7<P"@*G:K^-A(&V1F\VlQaBV2Nc)sDA*^Q\ai`n^Wm*790$'#BP5u3)J<Fn%ITe5R:poloB^2[()0fu)pX0Wb6!_])@jY^dHCta-/cN6Dm!>hdoko\Y_nB>`Ft8mY/TO/n+F?L_mI0iGNcj3eG##PXWPEFZmKn.7oaE?KGRN'YWiPlA1Pb/E1b]=[P?u:9QVUr+'%Jr:Ah^4#.,PF[/d<Y="qso-:"\6h-l00QPA^Yh*6@Wo@,_8+^)9UT+N$-^VKeaXmR5-I#0D2$6e\XCY6^VGj]-t'[tJ!3S&3e36XsbYgb8PK(Cn9<pGqu;p#?OHLCQP/]PF5,G7g:NnO_L1Cp,&u<%m?;!A=ZG%(P!,p<3&BEsm?FH%S9',(G[3)V2']j'hAZ1i@@LZP?kVCiC((/dka`TRJVWl(T_FL?FQa/oN^\PLn2g^qeVf,'R+M~>endstream
++endobj
++19 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 935
++>>
++stream
++GatUq9lK#F&;KZP'm!Q`X!N`m6D1f::oR?hG.U:ll,>VLE(TDtm6LR;G8sKfe[@k787:H0o?9;bfF1+CYi]/S!#JQn]k5&(R*L9%5n)4HQqU<TT!U:fOSGepq`K\fGSlG`LuU<c`XjC=4^_Z<^OW`(a%7sUikYVh,Y/ak0pn9RRp8/4^gf2piAWEj!b(YYU3:R2E,I72>G?0-J<`$1oA32=eCGN*ht[c2-^ao&&3H#;BGdsa0\VS0cZ=baB>lMrBY/r*E,!IHKSC`T9o%!cINBZNI_X@t#Zr;RCNSbL!k:S;AUt_(8]%o6/%D:FI,WJJ'X#=Oq#;^ta#aG$J\CItQ,Eq"!96cs?85$sk6d1oaWrOt)r)AbS.sVji0LTbOW,THh>nf=+-p>&isjCVCqtA/'nT%^kt$XeT\>q<$c<J%_s!"I\=6VX.nZ)dUWVE0*f`,uKjW1!OejL3)U,#CcU_A?(Sl(bP[2AQA(8BG"taeHJCa6n+mjjeV1OjpB`jXJF##dj6oC`(\`%+V2X!Ci4I5oR.?W"R-laD1%$8%s^S'g-;Cr2RnB*eog'%2.$r/7u8/Q1q==e-b(L/Mu/ilkMa&8O^+H)_K>_9<bI$U'2R$4$EKf7Vr3`Om2+39=d.s>?3K.f9)choe[G;r\[mVq<9.``]KQ@5AXH,g_rBH%tfV(q3Z1n@"bO_VkYRjg/?[BhX+,<V?83A<[OT<sW23FXo,@d0kWG2@Nab!#UPGZDQ`qTGQGA9'6^?1!:tWIn7tQP/L"kD&/kJ-]fOeqaYgoM02+RVm-Rgj2ss"8OK`,s&Uk@Hg9`!?3&l$g=tDcntH_,dA&Cq9PM64'D9Me7@+?dH-jri9uYjF>#oC@d1#UoU6_KCfr,kmC2Aa8W03F8c$/ER(]BI>CU2+%-^MdNBXq=e^,YQIP2"tqu^H\:"f~>endstream
++endobj
++20 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 965
++>>
++stream
++Gasan92jS!&AI=/m&?gT0p4*0p9B]El/YY`1VI`>[ZVJDbK)H"rq`c;a#FJaN5lHCGI@>8j"gjj([[f.$#m2#j"h%,_.!_8#94M#Qn9WqP?nk*_MaS+5N"A\,_gj@Lkl086#_I.?$QP+T?]k:$6Fr;6m*n;.4e(NR%7Ph^^ZJ>>cY._1sDP6g:I2Z_iL\B9iL?"_3M0_FW8#PU1bKYQ.Pg9M`Y#\qB/8!"Hrj$@D(pj[p!JW,E#1t1mlWR\1")&^e[YB"tq![_u2<s"+>R:J9Epqh.9Z,^]R\@<AdEZ9+9*FE3<sN!`qj&V5e_Zn$l*o_'1$gqQI_X&191=0pr=[EQmpsW/uj3C?=gg#9M!;0d>P38[',!LQcR7Rn>Dk2jNs1SA31/KXd4TC47(js#&@(fgI3mPa&q_O"12[oiU*1%3pnHJ05'FH!]=m%'gkrg7V`XCZq8R^EH8$+%0u`P6le6]ek)q*c+TR<Xp@/e<D91kKh*eoOFKW.`L3n"-"=7?F2k!C7X1\oH'O[6DIp!^qn'UnF&%WantoI6J3lD*WUf15hpZ-KY_Eslnep(fl'g@>"iM-XO\/%jjm4pM[i7WC3?!^\U+?A2bR*1"sp6+9`n,$2Pt0]+W=T\$1it+J&EGFU86D<bi<11F1;F\P;Y'L-qq%k?(9r@.UZgff(s]\emZBOjH\1_OfsL[WM1uFI%(.QaRh["<r7CV5,XVf-;$f)IO]j+I>?k7F'9OjQ>h6K.HGGj5!c&rVdTkSf.lp@!j4Ts)%4O22Ams(<'E8iMT6?7D$>NN"h<7nO:4S[>\sTUl'(O@%?":hTo:o:o($4oQ!_7:XY!sRC_Y)fkZR5""e#i,&"ic$&.!]@3]cKGJ9it1kc(rPS-D%VLUji?CV(&:_!X.4r;afkBUf+4p8ue'Cb2d^'aLH0Z(Q38lHR,3Vb5]US_$CAfO`A]GXL(:q$0Ru`,u~>endstream
++endobj
++21 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 985
++>>
++stream
++GauHJ9i'e'&A@Zck-XEVBNd>d5PE*kZ9mQd6H*9@\B2)p*';eJU&TS^DH^5n'gY/`Uc'-@b^7ZS`aR5lLP=We!;JF(h?=!>JCt!+&g]6DK'DX_q4o&L7B%AteF=qqP@8qL;3Hn7kld`f:B:Z3kngRMpEYaX1l5]ZUf#:eR),kScLh%s'(-"B&_urOPR,`>bUOu@#\V__[08#b2cshT2Y/PtXK455chS'W8!s8E+SIReK42^HG^PnCRP,8-HRo(,U"p>^K,]ePPgV&gZ/NlLiZrsl(.e0P#/GfprU?1#FOCGl/!6UL&AGt$)R0hkU!sG;"MPj$5+Xg'r&;#"S<>7hj:!B_]Bo9.1kLh,A#kAHkLq':(01/QUpdj^=T>I8mPa>1#?u-r_-h!(P3>3i\&B+'A6a\fb&A+b-(XN1<hM5mZV^gVK.eU^;qr!lZq#AoC0h2/0L(7`j_0J.MN6`(rl6"gas#6Rkd`$Aq#H8;$gWJg>SC<>0;l5HSmuCJ.RS-bJ?\Z8'QO7nZ/hL2>f4GB!e_aAY4=Yo8Y^=RbqYE2%YYhJ)ih\'hTYHtq-6JLN`gAf\ZXE;NOqF_ojktV(j'"2+t=;:#HY<=?"0Qp'2$/k1eu)rVf[;Q*:G4:T5<a3Ba8R9@+,rRqq]B+lEGjY5\'0@bT#701u"TeHl2(GpYsbDQr:-<CT7T1Y66k"%6Y=\pX%NBC.Z*Z:XY;4Vit.h?Q6[8]I6<S?If;^WWNUj'q)eZ*SG"13@+4f!ai<[C&i_4$Ma58OHh>!(#-<:XDZ`!^qZ4;_$1C/Z4EZ4?(uPK>4,)>!,LAMR+)MjF=irHaO'?@D(KE`Q1hhu-KrT`R[i,b;H!B"jjdVeUn%SAon<QY53LT4KNfcZQ#N?ageLl*\gmHip)8P_5$;PJ1uN0EW,)IBSI.HRi`C`9HLh2D'9AM@hgI^4CHM33H19L;_%p7'_u5>5d!<0"'pj&1H\WY;rW,AE*_u~>endstream
++endobj
++22 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 906
++>>
++stream
++Gat=)_/c#!&A@rkp?6U%71omq0km1R3pkEgkUdSXZE4NX.cDZPqlXJ6TrleKLTs-KmG#*gGC]e6Mu!Cc!k;"anqI2*O=l*<,_Ye?bgX\;8S<m:E2HdI:I6stBEBFf@k)(U"N:fSB&t"7LE6d8LbK*b$R-E\(o.m?k9'/2iK6Vb4ChGj8smB9I+,*.$!5\MCF`PsE%`/Ig>0<oZJ=*`AF@YFUed)dF!LsP"HNg%5r+J-aArr5J]AcX[!,q!\N"1hi$/S[B'RY$4=Gjmn+)28o.i#'__`RAf_d:#%_&i_<JsH43\+WIoMT+,$R;:/Hl3Ok2[021$3>>sW-gI7]4s$,VWegP7MhQL7>L4P@@l#r3.?#[po"ZB5:j-GeLThGM&+O4Zir"?Y+T&nYZW9C^TLRs$(5'RRVZ3nX<;pXdhIj$3sAl`TI`QH0t,]-gd810>ZlpB$RiBh;!Sl(Ab/g[XugEh?oHWVnYp'5c7l&B&#`_VlWf%pPj#$i4t)S3N08$i[cl)@FeMIAg61JOUKfns&VqPh,-rfebY-*j%Nf@+!K//Z:kLNaqp6/@Qp6KGR8G.$0]-E!3TsAK=I-!W^;>pLof#pZgHT]8jqUc)GaOu,BQY_P0KJ5,>\@*'Wg9QF@=ChGh_>cq4u=2L3EN0i.h5,PQbY#'a/Kui"s,Emig(i2mZTts/98&ZOQo(J4"59ipGL"24st6'^]Js_i*b/Qo59Z8M;1BNr((LRo@h@PY70:U$/-caO6Kg'0^-jGLsQ0WS+86-H^^%lq]mJ=i3O!`,"["bpR`i.QA(Ysm6D<p'ngQp32aVH96fqQ3],422B<bW*'")=n4b\qiGriD`a6J)%\r"(KZi3d-US9EH@m%\,7YF_L]QrN0HkUk3YqT]ci)-r0_l/+*WJ%~>endstream
++endobj
++23 0 obj
++<<
++/Filter [ /ASCII85Decode /FlateDecode ] /Length 720
++>>
++stream
++GasbXhf"u<&BE]*=5;8h9q*((%e-u&WDmT$\s17L:q.(?"uG!ZbC@:5+Xu)*F[750oDSH5mL4js>s-oC(>r*lf/F[o"N;.$_@e92^q.&PGr8`&-G1e"elfl]eM75m,jA4f^r2BO31.]In0rZ-==fUpL.F#7H,cOk@BogE\V5fPQ,7t&p'P7,$`h+c4i0^)dFo?t#93$;ET=c;V$?6Zl1_iEiWg1dHkE\Y,$H]Rip8GL?.g?21QUuMkj60aimO&I6&u.XeB?0W&g)i5dFU;hnA&EL0%7T[AagGj:=i\6jp5n`hN_u_n4c!WaSKr6=Np?-U0\VN1XE`D/]bsJnBdYeU9ma?+?Snb,D*KW("BO*3__+>fkN9'<(]($<>]nJ_=M57lk"K<l_3m0:d1WrkQsl6UTn@GqBTY"cGUW;,R$8a,eZL%Al!<)U<Z)*a,1f%\'08ua?EH1>A\s.Kc$%aYB*oZl)WV!k[3,&*C7$li0eT)BL0ojCrBqZe*_.c'cJI/Z7>hMHSB%*,eF7OKC!@>O_uG6"J.Q'V4k]?r!`/aRJSD%GT-d#&lK/A7<aX1DB4aRAi2iMII6I@]'g@[H;k^5&)'-_Ps0FAkG4lD.Q+`&Gk`B/,%`s\4m87"EI+qjEGtu,Sjk9n\Y/\k#/2":&Ue6#mg"dAKMF#$3;hu)bG&*lK/NN94<@ou+=s(dNV%jE.f7+ppdkWor<CS]?fV~>endstream
++endobj
++xref
++0 24
++0000000000 65535 f 
++0000000061 00000 n 
++0000000112 00000 n 
++0000000219 00000 n 
++0000000331 00000 n 
++0000000536 00000 n 
++0000000741 00000 n 
++0000000946 00000 n 
++0000001151 00000 n 
++0000001356 00000 n 
++0000001439 00000 n 
++0000001645 00000 n 
++0000001851 00000 n 
++0000002057 00000 n 
++0000002127 00000 n 
++0000002408 00000 n 
++0000002513 00000 n 
++0000003369 00000 n 
++0000004596 00000 n 
++0000006005 00000 n 
++0000007031 00000 n 
++0000008087 00000 n 
++0000009163 00000 n 
++0000010160 00000 n 
++trailer
++<<
++/ID 
++[<83ce19c1c78d15f8b252bacfe3b96762><83ce19c1c78d15f8b252bacfe3b96762>]
++% ReportLab generated PDF document -- digest (opensource)
++
++/Info 14 0 R
++/Root 13 0 R
++/Size 24
++>>
++startxref
++10971
++%%EOF
+diff -ruN /mnt/data/ecri_original/Arui-main/university-insights-main/src/routes/ecri.index.tsx /mnt/data/ecri_work/Arui-main/university-insights-main/src/routes/ecri.index.tsx
+--- /mnt/data/ecri_original/Arui-main/university-insights-main/src/routes/ecri.index.tsx	2026-09-17 17:10:00.000000000 +0000
++++ /mnt/data/ecri_work/Arui-main/university-insights-main/src/routes/ecri.index.tsx	2026-09-18 11:55:03.645420532 +0000
+@@ -370,7 +370,7 @@
+               <ArrowRight className="size-3.5" />
+             </Link>
+             <button
+-              onClick={() => setConsultModalOpen(true)}
++              onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
+               className="hidden md:inline-flex items-center justify-center rounded-lg bg-teal px-4 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-teal/90 hover:shadow"
+             >
+               Request an ECRI Assessment
+@@ -417,7 +417,7 @@
+               </button>
+ 
+               <button
+-                onClick={() => setConsultModalOpen(true)}
++                onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
+                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-teal hover:text-teal"
+               >
+                 <Mail className="size-4" />
+@@ -1086,7 +1086,7 @@
+                       onClick={() => setConsultModalOpen(true)}
+                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
+                     >
+-                      <Download className="size-3.5" /> Request Sample Dossier
++                      <Download className="size-3.5" /> View Sample Report
+                     </button>
+                   </div>
+                 </div>
+@@ -1118,7 +1118,7 @@
+                       onClick={() => setConsultModalOpen(true)}
+                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
+                     >
+-                      <Download className="size-3.5" /> Request Sample Dossier
++                      <Download className="size-3.5" /> View Sample Report
+                     </button>
+                   </div>
+                 </div>

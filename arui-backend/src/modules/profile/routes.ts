@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
 import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
+import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 
 const router = Router();
 
@@ -335,7 +336,7 @@ router.get('/methodology/reference/states/:state/districts', (req, res) => {
 });
 
 // Route: Get Profile Values for Assessment/Institution
-router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
+router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id } = req.params;
   try {
     const pRes = await query(
@@ -367,7 +368,7 @@ router.get(['/assessments/:id/profile', '/institutions/:id/profile'], authentica
 });
 
 // Route: Save Profile Values
-router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, async (req, res) => {
+router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id } = req.params;
   const { values } = req.body;
 
@@ -394,13 +395,17 @@ router.put(['/assessments/:id/profile', '/institutions/:id/profile'], authentica
 
     // Calculate completeness based on key fields
     let filledCount = 0;
-    const requiredKeys = ['IP01_INST_NAME', 'IP02_INST_TYPE', 'IP03_MANDATE', 'IP04_STATE', 'IP05_DISTRICT', 'IP08_STUDENT_ENROLLMENT', 'IP09_FACULTY_COUNT', 'IP15_RESEARCH_INTENSITY', 'IP10_AI_EXPOSURE', 'IP11_DISCIPLINARY_CONSEQUENCE', 'IP16_RESOURCE_ENVELOPE'];
-    for (const key of requiredKeys) {
-      if (values[key] !== undefined && values[key] !== null && values[key] !== '') {
-        filledCount++;
-      }
+    // ECRI/ARUI share the canonical 25-field institutional profile registry.
+    // Completeness must be based on those canonical IP01–IP25 fields, never on
+    // ARUI-only AI exposure / disciplinary-consequence aliases.
+    const registryPath = new URL('../../methodology/registry/institution_profile_fields.json', import.meta.url);
+    const registry = JSON.parse(await (await import('fs/promises')).readFile(registryPath, 'utf8'));
+    const requiredCodes = registry.filter((f: any) => f.requirement === 'Required').map((f: any) => f.code);
+    for (const code of requiredCodes) {
+      const value = values[code] ?? values[`${code}_${String(code).replace(/^IP\d+_?/, '').toUpperCase()}`];
+      if (value !== undefined && value !== null && value !== '' && !(Array.isArray(value) && value.length === 0)) filledCount++;
     }
-    const completenessScore = Math.round((filledCount / requiredKeys.length) * 100);
+    const completenessScore = requiredCodes.length ? Math.round((filledCount / requiredCodes.length) * 100) : 0;
 
     const upsertRes = await query(
       `INSERT INTO institution_profiles (institution_id, assessment_id, status, values_json, completeness_score, updated_at)

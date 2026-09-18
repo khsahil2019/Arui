@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { query } from '../../db/index.js';
 import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
+import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 
 const router = Router();
 
@@ -117,14 +118,14 @@ function computePosition(list: any[], prompt: any, responseMap: Record<string, a
 }
 
 // Route: Get Pulse / Screening Prompts (≤30 prompts)
-router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id } = req.params;
   try {
     const qRes = await query(
       `SELECT q.* FROM questions q
        JOIN assessments a ON a.id = $1
        WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
-         AND (q.role = 'Diagnostic' OR q.code IN ('Q01', 'Q02', 'Q03', 'Q04', 'Q05'))
+         AND q.role = 'Screening'
        ORDER BY q.domain_code, q.sort_order LIMIT 30`,
       [id]
     );
@@ -144,9 +145,13 @@ router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess,
     const respondedIds = new Set(responses.map((r) => r.promptId));
     const complete = prompts.length > 0 && prompts.every((p) => respondedIds.has(p.id));
 
+    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
+    const isEcri = String(productRes.rows[0]?.product_code || '').toLowerCase() === 'ecri';
     return res.json({
-      title: 'Institutional Pulse',
-      intro: 'A short set of strategic signals that give the assessment an early read of how AI is positioned, governed and practised across the institution.',
+      title: isEcri ? 'Institutional Employability Pulse' : 'Institutional Pulse',
+      intro: isEcri
+        ? 'A short set of high-information signals about employer demand sensing, curriculum relevance, work-integrated learning and career outcomes.'
+        : 'A short set of strategic signals that give the assessment an early read of how AI is positioned, governed and practised across the institution.',
       prompts,
       responses,
       earlySignal: {
@@ -162,7 +167,7 @@ router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess,
 });
 
 // Route: Next Adaptive Prompt for a Domain
-router.get('/assessments/:id/domains/:code/next', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get('/assessments/:id/domains/:code/next', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id, code } = req.params;
   const after = req.query.after as string | undefined;
 
@@ -187,7 +192,25 @@ router.get('/assessments/:id/domains/:code/next', authenticate, requireInstituti
       });
     }
 
-    const mappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
+    // Fetch responses for this assessment
+    const screeningRes = await query(
+      `SELECT prompt_id, response_value_json, state FROM assessment_responses WHERE assessment_id = $1`,
+      [id]
+    );
+    const screeningSignals = new Set<string>();
+    for (const r of screeningRes.rows) {
+      const value = r.response_value_json;
+      const raw = typeof value === 'string' ? value : JSON.stringify(value || '');
+      // Screening is intentionally high-information: only non-affirmative / uncertain
+      // signals trigger a targeted deep dive.
+      if (r.state === 'answered' && !/opt_yes|yes|fully established|maturityLevel\":4/i.test(raw)) {
+        const match = String(r.prompt_id).match(/^(D\d{2})-/);
+        if (match) screeningSignals.add(match[1]);
+      }
+    }
+    const allMappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
+    const targeted = allMappedPrompts.filter((p) => screeningSignals.has(p.domainCode || ''));
+    const mappedPrompts = targeted.length > 0 ? targeted : allMappedPrompts;
 
     // Fetch responses for this assessment
     const rRes = await query(
@@ -242,7 +265,7 @@ router.get('/assessments/:id/domains/:code/next', authenticate, requireInstituti
 });
 
 // Route: Get Prompt By ID for a Domain (handles direct navigation)
-router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id, code, promptId } = req.params;
 
   try {
@@ -300,7 +323,7 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, req
 });
 
 // Route: Save Response for a Prompt (Preserving all four distinct response states)
-router.put('/assessments/:id/responses/:promptId', authenticate, requireInstitutionAccess, async (req, res) => {
+router.put('/assessments/:id/responses/:promptId', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id, promptId } = req.params;
   const { state, value, note, notApplicableRationale } = req.body;
 

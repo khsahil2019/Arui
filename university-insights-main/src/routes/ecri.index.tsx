@@ -370,7 +370,7 @@ function EcriPublicExperiencePage() {
               <ArrowRight className="size-3.5" />
             </Link>
             <button
-              onClick={() => setConsultModalOpen(true)}
+              onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
               className="hidden md:inline-flex items-center justify-center rounded-lg bg-teal px-4 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-teal/90 hover:shadow"
             >
               Request an ECRI Assessment
@@ -417,7 +417,7 @@ function EcriPublicExperiencePage() {
               </button>
 
               <button
-                onClick={() => setConsultModalOpen(true)}
+                onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-teal hover:text-teal"
               >
                 <Mail className="size-4" />
@@ -1086,7 +1086,7 @@ function EcriPublicExperiencePage() {
                       onClick={() => setConsultModalOpen(true)}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
-                      <Download className="size-3.5" /> Request Sample Dossier
+                      <Download className="size-3.5" /> View Sample Report
                     </button>
                   </div>
                 </div>
@@ -1118,7 +1118,7 @@ function EcriPublicExperiencePage() {
                       onClick={() => setConsultModalOpen(true)}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
-                      <Download className="size-3.5" /> Request Sample Dossier
+                      <Download className="size-3.5" /> View Sample Report
                     </button>
                   </div>
                 </div>

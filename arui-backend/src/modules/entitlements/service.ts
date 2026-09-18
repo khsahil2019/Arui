@@ -227,8 +227,12 @@ export class EntitlementService {
       `SELECT amount, currency FROM product_pricing WHERE product_code = $1 AND is_active = true LIMIT 1`,
       [code]
     );
-    const amount = input.amount || Number(priceRes.rows[0]?.amount || 4999.0);
-    const currency = input.currency || priceRes.rows[0]?.currency || 'USD';
+    if (priceRes.rows.length === 0) throw new Error(`No active price configured for ${code}`);
+    const amount = Number(priceRes.rows[0].amount);
+    const currency = String(priceRes.rows[0].currency);
+    if (input.amount !== undefined && Number(input.amount) !== amount) throw new Error('PRICE_MISMATCH');
+    if (input.currency !== undefined && String(input.currency).toUpperCase() !== currency.toUpperCase()) throw new Error('CURRENCY_MISMATCH');
+    const paymentMode = process.env.PAYMENT_MODE || 'manual';
 
     const txRef = `tx_${code}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const invoiceNum = `INV-${code.toUpperCase()}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -238,7 +242,7 @@ export class EntitlementService {
          institution_id, user_id, product_code, amount, currency, payment_method,
          transaction_reference, status, invoice_number, notes
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, 'SUCCESS', $8, $9)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $10, $8, $9)
        RETURNING *`,
       [
         institutionId,
@@ -250,6 +254,7 @@ export class EntitlementService {
         txRef,
         invoiceNum,
         input.notes || `Institutional assessment engagement activation for ${code.toUpperCase()}`,
+        paymentMode === 'manual' ? 'SUCCESS' : 'PENDING',
       ]
     );
 
@@ -268,6 +273,9 @@ export class EntitlementService {
       createdAt: payRow.created_at,
     };
 
+    if (payRow.status !== 'SUCCESS') {
+      throw new Error('PAYMENT_PENDING_PROVIDER_CONFIRMATION');
+    }
     const entitlement = await this.activateEngineEntitlement(institutionId, code, transaction.id);
 
     return { transaction, entitlement };
