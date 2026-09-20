@@ -214,7 +214,7 @@ const ecriDimensionsData = [
     theme: "Authentic Credentials",
     metricCount: 12,
     weight: "8%",
-    sampleScore: 63,
+    sampleScore: 69,
     sampleMaturity: 3,
     level: "Developing",
     desc: "Evidence-backed portfolios, verified digital credentials, and capability profiles.",
@@ -236,7 +236,7 @@ const ecriDimensionsData = [
     theme: "Corporate Partnerships",
     metricCount: 12,
     weight: "10%",
-    sampleScore: 84,
+    sampleScore: 77,
     sampleMaturity: 4,
     level: "Established",
     desc: "Corporate recruitment networks, on-campus talent days, and hiring conversion.",
@@ -258,7 +258,7 @@ const ecriDimensionsData = [
     theme: "Market Performance & ROI",
     metricCount: 12,
     weight: "12%",
-    sampleScore: 75,
+    sampleScore: 73,
     sampleMaturity: 4,
     level: "Established",
     desc: "6-month verified graduate outcomes, compensation benchmarking, and role quality.",
@@ -280,7 +280,7 @@ const ecriDimensionsData = [
     theme: "Lifelong Mobility",
     metricCount: 12,
     weight: "10%",
-    sampleScore: 68,
+    sampleScore: 77.7,
     sampleMaturity: 3,
     level: "Developing",
     desc: "Longitudinal alumni career trajectories, lifelong reskilling access, and employability research.",
@@ -370,7 +370,7 @@ function EcriPublicExperiencePage() {
               <ArrowRight className="size-3.5" />
             </Link>
             <button
-              onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
+              onClick={() => setConsultModalOpen(true)}
               className="hidden md:inline-flex items-center justify-center rounded-lg bg-teal px-4 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-teal/90 hover:shadow"
             >
               Request an ECRI Assessment
@@ -1080,10 +1080,10 @@ function EcriPublicExperiencePage() {
 
                   <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
                     <span className="text-[11px] text-muted-foreground font-medium">
-                      15 Pages · Executive Summary
+                      17 Pages · Executive Assessment
                     </span>
                     <button
-                      onClick={() => setConsultModalOpen(true)}
+                      onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
                       <Download className="size-3.5" /> View Sample Report
@@ -1112,16 +1112,36 @@ function EcriPublicExperiencePage() {
 
                   <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
                     <span className="text-[11px] text-muted-foreground font-medium">
-                      45 Pages · Metric Traceability
+                      45 Pages · 132-Metric Traceability
                     </span>
                     <button
-                      onClick={() => setConsultModalOpen(true)}
+                      onClick={() => window.open("/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf", "_blank", "noopener,noreferrer")}
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
                       <Download className="size-3.5" /> View Sample Report
                     </button>
                   </div>
                 </div>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-3">
+                {[
+                  ["Board Scorecard", "ECRI_Sample_Board_Scorecard.pdf", "4 Pages · Leadership Scorecard"],
+                  ["Evidence & Claim Integrity Dossier", "ECRI_Sample_Evidence_Integrity_Dossier.pdf", "8 Pages · Evidence Intelligence"],
+                  ["Transformation Roadmap", "ECRI_Sample_Transformation_Roadmap.pdf", "7 Pages · Action & Sequencing"],
+                ].map(([title, file, meta]) => (
+                  <div key={file} className="rounded-2xl border border-border bg-card p-5 flex flex-col justify-between">
+                    <div>
+                      <span className="rounded bg-teal/10 px-2.5 py-1 text-xs font-bold text-teal">Sample Deliverable</span>
+                      <h5 className="mt-3 text-base font-serif font-bold text-foreground">{title}</h5>
+                      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">Uses the same canonical ECRI demonstration dataset and score architecture.</p>
+                    </div>
+                    <div className="mt-5 pt-3 border-t border-border flex items-center justify-between">
+                      <span className="text-[10px] text-muted-foreground">{meta}</span>
+                      <button onClick={() => window.open(`/samples/${file}`, "_blank", "noopener,noreferrer")} className="text-xs font-bold text-teal hover:underline">View PDF →</button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const here = path.dirname(fileURLToPath(import.meta.url));
+const backend = path.resolve(here, '../..');
+const root = path.resolve(backend, '..');
+const read = p => JSON.parse(fs.readFileSync(p,'utf8'));
+const reg = path.join(backend,'src/methodology/ecri_registry');
+const domains=read(path.join(reg,'domains.json')); const metrics=read(path.join(reg,'metrics.json')); const q=read(path.join(reg,'question_bank.json'));
+const assert=(c,m)=>{if(!c) throw new Error(m)};
+assert(domains.length===11,'ECRI dimensions must equal 11'); assert(metrics.length===132,'ECRI metrics must equal 132');
+assert(q.filter(x=>x.role==='Screening').length===21,'Screening must equal 21'); assert(q.filter(x=>x.role==='Diagnostic').length===132,'Diagnostic must equal 132');
+const sample=read(path.join(backend,'src/methodology/ecri_sample/canonical_demo.json'));
+const calc=sample.dimensions.reduce((s,d)=>s+d.score*d.weight,0); assert(Math.abs(calc-sample.overallScore)<0.001,'Canonical sample weighted score mismatch'); assert(sample.overallScore===74.8,'Canonical sample must equal 74.80');
+for(const f of ['ECRI_Sample_Executive_Report.pdf','ECRI_Sample_Detailed_132_Metric_Report.pdf','ECRI_Sample_Board_Scorecard.pdf','ECRI_Sample_Evidence_Integrity_Dossier.pdf','ECRI_Sample_Transformation_Roadmap.pdf']) assert(fs.existsSync(path.join(root,'university-insights-main/public/samples',f)),`Missing ${f}`);
+const ui=fs.readFileSync(path.join(root,'university-insights-main/src/routes/ecri.assessment.$domain.tsx'),'utf8'); assert(ui.includes('ecriDimensionNames'),'ECRI assessment route must use ECRI dimension names');
+const engine=fs.readFileSync(path.join(backend,'src/modules/scoring/engine.ts'),'utf8'); assert(engine.includes('calculateEcriMetricPerformance'),'Scoring engine must use canonical methodology formula'); assert(!engine.includes('Math.round(domainScore / 20)'),'Maturity must not be reconstructed from score');
+console.log('ECRI FINAL ACCEPTANCE: PASS');
+console.log(JSON.stringify({dimensions:domains.length,metrics:metrics.length,screening:q.filter(x=>x.role==='Screening').length,diagnostic:q.filter(x=>x.role==='Diagnostic').length,overall:sample.overallScore,pdfs:5},null,2));

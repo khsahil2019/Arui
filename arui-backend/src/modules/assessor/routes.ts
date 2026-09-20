@@ -1,3 +1,4 @@
+import { calculateEcriMetricPerformance } from '../scoring/methodologyFormula.js';
 import { Router } from 'express';
 import { query } from '../../db/index.js';
 import { calculateScoreRun } from '../scoring/engine.js';
@@ -307,17 +308,9 @@ router.patch(['/assessor/assessments/:id/metrics/:metricId', '/assessments/:id/m
     let score = null;
 
     if (!isNa && maturity !== null && maturity !== undefined) {
-      const M = Number(maturity);
-      const I = Number(implementation ?? M);
-      if (outcome !== null && outcome !== undefined) {
-        const O = Number(outcome);
-        // Standard P0-3 with Outcome: 100 * (0.45M + 0.30I + 0.25O) / 5
-        score = (100 * (0.45 * M + 0.30 * I + 0.25 * O)) / 5;
-      } else {
-        // Outcome N/A formula: 100 * (0.60M + 0.40I) / 5
-        score = (100 * (0.60 * M + 0.40 * I)) / 5;
-      }
-      score = Math.round(score * 100) / 100;
+      const metricMeta = await query(`SELECT has_outcome FROM metrics WHERE full_code = $1 LIMIT 1`, [metricId]);
+      const hasOutcome = !!metricMeta.rows[0]?.has_outcome;
+      score = calculateEcriMetricPerformance({ maturity: Number(maturity), implementation: implementation === null || implementation === undefined ? null : Number(implementation), outcome: outcome === null || outcome === undefined ? null : Number(outcome), hasOutcome });
     }
 
     const domainCode = typeof metricId === 'string' ? metricId.split('-')[0] || 'D01' : 'D01';

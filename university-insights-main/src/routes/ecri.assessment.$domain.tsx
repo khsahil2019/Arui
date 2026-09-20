@@ -7,11 +7,11 @@ import { SignalProgress, SaveIndicator } from "@/components/ari/progress";
 import { ResponseControls, ResponsePanel } from "@/components/ari/response-controls";
 import { StatusBadge } from "@/components/ari/status-badge";
 import { Button } from "@/components/ui/button";
-import { domainNames, inScopeDomains, type DomainCode, type ChoiceOption } from "@/lib/catalogue";
+import { ecriDimensionNames, inScopeDomains, type DomainCode, type ChoiceOption } from "@/lib/catalogue";
 import { queries, useSaveResponse } from "@/api/hooks";
 
 function isDomain(v: string): v is DomainCode {
-  return v in domainNames;
+  return v in ecriDimensionNames;
 }
 
 export const Route = createFileRoute("/ecri/assessment/$domain")({
@@ -37,7 +37,7 @@ export const Route = createFileRoute("/ecri/assessment/$domain")({
   },
   pendingComponent: () => <PagePending />,
   head: ({ params }) => {
-    const name = isDomain(params.domain) ? domainNames[params.domain] : "Assessment";
+    const name = isDomain(params.domain) ? ecriDimensionNames[params.domain] : "Assessment";
     return {
       meta: [
         { title: `${params.domain} · ${name} — ECRI Assessment` },
@@ -99,7 +99,7 @@ function EcriDomainRunner() {
             <Check className="size-5" strokeWidth={2.5} />
           </span>
           <p className="eyebrow mt-8 text-emerald-800">
-            {domain} · {domainNames[domain]}
+            {domain} · {ecriDimensionNames[domain]}
           </p>
           <h1 className="mt-3 text-3xl md:text-4xl font-serif">
             {data.domainComplete
@@ -137,7 +137,7 @@ function EcriDomainRunner() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         {position ? (
           <SignalProgress
-            label={`${domain} · ${domainNames[domain].split(",")[0]}`}
+            label={`${domain} · ${ecriDimensionNames[domain].split(",")[0]}`}
             caption={`${position.theme} · Exploring ${position.withinTheme.current} of ${position.withinTheme.total}`}
             current={position.themeIndex}
             total={position.themeTotal}

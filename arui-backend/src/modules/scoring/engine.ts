@@ -1,4 +1,5 @@
 import { query } from '../../db/index.js';
+import { calculateEcriMetricPerformance, calculateWeightedMean, ECRI_DIMENSION_WEIGHTS, ECRI_REQUIRED_MATURITY_TARGETS, ECRI_MATURITY_LABELS } from './methodologyFormula.js';
 
 export interface ScoreRunCalculationResult {
   overallScore: number | null;
@@ -180,16 +181,12 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
       outcomes = sm.outcomes !== undefined && sm.outcomes !== null ? Number(sm.outcomes) : null;
 
       if (!isNa && maturity !== null) {
-        const M = maturity;
-        const I = implementation !== null ? implementation : M;
-        if (outcomes !== null) {
-          // Standard P0-3 with Outcome: 100 * (0.45M + 0.30I + 0.25O) / 5
-          score = (100 * (0.45 * M + 0.30 * I + 0.25 * outcomes)) / 5;
-        } else {
-          // Legitimate Outcome N/A formula: 100 * (0.60M + 0.40I) / 5
-          score = (100 * (0.60 * M + 0.40 * I)) / 5;
-        }
-        score = Math.round(score * 100) / 100;
+        score = calculateEcriMetricPerformance({
+          maturity,
+          implementation,
+          outcome: outcomes,
+          hasOutcome: !!m.has_outcome,
+        });
       }
     }
 
@@ -258,83 +255,54 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     }
   }
 
-  // 5. Compute Domain Results & Context-Calibrated Required Maturity (P0-4 Formula)
-  // R_d = clamp(round(3.0 + baseContextShift + domainSensitivity), 1, 5)
+  // 5. Compute Domain Results. Maturity and performance remain separate constructs.
   const domainResults: Record<string, any> = {};
   const contextResults: Record<string, any> = {};
   let weightedSum = 0;
   let totalWeightAssessed = 0;
   let assessedDomainsCount = 0;
-  const domainRdList: number[] = [];
 
   for (const d of domainsRes.rows) {
-    const scores = domainMetricScores[d.code] || [];
-    const assessed = scores.length > 0;
+    const domainMetrics = metricsRes.rows.filter((m: any) => m.domain_code === d.code);
+    const scored = domainMetrics.map((m: any) => ({ m, r: metricResults[m.full_code] }))
+      .filter(({r}: any) => r && r.score !== null && !r.isNa);
+    const assessed = scored.length > 0;
     if (assessed) assessedDomainsCount++;
 
-    const domainScore = assessed ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100 : null;
-    const currentMaturity = assessed && domainScore !== null ? Math.min(5, Math.max(0, Math.round(domainScore / 20))) : null;
+    const domainScore = calculateWeightedMean(scored.map(({m,r}: any) => ({ value: Number(r.score), weight: Number(m.weight || 1) })));
+    const currentMaturity = calculateWeightedMean(scored
+      .filter(({r}: any) => r.maturity !== null)
+      .map(({m,r}: any) => ({ value: Number(r.maturity), weight: Number(m.weight || 1) })));
 
-    // Domain-specific sensitivity factors
-    let domainSensitivity = 0;
-    if (d.code === 'D01' && (hasHighExposureDisc || mandateVal === 'research_intensive')) domainSensitivity += 0.25;
-    if (d.code === 'D02' && (hasHighExposureDisc || discExposureDelta >= 0.30)) domainSensitivity += 0.50;
-    if (d.code === 'D03' && (scaleDelta >= 0.30 || location === 'metro')) domainSensitivity += 0.25;
-    if (d.code === 'D04' && (hasHighExposureDisc || progComplexityDelta >= 0.20)) domainSensitivity += 0.25;
-    if (d.code === 'D05' && (facultyDelta >= 0.20 || scaleDelta >= 0.30)) domainSensitivity += 0.25;
-    if (d.code === 'D06' && (scaleDelta >= 0.30 || intlDelta >= 0.10)) domainSensitivity += 0.25;
-    if (d.code === 'D07' && (hasHighExposureDisc || discExposureDelta >= 0.30)) domainSensitivity += 0.25;
-    if (d.code === 'D08' && (scaleDelta >= 0.30 || location === 'metro')) domainSensitivity += 0.25;
-    if (d.code === 'D09' && (mandateVal === 'professional' || ecosystemDelta >= 0.20)) domainSensitivity += 0.25;
-    if (d.code === 'D10' && (researchDelta >= 0.25 || mandateVal === 'research_intensive')) domainSensitivity += 0.50;
-    if (d.code === 'D11' && (scaleDelta >= 0.30 || mandateVal === 'research_intensive')) domainSensitivity += 0.25;
+    // P0-4 declared strategic targets. Context can raise the target, but never lower it.
+    const requiredMaturity = ECRI_REQUIRED_MATURITY_TARGETS[d.code] ?? 3;
+    const transformationDistance = currentMaturity !== null ? Math.round((requiredMaturity - currentMaturity) * 10) / 10 : null;
 
-    const rawRd = 3.0 + baseContextShift + domainSensitivity;
-    const requiredMaturity = Math.min(5, Math.max(1, Math.round(rawRd)));
-    domainRdList.push(requiredMaturity);
-
-    const transformationDistance = currentMaturity !== null ? requiredMaturity - currentMaturity : null;
-
-    // P0-6 Evidence Confidence Calculation: Decoupled from capability scores
     const linkedDomainEv = domainEvidenceMap[d.code] || [];
-    const reviewedDomainEv = linkedDomainEv.filter(
-      (e) => (e.status === 'REVIEWED' || e.status === 'CORROBORATED') && e.temporal_validity_status !== 'expired' && e.temporal_validity_status !== 'invalid'
+    const reviewedDomainEv = linkedDomainEv.filter((e) =>
+      (e.status === 'REVIEWED' || e.status === 'CORROBORATED') &&
+      e.temporal_validity_status !== 'expired' && e.temporal_validity_status !== 'invalid'
     );
-    const e2PlusCount = reviewedDomainEv.filter((e) => ['E2', 'E3', 'E4'].includes(e.reviewed_level || 'E2')).length;
+    const e2PlusCount = reviewedDomainEv.filter((e) => ['E2','E3','E4'].includes(e.reviewed_level || 'E2')).length;
     const distinctOrigins = new Set(reviewedDomainEv.map((e) => e.source_origin || e.evidence_id || e.id)).size;
-
-    let domainConfidence: 'unverified' | 'preliminary' | 'corroborated' = 'unverified';
-    if (e2PlusCount >= 2 && distinctOrigins >= 2) {
-      domainConfidence = 'corroborated';
-    } else if (reviewedDomainEv.length >= 1 || linkedDomainEv.length >= 1) {
-      domainConfidence = 'preliminary';
-    } else {
-      domainConfidence = 'unverified';
-    }
+    let domainConfidence: 'unverified'|'preliminary'|'corroborated' = 'unverified';
+    if (e2PlusCount >= 2 && distinctOrigins >= 2) domainConfidence = 'corroborated';
+    else if (reviewedDomainEv.length >= 1 || linkedDomainEv.length >= 1) domainConfidence = 'preliminary';
 
     domainResults[d.code] = {
-      code: d.code,
-      name: d.name,
-      assessed,
-      domainScore,
-      currentMaturity,
-      requiredMaturity,
-      transformationDistance,
-      evidenceConfidence: domainConfidence,
-      metricsAssessedCount: scores.length,
-      totalMetricsCount: metricsRes.rows.filter((m: any) => m.domain_code === d.code).length,
+      code: d.code, name: d.name, assessed, domainScore, currentMaturity,
+      currentMaturityLabel: currentMaturity === null ? null : ECRI_MATURITY_LABELS[Math.round(currentMaturity)],
+      requiredMaturity, requiredMaturityLabel: ECRI_MATURITY_LABELS[requiredMaturity],
+      transformationDistance, evidenceConfidence: domainConfidence,
+      metricsAssessedCount: scored.length, totalMetricsCount: domainMetrics.length,
+      metricWeightsUsed: scored.reduce((sum: number, {m}: any) => sum + Number(m.weight || 1), 0),
     };
-
-    contextResults[d.code] = {
-      domainCode: d.code,
-      requiredMaturity,
-      currentMaturity,
-      transformationDistance,
-    };
+    contextResults[d.code] = { domainCode: d.code, requiredMaturity, currentMaturity, transformationDistance };
 
     if (assessed && domainScore !== null) {
-      weightedSum += domainScore * Number(d.provisional_weight || 0.09);
-      totalWeightAssessed += Number(d.provisional_weight || 0.09);
+      const w = ECRI_DIMENSION_WEIGHTS[d.code] ?? Number(d.provisional_weight || 0);
+      weightedSum += domainScore * w;
+      totalWeightAssessed += w;
     }
   }
 
@@ -479,15 +447,17 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     ? Math.round((weightedSum / totalWeightAssessed) * 100) / 100
     : null;
 
-  const overallCurrentMaturity = overallScore !== null ? Math.min(5, Math.max(0, Math.round(overallScore / 20))) : null;
+  const assessedForMaturity = Object.values(domainResults).filter((d: any) => d.assessed && d.currentMaturity !== null);
+  const overallCurrentMaturity = assessedForMaturity.length > 0
+    ? Math.round((assessedForMaturity.reduce((sum: number, d: any) => sum + Number(d.currentMaturity), 0) / assessedForMaturity.length) * 10) / 10
+    : null;
 
-  // Overall Required Maturity derived dynamically from domain requirements (never fixed at 4)
+  // Required maturity is a separate declared target; it is never derived from the score.
   const applicableDomainRdValues = Object.values(domainResults)
-    .filter((d: any) => d.assessed || !isPartial)
-    .map((d: any) => d.requiredMaturity);
-  const targetRdList = applicableDomainRdValues.length > 0 ? applicableDomainRdValues : domainRdList;
-  const overallRequiredMaturity = targetRdList.length > 0
-    ? Math.min(5, Math.max(1, Math.round(targetRdList.reduce((a, b) => a + b, 0) / targetRdList.length)))
+    .filter((d: any) => d.assessed && d.requiredMaturity !== null)
+    .map((d: any) => Number(d.requiredMaturity));
+  const overallRequiredMaturity = applicableDomainRdValues.length > 0
+    ? Math.round((applicableDomainRdValues.reduce((a, b) => a + b, 0) / applicableDomainRdValues.length) * 10) / 10
     : 3;
 
   const overallTransformationDistance = overallCurrentMaturity !== null ? overallRequiredMaturity - overallCurrentMaturity : null;

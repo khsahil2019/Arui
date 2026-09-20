@@ -6,6 +6,13 @@ import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 const router = Router();
 
 // Canonical domain names lookup
+const ECRI_DOMAIN_NAMES: Record<string,string> = {
+  D01:'Employer Demand Intelligence', D02:'Employability Capability Framework', D03:'Industry-Aligned Curriculum',
+  D04:'Experiential & Practice-Based Learning', D05:'Career Development Infrastructure', D06:'Professional & Human Capabilities',
+  D07:'Digital & AI-Era Work Readiness', D08:'Portfolio & Capability Signalling', D09:'Employer Engagement & Recruitment Ecosystem',
+  D10:'Employment Outcome Quality', D11:'Career Adaptability, Lifelong Readiness & Employability Intelligence',
+};
+
 const DOMAIN_NAMES: Record<string, string> = {
   D01: 'Institutional Strategy, Foresight & AI Direction',
   D02: 'Governance, Responsible AI & Institutional Risk',
@@ -21,7 +28,7 @@ const DOMAIN_NAMES: Record<string, string> = {
 };
 
 // Map database question to frontend Prompt contract (strictly registry-driven; respondent never sees internal weights or formulas)
-function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' = 'core', targetedReason?: string) {
+function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' = 'core', targetedReason?: string, productCode?: string) {
   let presentation: any = {
     kind: q.presentation_kind || 'single_choice',
     provisionalOptions: true,
@@ -64,7 +71,8 @@ function mapQuestionToPrompt(q: any, origin: 'screening' | 'core' | 'targeted' =
   }
 
   const cardCode = q.card_code || '';
-  const domainDisplayName = q.domain_name || (q.domain_code ? (DOMAIN_NAMES[q.domain_code] || `Dimension ${q.domain_code}`) : 'Institutional Screening');
+  const nameMap = String(productCode || '').toLowerCase() === 'ecri' ? ECRI_DOMAIN_NAMES : DOMAIN_NAMES;
+  const domainDisplayName = q.domain_name || (q.domain_code ? (nameMap[q.domain_code] || `Dimension ${q.domain_code}`) : 'Institutional Screening');
   const theme = cardCode ? `Strategic Area ${cardCode}` : `${domainDisplayName} Focus`;
   
   // Format globally unique prompt ID
@@ -141,11 +149,12 @@ router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess,
       updatedAt: r.updated_at ? new Date(r.updated_at).toISOString() : new Date().toISOString(),
     }));
 
-    const prompts = qRes.rows.map((q) => mapQuestionToPrompt(q, 'screening'));
+    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
+    const productCode = String(productRes.rows[0]?.product_code || '').toLowerCase();
+    const prompts = qRes.rows.map((q) => mapQuestionToPrompt(q, 'screening', undefined, productCode));
     const respondedIds = new Set(responses.map((r) => r.promptId));
     const complete = prompts.length > 0 && prompts.every((p) => respondedIds.has(p.id));
 
-    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
     const isEcri = String(productRes.rows[0]?.product_code || '').toLowerCase() === 'ecri';
     return res.json({
       title: isEcri ? 'Institutional Employability Pulse' : 'Institutional Pulse',
@@ -198,18 +207,31 @@ router.get('/assessments/:id/domains/:code/next', authenticate, requireInstituti
       [id]
     );
     const screeningSignals = new Set<string>();
+    const highMaturityClaims = new Set<string>();
     for (const r of screeningRes.rows) {
       const value = r.response_value_json;
       const raw = typeof value === 'string' ? value : JSON.stringify(value || '');
-      // Screening is intentionally high-information: only non-affirmative / uncertain
-      // signals trigger a targeted deep dive.
-      if (r.state === 'answered' && !/opt_yes|yes|fully established|maturityLevel\":4/i.test(raw)) {
-        const match = String(r.prompt_id).match(/^(D\d{2})-/);
-        if (match) screeningSignals.add(match[1]);
-      }
+      const match = String(r.prompt_id).match(/^(D\d{2})-/);
+      if (!match || r.state !== 'answered') continue;
+      const domain = match[1];
+      if (/opt_4|opt_5|level[_ -]?[45]|maturity[_ -]?[45]|fully integrated|adaptive/i.test(raw)) highMaturityClaims.add(domain);
+      if (/unclear|contradict|not sure|opt_0|opt_1|opt_2|no|partial|emerging|reactive/i.test(raw) || !/opt_yes|yes|fully established/i.test(raw)) screeningSignals.add(domain);
     }
-    const allMappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
-    const targeted = allMappedPrompts.filter((p) => screeningSignals.has(p.domainCode || ''));
+    // P0-8 deterministic cross-domain routing: weak signals open related dimensions;
+    // routing never changes the underlying 132-metric scoring universe.
+    const dependencyTargets: Record<string,string[]> = {
+      D01:['D03','D07','D04'], D02:['D03','D06','D07','D08'], D03:['D04'], D04:['D08'],
+      D05:['D08','D09','D10'], D06:['D02'], D07:['D08'], D08:['D09'], D09:['D04','D05','D10'],
+      D10:['D01','D03','D04','D05','D09'], D11:['D10'],
+    };
+    const routeDomains = new Set<string>(screeningSignals);
+    for (const d of screeningSignals) for (const t of dependencyTargets[d] || []) routeDomains.add(t);
+    for (const d of highMaturityClaims) routeDomains.add(d);
+    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
+    const productCode = String(productRes.rows[0]?.product_code || '').toLowerCase();
+    const allMappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core', undefined, productCode));
+    const targeted = allMappedPrompts.filter((p) => routeDomains.has(p.domainCode || ''))
+      .map((p) => ({ ...p, targetedReason: highMaturityClaims.has(p.domainCode || '') ? 'High maturity claim requires corroboration' : 'Screening uncertainty/dependency route' }));
     const mappedPrompts = targeted.length > 0 ? targeted : allMappedPrompts;
 
     // Fetch responses for this assessment
@@ -279,7 +301,9 @@ router.get('/assessments/:id/domains/:code/prompts/:promptId', authenticate, req
     );
 
     const questions = domainQuestionsRes.rows;
-    const mappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core'));
+    const productRes = await query(`SELECT product_code FROM assessments WHERE id = $1`, [id]);
+    const productCode = String(productRes.rows[0]?.product_code || '').toLowerCase();
+    const mappedPrompts = questions.map((q) => mapQuestionToPrompt(q, 'core', undefined, productCode));
 
     const targetPrompt = mappedPrompts.find((p) => p.id === promptId) || null;
 
