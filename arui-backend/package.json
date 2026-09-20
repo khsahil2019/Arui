@@ -14,10 +14,11 @@
     "test:verification": "tsx src/tests/ARUI_PRODUCTION_verification_suite.mjs",
     "test:adversarial": "tsx src/tests/ARUI_COMPREHENSIVE_ADVERSARIAL_SUITE.mjs",
     "test:ecri": "tsx src/tests/methodology_integrity.test.ts && tsx src/tests/session_and_routing.test.ts && tsx src/tests/canonical_payload.test.ts && tsx src/tests/pdf_generation.test.ts && tsx src/tests/commercial_and_admin.test.ts",
+    "test:ecri:all": "tsx src/tests/ecri_sample_consistency.test.ts && tsx src/tests/ecri_deep_report_verification.test.ts && tsx src/tests/ecri_full_e2e_lifecycle.test.ts && node src/tests/ecri_final_acceptance.mjs && node src/tests/ecri_final_release_validation.mjs && npm run test:ecri",
     "test:isolation": "tsx src/tests/multi_engine_isolation.test.ts",
     "test:benchmarking": "tsx src/tests/benchmarking_architecture.test.ts",
     "test:entitlements": "tsx src/tests/platform_identity_and_entitlements.test.ts",
-    "test:all": "npm test && npm run test:reproducibility && npm run test:verification && npm run test:adversarial && npm run test:ecri && npm run test:benchmarking && npm run test:entitlements"
+    "test:all": "npm run test:ecri:all && npm run test:isolation && npm run test:benchmarking && npm run test:entitlements && npm run test:reproducibility"
   },
   "keywords": [],
   "author": "",

@@ -43,7 +43,7 @@ export function SignalProgress({
 }
 
 interface StepListProps {
-  steps: { id: string; label: string; description?: string }[];
+  steps: { id: string; label?: string; title?: string; description?: string }[];
   currentIndex: number;
   completed: Set<string> | string[];
   onSelect?: (index: number) => void;
@@ -88,7 +88,7 @@ export function StepList({ steps, currentIndex, completed, onSelect, className }
                     isCurrent ? "text-foreground" : "text-muted-foreground",
                   )}
                 >
-                  {s.label}
+                  {s.label || (s as any).title}
                 </span>
                 {s.description && isCurrent && (
                   <span className="mt-0.5 block text-xs text-muted-foreground">

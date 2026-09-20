@@ -122,7 +122,7 @@ function AruiProfilePage() {
             <p className="eyebrow mb-2">
               Step {step + 1} of {steps.length}
             </p>
-            <h2 className="text-2xl text-foreground md:text-3xl">{current.label}</h2>
+            <h2 className="text-2xl text-foreground md:text-3xl">{current.label || (current as any).title}</h2>
             <p className="mt-1 text-sm text-muted-foreground">{current.description}</p>
           </div>
 

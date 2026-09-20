@@ -315,27 +315,43 @@ function EcriPublicExperiencePage() {
   });
   const [consultSubmitted, setConsultSubmitted] = useState(false);
   const [consultSubmitting, setConsultSubmitting] = useState(false);
+  const [consultError, setConsultError] = useState<string | null>(null);
 
   const handleConsultSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setConsultSubmitting(true);
+    setConsultError(null);
     try {
-      const root =
+      const envUrl = (import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined)?.trim()?.replace(/\/$/, "");
+      let root = "";
+      if (envUrl) {
+        root = envUrl;
+      } else if (
         typeof window !== "undefined" &&
         (window.location.port === "8080" ||
           window.location.port === "5173" ||
           window.location.port === "3000")
-          ? `${window.location.protocol}//${window.location.hostname}:4000`
-          : "http://localhost:4000";
+      ) {
+        root = `${window.location.protocol}//${window.location.hostname}:4000`;
+      } else if (typeof window !== "undefined") {
+        root = window.location.origin;
+      }
 
-      await fetch(`${root}/api/v1/enquiries`, {
+      const res = await fetch(`${root}/api/v1/enquiries`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...consultForm, productCode: "ecri" }),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || errorData.message || `Server responded with status ${res.status}`);
+      }
+
       setConsultSubmitted(true);
-    } catch {
-      setConsultSubmitted(true);
+    } catch (err: any) {
+      console.error("Enquiry submission failed:", err);
+      setConsultError(err.message || "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.");
     } finally {
       setConsultSubmitting(false);
     }
@@ -1281,6 +1297,12 @@ function EcriPublicExperiencePage() {
                   Provide your institutional details. Our advisory team will coordinate a
                   consultation to structure your assessment.
                 </p>
+
+                {consultError && (
+                  <div className="mb-4 rounded-md border border-red-500/20 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400">
+                    {consultError}
+                  </div>
+                )}
 
                 <form onSubmit={handleConsultSubmit} className="space-y-4">
                   <div>
