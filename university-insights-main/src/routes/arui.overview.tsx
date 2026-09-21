@@ -14,7 +14,9 @@ export const Route = createFileRoute("/arui/overview")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -23,7 +25,8 @@ export const Route = createFileRoute("/arui/overview")({
       { title: "ARUI Dashboard — AI-Resilient University Index" },
       {
         name: "description",
-        content: "Institutional AI Resilience Dashboard: Strategy, Governance, Curriculum and Faculty Transformation.",
+        content:
+          "Institutional AI Resilience Dashboard: Strategy, Governance, Curriculum and Faculty Transformation.",
       },
     ],
   }),
@@ -146,14 +149,18 @@ function AruiOverviewPage() {
                     : "Dr. Aris Thorne (Institutional Lead)",
                 },
                 { term: "Methodology", detail: status.methodologyVersion || "ARUI v4.0 Master" },
-                { term: "Confidentiality", detail: status.confidentiality || "Institutional Confidential" },
+                {
+                  term: "Confidentiality",
+                  detail: status.confidentiality || "Institutional Confidential",
+                },
               ]}
             />
           </Panel>
           <Panel tone="muted" className="px-6 py-5">
             <p className="eyebrow text-navy font-bold">Evidence Intelligence</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {status.evidence.submitted} verified artifacts submitted. Audit trails locked against institutional integrity protocols.
+              {status.evidence.submitted} verified artifacts submitted. Audit trails locked against
+              institutional integrity protocols.
             </p>
           </Panel>
         </div>

@@ -772,7 +772,12 @@ export function createMockApi(): ArUiApi {
       const s = load();
       s.session = {
         token: `mock-${Date.now()}`,
-        user: { id: "u-institution_admin", name: input.name, email: input.email, role: "institution_admin" },
+        user: {
+          id: "u-institution_admin",
+          name: input.name,
+          email: input.email,
+          role: "institution_admin",
+        },
         institution: { id: "inst-mock-001", name: input.institutionName },
         assessmentId: null,
         engineEntitlements: {
@@ -1390,7 +1395,8 @@ export function createMockApi(): ArUiApi {
           productCode: "ecri",
           code: "PG-COMP",
           name: "Comprehensive Research & Teaching Universities",
-          description: "Multi-faculty institutions with substantial undergraduate & postgraduate programs",
+          description:
+            "Multi-faculty institutions with substantial undergraduate & postgraduate programs",
           minSampleSize: 10,
           isActive: true,
         },
@@ -1399,7 +1405,8 @@ export function createMockApi(): ArUiApi {
           productCode: "ecri",
           code: "PG-TECH",
           name: "Technical & STEM-Focused Universities",
-          description: "Institutions with >= 60% STEM, engineering, or computing discipline profile",
+          description:
+            "Institutions with >= 60% STEM, engineering, or computing discipline profile",
           minSampleSize: 10,
           isActive: true,
         },

@@ -60,10 +60,6 @@ function AruiProfilePage() {
   const pending = useRef<ProfileValues>({});
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (!form || !profile) {
-    return <PagePending />;
-  }
-
   const flush = () => {
     if (Object.keys(pending.current).length === 0) return;
     const batch = pending.current;
@@ -78,6 +74,10 @@ function AruiProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  if (!form || !profile) {
+    return <PagePending />;
+  }
 
   const set = (id: string, v: ProfileValue) => {
     setValues((s) => ({ ...s, [id]: v }));
@@ -122,7 +122,9 @@ function AruiProfilePage() {
             <p className="eyebrow mb-2">
               Step {step + 1} of {steps.length}
             </p>
-            <h2 className="text-2xl text-foreground md:text-3xl">{current.label || (current as any).title}</h2>
+            <h2 className="text-2xl text-foreground md:text-3xl">
+              {current.label || (current as any).title}
+            </h2>
             <p className="mt-1 text-sm text-muted-foreground">{current.description}</p>
           </div>
 
@@ -143,7 +145,8 @@ function AruiProfilePage() {
                 tone="muted"
                 className="px-5 py-4 text-sm leading-relaxed text-muted-foreground"
               >
-                Once the ARUI profile is saved, proceed to Orientation and the Institutional AI Pulse.
+                Once the ARUI profile is saved, proceed to Orientation and the Institutional AI
+                Pulse.
               </Panel>
             )}
           </div>
@@ -158,7 +161,11 @@ function AruiProfilePage() {
               <ArrowLeft /> Back
             </Button>
             {isLast ? (
-              <Button asChild size="lg" className="h-11 px-6 text-[15px] bg-navy text-white hover:bg-navy-deep">
+              <Button
+                asChild
+                size="lg"
+                className="h-11 px-6 text-[15px] bg-navy text-white hover:bg-navy-deep"
+              >
                 <Link to="/arui/orientation" onClick={flush}>
                   Continue to ARUI Orientation <ArrowRight />
                 </Link>

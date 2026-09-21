@@ -11,7 +11,9 @@ export const Route = createFileRoute("/ecri/orientation")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -20,7 +22,8 @@ export const Route = createFileRoute("/ecri/orientation")({
       { title: "ECRI Orientation — Employability Methodology Scope" },
       {
         name: "description",
-        content: "Overview of ECRI 11 dimensions, employer integration metrics, and accreditation calibration.",
+        content:
+          "Overview of ECRI 11 dimensions, employer integration metrics, and accreditation calibration.",
       },
     ],
   }),
@@ -52,15 +55,19 @@ function EcriOrientationPage() {
           <Briefcase className="size-6 text-emerald-700 mb-3" />
           <h3 className="text-base font-semibold text-foreground">11 Employability Dimensions</h3>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Covers employer co-design, industry tools, WIL internships, soft skills, and longitudinal career tracking.
+            Covers employer co-design, industry tools, WIL internships, soft skills, and
+            longitudinal career tracking.
           </p>
         </Panel>
 
         <Panel className="p-6 border-emerald-100 shadow-sm">
           <Award className="size-6 text-emerald-700 mb-3" />
-          <h3 className="text-base font-semibold text-foreground">Calibrated ECRI Benchmark (0–5)</h3>
+          <h3 className="text-base font-semibold text-foreground">
+            Calibrated ECRI Benchmark (0–5)
+          </h3>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Evaluates capability against national employer demand baselines calibrated to your institution's degree mix.
+            Evaluates capability against national employer demand baselines calibrated to your
+            institution's degree mix.
           </p>
         </Panel>
 
@@ -68,7 +75,8 @@ function EcriOrientationPage() {
           <ShieldCheck className="size-6 text-emerald-700 mb-3" />
           <h3 className="text-base font-semibold text-foreground">Verified WIL Audit Standards</h3>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Institutional WIL metrics and partnership claims are validated against independent employer feedback and logs.
+            Institutional WIL metrics and partnership claims are validated against independent
+            employer feedback and logs.
           </p>
         </Panel>
       </div>

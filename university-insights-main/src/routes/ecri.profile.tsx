@@ -60,10 +60,6 @@ function EcriProfilePage() {
   const pending = useRef<ProfileValues>({});
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (!form || !profile) {
-    return <PagePending />;
-  }
-
   const flush = () => {
     if (Object.keys(pending.current).length === 0) return;
     const batch = pending.current;
@@ -78,6 +74,10 @@ function EcriProfilePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  if (!form || !profile) {
+    return <PagePending />;
+  }
 
   const set = (id: string, v: ProfileValue) => {
     setValues((s) => ({ ...s, [id]: v }));
@@ -112,7 +112,8 @@ function EcriProfilePage() {
           <div className="mt-6 flex gap-3 rounded-md border border-emerald-200 bg-emerald-50/40 px-4 py-3.5 text-[13px] leading-relaxed text-emerald-950 shadow-card">
             <Info className="mt-0.5 size-4 shrink-0 text-emerald-700" />
             <p>
-              These context parameters calibrate the required employability maturity target without penalizing degree specialization.
+              These context parameters calibrate the required employability maturity target without
+              penalizing degree specialization.
             </p>
           </div>
         </aside>
@@ -122,7 +123,9 @@ function EcriProfilePage() {
             <p className="eyebrow mb-2 text-emerald-800">
               Step {step + 1} of {steps.length}
             </p>
-            <h2 className="text-2xl text-foreground md:text-3xl">{current.label || (current as any).title}</h2>
+            <h2 className="text-2xl text-foreground md:text-3xl">
+              {current.label || (current as any).title}
+            </h2>
             <p className="mt-1 text-sm text-muted-foreground">{current.description}</p>
           </div>
 
@@ -158,7 +161,11 @@ function EcriProfilePage() {
               <ArrowLeft /> Back
             </Button>
             {isLast ? (
-              <Button asChild size="lg" className="h-11 px-6 text-[15px] bg-emerald-600 text-white hover:bg-emerald-700">
+              <Button
+                asChild
+                size="lg"
+                className="h-11 px-6 text-[15px] bg-emerald-600 text-white hover:bg-emerald-700"
+              >
                 <Link to="/ecri/orientation" onClick={flush}>
                   Continue to ECRI Orientation <ArrowRight />
                 </Link>

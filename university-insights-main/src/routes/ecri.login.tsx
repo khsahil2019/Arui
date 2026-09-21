@@ -115,7 +115,8 @@ function EcriLoginPage() {
             </div>
             <h2 className="mt-3 text-2xl font-bold text-foreground">Sign in to ECRI Workspace</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Enter authorized institutional credentials to access the Employability & Career Readiness benchmark.
+              Enter authorized institutional credentials to access the Employability & Career
+              Readiness benchmark.
             </p>
           </div>
 
@@ -194,14 +195,17 @@ function EcriLoginPage() {
             </button>
 
             <div className="text-center pt-2">
-              <Link to="/ecri/engagement" className="text-xs font-semibold text-teal hover:underline">
+              <Link
+                to="/ecri/engagement"
+                className="text-xs font-semibold text-teal hover:underline"
+              >
                 New institution? Register Institutional Account & Activate Engagement →
               </Link>
             </div>
           </form>
 
           {/* Quick Demo Sign-In Options for ECRI (Environment-Gated for Security) */}
-          {(import.meta.env.DEV || import.meta.env['VITE_ENABLE_DEMO_CREDENTIALS'] === "true") && (
+          {(import.meta.env.DEV || import.meta.env["VITE_ENABLE_DEMO_CREDENTIALS"] === "true") && (
             <div className="mt-6 rounded-xl border border-emerald-500/20 bg-emerald-50/50 p-4">
               <p className="text-xs font-bold text-teal uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Briefcase className="size-4" /> 1-Click ECRI Demo Credentials
@@ -218,8 +222,12 @@ function EcriLoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2.5 text-xs font-medium text-foreground hover:border-teal hover:bg-card/80 transition-all cursor-pointer text-left shadow-sm"
                 >
                   <div>
-                    <p className="font-bold text-teal">💼 Horizon State University (Dean of Career & WIL)</p>
-                    <p className="text-[11px] text-muted-foreground">lead@horizon.edu / horizon123 · 11 Dimensions · 132 Metrics</p>
+                    <p className="font-bold text-teal">
+                      💼 Horizon State University (Dean of Career & WIL)
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      lead@horizon.edu / horizon123 · 11 Dimensions · 132 Metrics
+                    </p>
                   </div>
                   <ArrowRight className="size-4 text-teal shrink-0" />
                 </button>
@@ -235,8 +243,12 @@ function EcriLoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-teal hover:bg-card/80 transition-all cursor-pointer text-left"
                 >
                   <div>
-                    <p className="font-semibold text-foreground">🤝 Director of Corporate Partnerships & WIL</p>
-                    <p className="text-[11px] text-muted-foreground">industry@horizon.edu / horizon123 · Work-Integrated Learning</p>
+                    <p className="font-semibold text-foreground">
+                      🤝 Director of Corporate Partnerships & WIL
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      industry@horizon.edu / horizon123 · Work-Integrated Learning
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -253,7 +265,9 @@ function EcriLoginPage() {
                 >
                   <div>
                     <p className="font-semibold text-foreground">🔍 Lead ECRI Adjudicator</p>
-                    <p className="text-[11px] text-muted-foreground">assessor@ecri.org / assessor123 · Calibration & Review</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      assessor@ecri.org / assessor123 · Calibration & Review
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -262,7 +276,9 @@ function EcriLoginPage() {
           )}
 
           <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
-            <Link to="/" className="hover:underline">← Master Portal Home</Link>
+            <Link to="/" className="hover:underline">
+              ← Master Portal Home
+            </Link>
             <span className="font-mono text-[11px]">ECRI Master v6.0</span>
           </div>
         </div>

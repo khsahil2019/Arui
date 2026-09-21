@@ -14,7 +14,8 @@ export const ECRI_CONFIG = {
   name: "Employability & Career Readiness Index",
   shortTitle: "ECRI",
   version: "ecri-v6.0",
-  tagline: "Comprehensive Institutional Benchmark for Graduate Employability, Industry Alignment & Career Readiness",
+  tagline:
+    "Comprehensive Institutional Benchmark for Graduate Employability, Industry Alignment & Career Readiness",
   domainsLabel: "11 Dimensions · 132 Metrics",
   brandColor: "#0F766E", // Emerald/Teal 700
   accentColor: "#059669", // Emerald 600
@@ -25,7 +26,8 @@ export const ECRI_CONFIG = {
       shortName: "Demand Intelligence",
       theme: "Market Demand & Intelligence",
       metricCount: 12,
-      description: "Institutional evaluation of labor market forecasting, employer demand sensing, and strategic industry intelligence.",
+      description:
+        "Institutional evaluation of labor market forecasting, employer demand sensing, and strategic industry intelligence.",
     },
     {
       code: "D02" as DomainCode,
@@ -33,7 +35,8 @@ export const ECRI_CONFIG = {
       shortName: "Capability Framework",
       theme: "Institutional Capabilities",
       metricCount: 12,
-      description: "Comprehensive institutional capability taxonomy, institutional learning outcomes, and graduate attribute articulation.",
+      description:
+        "Comprehensive institutional capability taxonomy, institutional learning outcomes, and graduate attribute articulation.",
     },
     {
       code: "D03" as DomainCode,
@@ -41,7 +44,8 @@ export const ECRI_CONFIG = {
       shortName: "Industry Curriculum",
       theme: "Curricular Relevance",
       metricCount: 12,
-      description: "Structured industry advisory boards, syllabus co-creation, emerging industry skills integration, and modular course design.",
+      description:
+        "Structured industry advisory boards, syllabus co-creation, emerging industry skills integration, and modular course design.",
     },
     {
       code: "D04" as DomainCode,
@@ -49,7 +53,8 @@ export const ECRI_CONFIG = {
       shortName: "Experiential Learning",
       theme: "Work-Integrated Learning",
       metricCount: 12,
-      description: "Work-Integrated Learning (WIL), structured credit-bearing internships, live industry capstones, and simulated workplace labs.",
+      description:
+        "Work-Integrated Learning (WIL), structured credit-bearing internships, live industry capstones, and simulated workplace labs.",
     },
     {
       code: "D05" as DomainCode,
@@ -57,7 +62,8 @@ export const ECRI_CONFIG = {
       shortName: "Career Infrastructure",
       theme: "Career Services & Navigation",
       metricCount: 12,
-      description: "Institutional career services, 4-year career pathways, personalized navigation, mentoring systems, and employer clinics.",
+      description:
+        "Institutional career services, 4-year career pathways, personalized navigation, mentoring systems, and employer clinics.",
     },
     {
       code: "D06" as DomainCode,
@@ -65,7 +71,8 @@ export const ECRI_CONFIG = {
       shortName: "Professional Capabilities",
       theme: "Workplace Capabilities",
       metricCount: 12,
-      description: "Leadership, critical enquiry, teamwork, ethical reasoning, cross-cultural communication, and executive presence.",
+      description:
+        "Leadership, critical enquiry, teamwork, ethical reasoning, cross-cultural communication, and executive presence.",
     },
     {
       code: "D07" as DomainCode,
@@ -73,7 +80,8 @@ export const ECRI_CONFIG = {
       shortName: "Digital Work Readiness",
       theme: "Digital & AI Proficiency",
       metricCount: 12,
-      description: "Digital fluency, workflow automation, modern tech toolkits, AI tools for domain problems, and data literacy.",
+      description:
+        "Digital fluency, workflow automation, modern tech toolkits, AI tools for domain problems, and data literacy.",
     },
     {
       code: "D08" as DomainCode,
@@ -81,7 +89,8 @@ export const ECRI_CONFIG = {
       shortName: "Capability Signalling",
       theme: "Authentic Credentials & Portfolio",
       metricCount: 12,
-      description: "Evidence-backed portfolios, verified digital credentials, authentic project artifacts, and employer-facing capability profiles.",
+      description:
+        "Evidence-backed portfolios, verified digital credentials, authentic project artifacts, and employer-facing capability profiles.",
     },
     {
       code: "D09" as DomainCode,
@@ -89,7 +98,8 @@ export const ECRI_CONFIG = {
       shortName: "Employer Ecosystem",
       theme: "Corporate Ecosystem & Placement",
       metricCount: 12,
-      description: "Corporate recruitment networks, on-campus talent days, high-trust employer partnerships, and hiring conversion.",
+      description:
+        "Corporate recruitment networks, on-campus talent days, high-trust employer partnerships, and hiring conversion.",
     },
     {
       code: "D10" as DomainCode,
@@ -97,7 +107,8 @@ export const ECRI_CONFIG = {
       shortName: "Outcome Quality",
       theme: "Market Performance & ROI",
       metricCount: 12,
-      description: "6-month verified graduate outcomes, compensation benchmarking, role quality, and employer retention rates.",
+      description:
+        "6-month verified graduate outcomes, compensation benchmarking, role quality, and employer retention rates.",
     },
     {
       code: "D11" as DomainCode,
@@ -105,8 +116,8 @@ export const ECRI_CONFIG = {
       shortName: "Career Adaptability",
       theme: "Lifelong Mobility & Intelligence",
       metricCount: 12,
-      description: "Longitudinal alumni career trajectories, lifelong reskilling access, alumni career network, and employability research.",
+      description:
+        "Longitudinal alumni career trajectories, lifelong reskilling access, alumni career network, and employability research.",
     },
   ],
 };
-

@@ -7,7 +7,12 @@ import { SignalProgress, SaveIndicator } from "@/components/ari/progress";
 import { ResponseControls, ResponsePanel } from "@/components/ari/response-controls";
 import { StatusBadge } from "@/components/ari/status-badge";
 import { Button } from "@/components/ui/button";
-import { ecriDimensionNames, inScopeDomains, type DomainCode, type ChoiceOption } from "@/lib/catalogue";
+import {
+  ecriDimensionNames,
+  inScopeDomains,
+  type DomainCode,
+  type ChoiceOption,
+} from "@/lib/catalogue";
 import { queries, useSaveResponse } from "@/api/hooks";
 
 function isDomain(v: string): v is DomainCode {
@@ -62,19 +67,19 @@ function EcriDomainRunner() {
   });
   const save = useSaveResponse(assessmentId || "");
 
-  if (!data) {
-    return <PagePending />;
-  }
-
   const priorId =
-    data.prompt?.presentation.kind === "matrix" &&
+    data?.prompt?.presentation.kind === "matrix" &&
     data.prompt.presentation.rows.source === "prior_response"
       ? data.prompt.presentation.rows.promptId
       : null;
   const prior = useQuery({
-    ...queries.promptById(assessmentId, domain, priorId ?? "none"),
+    ...queries.promptById(assessmentId || "", domain, priorId ?? "none"),
     enabled: !!priorId,
   });
+
+  if (!data) {
+    return <PagePending />;
+  }
   const priorRows: ChoiceOption[] | undefined = (() => {
     if (!priorId || !prior.data?.prompt) return undefined;
     const pres = prior.data.prompt.presentation;
@@ -107,7 +112,8 @@ function EcriDomainRunner() {
               : "Nothing further to evaluate right now."}
           </h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            The assessment will calculate calibration signals and verify against industry co-design metrics.
+            The assessment will calculate calibration signals and verify against industry co-design
+            metrics.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button asChild variant="outline">

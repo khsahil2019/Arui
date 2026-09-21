@@ -61,7 +61,8 @@ export function InstitutionalPortfolioPage() {
     );
   }
 
-  const institutionName = portfolio?.institutionName || session?.institution?.name || "University Account";
+  const institutionName =
+    portfolio?.institutionName || session?.institution?.name || "University Account";
   const user = session?.user;
 
   return (
@@ -105,8 +106,9 @@ export function InstitutionalPortfolioPage() {
               </div>
               <h1 className="text-3xl font-serif font-bold text-foreground">{institutionName}</h1>
               <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed">
-                Centralized institutional management for all authorized Higher Education assessment instruments.
-                Each assessment engine operates with independent methodology, evidence audit, and transformation roadmap.
+                Centralized institutional management for all authorized Higher Education assessment
+                instruments. Each assessment engine operates with independent methodology, evidence
+                audit, and transformation roadmap.
               </p>
             </div>
 
@@ -114,7 +116,8 @@ export function InstitutionalPortfolioPage() {
               <div>
                 <span className="text-muted-foreground block text-[11px]">Active Engagements</span>
                 <strong className="text-lg font-bold text-teal">
-                  {portfolio?.totalActiveEngagements || 0} / {portfolio?.totalAvailableEngagements || 2}
+                  {portfolio?.totalActiveEngagements || 0} /{" "}
+                  {portfolio?.totalAvailableEngagements || 2}
                 </strong>
               </div>
               <div className="border-l border-border pl-4">
@@ -147,7 +150,9 @@ export function InstitutionalPortfolioPage() {
                     11 Dimensions · 132 Metrics
                   </span>
                   {session?.engineEntitlements?.["ecri"] === "ACTIVE" ||
-                  portfolio?.entitlements.some((e) => e.productCode === "ecri" && e.status === "ACTIVE") ? (
+                  portfolio?.entitlements.some(
+                    (e) => e.productCode === "ecri" && e.status === "ACTIVE",
+                  ) ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400">
                       <CheckCircle2 className="size-3.5" /> Entitlement Active
                     </span>
@@ -163,18 +168,23 @@ export function InstitutionalPortfolioPage() {
                     ECRI — Employability & Career Readiness Index
                   </h3>
                   <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                    Comprehensive institutional evaluation across 11 dimensions of industry curriculum co-design,
-                    mandatory WIL/internships, AI work readiness, and graduate outcomes.
+                    Comprehensive institutional evaluation across 11 dimensions of industry
+                    curriculum co-design, mandatory WIL/internships, AI work readiness, and graduate
+                    outcomes.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs bg-muted/30 p-3.5 rounded-xl">
                   <div>
-                    <span className="text-muted-foreground block text-[11px]">Engagement Cycle</span>
+                    <span className="text-muted-foreground block text-[11px]">
+                      Engagement Cycle
+                    </span>
                     <strong className="text-foreground">2026–2027 Annual</strong>
                   </div>
                   <div>
-                    <span className="text-muted-foreground block text-[11px]">Assessment Scope</span>
+                    <span className="text-muted-foreground block text-[11px]">
+                      Assessment Scope
+                    </span>
                     <strong className="text-teal">Full 11 Dimensions</strong>
                   </div>
                 </div>
@@ -203,7 +213,9 @@ export function InstitutionalPortfolioPage() {
                     11 Domains · 143 Metrics
                   </span>
                   {session?.engineEntitlements?.["arui"] === "ACTIVE" ||
-                  portfolio?.entitlements.some((e) => e.productCode === "arui" && e.status === "ACTIVE") ? (
+                  portfolio?.entitlements.some(
+                    (e) => e.productCode === "arui" && e.status === "ACTIVE",
+                  ) ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400">
                       <CheckCircle2 className="size-3.5" /> Entitlement Active
                     </span>
@@ -219,18 +231,23 @@ export function InstitutionalPortfolioPage() {
                     ARUI — AI-Resilient University Index
                   </h3>
                   <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                    Institutional readiness framework for artificial intelligence adaptation, academic integrity
-                    governance, teaching transformation, and administrative resilience.
+                    Institutional readiness framework for artificial intelligence adaptation,
+                    academic integrity governance, teaching transformation, and administrative
+                    resilience.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-xs bg-muted/30 p-3.5 rounded-xl">
                   <div>
-                    <span className="text-muted-foreground block text-[11px]">Engagement Cycle</span>
+                    <span className="text-muted-foreground block text-[11px]">
+                      Engagement Cycle
+                    </span>
                     <strong className="text-foreground">2026–2027 Annual</strong>
                   </div>
                   <div>
-                    <span className="text-muted-foreground block text-[11px]">Assessment Scope</span>
+                    <span className="text-muted-foreground block text-[11px]">
+                      Assessment Scope
+                    </span>
                     <strong className="text-navy">Comprehensive 11 Domains</strong>
                   </div>
                 </div>
@@ -260,10 +277,13 @@ export function InstitutionalPortfolioPage() {
               <Layers className="size-5" />
             </span>
             <div className="space-y-1">
-              <h4 className="text-sm font-bold text-foreground">Extensible Higher Education Assessment Architecture</h4>
+              <h4 className="text-sm font-bold text-foreground">
+                Extensible Higher Education Assessment Architecture
+              </h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                As future evaluation frameworks (e.g. Sustainability & ESG Index, Global Research Impact Benchmark) are
-                introduced, your institution accesses them seamlessly through this account without creating new credentials.
+                As future evaluation frameworks (e.g. Sustainability & ESG Index, Global Research
+                Impact Benchmark) are introduced, your institution accesses them seamlessly through
+                this account without creating new credentials.
               </p>
             </div>
           </div>

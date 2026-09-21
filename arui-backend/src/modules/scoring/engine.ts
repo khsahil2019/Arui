@@ -20,12 +20,20 @@ export interface ScoreRunCalculationResult {
 }
 
 export async function calculateScoreRun(assessmentId: string, methodologyVersionId?: string): Promise<ScoreRunCalculationResult> {
-  // 1. Resolve Pinned Methodology Version
-  let activeVersionId = methodologyVersionId;
-  if (!activeVersionId) {
-    const asmVerRes = await query(`SELECT methodology_version_id FROM assessments WHERE id = $1`, [assessmentId]);
-    activeVersionId = asmVerRes.rows[0]?.methodology_version_id;
-  }
+  // 1. Resolve Assessment & Pinned Methodology Version
+  const asmRes = await query(
+    `SELECT a.id, a.methodology_version_id, a.product_code, mv.version, mv.product_code as mv_product_code
+     FROM assessments a
+     LEFT JOIN methodology_versions mv ON mv.id = a.methodology_version_id
+     WHERE a.id = $1`,
+    [assessmentId]
+  );
+  const asmRow = asmRes.rows[0];
+  let activeVersionId = methodologyVersionId || asmRow?.methodology_version_id;
+
+  // Detect product code: 'arui' vs 'ecri'
+  const isEcri = (asmRow?.product_code === 'ecri') || (asmRow?.mv_product_code === 'ecri') || (asmRow?.version && asmRow.version.startsWith('ecri'));
+  const productCode = isEcri ? 'ecri' : 'arui';
 
   // Fetch domains and metrics strictly pinned to assessment's methodology version
   let domainsQuery = `SELECT * FROM domains`;
@@ -165,7 +173,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
   const metricResults: Record<string, any> = {};
   const domainMetricScores: Record<string, number[]> = {};
 
-  // 3. Score Each Metric (Standard P0-3 Metric Scoring Formula)
+  // 3. Score Each Metric (Methodology Specific Formula)
   for (const m of metricsRes.rows) {
     const sm = scoreMap[m.full_code];
     let score: number | null = null;
@@ -181,12 +189,25 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
       outcomes = sm.outcomes !== undefined && sm.outcomes !== null ? Number(sm.outcomes) : null;
 
       if (!isNa && maturity !== null) {
-        score = calculateEcriMetricPerformance({
-          maturity,
-          implementation,
-          outcome: outcomes,
-          hasOutcome: !!m.has_outcome,
-        });
+        if (isEcri) {
+          score = calculateEcriMetricPerformance({
+            maturity,
+            implementation,
+            outcome: outcomes,
+            hasOutcome: !!m.has_outcome,
+          });
+        } else {
+          // ARUI Canonical P0-3 Metric Calculation
+          const mat = Math.max(0, Math.min(5, maturity));
+          const imp = implementation !== null ? Math.max(0, Math.min(5, implementation)) : mat;
+          if (m.has_outcome && outcomes !== null && outcomes !== undefined) {
+            const outVal = Number(outcomes);
+            const outNorm = outVal > 5 ? outVal / 20.0 : Math.max(0, Math.min(5, outVal));
+            score = Math.round(((100 * (0.45 * mat + 0.30 * imp + 0.25 * outNorm)) / 5) * 100) / 100;
+          } else {
+            score = Math.round(((100 * (0.60 * mat + 0.40 * imp)) / 5) * 100) / 100;
+          }
+        }
       }
     }
 
@@ -274,8 +295,22 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
       .filter(({r}: any) => r.maturity !== null)
       .map(({m,r}: any) => ({ value: Number(r.maturity), weight: Number(m.weight || 1) })));
 
-    // P0-4 declared strategic targets. Context can raise the target, but never lower it.
-    const requiredMaturity = ECRI_REQUIRED_MATURITY_TARGETS[d.code] ?? 3;
+    let requiredMaturity = 3;
+    if (isEcri) {
+      requiredMaturity = ECRI_REQUIRED_MATURITY_TARGETS[d.code] ?? 3;
+    } else {
+      // Dynamic Context Calibration for ARUI
+      let baseTarget = 3.0;
+      if (researchDelta >= 0.25 && (d.code === 'D10' || d.code === 'D01')) {
+        baseTarget += researchDelta;
+      }
+      if (discExposureDelta >= 0.25 && (d.code === 'D02' || d.code === 'D07')) {
+        baseTarget += discExposureDelta;
+      }
+      const rawTarget = Math.round(baseTarget + baseContextShift);
+      requiredMaturity = Math.max(1, Math.min(5, rawTarget));
+    }
+
     const transformationDistance = currentMaturity !== null ? Math.round((requiredMaturity - currentMaturity) * 10) / 10 : null;
 
     const linkedDomainEv = domainEvidenceMap[d.code] || [];
@@ -289,10 +324,13 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     if (e2PlusCount >= 2 && distinctOrigins >= 2) domainConfidence = 'corroborated';
     else if (reviewedDomainEv.length >= 1 || linkedDomainEv.length >= 1) domainConfidence = 'preliminary';
 
+    const matLabel = ECRI_MATURITY_LABELS[Math.round(currentMaturity ?? 0)] || null;
+    const reqLabel = ECRI_MATURITY_LABELS[requiredMaturity] || `Level ${requiredMaturity}`;
+
     domainResults[d.code] = {
       code: d.code, name: d.name, assessed, domainScore, currentMaturity,
-      currentMaturityLabel: currentMaturity === null ? null : ECRI_MATURITY_LABELS[Math.round(currentMaturity)],
-      requiredMaturity, requiredMaturityLabel: ECRI_MATURITY_LABELS[requiredMaturity],
+      currentMaturityLabel: currentMaturity === null ? null : matLabel,
+      requiredMaturity, requiredMaturityLabel: reqLabel,
       transformationDistance, evidenceConfidence: domainConfidence,
       metricsAssessedCount: scored.length, totalMetricsCount: domainMetrics.length,
       metricWeightsUsed: scored.reduce((sum: number, {m}: any) => sum + Number(m.weight || 1), 0),
@@ -300,7 +338,7 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     contextResults[d.code] = { domainCode: d.code, requiredMaturity, currentMaturity, transformationDistance };
 
     if (assessed && domainScore !== null) {
-      const w = ECRI_DIMENSION_WEIGHTS[d.code] ?? Number(d.provisional_weight || 0);
+      const w = isEcri ? (ECRI_DIMENSION_WEIGHTS[d.code] ?? 0.09) : Number(d.provisional_weight || 1.0);
       weightedSum += domainScore * w;
       totalWeightAssessed += w;
     }
@@ -353,6 +391,23 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
           message: `Cross-domain dependency gap (${rule.rule_id}): Downstream capability ${rule.from_metric} (${fromScore}%) exceeds foundational capability ${rule.to_metric} (${toScore}%) by ${Math.round(scoreGap)} points.`,
         });
       }
+    }
+  }
+
+  // Also evaluate high-level domain contradictions (e.g., D01 high vs D03 low)
+  if (domainResults['D01']?.domainScore !== null && domainResults['D03']?.domainScore !== null) {
+    const d01Score = domainResults['D01'].domainScore;
+    const d03Score = domainResults['D03'].domainScore;
+    if (d01Score >= 70 && d03Score <= 30 && !triggeredRuleMap.has('DOMAIN_D01_D03_CONTRADICTION')) {
+      triggeredRuleMap.set('DOMAIN_D01_D03_CONTRADICTION', true);
+      crossDomainFindings.push({
+        ruleId: 'CD-DOMAIN-01',
+        severity: 'CONTRADICTION',
+        type: 'contradiction',
+        fromMetric: 'D01',
+        toMetric: 'D03',
+        message: `Cross-domain contradiction: Advanced strategy capability in D01 (${d01Score}%) while operational practice in D03 is low (${d03Score}%).`,
+      });
     }
   }
 
@@ -448,19 +503,21 @@ export async function calculateScoreRun(assessmentId: string, methodologyVersion
     : null;
 
   const assessedForMaturity = Object.values(domainResults).filter((d: any) => d.assessed && d.currentMaturity !== null);
-  const overallCurrentMaturity = assessedForMaturity.length > 0
+  const overallCurrentMaturity = (!isPartial && assessedForMaturity.length > 0)
     ? Math.round((assessedForMaturity.reduce((sum: number, d: any) => sum + Number(d.currentMaturity), 0) / assessedForMaturity.length) * 10) / 10
     : null;
 
   // Required maturity is a separate declared target; it is never derived from the score.
   const applicableDomainRdValues = Object.values(domainResults)
-    .filter((d: any) => d.assessed && d.requiredMaturity !== null)
+    .filter((d: any) => (isPartial ? true : d.assessed) && d.requiredMaturity !== null)
     .map((d: any) => Number(d.requiredMaturity));
   const overallRequiredMaturity = applicableDomainRdValues.length > 0
     ? Math.round((applicableDomainRdValues.reduce((a, b) => a + b, 0) / applicableDomainRdValues.length) * 10) / 10
     : 3;
 
-  const overallTransformationDistance = overallCurrentMaturity !== null ? overallRequiredMaturity - overallCurrentMaturity : null;
+  const overallTransformationDistance = (!isPartial && overallCurrentMaturity !== null)
+    ? Math.round((overallRequiredMaturity - overallCurrentMaturity) * 10) / 10
+    : null;
 
   // 9. Dynamic Strengths and Vulnerabilities Generation from actual scores
   const assessedDomainEntries = Object.values(domainResults).filter((d: any) => d.assessed && d.domainScore !== null);

@@ -126,7 +126,10 @@ export function EcriEngagementPage() {
             </span>
           </div>
 
-          <Link to="/ecri" className="text-xs font-semibold text-muted-foreground hover:text-foreground">
+          <Link
+            to="/ecri"
+            className="text-xs font-semibold text-muted-foreground hover:text-foreground"
+          >
             ← Back to Public Overview
           </Link>
         </div>
@@ -142,8 +145,9 @@ export function EcriEngagementPage() {
             Employability & Career Readiness Index (ECRI)
           </h1>
           <p className="mx-auto max-w-2xl text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            Activate institutional evaluation for the 2026–2027 cycle. Comprehensive 11-dimension diagnostics,
-            audit-grade evidence review, executive scoreboard, and boardroom PDF dossiers.
+            Activate institutional evaluation for the 2026–2027 cycle. Comprehensive 11-dimension
+            diagnostics, audit-grade evidence review, executive scoreboard, and boardroom PDF
+            dossiers.
           </p>
         </div>
 
@@ -184,11 +188,16 @@ export function EcriEngagementPage() {
                     desc: "Annual evolution tracking and comparative intelligence with zero fake rankings guarantee.",
                   },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3 rounded-xl border border-border/70 bg-muted/20 p-3">
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 rounded-xl border border-border/70 bg-muted/20 p-3"
+                  >
                     <CheckCircle2 className="size-4 text-teal shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-foreground block">{item.title}</strong>
-                      <span className="text-muted-foreground text-[11px] leading-relaxed">{item.desc}</span>
+                      <span className="text-muted-foreground text-[11px] leading-relaxed">
+                        {item.desc}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -233,11 +242,16 @@ export function EcriEngagementPage() {
                   className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal py-3.5 text-xs font-bold text-white shadow-raised hover:bg-teal/90 transition-all disabled:opacity-60"
                 >
                   <CreditCard className="size-4" />
-                  <span>{activating ? "Activating Engagement..." : "Activate ECRI Assessment ($4,999 USD)"}</span>
+                  <span>
+                    {activating
+                      ? "Activating Engagement..."
+                      : "Activate ECRI Assessment ($4,999 USD)"}
+                  </span>
                 </button>
 
                 <p className="text-[11px] text-center text-muted-foreground">
-                  Secure server-side entitlement activation. Payment receipt and invoice are instantly generated.
+                  Secure server-side entitlement activation. Payment receipt and invoice are
+                  instantly generated.
                 </p>
               </div>
             ) : (
@@ -271,7 +285,9 @@ export function EcriEngagementPage() {
                           type="text"
                           required
                           value={authForm.institutionName}
-                          onChange={(e) => setAuthForm({ ...authForm, institutionName: e.target.value })}
+                          onChange={(e) =>
+                            setAuthForm({ ...authForm, institutionName: e.target.value })
+                          }
                           placeholder="e.g. Apex Global University"
                           className="w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-teal"
                         />
@@ -294,7 +310,9 @@ export function EcriEngagementPage() {
                           <input
                             type="text"
                             value={authForm.designation}
-                            onChange={(e) => setAuthForm({ ...authForm, designation: e.target.value })}
+                            onChange={(e) =>
+                              setAuthForm({ ...authForm, designation: e.target.value })
+                            }
                             placeholder="e.g. Dean / Registrar"
                             className="w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-1 focus:ring-teal"
                           />
@@ -332,7 +350,13 @@ export function EcriEngagementPage() {
                     disabled={authLoading}
                     className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal py-3 text-xs font-bold text-white shadow-raised hover:bg-teal/90 transition-all disabled:opacity-60"
                   >
-                    <span>{authLoading ? "Processing..." : isRegisterMode ? "Create Account & Proceed" : "Sign In & Proceed"}</span>
+                    <span>
+                      {authLoading
+                        ? "Processing..."
+                        : isRegisterMode
+                          ? "Create Account & Proceed"
+                          : "Sign In & Proceed"}
+                    </span>
                     <ArrowRight className="size-3.5" />
                   </button>
                 </form>

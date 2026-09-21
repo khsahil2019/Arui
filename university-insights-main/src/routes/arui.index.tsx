@@ -145,7 +145,9 @@ const pricingPlans = [
 ];
 
 function AruiProductPage() {
-  const [activeTab, setActiveTab] = useState<"domains" | "deliverables" | "pricing" | "faq">("domains");
+  const [activeTab, setActiveTab] = useState<"domains" | "deliverables" | "pricing" | "faq">(
+    "domains",
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -153,7 +155,9 @@ function AruiProductPage() {
       <div className="bg-navy text-primary-foreground px-4 py-2 text-center text-xs font-medium tracking-wide">
         <span>Official ARUI Framework Version 4.0 Released</span>
         <span className="mx-2 opacity-50">·</span>
-        <span className="opacity-90">11 Domains · 143 Metrics · Calibrated AI Resilience Matrix</span>
+        <span className="opacity-90">
+          11 Domains · 143 Metrics · Calibrated AI Resilience Matrix
+        </span>
       </div>
 
       {/* Navigation Bar */}
@@ -216,11 +220,15 @@ function AruiProductPage() {
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-foreground leading-[1.08]">
-                The Global Standard for <span className="italic font-normal text-navy">University AI Resilience</span> & Transformation.
+                The Global Standard for{" "}
+                <span className="italic font-normal text-navy">University AI Resilience</span> &
+                Transformation.
               </h1>
 
               <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
-                A rigorous, multi-domain institutional evaluation framework assessing universities across 11 critical domains, 143 metrics, authentic assessment redesign, and calibrated compute maturity.
+                A rigorous, multi-domain institutional evaluation framework assessing universities
+                across 11 critical domains, 143 metrics, authentic assessment redesign, and
+                calibrated compute maturity.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -263,7 +271,9 @@ function AruiProductPage() {
                   <span className="size-3 rounded-full bg-amber-500" />
                   <span className="size-3 rounded-full bg-emerald-500" />
                 </div>
-                <span className="text-[11px] font-mono text-muted-foreground">ARUI-SPEC-2026.pdf</span>
+                <span className="text-[11px] font-mono text-muted-foreground">
+                  ARUI-SPEC-2026.pdf
+                </span>
               </div>
 
               <div className="mt-6 space-y-4">
@@ -316,7 +326,9 @@ function AruiProductPage() {
               The 11 Assessed Domains of AI Resilience
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              Unlike simplistic survey checklists, ARUI evaluates whole-institution capability across governance, academic integrity, high-speed GPU clusters, faculty readiness, and strategic agility.
+              Unlike simplistic survey checklists, ARUI evaluates whole-institution capability
+              across governance, academic integrity, high-speed GPU clusters, faculty readiness, and
+              strategic agility.
             </p>
           </div>
 
@@ -339,7 +351,10 @@ function AruiProductPage() {
 
                 <div className="mt-6 border-t border-border pt-3 flex items-center justify-between text-xs text-muted-foreground">
                   <span>Maturity 0–5 Rubric</span>
-                  <Link to="/arui/login" className="text-navy font-semibold hover:underline inline-flex items-center gap-1">
+                  <Link
+                    to="/arui/login"
+                    className="text-navy font-semibold hover:underline inline-flex items-center gap-1"
+                  >
                     Evaluate <ChevronRight className="size-3" />
                   </Link>
                 </div>
@@ -358,7 +373,8 @@ function AruiProductPage() {
               Assessment Deliverables & Strategic Reports
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              Every ARUI assessment produces executive artifacts designed specifically for Academic Boards, Vice-Chancellors, and Chief Information Officers.
+              Every ARUI assessment produces executive artifacts designed specifically for Academic
+              Boards, Vice-Chancellors, and Chief Information Officers.
             </p>
           </div>
 
@@ -395,7 +411,9 @@ function AruiProductPage() {
               Institutional Assessment Package
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              Comprehensive institutional licensing with zero hidden add-ons. Full 11-domain evaluation, 143 metrics, executive PDF generation, and independent peer assessor adjudication.
+              Comprehensive institutional licensing with zero hidden add-ons. Full 11-domain
+              evaluation, 143 metrics, executive PDF generation, and independent peer assessor
+              adjudication.
             </p>
           </div>
 
@@ -424,7 +442,10 @@ function AruiProductPage() {
                   <p className="eyebrow text-foreground mb-4">Included in Package:</p>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {tier.features.map((feat) => (
-                      <div key={feat} className="flex items-start gap-2.5 text-xs text-foreground/90">
+                      <div
+                        key={feat}
+                        className="flex items-start gap-2.5 text-xs text-foreground/90"
+                      >
                         <CheckCircle2 className="size-4 text-navy shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
@@ -454,28 +475,43 @@ function AruiProductPage() {
         <div className="mx-auto max-w-4xl px-6 md:px-10">
           <div className="text-center mb-12">
             <p className="eyebrow text-navy mb-2">Methodology Clarity</p>
-            <h2 className="text-3xl font-serif font-bold text-foreground">Frequently Asked Questions</h2>
+            <h2 className="text-3xl font-serif font-bold text-foreground">
+              Frequently Asked Questions
+            </h2>
           </div>
 
           <div className="space-y-6 text-sm">
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-bold text-foreground">How does ARUI calibrate against institutional type?</h3>
+              <h3 className="font-bold text-foreground">
+                How does ARUI calibrate against institutional type?
+              </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                The 25-parameter institutional context profile calibrates the "Required Maturity Baseline". A specialized research university is expected to achieve higher maturity in high-speed GPU clusters (D08) and research integrity (D07) than a liberal arts teaching college, preventing unfair comparisons.
+                The 25-parameter institutional context profile calibrates the "Required Maturity
+                Baseline". A specialized research university is expected to achieve higher maturity
+                in high-speed GPU clusters (D08) and research integrity (D07) than a liberal arts
+                teaching college, preventing unfair comparisons.
               </p>
             </div>
 
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-bold text-foreground">Is institutional data kept confidential?</h3>
+              <h3 className="font-bold text-foreground">
+                Is institutional data kept confidential?
+              </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Yes. All uploaded policy files, compute logs, and self-assessment scores remain strictly confidential within your institutional tenant. Results are never made public without explicit written authorization from the Vice-Chancellor.
+                Yes. All uploaded policy files, compute logs, and self-assessment scores remain
+                strictly confidential within your institutional tenant. Results are never made
+                public without explicit written authorization from the Vice-Chancellor.
               </p>
             </div>
 
             <div className="rounded-xl border border-border bg-card p-6">
-              <h3 className="font-bold text-foreground">Can multiple department leads contribute simultaneously?</h3>
+              <h3 className="font-bold text-foreground">
+                Can multiple department leads contribute simultaneously?
+              </h3>
               <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-                Yes. The institutional lead can invite faculty deans, CIOs, and academic integrity officers to complete their respective domains independently. The platform aggregates all responses into the canonical executive dashboard.
+                Yes. The institutional lead can invite faculty deans, CIOs, and academic integrity
+                officers to complete their respective domains independently. The platform aggregates
+                all responses into the canonical executive dashboard.
               </p>
             </div>
           </div>
@@ -487,7 +523,9 @@ function AruiProductPage() {
         <div className="mx-auto max-w-7xl px-6 md:px-10 flex flex-wrap items-center justify-between gap-6 text-xs text-muted-foreground">
           <div>
             <Wordmark engine="arui" />
-            <p className="mt-2 text-[11px]">Official AI-Resilient University Index · Methodology Version 4.0</p>
+            <p className="mt-2 text-[11px]">
+              Official AI-Resilient University Index · Methodology Version 4.0
+            </p>
           </div>
           <div className="flex items-center gap-6">
             <Link to="/arui/login" className="text-navy font-bold hover:underline">

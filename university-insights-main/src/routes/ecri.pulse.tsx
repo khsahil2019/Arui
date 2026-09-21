@@ -16,7 +16,9 @@ export const Route = createFileRoute("/ecri/pulse")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.screening(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.screening(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -41,6 +43,8 @@ function EcriPulsePage() {
     enabled: !!assessmentId,
   });
   const save = useSaveResponse(assessmentId || "");
+  const [index, setIndex] = useState(0);
+  const [complete, setComplete] = useState(false);
 
   if (!screening) {
     return <PagePending />;
@@ -49,8 +53,6 @@ function EcriPulsePage() {
   const prompts = screening.prompts;
   const responded = new Set(screening.responses.map((r) => r.promptId));
   const firstOpen = prompts.findIndex((p) => !responded.has(p.id));
-  const [index, setIndex] = useState(firstOpen === -1 ? 0 : firstOpen);
-  const [complete, setComplete] = useState(screening.complete && firstOpen === -1);
 
   const prompt = prompts[index]!;
   const existing = screening.responses.find((r) => r.promptId === prompt.id) ?? null;
@@ -69,9 +71,13 @@ function EcriPulsePage() {
             <Check className="size-5" strokeWidth={2.5} />
           </span>
           <p className="eyebrow mt-8 text-emerald-800">{screening.title}</p>
-          <h1 className="mt-3 text-3xl md:text-4xl font-serif">{prompts.length} career signals captured.</h1>
+          <h1 className="mt-3 text-3xl md:text-4xl font-serif">
+            {prompts.length} career signals captured.
+          </h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            The benchmark now has an early reading of employer integration across the institution. The next stage explores each dimension in turn, beginning with D01 · {ecriDimensionNames.D01}.
+            The benchmark now has an early reading of employer integration across the institution.
+            The next stage explores each dimension in turn, beginning with D01 ·{" "}
+            {ecriDimensionNames.D01}.
           </p>
           {screening.earlySignal && (
             <div className="mt-10 text-left">
@@ -90,7 +96,11 @@ function EcriPulsePage() {
             >
               Review signals
             </Button>
-            <Button asChild size="lg" className="h-11 px-6 text-[15px] bg-emerald-600 text-white hover:bg-emerald-700">
+            <Button
+              asChild
+              size="lg"
+              className="h-11 px-6 text-[15px] bg-emerald-600 text-white hover:bg-emerald-700"
+            >
               <Link to="/ecri/assessment/$domain" params={{ domain: "D01" }}>
                 Begin D01 · Employer-Curriculum Co-Design <ArrowRight className="ml-2 size-4" />
               </Link>
@@ -143,7 +153,11 @@ function EcriPulsePage() {
                     Select a response to continue
                   </span>
                 )}
-                <Button className="h-10 px-5 bg-emerald-600 text-white hover:bg-emerald-700" onClick={next} disabled={!existing}>
+                <Button
+                  className="h-10 px-5 bg-emerald-600 text-white hover:bg-emerald-700"
+                  onClick={next}
+                  disabled={!existing}
+                >
                   {index === prompts.length - 1 ? "Complete pulse" : "Next signal"} <ArrowRight />
                 </Button>
               </div>
@@ -188,7 +202,11 @@ function EcriPulsePage() {
               <span
                 className={cn(
                   "size-1.5 rounded-full",
-                  responded.has(p.id) ? "bg-emerald-700" : i === index ? "bg-emerald-500" : "bg-border",
+                  responded.has(p.id)
+                    ? "bg-emerald-700"
+                    : i === index
+                      ? "bg-emerald-500"
+                      : "bg-border",
                 )}
               />
               {p.theme}

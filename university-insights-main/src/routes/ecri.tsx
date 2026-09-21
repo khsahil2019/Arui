@@ -32,10 +32,7 @@ function EcriLayout() {
   const session = (ctx as any)?.session;
   const assessmentId = (ctx as any)?.assessmentId;
   const isPublic =
-    pathname === "/ecri" ||
-    pathname === "/ecri/" ||
-    pathname.startsWith("/ecri/login") ||
-    !session;
+    pathname === "/ecri" || pathname === "/ecri/" || pathname.startsWith("/ecri/login") || !session;
 
   const status = useQuery({
     ...queries.status(assessmentId || ""),
@@ -58,4 +55,3 @@ function EcriLayout() {
     </WorkspaceShell>
   );
 }
-

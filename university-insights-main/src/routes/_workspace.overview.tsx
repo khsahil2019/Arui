@@ -14,7 +14,9 @@ export const Route = createFileRoute("/_workspace/overview")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -50,6 +52,7 @@ const stageLinks = {
 
 function OverviewPage() {
   const { session, assessmentId } = Route.useRouteContext();
+  const routerState = useRouterState();
   const { data: status } = useQuery({
     ...queries.status(assessmentId || ""),
     enabled: !!assessmentId,
@@ -58,7 +61,6 @@ function OverviewPage() {
   if (!status) {
     return <PagePending />;
   }
-  const routerState = useRouterState();
   const rawEngine = new URLSearchParams(routerState.location.search).get("engine");
   const engine: EngineType = rawEngine?.toLowerCase() === "ecri" ? "ecri" : "arui";
   const engineConfig = getEngineConfig(engine);
@@ -73,7 +75,12 @@ function OverviewPage() {
         lede={`Institutional assessment workspace for ${engineConfig.title}. Track progress across profile, pulse, ${engineConfig.domainsLabel}, evidence vault, and executive intelligence.`}
         meta={
           <div className="flex items-center gap-2">
-            <span className={cn("font-bold px-2.5 py-1 rounded text-xs", engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy")}>
+            <span
+              className={cn(
+                "font-bold px-2.5 py-1 rounded text-xs",
+                engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy",
+              )}
+            >
               {engineConfig.shortTitle} Mode
             </span>
             <StatusBadge tone="blue" dot>
@@ -163,7 +170,13 @@ function OverviewPage() {
                     ? status.contributors.map((c) => `${c.name} (${roleLabels[c.role]})`).join(", ")
                     : "None yet invited",
                 },
-                { term: "Methodology", detail: engine === "ecri" ? "ECRI v6.0 Calibrated Master (132 Metrics)" : status.methodologyVersion },
+                {
+                  term: "Methodology",
+                  detail:
+                    engine === "ecri"
+                      ? "ECRI v6.0 Calibrated Master (132 Metrics)"
+                      : status.methodologyVersion,
+                },
                 { term: "Confidentiality", detail: status.confidentiality },
               ]}
             />
@@ -171,7 +184,8 @@ function OverviewPage() {
           <Panel tone="muted" className="px-6 py-5">
             <p className="eyebrow">Evidence Vault</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Verified against the {engineConfig.shortTitle} evidence intelligence rubric.
+              {status.evidence.submitted} submitted · {status.evidence.drafts} in draft. Verified
+              against the {engineConfig.shortTitle} evidence intelligence rubric.
             </p>
           </Panel>
         </div>

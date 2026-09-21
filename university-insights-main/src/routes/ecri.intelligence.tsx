@@ -69,7 +69,8 @@ function EcriIntelligencePage() {
           <p className="eyebrow mt-8 text-emerald-800">ECRI Benchmark</p>
           <h1 className="mt-3 text-3xl md:text-4xl">Employability intelligence is compiling.</h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            A preliminary readout is generated once all 11 dimensions are evaluated and employer co-design evidence is attached.
+            A preliminary readout is generated once all 11 dimensions are evaluated and employer
+            co-design evidence is attached.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -93,9 +94,7 @@ function EcriIntelligencePage() {
       {apiMode === "mock" && (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-md border border-amber/40 bg-amber-soft/60 px-4 py-2.5 text-[13px] text-foreground/85">
           <StatusBadge tone="demo">Illustrative</StatusBadge>
-          <span>
-            These results are illustrative fixtures returned by the mock service.
-          </span>
+          <span>These results are illustrative fixtures returned by the mock service.</span>
         </div>
       )}
 
@@ -281,7 +280,9 @@ function EcriIntelligencePage() {
             </div>
             <div className="text-right">
               <span className="text-xs text-muted-foreground block">Active Peer Group</span>
-              <strong className="text-sm text-foreground">Comprehensive Research & Teaching Universities</strong>
+              <strong className="text-sm text-foreground">
+                Comprehensive Research & Teaching Universities
+              </strong>
             </div>
           </div>
 
@@ -293,7 +294,8 @@ function EcriIntelligencePage() {
               </span>
               <div className="text-xl font-bold font-serif text-foreground">First Cycle</div>
               <p className="text-muted-foreground text-[11px] leading-relaxed">
-                Baseline assessment recorded. Trajectory analytics and delta tracking will activate upon Cycle 2 review.
+                Baseline assessment recorded. Trajectory analytics and delta tracking will activate
+                upon Cycle 2 review.
               </p>
             </div>
 
@@ -329,7 +331,8 @@ function EcriIntelligencePage() {
               </span>
               <div className="text-xl font-bold font-serif text-foreground">N = 7 / 20</div>
               <p className="text-muted-foreground text-[11px] leading-relaxed">
-                Higher education national dataset accumulating under irreversible hash anonymisation.
+                Higher education national dataset accumulating under irreversible hash
+                anonymisation.
               </p>
             </div>
           </div>
@@ -339,7 +342,10 @@ function EcriIntelligencePage() {
             <div>
               <strong>Zero Fake Rankings Guarantee (Instruction #41 & #45):</strong>
               <p className="mt-0.5 text-muted-foreground dark:text-amber-200/80 leading-relaxed">
-                ECRI strictly prohibits generating manufactured ranks or percentiles from small sample sizes. Comparative distributions, medians, and quadrant positioning activate automatically once minimum sample thresholds ($N \ge 10$) are achieved across verified audits.
+                ECRI strictly prohibits generating manufactured ranks or percentiles from small
+                sample sizes. Comparative distributions, medians, and quadrant positioning activate
+                automatically once minimum sample thresholds ($N \ge 10$) are achieved across
+                verified audits.
               </p>
             </div>
           </div>

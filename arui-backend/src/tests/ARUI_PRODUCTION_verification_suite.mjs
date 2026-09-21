@@ -177,18 +177,25 @@ async function runVerificationSuite() {
 
   // Create assessments for A and B
   const asmA_Res = await query(
-    `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, scope_domains_json, created_at, updated_at)
-     VALUES ($1, $2, 'Alpha 2026 Assessment', 'DRAFT', 'profile', $3, NOW(), NOW()) RETURNING id;`,
+    `INSERT INTO assessments (institution_id, methodology_version_id, product_code, title, status, stage, scope_domains_json, created_at, updated_at)
+     VALUES ($1, $2, 'arui', 'Alpha 2026 Assessment', 'DRAFT', 'profile', $3, NOW(), NOW()) RETURNING id;`,
     [instAId, activeMethodVerId, JSON.stringify(['D01', 'D02', 'D03'])]
   );
   const asmA_Id = asmA_Res.rows[0].id;
 
   const asmB_Res = await query(
-    `INSERT INTO assessments (institution_id, methodology_version_id, title, status, stage, scope_domains_json, created_at, updated_at)
-     VALUES ($1, $2, 'Beta 2026 Assessment', 'DRAFT', 'profile', $3, NOW(), NOW()) RETURNING id;`,
+    `INSERT INTO assessments (institution_id, methodology_version_id, product_code, title, status, stage, scope_domains_json, created_at, updated_at)
+     VALUES ($1, $2, 'arui', 'Beta 2026 Assessment', 'DRAFT', 'profile', $3, NOW(), NOW()) RETURNING id;`,
     [instBId, activeMethodVerId, JSON.stringify(['D01', 'D02', 'D03'])]
   );
   const asmB_Id = asmB_Res.rows[0].id;
+
+  await query(
+    `INSERT INTO engine_entitlements (institution_id, product_code, cycle, status, activated_at)
+     VALUES ($1, 'arui', '2026-2027', 'ACTIVE', NOW()), ($2, 'arui', '2026-2027', 'ACTIVE', NOW())
+     ON CONFLICT (institution_id, product_code, cycle) DO UPDATE SET status = 'ACTIVE';`,
+    [instAId, instBId]
+  );
 
   assert(!!userA && !!userB, "Dynamic fixture users created with unique bcrypt hashes");
   assert(!!asmA_Id && !!asmB_Id, "Isolated test assessments created for Institution Alpha and Beta");

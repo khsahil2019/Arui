@@ -14,7 +14,9 @@ export const Route = createFileRoute("/ecri/assessment/")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -23,7 +25,8 @@ export const Route = createFileRoute("/ecri/assessment/")({
       { title: "ECRI Dimensions — 11 Dimensions of Employability" },
       {
         name: "description",
-        content: "Work through the 11 assessed dimensions of graduate employability and career readiness.",
+        content:
+          "Work through the 11 assessed dimensions of graduate employability and career readiness.",
       },
     ],
   }),

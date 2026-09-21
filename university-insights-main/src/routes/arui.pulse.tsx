@@ -16,7 +16,9 @@ export const Route = createFileRoute("/arui/pulse")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.screening(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.screening(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -41,6 +43,8 @@ function AruiPulsePage() {
     enabled: !!assessmentId,
   });
   const save = useSaveResponse(assessmentId || "");
+  const [index, setIndex] = useState(0);
+  const [complete, setComplete] = useState(false);
 
   if (!screening) {
     return <PagePending />;
@@ -49,8 +53,6 @@ function AruiPulsePage() {
   const prompts = screening.prompts;
   const responded = new Set(screening.responses.map((r) => r.promptId));
   const firstOpen = prompts.findIndex((p) => !responded.has(p.id));
-  const [index, setIndex] = useState(firstOpen === -1 ? 0 : firstOpen);
-  const [complete, setComplete] = useState(screening.complete && firstOpen === -1);
 
   const prompt = prompts[index]!;
   const existing = screening.responses.find((r) => r.promptId === prompt.id) ?? null;
@@ -69,7 +71,9 @@ function AruiPulsePage() {
             <Check className="size-5" strokeWidth={2.5} />
           </span>
           <p className="eyebrow mt-8">{screening.title}</p>
-          <h1 className="mt-3 text-3xl md:text-4xl font-serif">{prompts.length} signals captured.</h1>
+          <h1 className="mt-3 text-3xl md:text-4xl font-serif">
+            {prompts.length} signals captured.
+          </h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
             The assessment now has an early sense of how AI sits within the institution. The next
             stage explores each domain in turn, beginning with D01 · {domainNames.D01}.
@@ -91,7 +95,11 @@ function AruiPulsePage() {
             >
               Review signals
             </Button>
-            <Button asChild size="lg" className="h-11 px-6 text-[15px] bg-navy text-white hover:bg-navy-deep">
+            <Button
+              asChild
+              size="lg"
+              className="h-11 px-6 text-[15px] bg-navy text-white hover:bg-navy-deep"
+            >
               <Link to="/arui/assessment/$domain" params={{ domain: "D01" }}>
                 Begin D01 · Institutional Strategy <ArrowRight className="ml-2 size-4" />
               </Link>
@@ -144,7 +152,11 @@ function AruiPulsePage() {
                     Select a response to continue
                   </span>
                 )}
-                <Button className="h-10 px-5 bg-navy text-white hover:bg-navy-deep" onClick={next} disabled={!existing}>
+                <Button
+                  className="h-10 px-5 bg-navy text-white hover:bg-navy-deep"
+                  onClick={next}
+                  disabled={!existing}
+                >
                   {index === prompts.length - 1 ? "Complete pulse" : "Next signal"} <ArrowRight />
                 </Button>
               </div>

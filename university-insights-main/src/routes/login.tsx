@@ -13,7 +13,8 @@ export const Route = createFileRoute("/login")({
   beforeLoad: async ({ context, search }) => {
     const session = await context.queryClient.ensureQueryData(queries.session());
     if (session) {
-      const target = search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/overview");
+      const target =
+        search.redirect ?? (session.user.role === "assessor" ? "/assessor" : "/overview");
       throw redirect({
         to: target as any,
         search: (search.engine ? { engine: search.engine } : {}) as any,
@@ -180,7 +181,7 @@ function LoginPage() {
           </form>
 
           {/* Quick Demo Sign-In Options (Environment-Gated for Security) */}
-          {(import.meta.env.DEV || import.meta.env['VITE_ENABLE_DEMO_CREDENTIALS'] === "true") && (
+          {(import.meta.env.DEV || import.meta.env["VITE_ENABLE_DEMO_CREDENTIALS"] === "true") && (
             <div className="mt-6 rounded-xl border border-border bg-slate-50 dark:bg-slate-900/50 p-4">
               <p className="text-xs font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <ShieldCheck className="size-4" /> Instant Demo Access
@@ -206,8 +207,12 @@ function LoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
                 >
                   <div>
-                    <p className="font-semibold text-navy">🎓 Apex National University (ARUI Lead)</p>
-                    <p className="text-[11px] text-muted-foreground">lead@apex.edu / apex123 · 11 Domains · 143 Metrics</p>
+                    <p className="font-semibold text-navy">
+                      🎓 Apex National University (ARUI Lead)
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      lead@apex.edu / apex123 · 11 Domains · 143 Metrics
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-navy shrink-0" />
                 </button>
@@ -232,8 +237,12 @@ function LoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-teal hover:bg-card/80 transition-all cursor-pointer text-left"
                 >
                   <div>
-                    <p className="font-semibold text-teal">💼 Horizon State University (ECRI Lead)</p>
-                    <p className="text-[11px] text-muted-foreground">lead@horizon.edu / horizon123 · Career & WIL</p>
+                    <p className="font-semibold text-teal">
+                      💼 Horizon State University (ECRI Lead)
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      lead@horizon.edu / horizon123 · Career & WIL
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-teal shrink-0" />
                 </button>
@@ -259,7 +268,9 @@ function LoginPage() {
                 >
                   <div>
                     <p className="font-semibold text-foreground">🛡️ Global Higher Ed Admin</p>
-                    <p className="text-[11px] text-muted-foreground">sahilkh3014@gmail.com / 123456 · Full Platform</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      sahilkh3014@gmail.com / 123456 · Full Platform
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -285,7 +296,9 @@ function LoginPage() {
                 >
                   <div>
                     <p className="font-semibold text-foreground">🔍 ARUI Assessor</p>
-                    <p className="text-[11px] text-muted-foreground">assessor@arui.org / assessor123 · Queue</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      assessor@arui.org / assessor123 · Queue
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -294,7 +307,9 @@ function LoginPage() {
           )}
 
           <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
-            <Link to="/" className="hover:underline">← Master Portal Home</Link>
+            <Link to="/" className="hover:underline">
+              ← Master Portal Home
+            </Link>
             <span className="font-mono text-[11px]">Multi-Product Platform</span>
           </div>
         </div>

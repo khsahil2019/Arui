@@ -32,10 +32,7 @@ function AruiLayout() {
   const session = (ctx as any)?.session;
   const assessmentId = (ctx as any)?.assessmentId;
   const isPublic =
-    pathname === "/arui" ||
-    pathname === "/arui/" ||
-    pathname.startsWith("/arui/login") ||
-    !session;
+    pathname === "/arui" || pathname === "/arui/" || pathname.startsWith("/arui/login") || !session;
 
   const status = useQuery({
     ...queries.status(assessmentId || ""),

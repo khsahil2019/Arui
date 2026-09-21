@@ -187,7 +187,7 @@ function AruiLoginPage() {
           </form>
 
           {/* Quick Demo Sign-In Options for ARUI (Environment-Gated for Security) */}
-          {(import.meta.env.DEV || import.meta.env['VITE_ENABLE_DEMO_CREDENTIALS'] === "true") && (
+          {(import.meta.env.DEV || import.meta.env["VITE_ENABLE_DEMO_CREDENTIALS"] === "true") && (
             <div className="mt-6 rounded-xl border border-navy/20 bg-navy/5 p-4">
               <p className="text-xs font-bold text-navy uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <ShieldCheck className="size-4" /> 1-Click ARUI Demo Credentials
@@ -204,8 +204,12 @@ function AruiLoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2.5 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left shadow-sm"
                 >
                   <div>
-                    <p className="font-bold text-navy">🎓 Apex National University (Institutional Lead)</p>
-                    <p className="text-[11px] text-muted-foreground">lead@apex.edu / apex123 · 11 Domains · 143 Metrics</p>
+                    <p className="font-bold text-navy">
+                      🎓 Apex National University (Institutional Lead)
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      lead@apex.edu / apex123 · 11 Domains · 143 Metrics
+                    </p>
                   </div>
                   <ArrowRight className="size-4 text-navy shrink-0" />
                 </button>
@@ -221,8 +225,12 @@ function AruiLoginPage() {
                   className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground hover:border-navy hover:bg-card/80 transition-all cursor-pointer text-left"
                 >
                   <div>
-                    <p className="font-semibold text-foreground">🛡️ Global Higher Ed Administrator</p>
-                    <p className="text-[11px] text-muted-foreground">sahilkh3014@gmail.com / 123456 · Super Admin</p>
+                    <p className="font-semibold text-foreground">
+                      🛡️ Global Higher Ed Administrator
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      sahilkh3014@gmail.com / 123456 · Super Admin
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -239,7 +247,9 @@ function AruiLoginPage() {
                 >
                   <div>
                     <p className="font-semibold text-foreground">🔍 ARUI Independent Assessor</p>
-                    <p className="text-[11px] text-muted-foreground">assessor@arui.org / assessor123 · Audit Queue</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      assessor@arui.org / assessor123 · Audit Queue
+                    </p>
                   </div>
                   <ArrowRight className="size-3.5 text-muted-foreground shrink-0" />
                 </button>
@@ -248,7 +258,9 @@ function AruiLoginPage() {
           )}
 
           <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-xs text-muted-foreground">
-            <Link to="/" className="hover:underline">← Master Portal Home</Link>
+            <Link to="/" className="hover:underline">
+              ← Master Portal Home
+            </Link>
             <span className="font-mono text-[11px]">ARUI Master v4.0</span>
           </div>
         </div>

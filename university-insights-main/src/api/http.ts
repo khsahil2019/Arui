@@ -121,11 +121,23 @@ export function createHttpApi(baseUrl: string): ArUiApi {
       return call("POST", `/entitlements/${encodeURIComponent(productCode)}/purchase`, input || {});
     },
 
-    getStatus: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `${a(id)}/status`)),
+    getStatus: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `${a(id)}/status`),
     getProfileForm: () => call("GET", `/methodology/profile-form`),
-    getProfile: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `${a(id)}/profile`)),
-    saveProfile: (id, values) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("PUT", `${a(id)}/profile`, { values })),
-    getScreening: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `${a(id)}/screening`)),
+    getProfile: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `${a(id)}/profile`),
+    saveProfile: (id, values) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("PUT", `${a(id)}/profile`, { values }),
+    getScreening: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `${a(id)}/screening`),
     getNextPrompt: (id, domainCode, afterPromptId) =>
       !id || id === "undefined"
         ? Promise.reject(new Error("Missing assessment ID"))
@@ -141,32 +153,65 @@ export function createHttpApi(baseUrl: string): ArUiApi {
       !id || id === "undefined"
         ? Promise.reject(new Error("Missing assessment ID"))
         : call("PUT", `${a(id)}/responses/${encodeURIComponent(input.promptId)}`, input),
-    getEvidence: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `${a(id)}/evidence`)),
-    createEvidence: (id, input) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("POST", `${a(id)}/evidence`, input)),
+    getEvidence: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `${a(id)}/evidence`),
+    createEvidence: (id, input) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("POST", `${a(id)}/evidence`, input),
     submitEvidence: (id, evidenceId) =>
       !id || id === "undefined"
         ? Promise.reject(new Error("Missing assessment ID"))
         : call("POST", `${a(id)}/evidence/${encodeURIComponent(evidenceId)}/submit`),
-    getPreliminaryResults: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `${a(id)}/results/preliminary`)),
+    getPreliminaryResults: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `${a(id)}/results/preliminary`),
 
     getAssessorQueue: () => call("GET", `/assessor/queue`),
-    getAssessorAssessment: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}`)),
-    getResponseReview: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}/responses`)),
-    getEvidenceReview: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}/evidence`)),
-    getMetricScoring: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}/metrics`)),
+    getAssessorAssessment: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}`),
+    getResponseReview: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}/responses`),
+    getEvidenceReview: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}/evidence`),
+    getMetricScoring: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}/metrics`),
     saveMetricScoring: (id, metricId, input) =>
       !id || id === "undefined"
         ? Promise.reject(new Error("Missing assessment ID"))
         : call("PATCH", `/assessor${a(id)}/metrics/${encodeURIComponent(metricId)}`, input),
-    getContextCalibration: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}/context`)),
-    getScoreRuns: (id) => (!id || id === "undefined" ? Promise.reject(new Error("Missing assessment ID")) : call("GET", `/assessor${a(id)}/score-runs`)),
+    getContextCalibration: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}/context`),
+    getScoreRuns: (id) =>
+      !id || id === "undefined"
+        ? Promise.reject(new Error("Missing assessment ID"))
+        : call("GET", `/assessor${a(id)}/score-runs`),
     requestScoreRun: (id, kind) => call("POST", `/assessor${a(id)}/score-runs`, { kind }),
     getExecutionLog: (id) => call("GET", `/assessor${a(id)}/execution-log`),
     getBenchmarkSummary: (id, peerGroupId) =>
       !id || id === "undefined"
         ? Promise.reject(new Error("Missing assessment ID"))
-        : call("GET", `/benchmarking/assessments/${encodeURIComponent(id)}/summary${peerGroupId ? `?peer_group_id=${encodeURIComponent(peerGroupId)}` : ""}`),
+        : call(
+            "GET",
+            `/benchmarking/assessments/${encodeURIComponent(id)}/summary${peerGroupId ? `?peer_group_id=${encodeURIComponent(peerGroupId)}` : ""}`,
+          ),
     getPeerGroups: (productCode) =>
-      call("GET", `/benchmarking/peer-groups${productCode ? `?product_code=${encodeURIComponent(productCode)}` : ""}`),
+      call(
+        "GET",
+        `/benchmarking/peer-groups${productCode ? `?product_code=${encodeURIComponent(productCode)}` : ""}`,
+      ),
   };
 }

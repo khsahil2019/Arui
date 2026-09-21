@@ -137,8 +137,8 @@ function WelcomePage() {
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                     Comprehensive research-grade evaluation measuring how institutional strategy,
-                    ethical governance, curriculum co-adaptation, faculty capability, and tech infrastructure
-                    respond to artificial intelligence.
+                    ethical governance, curriculum co-adaptation, faculty capability, and tech
+                    infrastructure respond to artificial intelligence.
                   </p>
                 </div>
 
@@ -216,8 +216,9 @@ function WelcomePage() {
                     Employability & Career Readiness Index
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    In-depth multi-dimensional framework assessing employer partnerships, industry co-designed
-                    curriculum, Work-Integrated Learning (WIL), alumni tracking, and high-impact career pathways.
+                    In-depth multi-dimensional framework assessing employer partnerships, industry
+                    co-designed curriculum, Work-Integrated Learning (WIL), alumni tracking, and
+                    high-impact career pathways.
                   </p>
                 </div>
 
@@ -272,8 +273,9 @@ function WelcomePage() {
                 Built for university executive leadership.
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Engineered specifically for Vice-Chancellors, Provosts, Deans, IQAC Directors, and institutional
-                planning committees. Designed for single-lead administration or distributed multi-contributor evaluation.
+                Engineered specifically for Vice-Chancellors, Provosts, Deans, IQAC Directors, and
+                institutional planning committees. Designed for single-lead administration or
+                distributed multi-contributor evaluation.
               </p>
             </div>
 
@@ -306,12 +308,15 @@ function WelcomePage() {
             <span>Dual Assessment Frameworks</span>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="/arui" className="hover:text-foreground">ARUI Specs</Link>
-            <Link to="/ecri" className="hover:text-foreground">ECRI Specs</Link>
+            <Link to="/arui" className="hover:text-foreground">
+              ARUI Specs
+            </Link>
+            <Link to="/ecri" className="hover:text-foreground">
+              ECRI Specs
+            </Link>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-

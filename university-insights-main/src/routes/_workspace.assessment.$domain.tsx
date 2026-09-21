@@ -125,7 +125,9 @@ function DomainRunner() {
           </ol>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Button asChild variant="outline">
-              <Link to="/assessment" search={engine ? { engine } : {}}>All domains</Link>
+              <Link to="/assessment" search={engine ? { engine } : {}}>
+                All domains
+              </Link>
             </Button>
             <NextDomainButton current={domain} engine={engine} />
           </div>
@@ -283,7 +285,13 @@ function StateChip({ state }: { state: string }) {
   return <StatusBadge tone={m.tone}>{m.label}</StatusBadge>;
 }
 
-function NextDomainButton({ current, engine }: { current: DomainCode; engine?: string | undefined }) {
+function NextDomainButton({
+  current,
+  engine,
+}: {
+  current: DomainCode;
+  engine?: string | undefined;
+}) {
   const i = inScopeDomains.indexOf(current);
   const next = inScopeDomains[i + 1];
   if (!next) {
@@ -297,11 +305,7 @@ function NextDomainButton({ current, engine }: { current: DomainCode; engine?: s
   }
   return (
     <Button asChild size="lg" className="h-11 px-6 text-[15px]">
-      <Link
-        to="/assessment/$domain"
-        params={{ domain: next }}
-        search={engine ? { engine } : {}}
-      >
+      <Link to="/assessment/$domain" params={{ domain: next }} search={engine ? { engine } : {}}>
         Begin {next} · {shortName(next)} <ArrowRight />
       </Link>
     </Button>

@@ -63,19 +63,19 @@ function AruiDomainRunner() {
   });
   const save = useSaveResponse(assessmentId || "");
 
-  if (!data) {
-    return <PagePending />;
-  }
-
   const priorId =
-    data.prompt?.presentation.kind === "matrix" &&
+    data?.prompt?.presentation.kind === "matrix" &&
     data.prompt.presentation.rows.source === "prior_response"
       ? data.prompt.presentation.rows.promptId
       : null;
   const prior = useQuery({
-    ...queries.promptById(assessmentId, domain, priorId ?? "none"),
+    ...queries.promptById(assessmentId || "", domain, priorId ?? "none"),
     enabled: !!priorId,
   });
+
+  if (!data) {
+    return <PagePending />;
+  }
   const priorRows: ChoiceOption[] | undefined = (() => {
     if (!priorId || !prior.data?.prompt) return undefined;
     const pres = prior.data.prompt.presentation;

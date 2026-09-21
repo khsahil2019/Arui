@@ -18,7 +18,9 @@ export const Route = createFileRoute("/ecri/evidence")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.evidence(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.evidence(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -42,7 +44,12 @@ const kinds: { value: EvidenceKind; label: string; icon: typeof FileText; hint: 
     icon: FileText,
     hint: "Employer agreements, WIL data, MoUs, accreditation files",
   },
-  { value: "url", label: "Add link", icon: Link2, hint: "Industry portal, alumni placement tracking site" },
+  {
+    value: "url",
+    label: "Add link",
+    icon: Link2,
+    hint: "Industry portal, alumni placement tracking site",
+  },
   {
     value: "note",
     label: "Add description",
@@ -61,10 +68,6 @@ function EcriEvidencePage() {
   const create = useCreateEvidence(assessmentId || "");
   const submit = useSubmitEvidence(assessmentId || "");
 
-  if (!view) {
-    return <PagePending />;
-  }
-
   const [kind, setKind] = useState<EvidenceKind>("document");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -77,6 +80,10 @@ function EcriEvidencePage() {
   const [requestIds, setRequestIds] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  if (!view) {
+    return <PagePending />;
+  }
 
   const submitted = view.items.filter((i) => i.status !== "draft").length;
   const coverage = Math.min(1, submitted / view.coreTarget.min);
@@ -224,7 +231,8 @@ function EcriEvidencePage() {
             ))}
             {view.items.length === 0 && (
               <p className="rounded-lg border border-dashed border-emerald-200 px-6 py-10 text-center text-sm text-muted-foreground">
-                No evidence yet. Start with what already exists — an Employer MoU, Advisory Board minutes, or internship completion audit.
+                No evidence yet. Start with what already exists — an Employer MoU, Advisory Board
+                minutes, or internship completion audit.
               </p>
             )}
           </div>
@@ -259,7 +267,10 @@ function EcriEvidencePage() {
                       )}
                     >
                       <k.icon
-                        className={cn("size-4", active ? "text-emerald-700" : "text-muted-foreground")}
+                        className={cn(
+                          "size-4",
+                          active ? "text-emerald-700" : "text-muted-foreground",
+                        )}
                       />
                       <span className="flex-1">
                         <span className="block text-sm font-medium text-foreground">{k.label}</span>
@@ -385,9 +396,7 @@ function EcriEvidencePage() {
                             on ? "border-emerald-700 bg-emerald-700" : "border-input",
                           )}
                         >
-                          {on && (
-                            <Check className="size-2.5 text-white" strokeWidth={3} />
-                          )}
+                          {on && <Check className="size-2.5 text-white" strokeWidth={3} />}
                         </span>
                         <span className="text-foreground">
                           {r.label} <span className="text-muted-foreground">· {r.domainCode}</span>

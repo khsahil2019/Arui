@@ -18,7 +18,9 @@ export const Route = createFileRoute("/arui/evidence")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.evidence(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.evidence(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -61,10 +63,6 @@ function AruiEvidencePage() {
   const create = useCreateEvidence(assessmentId || "");
   const submit = useSubmitEvidence(assessmentId || "");
 
-  if (!view) {
-    return <PagePending />;
-  }
-
   const [kind, setKind] = useState<EvidenceKind>("document");
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -77,6 +75,10 @@ function AruiEvidencePage() {
   const [requestIds, setRequestIds] = useState<string[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  if (!view) {
+    return <PagePending />;
+  }
 
   const submitted = view.items.filter((i) => i.status !== "draft").length;
   const coverage = Math.min(1, submitted / view.coreTarget.min);

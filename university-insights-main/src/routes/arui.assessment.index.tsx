@@ -14,7 +14,9 @@ export const Route = createFileRoute("/arui/assessment/")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,

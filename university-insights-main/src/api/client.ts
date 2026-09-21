@@ -53,7 +53,10 @@ export interface ArUiApi {
   getSession(engine?: string): Promise<Session | null>;
   /* platform portfolio & engine entitlements */
   getPortfolio(): Promise<import("./types").PortfolioView>;
-  purchaseEngine(productCode: string, input?: import("./types").PurchaseEngagementInput): Promise<any>;
+  purchaseEngine(
+    productCode: string,
+    input?: import("./types").PurchaseEngagementInput,
+  ): Promise<any>;
 
   /* respondent */
   getStatus(assessmentId: string): Promise<AssessmentStatusView>;
@@ -93,7 +96,10 @@ export interface ArUiApi {
   requestScoreRun(assessmentId: string, kind: ScoreRun["kind"]): Promise<ScoreRun>;
   getExecutionLog(assessmentId: string): Promise<ExecutionLogEntry[]>;
   /* benchmarking & comparative intelligence */
-  getBenchmarkSummary(assessmentId: string, peerGroupId?: string): Promise<import("./types").BenchmarkSummary>;
+  getBenchmarkSummary(
+    assessmentId: string,
+    peerGroupId?: string,
+  ): Promise<import("./types").BenchmarkSummary>;
   getPeerGroups(productCode?: string): Promise<import("./types").PeerGroupDefinition[]>;
 }
 

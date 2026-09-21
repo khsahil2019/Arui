@@ -302,7 +302,7 @@ function EcriPublicExperiencePage() {
     "scoreboard" | "dimensions" | "analytics" | "gaps" | "evolution" | "reports"
   >("scoreboard");
   const [selectedDimension, setSelectedDimension] = useState<(typeof ecriDimensionsData)[number]>(
-    (ecriDimensionsData[3] ?? ecriDimensionsData[0])!
+    (ecriDimensionsData[3] ?? ecriDimensionsData[0])!,
   );
   const [consultModalOpen, setConsultModalOpen] = useState(false);
   const [consultForm, setConsultForm] = useState({
@@ -322,7 +322,9 @@ function EcriPublicExperiencePage() {
     setConsultSubmitting(true);
     setConsultError(null);
     try {
-      const envUrl = (import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined)?.trim()?.replace(/\/$/, "");
+      const envUrl = (import.meta.env["VITE_ARUI_API_BASE_URL"] as string | undefined)
+        ?.trim()
+        ?.replace(/\/$/, "");
       let root = "";
       if (envUrl) {
         root = envUrl;
@@ -345,13 +347,18 @@ function EcriPublicExperiencePage() {
 
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.error || errorData.message || `Server responded with status ${res.status}`);
+        throw new Error(
+          errorData.error || errorData.message || `Server responded with status ${res.status}`,
+        );
       }
 
       setConsultSubmitted(true);
     } catch (err: any) {
       console.error("Enquiry submission failed:", err);
-      setConsultError(err.message || "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.");
+      setConsultError(
+        err.message ||
+          "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.",
+      );
     } finally {
       setConsultSubmitting(false);
     }
@@ -433,7 +440,13 @@ function EcriPublicExperiencePage() {
               </button>
 
               <button
-                onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
+                onClick={() =>
+                  window.open(
+                    "/samples/ECRI_Sample_Executive_Report.pdf",
+                    "_blank",
+                    "noopener,noreferrer",
+                  )
+                }
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-teal hover:text-teal"
               >
                 <Mail className="size-4" />
@@ -636,16 +649,20 @@ function EcriPublicExperiencePage() {
                           Capability Signalling Gap (63%)
                         </span>
                         <p className="text-muted-foreground leading-relaxed">
-                          Absence of standardized digital project repositories (e.g. GitHub/ePortfolios)
-                          limits employer pre-hiring verification.
+                          Absence of standardized digital project repositories (e.g.
+                          GitHub/ePortfolios) limits employer pre-hiring verification.
                         </p>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-6 pt-4 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Evidence Corroboration: <strong>E2 (Reviewed & Corroborated)</strong></span>
-                    <span>Audit Status: <strong>Verified</strong></span>
+                    <span>
+                      Evidence Corroboration: <strong>E2 (Reviewed & Corroborated)</strong>
+                    </span>
+                    <span>
+                      Audit Status: <strong>Verified</strong>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -951,11 +968,15 @@ function EcriPublicExperiencePage() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs bg-muted/40 p-3 rounded-lg">
                       <div>
-                        <span className="text-muted-foreground block text-[11px]">Current State</span>
+                        <span className="text-muted-foreground block text-[11px]">
+                          Current State
+                        </span>
                         <strong className="text-foreground">{item.current}</strong>
                       </div>
                       <div>
-                        <span className="text-muted-foreground block text-[11px]">Required Maturity</span>
+                        <span className="text-muted-foreground block text-[11px]">
+                          Required Maturity
+                        </span>
                         <strong className="text-teal">{item.target}</strong>
                       </div>
                       <div>
@@ -987,9 +1008,8 @@ function EcriPublicExperiencePage() {
                 </h4>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground max-w-3xl">
                   As relevant institutional information changes, policies mature, or employer
-                  initiatives expand, ECRI is reassessed over versioned snapshots. Historical
-                  audits remain preserved, creating an auditable trajectory of institutional
-                  progress.
+                  initiatives expand, ECRI is reassessed over versioned snapshots. Historical audits
+                  remain preserved, creating an auditable trajectory of institutional progress.
                 </p>
               </div>
 
@@ -1005,7 +1025,9 @@ function EcriPublicExperiencePage() {
                       Assessment Snapshot v1 (June 2026)
                     </span>
                     <div className="text-2xl font-bold font-serif text-foreground">66.4%</div>
-                    <span className="text-[11px] text-muted-foreground">Level 3 · Developing Baseline</span>
+                    <span className="text-[11px] text-muted-foreground">
+                      Level 3 · Developing Baseline
+                    </span>
                   </div>
 
                   <div className="rounded-xl border-2 border-teal/40 bg-teal/[0.04] p-4">
@@ -1013,7 +1035,9 @@ function EcriPublicExperiencePage() {
                       Progress Review Snapshot v2 (June 2027)
                     </span>
                     <div className="text-2xl font-bold font-serif text-teal">74.8%</div>
-                    <span className="text-[11px] text-teal font-bold">+8.4 pts · Level 4 Established</span>
+                    <span className="text-[11px] text-teal font-bold">
+                      +8.4 pts · Level 4 Established
+                    </span>
                   </div>
 
                   <div className="rounded-xl border border-border bg-muted/30 p-4">
@@ -1021,7 +1045,9 @@ function EcriPublicExperiencePage() {
                       Institutional Interventions Verified
                     </span>
                     <div className="text-2xl font-bold font-serif text-foreground">6 Major</div>
-                    <span className="text-[11px] text-muted-foreground">Curriculum & WIL Mandates</span>
+                    <span className="text-[11px] text-muted-foreground">
+                      Curriculum & WIL Mandates
+                    </span>
                   </div>
                 </div>
 
@@ -1032,7 +1058,8 @@ function EcriPublicExperiencePage() {
                         D04 · Experiential Learning & Internships (WIL)
                       </span>
                       <p className="text-muted-foreground text-[11px]">
-                        Credit weighting enacted for Arts & Sciences internships; 4 metric rubrics updated.
+                        Credit weighting enacted for Arts & Sciences internships; 4 metric rubrics
+                        updated.
                       </p>
                     </div>
                     <span className="font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded">
@@ -1099,7 +1126,13 @@ function EcriPublicExperiencePage() {
                       17 Pages · Executive Assessment
                     </span>
                     <button
-                      onClick={() => window.open("/samples/ECRI_Sample_Executive_Report.pdf", "_blank", "noopener,noreferrer")}
+                      onClick={() =>
+                        window.open(
+                          "/samples/ECRI_Sample_Executive_Report.pdf",
+                          "_blank",
+                          "noopener,noreferrer",
+                        )
+                      }
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
                       <Download className="size-3.5" /> View Sample Report
@@ -1131,7 +1164,13 @@ function EcriPublicExperiencePage() {
                       45 Pages · 132-Metric Traceability
                     </span>
                     <button
-                      onClick={() => window.open("/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf", "_blank", "noopener,noreferrer")}
+                      onClick={() =>
+                        window.open(
+                          "/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf",
+                          "_blank",
+                          "noopener,noreferrer",
+                        )
+                      }
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-teal hover:underline"
                     >
                       <Download className="size-3.5" /> View Sample Report
@@ -1142,19 +1181,47 @@ function EcriPublicExperiencePage() {
 
               <div className="grid gap-6 md:grid-cols-3">
                 {[
-                  ["Board Scorecard", "ECRI_Sample_Board_Scorecard.pdf", "4 Pages · Leadership Scorecard"],
-                  ["Evidence & Claim Integrity Dossier", "ECRI_Sample_Evidence_Integrity_Dossier.pdf", "8 Pages · Evidence Intelligence"],
-                  ["Transformation Roadmap", "ECRI_Sample_Transformation_Roadmap.pdf", "7 Pages · Action & Sequencing"],
+                  [
+                    "Board Scorecard",
+                    "ECRI_Sample_Board_Scorecard.pdf",
+                    "4 Pages · Leadership Scorecard",
+                  ],
+                  [
+                    "Evidence & Claim Integrity Dossier",
+                    "ECRI_Sample_Evidence_Integrity_Dossier.pdf",
+                    "8 Pages · Evidence Intelligence",
+                  ],
+                  [
+                    "Transformation Roadmap",
+                    "ECRI_Sample_Transformation_Roadmap.pdf",
+                    "7 Pages · Action & Sequencing",
+                  ],
                 ].map(([title, file, meta]) => (
-                  <div key={file} className="rounded-2xl border border-border bg-card p-5 flex flex-col justify-between">
+                  <div
+                    key={file}
+                    className="rounded-2xl border border-border bg-card p-5 flex flex-col justify-between"
+                  >
                     <div>
-                      <span className="rounded bg-teal/10 px-2.5 py-1 text-xs font-bold text-teal">Sample Deliverable</span>
-                      <h5 className="mt-3 text-base font-serif font-bold text-foreground">{title}</h5>
-                      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">Uses the same canonical ECRI demonstration dataset and score architecture.</p>
+                      <span className="rounded bg-teal/10 px-2.5 py-1 text-xs font-bold text-teal">
+                        Sample Deliverable
+                      </span>
+                      <h5 className="mt-3 text-base font-serif font-bold text-foreground">
+                        {title}
+                      </h5>
+                      <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+                        Uses the same canonical ECRI demonstration dataset and score architecture.
+                      </p>
                     </div>
                     <div className="mt-5 pt-3 border-t border-border flex items-center justify-between">
                       <span className="text-[10px] text-muted-foreground">{meta}</span>
-                      <button onClick={() => window.open(`/samples/${file}`, "_blank", "noopener,noreferrer")} className="text-xs font-bold text-teal hover:underline">View PDF →</button>
+                      <button
+                        onClick={() =>
+                          window.open(`/samples/${file}`, "_blank", "noopener,noreferrer")
+                        }
+                        className="text-xs font-bold text-teal hover:underline"
+                      >
+                        View PDF →
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -1387,9 +1454,7 @@ function EcriPublicExperiencePage() {
                     <textarea
                       rows={3}
                       value={consultForm.message}
-                      onChange={(e) =>
-                        setConsultForm({ ...consultForm, message: e.target.value })
-                      }
+                      onChange={(e) => setConsultForm({ ...consultForm, message: e.target.value })}
                       placeholder="Briefly describe your institution's size, current employability objectives, or accreditation priorities..."
                       className="w-full rounded-lg border border-input bg-background px-3 py-2 text-xs text-foreground focus:border-teal focus:outline-none focus:ring-1 focus:ring-teal"
                     />

@@ -14,7 +14,9 @@ export const Route = createFileRoute("/ecri/overview")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -23,7 +25,8 @@ export const Route = createFileRoute("/ecri/overview")({
       { title: "ECRI Scoreboard & Dashboard — Employability Benchmark" },
       {
         name: "description",
-        content: "Institutional Employability & Career Readiness Dashboard: 11 Dimensions, 132 Metrics, WIL audit.",
+        content:
+          "Institutional Employability & Career Readiness Dashboard: 11 Dimensions, 132 Metrics, WIL audit.",
       },
     ],
   }),
@@ -153,7 +156,8 @@ function EcriOverviewPage() {
           <Panel tone="muted" className="px-6 py-5">
             <p className="eyebrow text-teal font-bold">Evidence & WIL Vault</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {status.evidence.submitted} verified artifacts submitted. Anti-gaming verification active across corporate MoUs and placement audit logs.
+              {status.evidence.submitted} verified artifacts submitted. Anti-gaming verification
+              active across corporate MoUs and placement audit logs.
             </p>
           </Panel>
         </div>

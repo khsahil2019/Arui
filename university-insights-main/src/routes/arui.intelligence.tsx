@@ -69,8 +69,8 @@ function AruiIntelligencePage() {
           <p className="eyebrow mt-8">ARUI Assessment</p>
           <h1 className="mt-3 text-3xl md:text-4xl">Results are not yet available.</h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            A preliminary position is prepared once the assessed domains are complete and evidence has
-            been submitted.
+            A preliminary position is prepared once the assessed domains are complete and evidence
+            has been submitted.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -94,9 +94,7 @@ function AruiIntelligencePage() {
       {apiMode === "mock" && (
         <div className="mb-6 flex flex-wrap items-center gap-3 rounded-md border border-amber/40 bg-amber-soft/60 px-4 py-2.5 text-[13px] text-foreground/85">
           <StatusBadge tone="demo">Illustrative</StatusBadge>
-          <span>
-            These results are illustrative fixtures returned by the mock service.
-          </span>
+          <span>These results are illustrative fixtures returned by the mock service.</span>
         </div>
       )}
 
@@ -193,9 +191,7 @@ function AruiIntelligencePage() {
           detail={
             <span className="block space-y-1.5">
               <CoverageBar value={o.evidenceCoverage} tone="teal" />
-              <span className="block">
-                {status.evidence.submitted} evidence items submitted
-              </span>
+              <span className="block">{status.evidence.submitted} evidence items submitted</span>
             </span>
           }
         />

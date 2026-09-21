@@ -9,7 +9,12 @@ import { CoverageBar } from "@/components/ari/progress";
 import { queries } from "@/api/hooks";
 import { cn } from "@/lib/utils";
 
-import { getEngineConfig, getFrameworkDomains, type EngineType, type DomainCode } from "@/lib/catalogue";
+import {
+  getEngineConfig,
+  getFrameworkDomains,
+  type EngineType,
+  type DomainCode,
+} from "@/lib/catalogue";
 import { useRouterState } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_workspace/assessment/")({
@@ -55,11 +60,17 @@ function AssessmentHub() {
         lede={`Exhaustive institutional evaluation of ${engineConfig.title} across ${engineConfig.domainsLabel}. Complete the areas in any order and return at any time.`}
         meta={
           <div className="flex items-center gap-2">
-            <span className={cn("font-bold px-2.5 py-1 rounded text-xs", engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy")}>
+            <span
+              className={cn(
+                "font-bold px-2.5 py-1 rounded text-xs",
+                engine === "ecri" ? "bg-teal/10 text-teal" : "bg-navy/10 text-navy",
+              )}
+            >
               {engineConfig.shortTitle} Mode
             </span>
             <StatusBadge tone="outline">
-              Coverage · {inScope.length} of {status.domains.length} {engine === "ecri" ? "dimensions" : "domains"}
+              Coverage · {inScope.length} of {status.domains.length}{" "}
+              {engine === "ecri" ? "dimensions" : "domains"}
             </StatusBadge>
           </div>
         }

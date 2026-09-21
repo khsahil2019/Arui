@@ -11,7 +11,9 @@ export const Route = createFileRoute("/arui/orientation")({
   loader: async ({ context }) => {
     const assessmentId = (context as any)?.assessmentId;
     if (assessmentId) {
-      await context.queryClient.ensureQueryData(queries.status(assessmentId)).catch(() => undefined);
+      await context.queryClient
+        .ensureQueryData(queries.status(assessmentId))
+        .catch(() => undefined);
     }
   },
   pendingComponent: () => <PagePending />,
@@ -52,7 +54,8 @@ function AruiOrientationPage() {
           <ShieldCheck className="size-6 text-navy mb-3" />
           <h3 className="text-base font-semibold text-foreground">11 Assessed Domains</h3>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Covers governance, human capability, student agency, compute infrastructure, and research integrity.
+            Covers governance, human capability, student agency, compute infrastructure, and
+            research integrity.
           </p>
         </Panel>
 
@@ -60,7 +63,8 @@ function AruiOrientationPage() {
           <FileSpreadsheet className="size-6 text-navy mb-3" />
           <h3 className="text-base font-semibold text-foreground">Calibrated Maturity (0–5)</h3>
           <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-            Evaluates capability against contextual baselines calibrated to your institution's profile.
+            Evaluates capability against contextual baselines calibrated to your institution's
+            profile.
           </p>
         </Panel>
 

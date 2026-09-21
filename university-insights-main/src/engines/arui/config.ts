@@ -25,7 +25,8 @@ export const ARUI_CONFIG = {
       shortName: "Strategy & AI Direction",
       theme: "Governance & Leadership",
       metricCount: 13,
-      description: "Executive vision, senior leadership mandate, AI Advisory Council, and strategic roadmap.",
+      description:
+        "Executive vision, senior leadership mandate, AI Advisory Council, and strategic roadmap.",
     },
     {
       code: "D02" as DomainCode,
@@ -41,7 +42,8 @@ export const ARUI_CONFIG = {
       shortName: "Assessment Adaptation",
       theme: "Evaluation Protocols",
       metricCount: 13,
-      description: "Authentic viva, project demonstration, and invigilation redesign against automated cheating.",
+      description:
+        "Authentic viva, project demonstration, and invigilation redesign against automated cheating.",
     },
     {
       code: "D04" as DomainCode,
@@ -81,7 +83,8 @@ export const ARUI_CONFIG = {
       shortName: "Compute & Infrastructure",
       theme: "Digital Infrastructure",
       metricCount: 13,
-      description: "Campus GPU clusters, cloud AI gateways, and cyber defense against automated adversarial threats.",
+      description:
+        "Campus GPU clusters, cloud AI gateways, and cyber defense against automated adversarial threats.",
     },
     {
       code: "D09" as DomainCode,
@@ -89,7 +92,8 @@ export const ARUI_CONFIG = {
       shortName: "Administrative AI",
       theme: "Operations",
       metricCount: 13,
-      description: "Automated student advising chatbots, admissions triage, and administrative automation.",
+      description:
+        "Automated student advising chatbots, admissions triage, and administrative automation.",
     },
     {
       code: "D10" as DomainCode,
@@ -105,7 +109,8 @@ export const ARUI_CONFIG = {
       shortName: "Strategic Adaptability",
       theme: "Horizon Planning",
       metricCount: 13,
-      description: "Horizon scanning mechanisms, agile degree revision protocols, and continuous AI benchmarking.",
+      description:
+        "Horizon scanning mechanisms, agile degree revision protocols, and continuous AI benchmarking.",
     },
   ],
 };
