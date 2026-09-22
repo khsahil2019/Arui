@@ -97,6 +97,20 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.get(['/api/v1', '/api'], (req, res) => {
+  res.json({
+    status: 'active',
+    version: '1.0.0',
+    frameworks: ['ARUI (143 Metrics / 11 Domains)', 'ECRI (132 Metrics / 11 Dimensions)'],
+    endpoints: {
+      health: '/health',
+      domains: '/api/v1/methodology/domains',
+      metrics: '/api/v1/methodology/metrics',
+      enquiries: '/api/v1/enquiries'
+    }
+  });
+});
+
 // Mount Production API Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/auth', authRoutes);

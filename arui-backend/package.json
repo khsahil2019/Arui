@@ -18,6 +18,7 @@
     "test:isolation": "tsx src/tests/multi_engine_isolation.test.ts",
     "test:benchmarking": "tsx src/tests/benchmarking_architecture.test.ts",
     "test:entitlements": "tsx src/tests/platform_identity_and_entitlements.test.ts",
+    "test:ecri:27": "tsx src/tests/ecri_27_acceptance_checks.mjs",
     "test:all": "npm run test:ecri:all && npm run test:isolation && npm run test:benchmarking && npm run test:entitlements && npm run test:reproducibility"
   },
   "keywords": [],

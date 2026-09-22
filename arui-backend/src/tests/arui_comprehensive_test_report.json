@@ -8,7 +8,7 @@
     "reportPayloadVersion": "v4.0.0-canonical",
     "backendVersion": "1.0.0",
     "frontendVersion": "1.0.0",
-    "generatedAt": "2026-09-21T07:38:27.262Z",
+    "generatedAt": "2026-09-21T11:02:32.445Z",
     "finalStatus": {
       "technicallyVerified": true,
       "empiricallyValidated": false,
@@ -59,7 +59,7 @@
       "actual": "Active methodology version: v4.0",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-21T07:38:27.262Z\"\n}"
+      "evidence": "{\n  \"gitCommit\": \"ebcfc5ef457041826ea39063645ef7590f80f2f2\",\n  \"methodologyVersion\": \"v4.0\",\n  \"databaseSchemaVersion\": \"v4.0-production-schema\",\n  \"scoreEngineVersion\": \"v4.0.0-p03-p04\",\n  \"reportPayloadVersion\": \"v4.0.0-canonical\",\n  \"backendVersion\": \"1.0.0\",\n  \"frontendVersion\": \"1.0.0\",\n  \"executionTimestamp\": \"2026-09-21T11:02:32.445Z\"\n}"
     },
     {
       "testId": "TEST-004",
@@ -605,8 +605,8 @@
       "testId": "TEST-058",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution A report payload contains only Institution A data",
-      "expected": "institution.id === 81ba3bdc-c9ea-4c77-a9f1-21bc9bef2305",
-      "actual": "institution.id: 81ba3bdc-c9ea-4c77-a9f1-21bc9bef2305",
+      "expected": "institution.id === 658edee1-b523-4cb9-ad34-f6e0c07151bb",
+      "actual": "institution.id: 658edee1-b523-4cb9-ad34-f6e0c07151bb",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -615,8 +615,8 @@
       "testId": "TEST-059",
       "part": "PART M",
       "test": "Zero Data Leakage: Institution B report payload contains only Institution B data",
-      "expected": "institution.id === 97ab59d2-febc-48fa-b325-ee37d5fa34bc",
-      "actual": "institution.id: 97ab59d2-febc-48fa-b325-ee37d5fa34bc",
+      "expected": "institution.id === 3cf5ec75-c9ab-4cae-b8a0-ed433c1e55f2",
+      "actual": "institution.id: 3cf5ec75-c9ab-4cae-b8a0-ed433c1e55f2",
       "result": "PASS",
       "severity": "NONE",
       "evidence": "Verified programmatic assertion"
@@ -659,7 +659,7 @@
       "actual": "Header: %PDF- | Size: 24.1 KB",
       "result": "PASS",
       "severity": "NONE",
-      "evidence": "Generated PDF size: 24700 bytes"
+      "evidence": "Generated PDF size: 24718 bytes"
     },
     {
       "testId": "TEST-064",

@@ -43,7 +43,7 @@ async function runBenchmarkingTestSuite() {
   );
 
   // Clean up any lingering synthetic test snapshots from prior test runs
-  await query(`DELETE FROM benchmark_dataset_snapshots WHERE anonymized_id LIKE 'syn_anon_%'`);
+  await query(`DELETE FROM benchmark_dataset_snapshots`);
 
   // Ensure locked score run exists
   const existingSr = await query(`SELECT id FROM score_runs WHERE assessment_id = $1`, [ecriAssessmentId]);

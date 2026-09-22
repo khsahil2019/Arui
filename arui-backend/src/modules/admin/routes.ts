@@ -397,7 +397,7 @@ router.post(['/enquiries', '/admin/enquiries'], async (req, res) => {
        RETURNING *`,
       [productCode || 'ecri', name, institutionName || 'Not provided', designation || '', email, phone || '', whatsapp || '', message || '']
     );
-    return res.status(201).json({ message: 'Enquiry submitted successfully.', enquiry: insRes.rows[0] });
+    return res.status(201).json({ success: true, id: insRes.rows[0].id, message: 'Enquiry submitted successfully.', enquiry: insRes.rows[0] });
   } catch (err) {
     console.error('Failed to submit enquiry:', err);
     return res.status(500).json({ error: 'Failed to submit enquiry.' });
