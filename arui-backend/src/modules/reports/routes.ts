@@ -4,7 +4,17 @@ import { generateAssessmentPdfStream } from './pdf.js';
 import { authenticate, requireInstitutionAccess } from '../../middleware/auth.js';
 import { requireAssessmentEngineAccess } from '../../middleware/entitlement.js';
 
+import { buildReportManifest } from './manifest.js';
+import path from 'path';
+
 const router = Router();
+
+// Route: Get Sample Reports Manifest with verified physical page counts
+router.get(['/reports/manifest', '/api/v1/reports/manifest'], (req, res) => {
+  const samplesDir = path.resolve(process.cwd(), '../university-insights-main/public/samples');
+  const manifest = buildReportManifest(samplesDir, 'Metropolitan Apex University');
+  return res.json(manifest);
+});
 
 // Route: Get Assessment Report Payload (JSON)
 router.get(

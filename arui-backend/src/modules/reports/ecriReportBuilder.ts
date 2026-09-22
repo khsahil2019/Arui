@@ -59,7 +59,7 @@ export class EcriVectorReportBuilder {
     this.totalPages = totalPages;
     this.doc = new PDFDocument({
       size: 'A4',
-      margin: 40,
+      margin: 0,
       autoFirstPage: false,
       bufferPages: true,
       info: {
@@ -125,7 +125,7 @@ export class EcriVectorReportBuilder {
     d.fillColor(PALETTE.MUTED)
       .fontSize(6.8)
       .font('Helvetica')
-      .text(`Page ${pageNum}`, w - 100, footerY, { width: 60, align: 'right' });
+      .text(`Page ${pageNum} of ${this.totalPages}`, w - 110, footerY, { width: 70, align: 'right' });
   }
 
   // Draw Premium Dark Navy Cover Page (Page 1)
@@ -290,7 +290,18 @@ export class EcriVectorReportBuilder {
     return y + 44;
   }
 
-  // Draw Dimension Results Page (Matching Page 8/10/12 exactly!)
+  // Draw Large Score Block Card
+  drawScoreCard(y: number, score: number, label: string, sub: string) {
+    const d = this.doc;
+    d.roundedRect(40, y, 515, 60, 4).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
+    d.rect(40, y, 4, 60).fill(PALETTE.TEAL);
+    d.fillColor(PALETTE.TEAL).fontSize(24).font('Times-Bold').text(`${score.toFixed(1)}`, 54, y + 12);
+    d.fillColor(PALETTE.MUTED).fontSize(9.5).font('Helvetica').text('/ 100', 125, y + 22);
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(10.5).font('Helvetica-Bold').text(label, 175, y + 12);
+    d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(sub, 175, y + 28, { width: 360, lineGap: 1.5 });
+  }
+
+  // Draw Dimension Results Page (Matching Single Page Architecture)
   drawDimensionResultPage(pageNum: number, dData: {
     sectionNum: string;
     code: string;
@@ -308,7 +319,7 @@ export class EcriVectorReportBuilder {
     capabilities: { name: string; score: number; status: string; evidence: string }[];
     strengths: { finding: string; text: string; domain: string; evidence: string }[];
     gaps: { finding: string; text: string; domain: string; evidence: string }[];
-    claimsAwaiting: { claim: string; evidenceNeeded: string }[];
+    claimsAwaiting?: { claim: string; evidenceNeeded: string }[];
     institutionalData: { ref: string; item: string; value: string; state: string }[];
     assessorObservation: string;
   }) {
@@ -317,174 +328,166 @@ export class EcriVectorReportBuilder {
     let y = 46;
 
     // 1. Top Section Tracker & Dimension Title
-    d.fillColor(PALETTE.MUTED).fontSize(7.5).font('Helvetica-Bold').text(`${dData.sectionNum} · DOMAIN RESULT`, 40, y);
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(17).font('Times-Bold').text(`${dData.code} — ${dData.name}`, 40, y + 14);
-    y += 40;
+    d.fillColor(PALETTE.MUTED).fontSize(7).font('Helvetica-Bold').text(`${dData.sectionNum} · DIMENSION RESULT`, 40, y);
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(15).font('Times-Bold').text(`${dData.code} — ${dData.name}`, 40, y + 12);
+    y += 34;
 
     // 2. 5 KPI Summary Boxes in a Horizontal Row
     const boxW = (515 - 4 * 6) / 5;
+    const distStr = dData.distance === 0 ? '0' : dData.distance > 0 ? `+${dData.distance}` : `${dData.distance}`;
     const boxes = [
       { label: 'CURRENT MATURITY', val: `${dData.currentMaturity}`, sub: dData.currentLabel },
       { label: 'REQUIRED MATURITY', val: `${dData.requiredMaturity}`, sub: `${dData.requiredLabel} ·\ncontext-derived` },
-      { label: 'DISTANCE', val: `+${dData.distance}`, sub: 'required − current ·\ndiagnostic' },
-      { label: 'DOMAIN SCORE', val: `${dData.score}`, sub: dData.scoreStatus },
-      { label: 'EVIDENCE CONFIDENCE', val: `${dData.evidenceConfidence.toFixed(2)}`, sub: `coverage ${dData.evidenceCoverage}` },
+      { label: 'DISTANCE', val: distStr, sub: 'required − current ·\ndiagnostic' },
+      { label: 'DIMENSION SCORE', val: `${dData.score.toFixed(1)}`, sub: dData.scoreStatus },
+      { label: 'CONFIDENCE', val: `${dData.evidenceConfidence}%`, sub: `coverage ${dData.evidenceCoverage}` },
     ];
 
     boxes.forEach((b, i) => {
       const bx = 40 + i * (boxW + 6);
-      d.roundedRect(bx, y, boxW, 58, 3).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
-      d.fillColor(PALETTE.MUTED).fontSize(5.8).font('Helvetica-Bold').text(b.label, bx + 6, y + 6, { width: boxW - 12 });
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(17).font('Times-Bold').text(b.val, bx + 6, y + 17, { width: boxW - 12 });
-      d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica').text(b.sub, bx + 6, y + 36, { width: boxW - 12 });
+      d.roundedRect(bx, y, boxW, 48, 3).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
+      d.fillColor(PALETTE.MUTED).fontSize(5.5).font('Helvetica-Bold').text(b.label, bx + 5, y + 5, { width: boxW - 10 });
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(14).font('Times-Bold').text(b.val, bx + 5, y + 15, { width: boxW - 10 });
+      d.fillColor(PALETTE.MUTED).fontSize(6).font('Helvetica').text(b.sub, bx + 5, y + 30, { width: boxW - 10 });
     });
-    y += 66;
+    y += 54;
 
     // 3. Metrics summary line
-    d.fillColor(PALETTE.MUTED).fontSize(7).font('Helvetica').text(dData.metricsSummary, 40, y, { width: 515 });
-    y += 16;
+    d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica-Oblique').text(dData.metricsSummary, 40, y, { width: 515 });
+    y += 12;
 
     // 4. Capability positions Table
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Capability positions', 40, y);
-    y += 12;
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(8.5).font('Helvetica-Bold').text('Capability positions & sub-constructs', 40, y);
+    y += 10;
 
-    // Table Header
-    d.rect(40, y, 515, 14).fill(PALETTE.LIGHT_BG);
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Bold').text('CAPABILITY', 45, y + 4);
-    d.text('SCORE', 240, y + 4);
-    d.text('STATUS', 370, y + 4);
-    d.text('EVIDENCE', 460, y + 4);
-    y += 16;
+    d.rect(40, y, 515, 12).fill(PALETTE.LIGHT_BG);
+    d.fillColor(PALETTE.MUTED).fontSize(6).font('Helvetica-Bold').text('CAPABILITY', 45, y + 3);
+    d.text('SCORE', 240, y + 3);
+    d.text('STATUS', 370, y + 3);
+    d.text('EVIDENCE', 460, y + 3);
+    y += 14;
 
     dData.capabilities.forEach((c) => {
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica').text(c.name, 45, y + 2, { width: 190 });
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7).font('Helvetica').text(c.name, 45, y + 2, { width: 190 });
       
-      // Score bar
       const barW = 80;
-      d.rect(240, y + 4, barW, 5).fill(PALETTE.BORDER);
+      d.rect(240, y + 3, barW, 4).fill(PALETTE.BORDER);
       const fillW = Math.max(0, Math.min(barW, (c.score / 100) * barW));
-      const barColor = c.score >= 70 ? PALETTE.BLUE : c.score >= 55 ? PALETTE.AMBER : PALETTE.ROSE;
-      d.rect(240, y + 4, fillW, 5).fill(barColor);
-      d.fillColor(PALETTE.CHARCOAL).fontSize(6.5).font('Helvetica').text(`${c.score} / 100`, 240, y + 11);
+      d.rect(240, y + 3, fillW, 4).fill(c.score >= 70 ? PALETTE.TEAL : PALETTE.AMBER);
+      d.fillColor(PALETTE.CHARCOAL).fontSize(6).font('Helvetica').text(`${c.score} / 100`, 240, y + 9);
 
-      // Status Badge
-      const stColor = c.status === 'PRIORITY' ? PALETTE.AMBER : PALETTE.TEAL;
-      d.fillColor(stColor).fontSize(7).font('Helvetica-Bold').text(c.status, 370, y + 4);
+      d.fillColor(PALETTE.TEAL).fontSize(6.5).font('Helvetica-Bold').text(c.status, 370, y + 3);
+      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica-Bold').text(c.evidence, 465, y + 3);
 
-      // Evidence Badge
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica-Bold').text(c.evidence, 465, y + 4);
-
-      d.rect(40, y + 20, 515, 0.4).fill(PALETTE.BORDER);
-      y += 22;
+      d.rect(40, y + 16, 515, 0.4).fill(PALETTE.BORDER);
+      y += 18;
     });
-
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Oblique').text(
-      'Capability labels are the domain\'s derived outputs. Individual metric identities are held in the assessor record and are not printed in the institution copy.',
-      40,
-      y + 2,
-      { width: 515 }
-    );
-    y += 18;
+    y += 4;
 
     // 5. Strengths Table
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Strengths', 40, y);
-    y += 12;
-    d.rect(40, y, 515, 14).fill(PALETTE.LIGHT_BG);
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Bold').text('FINDING', 45, y + 4);
-    d.text('DOMAINS', 380, y + 4);
-    d.text('EVIDENCE', 450, y + 4);
-    y += 16;
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(8.5).font('Helvetica-Bold').text('Strategic strengths', 40, y);
+    y += 10;
+    d.rect(40, y, 515, 12).fill(PALETTE.LIGHT_BG);
+    d.fillColor(PALETTE.MUTED).fontSize(6).font('Helvetica-Bold').text('FINDING', 45, y + 3);
+    d.text('DOMAINS', 380, y + 3);
+    d.text('EVIDENCE', 450, y + 3);
+    y += 14;
 
-    dData.strengths.forEach((s) => {
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica-Bold').text(s.finding, 45, y + 2, { width: 320 });
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(s.text, 45, y + 11, { width: 320 });
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(s.domain, 380, y + 4);
-      d.fillColor(PALETTE.EMERALD).fontSize(7.5).font('Helvetica-Bold').text(s.evidence, 450, y + 4);
-      d.rect(40, y + 26, 515, 0.4).fill(PALETTE.BORDER);
-      y += 28;
+    dData.strengths.slice(0, 2).forEach((s) => {
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7).font('Helvetica-Bold').text(s.finding, 45, y + 2, { width: 320 });
+      d.fillColor(PALETTE.CHARCOAL).fontSize(6.5).font('Helvetica').text(s.text, 45, y + 10, { width: 320 });
+      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(s.domain, 380, y + 3);
+      d.fillColor(PALETTE.EMERALD).fontSize(7).font('Helvetica-Bold').text(s.evidence, 450, y + 3);
+      d.rect(40, y + 20, 515, 0.4).fill(PALETTE.BORDER);
+      y += 22;
     });
     y += 4;
 
     // 6. Gaps Table
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Gaps', 40, y);
-    y += 12;
-    d.rect(40, y, 515, 14).fill(PALETTE.LIGHT_BG);
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Bold').text('FINDING', 45, y + 4);
-    d.text('DOMAINS', 380, y + 4);
-    d.text('EVIDENCE', 450, y + 4);
-    y += 16;
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(8.5).font('Helvetica-Bold').text('Identified gaps & priority risks', 40, y);
+    y += 10;
+    d.rect(40, y, 515, 12).fill(PALETTE.LIGHT_BG);
+    d.fillColor(PALETTE.MUTED).fontSize(6).font('Helvetica-Bold').text('FINDING', 45, y + 3);
+    d.text('DOMAINS', 380, y + 3);
+    d.text('EVIDENCE', 450, y + 3);
+    y += 14;
 
-    dData.gaps.forEach((g) => {
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica-Bold').text(g.finding, 45, y + 2, { width: 320 });
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(g.text, 45, y + 11, { width: 320 });
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(g.domain, 380, y + 4);
-      const evColor = g.evidence === 'Evidenced' ? PALETTE.EMERALD : g.evidence === 'Partially evidenced' ? PALETTE.AMBER : PALETTE.MUTED;
-      d.fillColor(evColor).fontSize(7.5).font('Helvetica-Bold').text(g.evidence, 450, y + 4);
-      d.rect(40, y + 26, 515, 0.4).fill(PALETTE.BORDER);
-      y += 28;
+    dData.gaps.slice(0, 2).forEach((g) => {
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7).font('Helvetica-Bold').text(g.finding, 45, y + 2, { width: 320 });
+      d.fillColor(PALETTE.CHARCOAL).fontSize(6.5).font('Helvetica').text(g.text, 45, y + 10, { width: 320 });
+      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(g.domain, 380, y + 3);
+      d.fillColor(PALETTE.AMBER).fontSize(7).font('Helvetica-Bold').text(g.evidence, 450, y + 3);
+      d.rect(40, y + 20, 515, 0.4).fill(PALETTE.BORDER);
+      y += 22;
     });
+    y += 4;
 
-    // ----------------------------------------------------
-    // COMPANION SUB-PAGE FOR CLAIMS & INSTITUTIONAL DATA
-    // ----------------------------------------------------
-    this.doc.addPage();
-    let y2 = 46;
-
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Claims awaiting evidence', 40, y2);
-    y2 += 12;
-    d.rect(40, y2, 515, 14).fill(PALETTE.LIGHT_BG);
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Bold').text('CLAIM', 45, y2 + 4);
-    d.text('EVIDENCE THAT WOULD VALIDATE IT', 280, y2 + 4);
-    y2 += 16;
-
-    dData.claimsAwaiting.forEach((c) => {
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica').text(c.claim, 45, y2 + 2, { width: 225 });
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(c.evidenceNeeded, 280, y2 + 2, { width: 265 });
-      d.rect(40, y2 + 20, 515, 0.4).fill(PALETTE.BORDER);
-      y2 += 22;
-    });
-
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Oblique').text(
-      'Missing evidence does not automatically reduce capability. Where the methodology requires evidence for a particular claim, that claim may remain unvalidated until sufficient evidence is available.',
-      40,
-      y2 + 2,
-      { width: 515 }
-    );
-    y2 += 24;
-
-    // Institutional data supplied table
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Institutional data supplied', 40, y2);
-    y2 += 12;
-    d.rect(40, y2, 515, 14).fill(PALETTE.LIGHT_BG);
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Bold').text('REF', 45, y2 + 4);
-    d.text('ITEM', 110, y2 + 4);
-    d.text('VALUE', 380, y2 + 4);
-    d.text('STATE', 450, y2 + 4);
-    y2 += 16;
+    // 7. Institutional Data Table
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(8.5).font('Helvetica-Bold').text('Institutional data supplied', 40, y);
+    y += 10;
+    d.rect(40, y, 515, 12).fill(PALETTE.LIGHT_BG);
+    d.fillColor(PALETTE.MUTED).fontSize(6).font('Helvetica-Bold').text('REF', 45, y + 3);
+    d.text('ITEM', 110, y + 3);
+    d.text('VALUE', 380, y + 3);
+    d.text('STATE', 450, y + 3);
+    y += 14;
 
     dData.institutionalData.forEach((row) => {
-      d.fillColor(PALETTE.MUTED).fontSize(7).font('Helvetica').text(row.ref, 45, y2 + 2);
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica').text(row.item, 110, y2 + 2, { width: 260 });
-      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7.5).font('Helvetica-Bold').text(row.value, 380, y2 + 2);
-      d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(row.state, 450, y2 + 2);
-      d.rect(40, y2 + 15, 515, 0.4).fill(PALETTE.BORDER);
-      y2 += 17;
+      d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica').text(row.ref, 45, y + 2);
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7).font('Helvetica').text(row.item, 110, y + 2, { width: 260 });
+      d.fillColor(PALETTE.NAVY_TEXT).fontSize(7).font('Helvetica-Bold').text(row.value, 380, y + 2);
+      d.fillColor(PALETTE.CHARCOAL).fontSize(6.5).font('Helvetica').text(row.state, 450, y + 2);
+      d.rect(40, y + 12, 515, 0.4).fill(PALETTE.BORDER);
+      y += 14;
     });
+    y += 6;
 
-    d.fillColor(PALETTE.MUTED).fontSize(6.5).font('Helvetica-Oblique').text(
-      'Not sure, not provided and not applicable are distinct states. None of them is treated as zero.',
-      40,
-      y2 + 2,
-      { width: 515 }
+    // 8. Assessor Observation
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(8.5).font('Helvetica-Bold').text('Assessor observation', 40, y);
+    y += 10;
+    d.roundedRect(40, y, 515, 32, 3).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
+    d.rect(40, y, 3, 32).fill(PALETTE.TEAL);
+    d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(dData.assessorObservation, 48, y + 6, { width: 495, lineGap: 1.5 });
+  }
+
+  // Draw Standard Sample Closing Page (Section 27 of spec)
+  drawSampleClosingPage(version: string = 'ECRI v6.0') {
+    this.doc.addPage();
+    const d = this.doc;
+    let y = 46;
+    y = this.drawSectionTracker(
+      'SAMPLE DOCUMENT NOTICE',
+      'End of Illustrative Sample Report',
+      'Important notice regarding the scope, data provenance, and illustrative nature of this demonstration report.',
+      y
     );
-    y2 += 22;
 
-    // Assessor observation
-    d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Helvetica-Bold').text('Assessor observation', 40, y2);
-    y2 += 12;
-    d.roundedRect(40, y2, 515, 36, 4).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
-    d.rect(40, y2, 3, 36).fill(PALETTE.TEAL);
-    d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(dData.assessorObservation, 50, y2 + 8, { width: 495, lineGap: 2 });
+    d.roundedRect(40, y, 515, 220, 6).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
+    d.rect(40, y, 5, 220).fill(PALETTE.TEAL);
+
+    let cy = y + 22;
+    d.fillColor(PALETTE.NAVY_TEXT).fontSize(14).font('Times-Bold').text('END OF ILLUSTRATIVE SAMPLE', 60, cy);
+    cy += 22;
+
+    d.fillColor(PALETTE.CHARCOAL)
+      .fontSize(9)
+      .font('Helvetica')
+      .text(
+        'This report demonstrates the structure, analytical depth and presentation of an authoritative ECRI institutional assessment.\n\n' +
+        'The institution, scores, evidence records and strategic findings shown in this sample are illustrative/synthetic and do not represent a real institutional assessment or official public ranking.\n\n' +
+        'A complete institutional assessment report is generated from the institution\'s own calibrated diagnostic responses, corroborating evidence dossier, assessor review, and verified deterministic score run.',
+        60,
+        cy,
+        { width: 470, lineGap: 3.5 }
+      );
+    cy += 95;
+
+    d.rect(60, cy, 470, 0.5).fill(PALETTE.BORDER);
+    cy += 14;
+
+    d.fillColor(PALETTE.TEAL).fontSize(9.5).font('Helvetica-Bold').text(`${version} · Employability & Career Readiness Intelligence`, 60, cy);
+    cy += 13;
+    d.fillColor(PALETTE.MUTED).fontSize(8).font('Helvetica-Oblique').text('Illustrative Demonstration Only · Confidential Advisory Model', 60, cy);
   }
 
   // Finalize PDF Stream and apply all Headers & Footers across buffered pages

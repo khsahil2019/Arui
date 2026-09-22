@@ -42,6 +42,7 @@ import { Route as EcriOrientationRouteImport } from './routes/ecri.orientation'
 import { Route as EcriOverviewRouteImport } from './routes/ecri.overview'
 import { Route as EcriProfileRouteImport } from './routes/ecri.profile'
 import { Route as EcriPulseRouteImport } from './routes/ecri.pulse'
+import { Route as EcriSampleRouteImport } from './routes/ecri.sample'
 import { Route as WorkspaceAssessmentIndexRouteImport } from './routes/_workspace.assessment.index'
 import { Route as WorkspaceAssessmentDomainRouteImport } from './routes/_workspace.assessment.$domain'
 import { Route as AruiAssessmentIndexRouteImport } from './routes/arui.assessment.index'
@@ -54,6 +55,12 @@ import { Route as AssessorIdRunsRouteImport } from './routes/assessor.$id.runs'
 import { Route as AssessorIdScoringRouteImport } from './routes/assessor.$id.scoring'
 import { Route as EcriAssessmentIndexRouteImport } from './routes/ecri.assessment.index'
 import { Route as EcriAssessmentDomainRouteImport } from './routes/ecri.assessment.$domain'
+import { Route as EcriSampleIndexRouteImport } from './routes/ecri.sample.index'
+import { Route as EcriSampleAssessorRouteImport } from './routes/ecri.sample.assessor'
+import { Route as EcriSampleContinuousRouteImport } from './routes/ecri.sample.continuous'
+import { Route as EcriSampleInstitutionRouteImport } from './routes/ecri.sample.institution'
+import { Route as EcriSampleProfileRouteImport } from './routes/ecri.sample.profile'
+import { Route as EcriSampleReportsRouteImport } from './routes/ecri.sample.reports'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -219,6 +226,11 @@ const EcriPulseRoute = EcriPulseRouteImport.update({
   path: '/pulse',
   getParentRoute: () => EcriRoute,
 } as any)
+const EcriSampleRoute = EcriSampleRouteImport.update({
+  id: '/sample',
+  path: '/sample',
+  getParentRoute: () => EcriRoute,
+} as any)
 const WorkspaceAssessmentIndexRoute =
   WorkspaceAssessmentIndexRouteImport.update({
     id: '/assessment/',
@@ -281,6 +293,36 @@ const EcriAssessmentDomainRoute = EcriAssessmentDomainRouteImport.update({
   path: '/assessment/$domain',
   getParentRoute: () => EcriRoute,
 } as any)
+const EcriSampleIndexRoute = EcriSampleIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
+const EcriSampleAssessorRoute = EcriSampleAssessorRouteImport.update({
+  id: '/assessor',
+  path: '/assessor',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
+const EcriSampleContinuousRoute = EcriSampleContinuousRouteImport.update({
+  id: '/continuous',
+  path: '/continuous',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
+const EcriSampleInstitutionRoute = EcriSampleInstitutionRouteImport.update({
+  id: '/institution',
+  path: '/institution',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
+const EcriSampleProfileRoute = EcriSampleProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
+const EcriSampleReportsRoute = EcriSampleReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => EcriSampleRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -312,6 +354,7 @@ export interface FileRoutesByFullPath {
   '/ecri/overview': typeof EcriOverviewRoute
   '/ecri/profile': typeof EcriProfileRoute
   '/ecri/pulse': typeof EcriPulseRoute
+  '/ecri/sample': typeof EcriSampleRouteWithChildren
   '/arui/': typeof AruiIndexRoute
   '/assessor/': typeof AssessorIndexRoute
   '/ecri/': typeof EcriIndexRoute
@@ -323,10 +366,16 @@ export interface FileRoutesByFullPath {
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
   '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
+  '/ecri/sample/assessor': typeof EcriSampleAssessorRoute
+  '/ecri/sample/continuous': typeof EcriSampleContinuousRoute
+  '/ecri/sample/institution': typeof EcriSampleInstitutionRoute
+  '/ecri/sample/profile': typeof EcriSampleProfileRoute
+  '/ecri/sample/reports': typeof EcriSampleReportsRoute
   '/assessment/': typeof WorkspaceAssessmentIndexRoute
   '/arui/assessment/': typeof AruiAssessmentIndexRoute
   '/assessor/$id/': typeof AssessorIdIndexRoute
   '/ecri/assessment/': typeof EcriAssessmentIndexRoute
+  '/ecri/sample/': typeof EcriSampleIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -365,10 +414,16 @@ export interface FileRoutesByTo {
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
   '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
+  '/ecri/sample/assessor': typeof EcriSampleAssessorRoute
+  '/ecri/sample/continuous': typeof EcriSampleContinuousRoute
+  '/ecri/sample/institution': typeof EcriSampleInstitutionRoute
+  '/ecri/sample/profile': typeof EcriSampleProfileRoute
+  '/ecri/sample/reports': typeof EcriSampleReportsRoute
   '/assessment': typeof WorkspaceAssessmentIndexRoute
   '/arui/assessment': typeof AruiAssessmentIndexRoute
   '/assessor/$id': typeof AssessorIdIndexRoute
   '/ecri/assessment': typeof EcriAssessmentIndexRoute
+  '/ecri/sample': typeof EcriSampleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -402,6 +457,7 @@ export interface FileRoutesById {
   '/ecri/overview': typeof EcriOverviewRoute
   '/ecri/profile': typeof EcriProfileRoute
   '/ecri/pulse': typeof EcriPulseRoute
+  '/ecri/sample': typeof EcriSampleRouteWithChildren
   '/arui/': typeof AruiIndexRoute
   '/assessor/': typeof AssessorIndexRoute
   '/ecri/': typeof EcriIndexRoute
@@ -413,10 +469,16 @@ export interface FileRoutesById {
   '/assessor/$id/runs': typeof AssessorIdRunsRoute
   '/assessor/$id/scoring': typeof AssessorIdScoringRoute
   '/ecri/assessment/$domain': typeof EcriAssessmentDomainRoute
+  '/ecri/sample/assessor': typeof EcriSampleAssessorRoute
+  '/ecri/sample/continuous': typeof EcriSampleContinuousRoute
+  '/ecri/sample/institution': typeof EcriSampleInstitutionRoute
+  '/ecri/sample/profile': typeof EcriSampleProfileRoute
+  '/ecri/sample/reports': typeof EcriSampleReportsRoute
   '/_workspace/assessment/': typeof WorkspaceAssessmentIndexRoute
   '/arui/assessment/': typeof AruiAssessmentIndexRoute
   '/assessor/$id/': typeof AssessorIdIndexRoute
   '/ecri/assessment/': typeof EcriAssessmentIndexRoute
+  '/ecri/sample/': typeof EcriSampleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -450,6 +512,7 @@ export interface FileRouteTypes {
     | '/ecri/overview'
     | '/ecri/profile'
     | '/ecri/pulse'
+    | '/ecri/sample'
     | '/arui/'
     | '/assessor/'
     | '/ecri/'
@@ -461,10 +524,16 @@ export interface FileRouteTypes {
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
     | '/ecri/assessment/$domain'
+    | '/ecri/sample/assessor'
+    | '/ecri/sample/continuous'
+    | '/ecri/sample/institution'
+    | '/ecri/sample/profile'
+    | '/ecri/sample/reports'
     | '/assessment/'
     | '/arui/assessment/'
     | '/assessor/$id/'
     | '/ecri/assessment/'
+    | '/ecri/sample/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -503,10 +572,16 @@ export interface FileRouteTypes {
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
     | '/ecri/assessment/$domain'
+    | '/ecri/sample/assessor'
+    | '/ecri/sample/continuous'
+    | '/ecri/sample/institution'
+    | '/ecri/sample/profile'
+    | '/ecri/sample/reports'
     | '/assessment'
     | '/arui/assessment'
     | '/assessor/$id'
     | '/ecri/assessment'
+    | '/ecri/sample'
   id:
     | '__root__'
     | '/'
@@ -539,6 +614,7 @@ export interface FileRouteTypes {
     | '/ecri/overview'
     | '/ecri/profile'
     | '/ecri/pulse'
+    | '/ecri/sample'
     | '/arui/'
     | '/assessor/'
     | '/ecri/'
@@ -550,10 +626,16 @@ export interface FileRouteTypes {
     | '/assessor/$id/runs'
     | '/assessor/$id/scoring'
     | '/ecri/assessment/$domain'
+    | '/ecri/sample/assessor'
+    | '/ecri/sample/continuous'
+    | '/ecri/sample/institution'
+    | '/ecri/sample/profile'
+    | '/ecri/sample/reports'
     | '/_workspace/assessment/'
     | '/arui/assessment/'
     | '/assessor/$id/'
     | '/ecri/assessment/'
+    | '/ecri/sample/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -800,6 +882,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EcriPulseRouteImport
       parentRoute: typeof EcriRoute
     }
+    '/ecri/sample': {
+      id: '/ecri/sample'
+      path: '/sample'
+      fullPath: '/ecri/sample'
+      preLoaderRoute: typeof EcriSampleRouteImport
+      parentRoute: typeof EcriRoute
+    }
     '/_workspace/assessment/': {
       id: '/_workspace/assessment/'
       path: '/assessment'
@@ -883,6 +972,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/ecri/assessment/$domain'
       preLoaderRoute: typeof EcriAssessmentDomainRouteImport
       parentRoute: typeof EcriRoute
+    }
+    '/ecri/sample/': {
+      id: '/ecri/sample/'
+      path: '/'
+      fullPath: '/ecri/sample/'
+      preLoaderRoute: typeof EcriSampleIndexRouteImport
+      parentRoute: typeof EcriSampleRoute
+    }
+    '/ecri/sample/assessor': {
+      id: '/ecri/sample/assessor'
+      path: '/assessor'
+      fullPath: '/ecri/sample/assessor'
+      preLoaderRoute: typeof EcriSampleAssessorRouteImport
+      parentRoute: typeof EcriSampleRoute
+    }
+    '/ecri/sample/continuous': {
+      id: '/ecri/sample/continuous'
+      path: '/continuous'
+      fullPath: '/ecri/sample/continuous'
+      preLoaderRoute: typeof EcriSampleContinuousRouteImport
+      parentRoute: typeof EcriSampleRoute
+    }
+    '/ecri/sample/institution': {
+      id: '/ecri/sample/institution'
+      path: '/institution'
+      fullPath: '/ecri/sample/institution'
+      preLoaderRoute: typeof EcriSampleInstitutionRouteImport
+      parentRoute: typeof EcriSampleRoute
+    }
+    '/ecri/sample/profile': {
+      id: '/ecri/sample/profile'
+      path: '/profile'
+      fullPath: '/ecri/sample/profile'
+      preLoaderRoute: typeof EcriSampleProfileRouteImport
+      parentRoute: typeof EcriSampleRoute
+    }
+    '/ecri/sample/reports': {
+      id: '/ecri/sample/reports'
+      path: '/reports'
+      fullPath: '/ecri/sample/reports'
+      preLoaderRoute: typeof EcriSampleReportsRouteImport
+      parentRoute: typeof EcriSampleRoute
     }
   }
 }
@@ -977,6 +1108,28 @@ const AssessorRouteWithChildren = AssessorRoute._addFileChildren(
   AssessorRouteChildren,
 )
 
+interface EcriSampleRouteChildren {
+  EcriSampleAssessorRoute: typeof EcriSampleAssessorRoute
+  EcriSampleContinuousRoute: typeof EcriSampleContinuousRoute
+  EcriSampleInstitutionRoute: typeof EcriSampleInstitutionRoute
+  EcriSampleProfileRoute: typeof EcriSampleProfileRoute
+  EcriSampleReportsRoute: typeof EcriSampleReportsRoute
+  EcriSampleIndexRoute: typeof EcriSampleIndexRoute
+}
+
+const EcriSampleRouteChildren: EcriSampleRouteChildren = {
+  EcriSampleAssessorRoute: EcriSampleAssessorRoute,
+  EcriSampleContinuousRoute: EcriSampleContinuousRoute,
+  EcriSampleInstitutionRoute: EcriSampleInstitutionRoute,
+  EcriSampleProfileRoute: EcriSampleProfileRoute,
+  EcriSampleReportsRoute: EcriSampleReportsRoute,
+  EcriSampleIndexRoute: EcriSampleIndexRoute,
+}
+
+const EcriSampleRouteWithChildren = EcriSampleRoute._addFileChildren(
+  EcriSampleRouteChildren,
+)
+
 interface EcriRouteChildren {
   EcriEngagementRoute: typeof EcriEngagementRoute
   EcriEvidenceRoute: typeof EcriEvidenceRoute
@@ -986,6 +1139,7 @@ interface EcriRouteChildren {
   EcriOverviewRoute: typeof EcriOverviewRoute
   EcriProfileRoute: typeof EcriProfileRoute
   EcriPulseRoute: typeof EcriPulseRoute
+  EcriSampleRoute: typeof EcriSampleRouteWithChildren
   EcriIndexRoute: typeof EcriIndexRoute
   EcriAssessmentDomainRoute: typeof EcriAssessmentDomainRoute
   EcriAssessmentIndexRoute: typeof EcriAssessmentIndexRoute
@@ -1000,6 +1154,7 @@ const EcriRouteChildren: EcriRouteChildren = {
   EcriOverviewRoute: EcriOverviewRoute,
   EcriProfileRoute: EcriProfileRoute,
   EcriPulseRoute: EcriPulseRoute,
+  EcriSampleRoute: EcriSampleRouteWithChildren,
   EcriIndexRoute: EcriIndexRoute,
   EcriAssessmentDomainRoute: EcriAssessmentDomainRoute,
   EcriAssessmentIndexRoute: EcriAssessmentIndexRoute,

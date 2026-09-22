@@ -207,7 +207,7 @@ export function WorkspaceShell({
     title:
       status?.institutionName ??
       session.institution?.name ??
-      (engine === "ecri" ? "Horizon State University" : "Apex National University"),
+      (engine === "ecri" ? "Metropolitan Apex University" : "Metropolitan Apex University"),
     subtitle: `${engineConfig.shortTitle} Cycle · 2026`,
     badge: status ? (
       <StatusBadge tone="outline" className="border-sidebar-border text-sidebar-foreground/80">

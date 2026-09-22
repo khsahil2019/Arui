@@ -357,7 +357,7 @@ function EcriPublicExperiencePage() {
       console.error("Enquiry submission failed:", err);
       setConsultError(
         err.message ||
-          "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.",
+        "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.",
       );
     } finally {
       setConsultSubmitting(false);
@@ -427,26 +427,20 @@ function EcriPublicExperiencePage() {
 
             {/* Quick Action & Consultative Engagement Banner */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <button
-                onClick={() => {
-                  const el = document.getElementById("sample-experience-section");
-                  el?.scrollIntoView({ behavior: "smooth" });
-                }}
+              <Link
+                to="/ecri/sample"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal px-6 py-3 text-sm font-bold text-white shadow-raised transition-all hover:bg-teal/90 hover:shadow-lg"
               >
                 <Eye className="size-4" />
-                <span>Explore Live Sample Assessment</span>
+                <span>Explore Sample ECRI Assessment</span>
                 <ArrowRight className="size-4" />
-              </button>
+              </Link>
 
               <button
-                onClick={() =>
-                  window.open(
-                    "/samples/ECRI_Sample_Executive_Report.pdf",
-                    "_blank",
-                    "noopener,noreferrer",
-                  )
-                }
+                onClick={() => {
+                  const el = document.getElementById("enquiry-form-section");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }}
                 className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-border bg-card px-6 py-3 text-sm font-bold text-foreground transition-colors hover:border-teal hover:text-teal"
               >
                 <Mail className="size-4" />
@@ -501,11 +495,10 @@ function EcriPublicExperiencePage() {
           <div className="mt-6 flex flex-wrap gap-2 border-b border-border pb-4">
             <button
               onClick={() => setActiveTab("scoreboard")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "scoreboard"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "scoreboard"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <BarChart3 className="size-4" />
               <span>01 — Executive Scoreboard</span>
@@ -513,11 +506,10 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("dimensions")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "dimensions"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "dimensions"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <Layers className="size-4" />
               <span>02 — 11 Dimensions Deep Dive</span>
@@ -525,11 +517,10 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "analytics"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "analytics"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <PieChart className="size-4" />
               <span>03 — Visual Analytics Hub</span>
@@ -537,11 +528,10 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("gaps")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "gaps"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "gaps"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <Map className="size-4" />
               <span>04 — Transformation Gap</span>
@@ -549,11 +539,10 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("evolution")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "evolution"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "evolution"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <TrendingUp className="size-4" />
               <span>05 — Living Assessment & Evolution</span>
@@ -561,11 +550,10 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("reports")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "reports"
-                  ? "bg-teal text-white shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "reports"
+                ? "bg-teal text-white shadow-sm"
+                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
             >
               <FileSpreadsheet className="size-4" />
               <span>06 — Boardroom Reports & PDF</span>
@@ -731,11 +719,10 @@ function EcriPublicExperiencePage() {
                     <button
                       key={dim.code}
                       onClick={() => setSelectedDimension(dim)}
-                      className={`rounded px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${
-                        selectedDimension.code === dim.code
-                          ? "bg-teal text-white"
-                          : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
-                      }`}
+                      className={`rounded px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${selectedDimension.code === dim.code
+                        ? "bg-teal text-white"
+                        : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+                        }`}
                     >
                       {dim.code}
                     </button>
@@ -1123,7 +1110,7 @@ function EcriPublicExperiencePage() {
 
                   <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
                     <span className="text-[11px] text-muted-foreground font-medium">
-                      17 Pages · Executive Assessment
+                      20 Pages · Executive Assessment
                     </span>
                     <button
                       onClick={() =>
@@ -1161,7 +1148,7 @@ function EcriPublicExperiencePage() {
 
                   <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
                     <span className="text-[11px] text-muted-foreground font-medium">
-                      45 Pages · 132-Metric Traceability
+                      14 Pages · 132-Metric Traceability
                     </span>
                     <button
                       onClick={() =>

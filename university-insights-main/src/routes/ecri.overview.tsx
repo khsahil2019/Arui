@@ -59,7 +59,7 @@ function EcriOverviewPage() {
     <PageContainer>
       <PageHeader
         eyebrow="ECRI Benchmark · Executive Scoreboard"
-        title={status.institutionName || "Horizon State University"}
+        title={status.institutionName || "Metropolitan Apex University"}
         lede="Comprehensive institutional scoreboard evaluating graduate employability, industry-aligned curriculum, work-integrated learning (WIL), and career outcomes across 11 dimensions."
         meta={
           <div className="flex items-center gap-2">

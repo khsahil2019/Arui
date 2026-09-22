@@ -30,4 +30,10 @@ router.get('/methodology/anchors', async (req, res) => {
   }
 });
 
+import { ECRI_DEMO_ASSESSMENT } from './ecriDemoAssessment.js';
+
+router.get(['/methodology/ecri/demo-assessment', '/api/v1/methodology/ecri/demo-assessment'], (req, res) => {
+  return res.json(ECRI_DEMO_ASSESSMENT);
+});
+
 export default router;
