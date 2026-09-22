@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-22T04:47:55.004Z",
+  "timestamp": "2026-09-22T04:56:54.690Z",
   "platform": "Higher Education Advisory - Multi-Engine Platform",
   "engines": [
     "arui",
@@ -159,7 +159,7 @@
     },
     {
       "suite": "ECRI_E2E",
-      "test": "ECRI Executive PDF Report generated successfully (8 KB)",
+      "test": "ECRI Executive PDF Report generated successfully (9 KB)",
       "status": "PASS"
     }
   ]
