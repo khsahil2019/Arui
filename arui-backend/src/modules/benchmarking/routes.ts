@@ -7,7 +7,7 @@ import { BenchmarkingService } from './service.js';
 const router = Router();
 
 // 1. Get Benchmark & Comparative Summary for an assessment
-router.get('/:productCode/assessments/:assessmentId/summary', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
+router.get(['/assessments/:assessmentId/summary', '/:productCode/assessments/:assessmentId/summary'], authenticate, requireAssessmentEngineAccess(), async (req, res) => {
   const assessmentId = req.params.assessmentId as string;
   try {
     const summary = await BenchmarkingService.getBenchmarkSummary(assessmentId);
@@ -18,8 +18,8 @@ router.get('/:productCode/assessments/:assessmentId/summary', authenticate, requ
 });
 
 // 2. Get Configured Peer Groups for a product
-router.get('/:productCode/peer-groups', authenticate, async (req, res) => {
-  const productCode = (req.params.productCode as string) || 'ecri';
+router.get(['/peer-groups', '/:productCode/peer-groups'], authenticate, async (req, res) => {
+  const productCode = (req.query.product_code as string) || (req.params.productCode as string) || 'ecri';
   try {
     const pgRes = await query(
       `SELECT pg.*, 
@@ -38,7 +38,7 @@ router.get('/:productCode/peer-groups', authenticate, async (req, res) => {
 });
 
 // 3. Record/Update Assessment Benchmark Snapshot
-router.post('/:productCode/assessments/:assessmentId/snapshot', authenticate, requireAssessmentEngineAccess(), async (req, res) => {
+router.post(['/assessments/:assessmentId/snapshot', '/:productCode/assessments/:assessmentId/snapshot'], authenticate, requireAssessmentEngineAccess(), async (req, res) => {
   const assessmentId = req.params.assessmentId as string;
   try {
     const snapshot = await BenchmarkingService.recordAssessmentSnapshot(assessmentId);

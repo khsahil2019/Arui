@@ -15,6 +15,24 @@ export default defineConfig({
   vite: {
     server: {
       allowedHosts: true,
+      proxy: {
+        "/api": { target: "http://localhost:4000", changeOrigin: true },
+        "/auth": { target: "http://localhost:4000", changeOrigin: true },
+        "/assessments": { target: "http://localhost:4000", changeOrigin: true },
+        "/methodology": { target: "http://localhost:4000", changeOrigin: true },
+        "/assessor": { target: "http://localhost:4000", changeOrigin: true },
+        "/reports": { target: "http://localhost:4000", changeOrigin: true },
+        "/evidence": { target: "http://localhost:4000", changeOrigin: true },
+        "/questions": { target: "http://localhost:4000", changeOrigin: true },
+        "/profile": { target: "http://localhost:4000", changeOrigin: true },
+        "/institutional-data": { target: "http://localhost:4000", changeOrigin: true },
+        "/enquiries": { target: "http://localhost:4000", changeOrigin: true },
+        "/admin/login": { target: "http://localhost:4000", changeOrigin: true },
+        "/uploads": { target: "http://localhost:4000", changeOrigin: true },
+        "/health": { target: "http://localhost:4000", changeOrigin: true },
+        "/benchmarking": { target: "http://localhost:4000", changeOrigin: true },
+        "/entitlements": { target: "http://localhost:4000", changeOrigin: true },
+      },
     },
   },
 });

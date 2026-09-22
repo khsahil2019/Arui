@@ -109,18 +109,6 @@ function getResolvedBaseUrl(): string {
     return envUrl.trim().replace(/\/$/, "");
   }
   if (typeof window !== "undefined") {
-    // If running in local dev / LAN (e.g. port 8080, 5173, 3000), target backend on port 4000
-    if (
-      window.location.port === "8080" ||
-      window.location.port === "5173" ||
-      window.location.port === "3000"
-    ) {
-      return `${window.location.protocol}//${window.location.hostname}:4000`;
-    }
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-      return "http://localhost:4000";
-    }
-    // Deployed environment: fallback to same origin
     return window.location.origin;
   }
   return "http://localhost:4000";

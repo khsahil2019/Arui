@@ -109,7 +109,17 @@ export function useLogin() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: Parameters<ReturnType<typeof getApi>["login"]>[0]) => getApi().login(input),
-    onSuccess: (session) => qc.setQueryData(queries.session().queryKey, session),
+    onSuccess: (session) => {
+      qc.setQueryData(queries.session().queryKey, session);
+      if (session.engine) {
+        qc.setQueryData(queries.session(session.engine).queryKey, session);
+      }
+      if (session.productCode) {
+        qc.setQueryData(queries.session(session.productCode).queryKey, session);
+      }
+      qc.setQueryData(queries.session("ecri").queryKey, session);
+      qc.setQueryData(queries.session("arui").queryKey, session);
+    },
   });
 }
 

@@ -453,7 +453,7 @@ router.get(['/assessor/assessments/:id/score-runs', '/assessments/:id/score-runs
 });
 
 // Route: Preliminary Results (Respondent-Facing)
-router.get('/assessments/:id/results/preliminary', authenticate, requireInstitutionAccess, async (req, res) => {
+router.get(['/assessments/:id/results', '/assessments/:id/results/preliminary'], authenticate, requireInstitutionAccess, async (req, res) => {
   const { id } = req.params;
   try {
     const mvRes = await query(`SELECT id FROM methodology_versions WHERE is_active = true LIMIT 1`);

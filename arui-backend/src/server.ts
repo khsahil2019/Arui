@@ -35,13 +35,23 @@ app.use(
       // Allow requests with no origin (like mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
 
-      // In production mode, wildcard '*' is strictly forbidden
+      // In development mode or test environments, allow tunnels and local development
       const isProd = process.env.NODE_ENV === 'production';
-      if (!isProd && allowedOrigins.includes('*')) {
-        return callback(null, true);
+      if (!isProd) {
+        if (
+          origin.includes('localhost') ||
+          origin.includes('127.0.0.1') ||
+          origin.includes('trycloudflare.com') ||
+          origin.includes('loca.lt') ||
+          origin.includes('ngrok') ||
+          origin.includes('vercel.app') ||
+          /^http:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(origin)
+        ) {
+          return callback(null, true);
+        }
       }
 
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
         return callback(null, true);
       }
 
@@ -54,16 +64,6 @@ app.use(
         return false;
       });
       if (isAllowedSubdomain) return callback(null, true);
-
-      // In development mode, allow localhost and private network IPs (10.x, 192.168.x, 172.x)
-      if (
-        !isProd &&
-        (origin.includes('localhost') ||
-          origin.includes('127.0.0.1') ||
-          /^http:\/\/(10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/.test(origin))
-      ) {
-        return callback(null, true);
-      }
 
       return callback(new Error(`CORS policy error: Origin ${origin} not allowed`));
     },
