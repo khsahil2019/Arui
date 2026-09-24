@@ -129,7 +129,7 @@ function computePosition(list: any[], prompt: any, responseMap: Record<string, a
 router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess, requireAssessmentEngineAccess(), async (req, res) => {
   const { id } = req.params;
   try {
-    const qRes = await query(
+    let qRes = await query(
       `SELECT q.* FROM questions q
        JOIN assessments a ON a.id = $1
        WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
@@ -137,6 +137,17 @@ router.get('/assessments/:id/screening', authenticate, requireInstitutionAccess,
        ORDER BY q.domain_code, q.sort_order LIMIT 30`,
       [id]
     );
+
+    if (qRes.rows.length === 0) {
+      // Fallback for ARUI v4.0 where pulse questions are the primary domain diagnostic anchors (e.g. Q01 per domain)
+      qRes = await query(
+        `SELECT DISTINCT ON (q.domain_code) q.* FROM questions q
+         JOIN assessments a ON a.id = $1
+         WHERE (q.methodology_version_id = a.methodology_version_id OR q.methodology_version_id IS NULL)
+         ORDER BY q.domain_code, q.sort_order ASC, q.code ASC`,
+        [id]
+      );
+    }
 
     // Fetch existing responses
     const rRes = await query(`SELECT * FROM assessment_responses WHERE assessment_id = $1`, [id]);

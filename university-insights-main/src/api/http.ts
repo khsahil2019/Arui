@@ -108,8 +108,16 @@ export function createHttpApi(baseUrl: string): ArUiApi {
     },
     async logout(engine?: string) {
       await call<void>("POST", "/auth/logout").catch(() => undefined);
-      const key = getStorageKey(engine);
-      window.localStorage.removeItem(key);
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem("arui.session");
+        window.localStorage.removeItem("ecri.session");
+        window.localStorage.removeItem("session");
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("user");
+        if (engine) {
+          window.localStorage.removeItem(getStorageKey(engine));
+        }
+      }
     },
     async getSession(engine?: string) {
       return readSession(engine);

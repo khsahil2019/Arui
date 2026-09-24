@@ -50,13 +50,37 @@ function EcriPulsePage() {
     return <PagePending />;
   }
 
-  const prompts = screening.prompts;
-  const responded = new Set(screening.responses.map((r) => r.promptId));
-  const firstOpen = prompts.findIndex((p) => !responded.has(p.id));
+  const prompts = screening?.prompts || [];
+  const responded = new Set((screening?.responses || []).map((r) => r.promptId));
+  const captured = screening?.responses?.length || 0;
 
-  const prompt = prompts[index]!;
-  const existing = screening.responses.find((r) => r.promptId === prompt.id) ?? null;
-  const captured = screening.responses.length;
+  if (prompts.length === 0) {
+    return (
+      <PageContainer width="narrow">
+        <div className="mx-auto max-w-2xl py-10 text-center">
+          <p className="eyebrow mt-4 text-emerald-800">Institutional Employability Pulse</p>
+          <h1 className="mt-3 text-3xl font-serif">Assessment Ready</h1>
+          <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
+            No preliminary screening signals required for this cycle. You can proceed directly to the full ECRI dimension assessment.
+          </p>
+          <div className="mt-8">
+            <Button
+              asChild
+              size="lg"
+              className="h-11 px-6 text-[15px] bg-emerald-600 text-white hover:bg-emerald-700"
+            >
+              <Link to="/ecri/assessment/$domain" params={{ domain: "D01" }}>
+                Begin D01 · Employer-Curriculum Co-Design <ArrowRight className="ml-2 size-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </PageContainer>
+    );
+  }
+
+  const prompt = prompts[index] || prompts[0];
+  const existing = (screening?.responses || []).find((r) => r.promptId === prompt?.id) ?? null;
 
   const next = () => {
     if (index < prompts.length - 1) setIndex(index + 1);

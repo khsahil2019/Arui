@@ -6,6 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const apiProxy = {
+  target: "http://localhost:4000",
+  changeOrigin: true,
+  bypass: (req: any) => {
+    // If it's a browser page navigation request, let Vite/TanStack Start serve the SPA
+    if (req.headers?.accept?.includes("text/html")) {
+      return req.url;
+    }
+  },
+};
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
@@ -16,22 +27,23 @@ export default defineConfig({
     server: {
       allowedHosts: true,
       proxy: {
-        "/api": { target: "http://localhost:4000", changeOrigin: true },
-        "/auth": { target: "http://localhost:4000", changeOrigin: true },
-        "/assessments": { target: "http://localhost:4000", changeOrigin: true },
-        "/methodology": { target: "http://localhost:4000", changeOrigin: true },
-        "/assessor": { target: "http://localhost:4000", changeOrigin: true },
-        "/reports": { target: "http://localhost:4000", changeOrigin: true },
-        "/evidence": { target: "http://localhost:4000", changeOrigin: true },
-        "/questions": { target: "http://localhost:4000", changeOrigin: true },
-        "/profile": { target: "http://localhost:4000", changeOrigin: true },
-        "/institutional-data": { target: "http://localhost:4000", changeOrigin: true },
-        "/enquiries": { target: "http://localhost:4000", changeOrigin: true },
-        "/admin/login": { target: "http://localhost:4000", changeOrigin: true },
-        "/uploads": { target: "http://localhost:4000", changeOrigin: true },
-        "/health": { target: "http://localhost:4000", changeOrigin: true },
-        "/benchmarking": { target: "http://localhost:4000", changeOrigin: true },
-        "/entitlements": { target: "http://localhost:4000", changeOrigin: true },
+        "/api": apiProxy,
+        "/auth": apiProxy,
+        "/assessments": apiProxy,
+        "/methodology": apiProxy,
+        "/assessor": apiProxy,
+        "/reports": apiProxy,
+        "/evidence": apiProxy,
+        "/questions": apiProxy,
+        "/profile": apiProxy,
+        "/institutional-data": apiProxy,
+        "/enquiries": apiProxy,
+        "/admin/login": apiProxy,
+        "/admin/api": apiProxy,
+        "/uploads": apiProxy,
+        "/health": apiProxy,
+        "/benchmarking": apiProxy,
+        "/entitlements": apiProxy,
       },
     },
   },

@@ -217,9 +217,21 @@ export function WorkspaceShell({
   };
 
   const signOut = async () => {
-    await logout.mutateAsync();
+    try {
+      await logout.mutateAsync();
+    } catch {}
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("arui.session");
+      window.localStorage.removeItem("ecri.session");
+      window.localStorage.removeItem("session");
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("user");
+      window.sessionStorage.clear();
+    }
+    await qc.cancelQueries();
     qc.clear();
-    navigate({ to: (engine === "ecri" ? "/ecri/login" : "/login") as any, replace: true });
+    const dest = engine === "ecri" ? "/ecri/login" : "/arui/login";
+    window.location.href = dest;
   };
 
   return (
