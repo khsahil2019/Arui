@@ -61,7 +61,8 @@ function AruiPulsePage() {
           <p className="eyebrow mt-4">Institutional AI Pulse</p>
           <h1 className="mt-3 text-3xl font-serif">Assessment Ready</h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            No preliminary screening signals required for this cycle. You can proceed directly to the full institutional domain assessment.
+            No preliminary screening signals required for this cycle. You can proceed directly to
+            the full institutional domain assessment.
           </p>
           <div className="mt-8">
             <Button

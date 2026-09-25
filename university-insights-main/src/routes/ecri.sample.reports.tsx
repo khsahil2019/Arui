@@ -23,7 +23,8 @@ const reportCards = [
     title: "1. Executive Assessment Report",
     filename: "ECRI_Sample_Executive_Report.pdf",
     pageCount: "20 Pages (Exact Physical Count)",
-    purpose: "Comprehensive executive briefing detailing institutional employability positioning, strengths, priority gaps, cross-domain pathways, and 3-horizon action roadmap.",
+    purpose:
+      "Comprehensive executive briefing detailing institutional employability positioning, strengths, priority gaps, cross-domain pathways, and 3-horizon action roadmap.",
     audience: "Vice-Chancellor, Executive Board & Academic Council",
     url: "/samples/ECRI_Sample_Executive_Report.pdf",
     badge: "20-Page Full Dossier",
@@ -33,7 +34,8 @@ const reportCards = [
     title: "2. Detailed 132-Metric Taxonomy Diagnostic",
     filename: "ECRI_Sample_Detailed_132_Metric_Report.pdf",
     pageCount: "14 Pages (Exact Physical Count)",
-    purpose: "Exhaustive rubric-level audit documenting all 11 Dimensions × 12 Canonical Metrics (132 total metrics) with implementation scores and evidence levels.",
+    purpose:
+      "Exhaustive rubric-level audit documenting all 11 Dimensions × 12 Canonical Metrics (132 total metrics) with implementation scores and evidence levels.",
     audience: "Deans of Faculty, Heads of Department & Curriculum Committees",
     url: "/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf",
     badge: "132 Canonical Metrics",
@@ -43,7 +45,8 @@ const reportCards = [
     title: "3. Boardroom Governance & Risk Scorecard",
     filename: "ECRI_Sample_Board_Scorecard.pdf",
     pageCount: "4 Pages (Exact Physical Count)",
-    purpose: "High-level governance summary synthesizing capability radar balance, transformation distance matrix, and strategic board decisions.",
+    purpose:
+      "High-level governance summary synthesizing capability radar balance, transformation distance matrix, and strategic board decisions.",
     audience: "University Council, Board of Governors & Trustees",
     url: "/samples/ECRI_Sample_Board_Scorecard.pdf",
     badge: "Board Briefing",
@@ -53,7 +56,8 @@ const reportCards = [
     title: "4. Evidence Integrity & Verification Dossier",
     filename: "ECRI_Sample_Evidence_Integrity_Dossier.pdf",
     pageCount: "4 Pages (Exact Physical Count)",
-    purpose: "Audit trail report demonstrating multi-source artifact corroboration, cryptographic verification hashes, and anti-gaming safeguards.",
+    purpose:
+      "Audit trail report demonstrating multi-source artifact corroboration, cryptographic verification hashes, and anti-gaming safeguards.",
     audience: "Quality Assurance Units, Accreditation Bodies & Lead Adjudicators",
     url: "/samples/ECRI_Sample_Evidence_Integrity_Dossier.pdf",
     badge: "Audit & Traceability",
@@ -63,7 +67,8 @@ const reportCards = [
     title: "5. Strategic 3-Horizon Transformation Roadmap",
     filename: "ECRI_Sample_Transformation_Roadmap.pdf",
     pageCount: "4 Pages (Exact Physical Count)",
-    purpose: "Actionable management blueprint phasing capability interventions across Now (90 days), Next (12 months), and Future (24 months) horizons.",
+    purpose:
+      "Actionable management blueprint phasing capability interventions across Now (90 days), Next (12 months), and Future (24 months) horizons.",
     audience: "Transformation Taskforces & Academic Leadership",
     url: "/samples/ECRI_Sample_Transformation_Roadmap.pdf",
     badge: "Action Blueprint",
@@ -78,9 +83,12 @@ function EcriSampleReportsView() {
         <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-teal/10 text-teal text-[11px] font-bold uppercase tracking-wider">
           <FileText className="size-3.5" /> ECRI Report Centre
         </div>
-        <h1 className="text-3xl font-serif font-bold text-foreground">Your ECRI Assessment Package</h1>
+        <h1 className="text-3xl font-serif font-bold text-foreground">
+          Your ECRI Assessment Package
+        </h1>
         <p className="text-xs text-muted-foreground">
-          Five distinct institutional intelligence outputs generated from the single canonical assessment for <strong>Metropolitan Apex University (ECRI v6.0 · 74.8 / 100)</strong>.
+          Five distinct institutional intelligence outputs generated from the single canonical
+          assessment for <strong>Metropolitan Apex University (ECRI v6.0 · 74.8 / 100)</strong>.
         </p>
       </div>
 
@@ -100,11 +108,17 @@ function EcriSampleReportsView() {
                   <span className="text-[11px] font-mono text-muted-foreground">{r.id}</span>
                 </div>
                 <h3 className="text-lg font-bold text-foreground mt-1.5">{r.title}</h3>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed max-w-2xl">{r.purpose}</p>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed max-w-2xl">
+                  {r.purpose}
+                </p>
                 <div className="flex flex-wrap items-center gap-4 mt-3 text-[11px] text-muted-foreground">
-                  <span><strong>Audience:</strong> {r.audience}</span>
+                  <span>
+                    <strong>Audience:</strong> {r.audience}
+                  </span>
                   <span>•</span>
-                  <span><strong>Scope:</strong> {r.pageCount}</span>
+                  <span>
+                    <strong>Scope:</strong> {r.pageCount}
+                  </span>
                 </div>
               </div>
 
@@ -130,18 +144,27 @@ function EcriSampleReportsView() {
                 <span className="px-2 py-0.5 rounded bg-teal text-white text-[10px] font-bold uppercase tracking-wider">
                   Digital Web Deliverable
                 </span>
-                <span className="text-[11px] font-mono text-muted-foreground">RPT-ECRI-HTML-006</span>
+                <span className="text-[11px] font-mono text-muted-foreground">
+                  RPT-ECRI-HTML-006
+                </span>
               </div>
               <h3 className="text-xl font-serif font-bold text-foreground mt-1.5 flex items-center gap-2">
                 <Globe className="size-5 text-teal" /> Public ECRI Institutional Profile
               </h3>
               <p className="text-xs text-muted-foreground mt-1 leading-relaxed max-w-2xl">
-                Receive a ready-to-publish, certified institutional HTML profile that can be placed directly on your university website or student admission portal to showcase verified employability leadership.
+                Receive a ready-to-publish, certified institutional HTML profile that can be placed
+                directly on your university website or student admission portal to showcase verified
+                employability leadership.
               </p>
               <div className="flex flex-wrap items-center gap-4 mt-3 text-[11px] text-muted-foreground">
-                <span><strong>Format:</strong> Standalone Responsive HTML5 + Full Web Package (.zip)</span>
+                <span>
+                  <strong>Format:</strong> Standalone Responsive HTML5 + Full Web Package (.zip)
+                </span>
                 <span>•</span>
-                <span><strong>Audience:</strong> Prospective Students, Corporate Recruiters, Regulators & Public</span>
+                <span>
+                  <strong>Audience:</strong> Prospective Students, Corporate Recruiters, Regulators
+                  & Public
+                </span>
               </div>
             </div>
 

@@ -40,37 +40,89 @@ interface SampleNavGroup {
 }
 
 const sampleNavItems: SampleNavGroup[] = [
-  { group: "ECRI", items: [
-    { to: "/ecri/sample", label: "Overview & Scope", icon: Compass, exact: true },
-    { to: "/ecri/sample#what-is-ecri", label: "What is ECRI?", icon: BookOpen },
-    { to: "/ecri/sample#why-ecri", label: "Why ECRI?", icon: Zap },
-    { to: "/ecri/sample#methodology", label: "ECRI Methodology", icon: Sliders },
-    { to: "/ecri/sample#dimensions", label: "11 Dimensions", icon: Layers },
-    { to: "/ecri/sample#how-it-works", label: "How the Assessment Works", icon: HelpCircle },
-    { to: "/ecri/sample#what-you-receive", label: "What Your Institution Receives", icon: Award },
-  ]},
-  { group: "SAMPLE ASSESSMENT", items: [
-    { to: "/ecri/sample/institution", label: "Institution View", icon: Briefcase },
-    { to: "/ecri/sample/assessor", label: "Assessor View", icon: ShieldCheck },
-  ]},
-  { group: "SAMPLE OUTPUTS", items: [
-    { to: "/ecri/sample/reports", label: "Report Centre (All 5 Outputs)", icon: FileText },
-    { to: "/samples/ECRI_Sample_Executive_Report.pdf", label: "Executive Intelligence Report", icon: FileText, external: true },
-    { to: "/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf", label: "Detailed 132-Metric Diagnostic", icon: BarChart3, external: true },
-    { to: "/samples/ECRI_Sample_Board_Scorecard.pdf", label: "Board Scorecard", icon: Award, external: true },
-    { to: "/samples/ECRI_Sample_Evidence_Integrity_Dossier.pdf", label: "Evidence & Integrity", icon: ShieldCheck, external: true },
-    { to: "/samples/ECRI_Sample_Transformation_Roadmap.pdf", label: "Transformation Roadmap", icon: TrendingUp, external: true },
-  ]},
-  { group: "CONTINUOUS ECRI", items: [
-    { to: "/ecri/sample/continuous", label: "Continuous Assessment", icon: TrendingUp },
-    { to: "/ecri/sample/continuous", label: "Reassessment & Transformation Delta", icon: TrendingUp },
-  ]},
-  { group: "PUBLIC OUTPUT", items: [
-    { to: "/ecri/sample/profile", label: "Public ECRI Institutional Profile", icon: Globe },
-  ]},
-  { group: "START", items: [
-    { to: "/ecri/engagement", label: "Proceed to ECRI Assessment", icon: ArrowRight, highlight: true },
-  ]}
+  {
+    group: "ECRI",
+    items: [
+      { to: "/ecri/sample", label: "Overview & Scope", icon: Compass, exact: true },
+      { to: "/ecri/sample#what-is-ecri", label: "What is ECRI?", icon: BookOpen },
+      { to: "/ecri/sample#why-ecri", label: "Why ECRI?", icon: Zap },
+      { to: "/ecri/sample#methodology", label: "ECRI Methodology", icon: Sliders },
+      { to: "/ecri/sample#dimensions", label: "11 Dimensions", icon: Layers },
+      { to: "/ecri/sample#how-it-works", label: "How the Assessment Works", icon: HelpCircle },
+      { to: "/ecri/sample#what-you-receive", label: "What Your Institution Receives", icon: Award },
+    ],
+  },
+  {
+    group: "SAMPLE ASSESSMENT",
+    items: [
+      { to: "/ecri/sample/institution", label: "Institution View", icon: Briefcase },
+      { to: "/ecri/sample/assessor", label: "Assessor View", icon: ShieldCheck },
+    ],
+  },
+  {
+    group: "SAMPLE OUTPUTS",
+    items: [
+      { to: "/ecri/sample/reports", label: "Report Centre (All 5 Outputs)", icon: FileText },
+      {
+        to: "/samples/ECRI_Sample_Executive_Report.pdf",
+        label: "Executive Intelligence Report",
+        icon: FileText,
+        external: true,
+      },
+      {
+        to: "/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf",
+        label: "Detailed 132-Metric Diagnostic",
+        icon: BarChart3,
+        external: true,
+      },
+      {
+        to: "/samples/ECRI_Sample_Board_Scorecard.pdf",
+        label: "Board Scorecard",
+        icon: Award,
+        external: true,
+      },
+      {
+        to: "/samples/ECRI_Sample_Evidence_Integrity_Dossier.pdf",
+        label: "Evidence & Integrity",
+        icon: ShieldCheck,
+        external: true,
+      },
+      {
+        to: "/samples/ECRI_Sample_Transformation_Roadmap.pdf",
+        label: "Transformation Roadmap",
+        icon: TrendingUp,
+        external: true,
+      },
+    ],
+  },
+  {
+    group: "CONTINUOUS ECRI",
+    items: [
+      { to: "/ecri/sample/continuous", label: "Continuous Assessment", icon: TrendingUp },
+      {
+        to: "/ecri/sample/continuous",
+        label: "Reassessment & Transformation Delta",
+        icon: TrendingUp,
+      },
+    ],
+  },
+  {
+    group: "PUBLIC OUTPUT",
+    items: [
+      { to: "/ecri/sample/profile", label: "Public ECRI Institutional Profile", icon: Globe },
+    ],
+  },
+  {
+    group: "START",
+    items: [
+      {
+        to: "/ecri/engagement",
+        label: "Proceed to ECRI Assessment",
+        icon: ArrowRight,
+        highlight: true,
+      },
+    ],
+  },
 ];
 
 function EcriSampleLayout() {
@@ -92,9 +144,15 @@ function EcriSampleLayout() {
           </div>
 
           <div className="my-4 p-3 rounded-lg bg-teal/5 border border-teal/15">
-            <p className="text-[11px] font-bold text-teal uppercase tracking-wider">Canonical Institution</p>
-            <p className="text-xs font-semibold text-foreground mt-0.5">Metropolitan Apex University</p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">ECRI v6.0 · Synthetic / Illustrative Baseline</p>
+            <p className="text-[11px] font-bold text-teal uppercase tracking-wider">
+              Canonical Institution
+            </p>
+            <p className="text-xs font-semibold text-foreground mt-0.5">
+              Metropolitan Apex University
+            </p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              ECRI v6.0 · Synthetic / Illustrative Baseline
+            </p>
           </div>
 
           {/* Navigation Items */}
@@ -120,8 +178,8 @@ function EcriSampleLayout() {
                           item.highlight
                             ? "bg-teal text-white hover:bg-teal/90 shadow-sm"
                             : isActive
-                            ? "bg-teal/10 text-teal font-semibold"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                              ? "bg-teal/10 text-teal font-semibold"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                         )}
                       >
                         <Icon className="size-4 shrink-0" />

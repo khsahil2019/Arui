@@ -19,17 +19,116 @@ export const Route = createFileRoute("/ecri/sample/institution")({
 });
 
 const dimensions = [
-  { code: "D01", name: "Employer Demand Intelligence", score: 78.0, cur: 4, req: 3, dist: "+1", status: "DEVELOPING", color: "bg-teal" },
-  { code: "D02", name: "Industry Ecosystem & Partnerships", score: 72.0, cur: 4, req: 3, dist: "+1", status: "DEVELOPING", color: "bg-teal" },
-  { code: "D03", name: "Curriculum Co-Design & Modernization", score: 81.0, cur: 4, req: 4, dist: "0", status: "INTEGRATED", color: "bg-teal" },
-  { code: "D04", name: "Experiential & Practice-Based Learning", score: 67.0, cur: 3, req: 4, dist: "+1", status: "DEVELOPING", color: "bg-amber-500" },
-  { code: "D05", name: "Career Development Infrastructure", score: 76.0, cur: 4, req: 3, dist: "0", status: "ESTABLISHED", color: "bg-teal" },
-  { code: "D06", name: "Applied Competencies & Transversal Skills", score: 74.0, cur: 4, req: 3, dist: "0", status: "ESTABLISHED", color: "bg-teal" },
-  { code: "D07", name: "Assessment Integrity & Authentic Evaluation", score: 79.0, cur: 4, req: 3, dist: "0", status: "DEVELOPING", color: "bg-teal" },
-  { code: "D08", name: "Entrepreneurship & Venture Creation", score: 69.0, cur: 3, req: 3, dist: "0", status: "DEVELOPING", color: "bg-amber-500" },
-  { code: "D09", name: "Placement Architecture & Corporate Relations", score: 77.0, cur: 4, req: 4, dist: "0", status: "ESTABLISHED", color: "bg-teal" },
-  { code: "D10", name: "Employment Outcome Quality", score: 73.0, cur: 3, req: 4, dist: "+1", status: "DEVELOPING", color: "bg-teal" },
-  { code: "D11", name: "Continuous Improvement & Labor Market Calibration", score: 77.7, cur: 3, req: 3, dist: "0", status: "ESTABLISHED", color: "bg-teal" },
+  {
+    code: "D01",
+    name: "Employer Demand Intelligence",
+    score: 78.0,
+    cur: 4,
+    req: 3,
+    dist: "+1",
+    status: "DEVELOPING",
+    color: "bg-teal",
+  },
+  {
+    code: "D02",
+    name: "Industry Ecosystem & Partnerships",
+    score: 72.0,
+    cur: 4,
+    req: 3,
+    dist: "+1",
+    status: "DEVELOPING",
+    color: "bg-teal",
+  },
+  {
+    code: "D03",
+    name: "Curriculum Co-Design & Modernization",
+    score: 81.0,
+    cur: 4,
+    req: 4,
+    dist: "0",
+    status: "INTEGRATED",
+    color: "bg-teal",
+  },
+  {
+    code: "D04",
+    name: "Experiential & Practice-Based Learning",
+    score: 67.0,
+    cur: 3,
+    req: 4,
+    dist: "+1",
+    status: "DEVELOPING",
+    color: "bg-amber-500",
+  },
+  {
+    code: "D05",
+    name: "Career Development Infrastructure",
+    score: 76.0,
+    cur: 4,
+    req: 3,
+    dist: "0",
+    status: "ESTABLISHED",
+    color: "bg-teal",
+  },
+  {
+    code: "D06",
+    name: "Applied Competencies & Transversal Skills",
+    score: 74.0,
+    cur: 4,
+    req: 3,
+    dist: "0",
+    status: "ESTABLISHED",
+    color: "bg-teal",
+  },
+  {
+    code: "D07",
+    name: "Assessment Integrity & Authentic Evaluation",
+    score: 79.0,
+    cur: 4,
+    req: 3,
+    dist: "0",
+    status: "DEVELOPING",
+    color: "bg-teal",
+  },
+  {
+    code: "D08",
+    name: "Entrepreneurship & Venture Creation",
+    score: 69.0,
+    cur: 3,
+    req: 3,
+    dist: "0",
+    status: "DEVELOPING",
+    color: "bg-amber-500",
+  },
+  {
+    code: "D09",
+    name: "Placement Architecture & Corporate Relations",
+    score: 77.0,
+    cur: 4,
+    req: 4,
+    dist: "0",
+    status: "ESTABLISHED",
+    color: "bg-teal",
+  },
+  {
+    code: "D10",
+    name: "Employment Outcome Quality",
+    score: 73.0,
+    cur: 3,
+    req: 4,
+    dist: "+1",
+    status: "DEVELOPING",
+    color: "bg-teal",
+  },
+  {
+    code: "D11",
+    name: "Continuous Improvement & Labor Market Calibration",
+    score: 77.7,
+    cur: 3,
+    req: 3,
+    dist: "0",
+    status: "ESTABLISHED",
+    color: "bg-teal",
+  },
 ];
 
 function EcriSampleInstitutionView() {
@@ -46,9 +145,12 @@ function EcriSampleInstitutionView() {
               SAMPLE ENVIRONMENT
             </span>
           </div>
-          <h1 className="text-3xl font-serif font-bold text-foreground mt-2">Metropolitan Apex University</h1>
+          <h1 className="text-3xl font-serif font-bold text-foreground mt-2">
+            Metropolitan Apex University
+          </h1>
           <p className="text-xs text-muted-foreground mt-1">
-            Comprehensive Public State Chartered University · 28,500 Students · 14 Faculties · 2026 Academic Baseline
+            Comprehensive Public State Chartered University · 28,500 Students · 14 Faculties · 2026
+            Academic Baseline
           </p>
         </div>
 
@@ -72,28 +174,40 @@ function EcriSampleInstitutionView() {
       <div className="p-8 rounded-2xl bg-card border border-border shadow-sm space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/60">
           <div>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Overall ECRI Score</p>
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+              Overall ECRI Score
+            </p>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-5xl font-serif font-bold text-teal">74.8</span>
               <span className="text-xl text-muted-foreground font-light">/ 100</span>
             </div>
-            <p className="text-xs font-semibold text-foreground mt-1">Level 4 · Transformative & Scaling</p>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Top Decile Position (84th Percentile among evaluated peer institutions)</p>
+            <p className="text-xs font-semibold text-foreground mt-1">
+              Level 4 · Transformative & Scaling
+            </p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Top Decile Position (84th Percentile among evaluated peer institutions)
+            </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div className="p-3 rounded-lg bg-muted/40 border border-border/50">
-              <p className="text-[10px] text-muted-foreground uppercase font-semibold">Current Maturity</p>
+              <p className="text-[10px] text-muted-foreground uppercase font-semibold">
+                Current Maturity
+              </p>
               <p className="text-lg font-bold text-foreground mt-0.5">Level 4</p>
               <p className="text-[9px] text-muted-foreground">Established</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/40 border border-border/50">
-              <p className="text-[10px] text-muted-foreground uppercase font-semibold">Required Maturity</p>
+              <p className="text-[10px] text-muted-foreground uppercase font-semibold">
+                Required Maturity
+              </p>
               <p className="text-lg font-bold text-foreground mt-0.5">Level 3.6</p>
               <p className="text-[9px] text-muted-foreground">Context-Derived</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/40 border border-border/50">
-              <p className="text-[10px] text-muted-foreground uppercase font-semibold">Evidence Confidence</p>
+              <p className="text-[10px] text-muted-foreground uppercase font-semibold">
+                Evidence Confidence
+              </p>
               <p className="text-lg font-bold text-teal mt-0.5">88.0%</p>
               <p className="text-[9px] text-muted-foreground">High (E3+)</p>
             </div>
@@ -108,7 +222,9 @@ function EcriSampleInstitutionView() {
         {/* 11-Dimension Capability Bar Profile */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">11-Dimension Institutional Capability Profile</h3>
+            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">
+              11-Dimension Institutional Capability Profile
+            </h3>
             <span className="text-xs text-muted-foreground">Comprehensive Benchmark</span>
           </div>
 
@@ -121,8 +237,12 @@ function EcriSampleInstitutionView() {
                     <span className="font-medium text-foreground">{dim.name}</span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-[11px] text-muted-foreground">Req L{dim.req} / Cur L{dim.cur} (Dist {dim.dist})</span>
-                    <span className="font-bold text-foreground w-12 text-right">{dim.score.toFixed(1)}</span>
+                    <span className="text-[11px] text-muted-foreground">
+                      Req L{dim.req} / Cur L{dim.cur} (Dist {dim.dist})
+                    </span>
+                    <span className="font-bold text-foreground w-12 text-right">
+                      {dim.score.toFixed(1)}
+                    </span>
                   </div>
                 </div>
                 {/* Visual Progress Bar */}
@@ -153,7 +273,10 @@ function EcriSampleInstitutionView() {
               "Tier-1 Employer Recruitment Ecosystem encompassing 450+ corporate & public-sector partners.",
               "Structured 3-Year Alumni Lifelong Upskilling Entitlement maintaining ongoing graduate mobility.",
             ].map((s, idx) => (
-              <li key={idx} className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed">
+              <li
+                key={idx}
+                className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed"
+              >
                 <span className="size-4 rounded-full bg-teal/10 text-teal flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
                   ✓
                 </span>
@@ -176,7 +299,10 @@ function EcriSampleInstitutionView() {
               "Implement granular underemployment telemetry tracking beyond the 12-month graduation milestone.",
               "Scale continuous postgraduate micro-credential stackability for alumni mid-career transitions.",
             ].map((p, idx) => (
-              <li key={idx} className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed">
+              <li
+                key={idx}
+                className="flex items-start gap-2.5 text-xs text-muted-foreground leading-relaxed"
+              >
                 <span className="size-4 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">
                   !
                 </span>
@@ -193,7 +319,8 @@ function EcriSampleInstitutionView() {
           <Activity className="size-4" /> Cross-Domain Pathway & Coherence Intelligence
         </div>
         <p className="text-xs text-muted-foreground">
-          Systemic transmission analysis mapping how strategic inputs translate into graduate career mobility:
+          Systemic transmission analysis mapping how strategic inputs translate into graduate career
+          mobility:
         </p>
 
         {/* Pipeline steps */}
@@ -206,12 +333,20 @@ function EcriSampleInstitutionView() {
             { step: "5. Graduate Outcomes", code: "D10", val: "73.0", state: "High Yield" },
           ].map((item, idx) => (
             <div key={idx} className="p-3 rounded-lg bg-muted/40 border border-border/50">
-              <p className="text-[10px] text-muted-foreground font-semibold uppercase">{item.step}</p>
-              <p className="text-xs font-bold text-foreground mt-0.5">{item.code} · {item.val}</p>
-              <span className={cn(
-                "inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold",
-                item.state === "Strong" || item.state === "High Yield" ? "bg-teal/10 text-teal" : "bg-amber-500/10 text-amber-500"
-              )}>
+              <p className="text-[10px] text-muted-foreground font-semibold uppercase">
+                {item.step}
+              </p>
+              <p className="text-xs font-bold text-foreground mt-0.5">
+                {item.code} · {item.val}
+              </p>
+              <span
+                className={cn(
+                  "inline-block mt-1 px-1.5 py-0.5 rounded text-[9px] font-bold",
+                  item.state === "Strong" || item.state === "High Yield"
+                    ? "bg-teal/10 text-teal"
+                    : "bg-amber-500/10 text-amber-500",
+                )}
+              >
                 {item.state}
               </span>
             </div>
@@ -219,9 +354,14 @@ function EcriSampleInstitutionView() {
         </div>
 
         <div className="p-4 rounded-xl bg-teal/5 border border-teal/15 text-xs text-muted-foreground space-y-1">
-          <p className="font-semibold text-foreground">Coherence Diagnostic Finding (84.5% Systemic Coherence)</p>
+          <p className="font-semibold text-foreground">
+            Coherence Diagnostic Finding (84.5% Systemic Coherence)
+          </p>
           <p>
-            Strong transmission exists from Employer Demand (D01) through Industry Curricula (D03). The primary structural friction point is between Curriculum (D03) and Experiential Learning (D04), where student placement capacity in non-STEM faculties lags behind accredited engineering clusters.
+            Strong transmission exists from Employer Demand (D01) through Industry Curricula (D03).
+            The primary structural friction point is between Curriculum (D03) and Experiential
+            Learning (D04), where student placement capacity in non-STEM faculties lags behind
+            accredited engineering clusters.
           </p>
         </div>
       </div>

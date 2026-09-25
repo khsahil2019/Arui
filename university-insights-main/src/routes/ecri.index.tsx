@@ -357,7 +357,7 @@ function EcriPublicExperiencePage() {
       console.error("Enquiry submission failed:", err);
       setConsultError(
         err.message ||
-        "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.",
+          "Failed to submit enquiry. Please try again or contact evaluations@ecri.org directly.",
       );
     } finally {
       setConsultSubmitting(false);
@@ -495,10 +495,11 @@ function EcriPublicExperiencePage() {
           <div className="mt-6 flex flex-wrap gap-2 border-b border-border pb-4">
             <button
               onClick={() => setActiveTab("scoreboard")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "scoreboard"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "scoreboard"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <BarChart3 className="size-4" />
               <span>01 — Executive Scoreboard</span>
@@ -506,10 +507,11 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("dimensions")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "dimensions"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "dimensions"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <Layers className="size-4" />
               <span>02 — 11 Dimensions Deep Dive</span>
@@ -517,10 +519,11 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("analytics")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "analytics"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "analytics"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <PieChart className="size-4" />
               <span>03 — Visual Analytics Hub</span>
@@ -528,10 +531,11 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("gaps")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "gaps"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "gaps"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <Map className="size-4" />
               <span>04 — Transformation Gap</span>
@@ -539,10 +543,11 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("evolution")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "evolution"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "evolution"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <TrendingUp className="size-4" />
               <span>05 — Living Assessment & Evolution</span>
@@ -550,10 +555,11 @@ function EcriPublicExperiencePage() {
 
             <button
               onClick={() => setActiveTab("reports")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${activeTab === "reports"
-                ? "bg-teal text-white shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "reports"
+                  ? "bg-teal text-white shadow-sm"
+                  : "bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+              }`}
             >
               <FileSpreadsheet className="size-4" />
               <span>06 — Boardroom Reports & PDF</span>
@@ -719,10 +725,11 @@ function EcriPublicExperiencePage() {
                     <button
                       key={dim.code}
                       onClick={() => setSelectedDimension(dim)}
-                      className={`rounded px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${selectedDimension.code === dim.code
-                        ? "bg-teal text-white"
-                        : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
-                        }`}
+                      className={`rounded px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${
+                        selectedDimension.code === dim.code
+                          ? "bg-teal text-white"
+                          : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
                     >
                       {dim.code}
                     </button>

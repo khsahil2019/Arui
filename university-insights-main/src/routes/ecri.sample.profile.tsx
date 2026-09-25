@@ -26,9 +26,12 @@ function EcriSamplePublicProfileView() {
         <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-teal/10 text-teal text-[11px] font-bold uppercase tracking-wider">
           <Globe className="size-3.5" /> Public Institutional Profile
         </div>
-        <h1 className="text-3xl font-serif font-bold text-foreground">Verified Institutional Benchmark Credential</h1>
+        <h1 className="text-3xl font-serif font-bold text-foreground">
+          Verified Institutional Benchmark Credential
+        </h1>
         <p className="text-xs text-muted-foreground">
-          Public verification portal demonstrating certified employability credentials and transparency standards.
+          Public verification portal demonstrating certified employability credentials and
+          transparency standards.
         </p>
       </div>
 
@@ -40,39 +43,109 @@ function EcriSamplePublicProfileView() {
               <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex items-center gap-1">
                 <CheckCircle2 className="size-3.5" /> ECRI Assessed · 2026
               </span>
-              <span className="text-xs font-mono text-muted-foreground">ID: ECRI-MAU-2026-CERT</span>
+              <span className="text-xs font-mono text-muted-foreground">
+                ID: ECRI-MAU-2026-CERT
+              </span>
             </div>
-            <h2 className="text-2xl font-serif font-bold text-foreground mt-2">Metropolitan Apex University</h2>
+            <h2 className="text-2xl font-serif font-bold text-foreground mt-2">
+              Metropolitan Apex University
+            </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Public State Chartered Research & Teaching University · Victoria & New South Wales, Australia
+              Public State Chartered Research & Teaching University · Victoria & New South Wales,
+              Australia
             </p>
           </div>
 
           <div className="text-left sm:text-right p-4 rounded-xl bg-teal/5 border border-teal/15">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase">Certified Overall Score</p>
-            <div className="text-3xl font-serif font-bold text-teal mt-0.5">74.8 <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span></div>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase">
+              Certified Overall Score
+            </p>
+            <div className="text-3xl font-serif font-bold text-teal mt-0.5">
+              74.8{" "}
+              <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span>
+            </div>
             <p className="text-[11px] font-semibold text-foreground">Level 4 · Transformative</p>
           </div>
         </div>
 
         {/* 11 Dimensions Verified Scores */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Verified 11-Dimension Capability Assessment (132 Metrics)</h3>
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">
+            Verified 11-Dimension Capability Assessment (132 Metrics)
+          </h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              { code: "D01", name: "Employer Demand Intelligence", score: "78.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D02", name: "Industry Ecosystem & Partnerships", score: "72.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D03", name: "Curriculum Co-Design & Modernization", score: "81.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D04", name: "Experiential & Practice-Based Learning", score: "67.0 / 100", status: "Level 3 · Repeatable" },
-              { code: "D05", name: "Career Development Infrastructure", score: "76.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D06", name: "Applied Competencies & Transversal Skills", score: "74.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D07", name: "Assessment Integrity & Authentic Evaluation", score: "79.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D08", name: "Entrepreneurship & Venture Creation", score: "69.0 / 100", status: "Level 3 · Repeatable" },
-              { code: "D09", name: "Placement Architecture & Corporate Relations", score: "77.0 / 100", status: "Level 4 · Integrated" },
-              { code: "D10", name: "Employment Outcome Quality", score: "73.0 / 100", status: "Level 3 · Repeatable" },
-              { code: "D11", name: "Continuous Improvement & Labor Market Calibration", score: "77.7 / 100", status: "Level 3 · Repeatable" },
+              {
+                code: "D01",
+                name: "Employer Demand Intelligence",
+                score: "78.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D02",
+                name: "Industry Ecosystem & Partnerships",
+                score: "72.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D03",
+                name: "Curriculum Co-Design & Modernization",
+                score: "81.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D04",
+                name: "Experiential & Practice-Based Learning",
+                score: "67.0 / 100",
+                status: "Level 3 · Repeatable",
+              },
+              {
+                code: "D05",
+                name: "Career Development Infrastructure",
+                score: "76.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D06",
+                name: "Applied Competencies & Transversal Skills",
+                score: "74.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D07",
+                name: "Assessment Integrity & Authentic Evaluation",
+                score: "79.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D08",
+                name: "Entrepreneurship & Venture Creation",
+                score: "69.0 / 100",
+                status: "Level 3 · Repeatable",
+              },
+              {
+                code: "D09",
+                name: "Placement Architecture & Corporate Relations",
+                score: "77.0 / 100",
+                status: "Level 4 · Integrated",
+              },
+              {
+                code: "D10",
+                name: "Employment Outcome Quality",
+                score: "73.0 / 100",
+                status: "Level 3 · Repeatable",
+              },
+              {
+                code: "D11",
+                name: "Continuous Improvement & Labor Market Calibration",
+                score: "77.7 / 100",
+                status: "Level 3 · Repeatable",
+              },
             ].map((d) => (
-              <div key={d.code} className="p-3 rounded-lg bg-muted/40 border border-border/50 flex items-center justify-between text-xs">
+              <div
+                key={d.code}
+                className="p-3 rounded-lg bg-muted/40 border border-border/50 flex items-center justify-between text-xs"
+              >
                 <div className="flex items-center gap-2">
                   <span className="font-mono font-bold text-teal">{d.code}</span>
                   <span className="font-semibold text-foreground">{d.name}</span>
@@ -90,11 +163,14 @@ function EcriSamplePublicProfileView() {
         <div className="p-5 rounded-xl bg-muted/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
           <div className="space-y-2">
             <p className="font-semibold text-foreground flex items-center gap-1.5">
-              <ShieldCheck className="size-4 text-teal" /> Assessor Verification & Cryptographic Provenance
+              <ShieldCheck className="size-4 text-teal" /> Assessor Verification & Cryptographic
+              Provenance
             </p>
             <p className="leading-relaxed">
-              This certified baseline was evaluated by independent ECRI adjudicators against the <strong>ECRI v6.0 Methodology</strong>.
-              All capability claims above Level 2 have been corroborated with audited institutional artifacts under strict anti-gaming governance protocols.
+              This certified baseline was evaluated by independent ECRI adjudicators against the{" "}
+              <strong>ECRI v6.0 Methodology</strong>. All capability claims above Level 2 have been
+              corroborated with audited institutional artifacts under strict anti-gaming governance
+              protocols.
             </p>
             <div className="flex flex-wrap items-center gap-4 pt-2 text-[11px] text-muted-foreground font-mono">
               <span>Cycle: 2026 Academic Baseline</span>
@@ -106,7 +182,9 @@ function EcriSamplePublicProfileView() {
           </div>
 
           <div className="pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-3">
-            <span className="text-xs font-semibold text-foreground">Publish to University Website:</span>
+            <span className="text-xs font-semibold text-foreground">
+              Publish to University Website:
+            </span>
             <div className="flex items-center gap-2">
               <a
                 href="/samples/ECRI_Institutional_Profile.html"

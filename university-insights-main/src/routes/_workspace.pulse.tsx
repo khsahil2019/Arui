@@ -52,7 +52,8 @@ function PulsePage() {
         <div className="mx-auto max-w-2xl py-10 text-center">
           <h1 className="mt-3 text-3xl font-serif">Assessment Ready</h1>
           <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-muted-foreground">
-            No preliminary screening signals required. You can proceed directly to the domain assessment.
+            No preliminary screening signals required. You can proceed directly to the domain
+            assessment.
           </p>
           <div className="mt-8">
             <Button asChild size="lg" className="h-11 px-6 text-[15px]">
