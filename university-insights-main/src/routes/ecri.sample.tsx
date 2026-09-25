@@ -25,26 +25,51 @@ export const Route = createFileRoute("/ecri/sample")({
   component: EcriSampleLayout,
 });
 
-const sampleNavItems = [
-  { group: "ECRI OVERVIEW", items: [
-    { to: "/ecri/sample", label: "1. Overview & Scope", icon: Compass, exact: true },
-    { to: "/ecri/sample#what-is-ecri", label: "2. What is ECRI", icon: BookOpen },
-    { to: "/ecri/sample#why-ecri", label: "3. Why ECRI", icon: Zap },
-    { to: "/ecri/sample#dimensions", label: "4. 11 Dimensions", icon: Layers },
-    { to: "/ecri/sample#how-it-works", label: "5. How It Works", icon: HelpCircle },
-    { to: "/ecri/sample#deliverables", label: "6. What Institution Receives", icon: Award },
+interface SampleNavItem {
+  to: string;
+  label: string;
+  icon: React.ElementType;
+  exact?: boolean;
+  external?: boolean;
+  highlight?: boolean;
+}
+
+interface SampleNavGroup {
+  group: string;
+  items: SampleNavItem[];
+}
+
+const sampleNavItems: SampleNavGroup[] = [
+  { group: "ECRI", items: [
+    { to: "/ecri/sample", label: "Overview & Scope", icon: Compass, exact: true },
+    { to: "/ecri/sample#what-is-ecri", label: "What is ECRI?", icon: BookOpen },
+    { to: "/ecri/sample#why-ecri", label: "Why ECRI?", icon: Zap },
+    { to: "/ecri/sample#methodology", label: "ECRI Methodology", icon: Sliders },
+    { to: "/ecri/sample#dimensions", label: "11 Dimensions", icon: Layers },
+    { to: "/ecri/sample#how-it-works", label: "How the Assessment Works", icon: HelpCircle },
+    { to: "/ecri/sample#what-you-receive", label: "What Your Institution Receives", icon: Award },
   ]},
   { group: "SAMPLE ASSESSMENT", items: [
-    { to: "/ecri/sample/institution", label: "7. Institution View", icon: Briefcase },
-    { to: "/ecri/sample/assessor", label: "8. Assessor View (132 Metrics)", icon: ShieldCheck },
+    { to: "/ecri/sample/institution", label: "Institution View", icon: Briefcase },
+    { to: "/ecri/sample/assessor", label: "Assessor View", icon: ShieldCheck },
   ]},
-  { group: "SAMPLE OUTPUTS & INTELLIGENCE", items: [
-    { to: "/ecri/sample/reports", label: "9–13. Report Centre (5 Reports)", icon: FileText },
-    { to: "/ecri/sample/continuous", label: "14. Continuous Assessment", icon: TrendingUp },
-    { to: "/ecri/sample/profile", label: "15. Public Institutional Profile", icon: Globe },
+  { group: "SAMPLE OUTPUTS", items: [
+    { to: "/ecri/sample/reports", label: "Report Centre (All 5 Outputs)", icon: FileText },
+    { to: "/samples/ECRI_Sample_Executive_Report.pdf", label: "Executive Intelligence Report", icon: FileText, external: true },
+    { to: "/samples/ECRI_Sample_Detailed_132_Metric_Report.pdf", label: "Detailed 132-Metric Diagnostic", icon: BarChart3, external: true },
+    { to: "/samples/ECRI_Sample_Board_Scorecard.pdf", label: "Board Scorecard", icon: Award, external: true },
+    { to: "/samples/ECRI_Sample_Evidence_Integrity_Dossier.pdf", label: "Evidence & Integrity", icon: ShieldCheck, external: true },
+    { to: "/samples/ECRI_Sample_Transformation_Roadmap.pdf", label: "Transformation Roadmap", icon: TrendingUp, external: true },
   ]},
-  { group: "START ENGAGEMENT", items: [
-    { to: "/ecri/engagement", label: "16. Proceed to ECRI Assessment", icon: ArrowRight, highlight: true },
+  { group: "CONTINUOUS ECRI", items: [
+    { to: "/ecri/sample/continuous", label: "Continuous Assessment", icon: TrendingUp },
+    { to: "/ecri/sample/continuous", label: "Reassessment & Transformation Delta", icon: TrendingUp },
+  ]},
+  { group: "PUBLIC OUTPUT", items: [
+    { to: "/ecri/sample/profile", label: "Public ECRI Institutional Profile", icon: Globe },
+  ]},
+  { group: "START", items: [
+    { to: "/ecri/engagement", label: "Proceed to ECRI Assessment", icon: ArrowRight, highlight: true },
   ]}
 ];
 

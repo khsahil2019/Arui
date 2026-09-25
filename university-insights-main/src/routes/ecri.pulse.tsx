@@ -80,7 +80,8 @@ function EcriPulsePage() {
   }
 
   const prompt = prompts[index] || prompts[0];
-  const existing = (screening?.responses || []).find((r) => r.promptId === prompt?.id) ?? null;
+  if (!prompt) return null;
+  const existing = (screening?.responses || []).find((r) => r.promptId === prompt.id) ?? null;
 
   const next = () => {
     if (index < prompts.length - 1) setIndex(index + 1);

@@ -208,7 +208,7 @@ function LoginPage() {
                 >
                   <div>
                     <p className="font-semibold text-navy">
-                      🎓 Apex National University (ARUI Lead)
+                      🎓 Metropolitan Apex University (ARUI Lead)
                     </p>
                     <p className="text-[11px] text-muted-foreground">
                       lead@apex.edu / apex123 · 11 Domains · 143 Metrics

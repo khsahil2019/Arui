@@ -254,15 +254,17 @@ export async function seed() {
   for (let i = 0; i < ecriMetrics.length; i++) {
     const m = ecriMetrics[i];
     await query(
-      `INSERT INTO metrics (methodology_version_id, domain_code, code, full_code, name, what_measured, measurement_method, exposure, weight, has_outcome, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      `INSERT INTO metrics (methodology_version_id, domain_code, code, full_code, name, display_name, explanation, what_measured, measurement_method, exposure, weight, has_outcome, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
        ON CONFLICT (methodology_version_id, full_code) DO UPDATE SET
          name = EXCLUDED.name,
+         display_name = EXCLUDED.display_name,
+         explanation = EXCLUDED.explanation,
          what_measured = EXCLUDED.what_measured,
          measurement_method = EXCLUDED.measurement_method,
          exposure = EXCLUDED.exposure,
          weight = EXCLUDED.weight`,
-      [ecriVersionId, m.domainCode, m.code, m.fullCode, m.name, m.whatMeasured, m.measurementMethod, m.exposure, m.weight, m.hasOutcome, i + 1]
+      [ecriVersionId, m.domainCode, m.code, m.fullCode, m.name, m.displayName || m.name, m.explanation || m.whatMeasured, m.whatMeasured, m.measurementMethod, m.exposure, m.weight, m.hasOutcome, i + 1]
     );
   }
 
@@ -291,9 +293,25 @@ export async function seed() {
   for (let i = 0; i < ecriQuestions.length; i++) {
     const q = ecriQuestions[i];
     await query(
-      `INSERT INTO questions (methodology_version_id, domain_code, code, card_code, prompt, input_type, presentation_kind, role, options_json, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-      [ecriVersionId, q.domainCode, q.code, q.cardCode, q.prompt, q.inputType, q.presentationKind, q.role, JSON.stringify(q.options || []), i + 1]
+      `INSERT INTO questions (methodology_version_id, domain_code, code, card_code, prompt, display_prompt, what_we_are_asking, what_should_i_provide, evidence_examples, why_this_matters, input_type, presentation_kind, role, options_json, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`,
+      [
+        ecriVersionId,
+        q.domainCode,
+        q.code,
+        q.cardCode,
+        q.prompt,
+        q.displayPrompt || q.prompt,
+        q.whatWeAreAsking || null,
+        q.whatShouldIProvide || null,
+        JSON.stringify(q.evidenceExamples || []),
+        q.whyThisMatters || null,
+        q.inputType,
+        q.presentationKind,
+        q.role,
+        JSON.stringify(q.options || []),
+        i + 1
+      ]
     );
   }
 
@@ -301,9 +319,20 @@ export async function seed() {
   await query(`DELETE FROM evidence_requirements WHERE methodology_version_id = $1`, [ecriVersionId]);
   for (const ev of ecriEvidence) {
     await query(
-      `INSERT INTO evidence_requirements (methodology_version_id, domain_code, code, title, quantity, requirement, metric_link)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [ecriVersionId, ev.domainCode, ev.code, ev.title, ev.quantity, ev.requirement, ev.metricLink]
+      `INSERT INTO evidence_requirements (methodology_version_id, domain_code, code, title, display_title, display_instruction, examples_json, quantity, requirement, metric_link)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        ecriVersionId,
+        ev.domainCode,
+        ev.code,
+        ev.title,
+        ev.displayTitle || ev.title,
+        ev.displayInstruction || null,
+        JSON.stringify(ev.examplesJson || []),
+        ev.quantity,
+        ev.requirement,
+        ev.metricLink
+      ]
     );
   }
 
@@ -353,24 +382,15 @@ export async function seed() {
   }
   console.log(`Seeded ECRI Methodology Registry (11 Dimensions, 132 Canonical Metrics, Badges & Calibration).`);
 
-  // 4. Seed Demo Institutions & Distinct Users for ARUI and ECRI
+  // 4. Seed Demonstration Institution & Distinct Users for ARUI and ECRI
   const instRes = await query(
     `INSERT INTO institutions (name, slug, country, state, district)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
      RETURNING id`,
-    ['Apex National University', 'apex-national-university', 'India', 'Karnataka', 'Bengaluru Urban']
+    ['Metropolitan Apex University', 'metropolitan-apex-university', 'India', 'Karnataka', 'Bengaluru Urban']
   );
   const instId = instRes.rows[0].id;
-
-  const horizonRes = await query(
-    `INSERT INTO institutions (name, slug, country, state, district)
-     VALUES ($1, $2, $3, $4, $5)
-     ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name
-     RETURNING id`,
-    ['Horizon State University', 'horizon-state-university', 'India', 'Maharashtra', 'Mumbai Suburban']
-  );
-  const horizonInstId = horizonRes.rows[0].id;
 
   // Hashes for Demo Credentials
   const apexPasswordHash = await bcrypt.hash('apex123', 10);
@@ -379,8 +399,8 @@ export async function seed() {
   const horizonPasswordHash = await bcrypt.hash('horizon123', 10);
   const ecriAssessorHash = await bcrypt.hash('assessor123', 10);
 
-  // --- ARUI DEMO USERS ---
-  // 1. Apex University Lead & Admin
+  // --- DEMO USERS ---
+  // 1. Apex / Metropolitan University Lead & Admin
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
@@ -392,7 +412,7 @@ export async function seed() {
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
-    [instId, 'admin@apex.edu', apexPasswordHash, 'Apex University Administrator', 'INSTITUTION_ADMIN']
+    [instId, 'admin@apex.edu', apexPasswordHash, 'Metropolitan Apex University Administrator', 'INSTITUTION_ADMIN']
   );
 
   // 2. Global Super Admin
@@ -425,28 +445,40 @@ export async function seed() {
     [null, 'assessor@arui.org', aruiAssessorHash, 'Prof. Elizabeth Vance (Lead ARUI Assessor)', 'ASSESSOR']
   );
 
-  // --- ECRI DEMO USERS ---
-  // 4. Horizon University Career & Employability Lead & Admin
+  // 4. ECRI Demo Lead & Admin (mapped to Metropolitan Apex University)
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
-    [horizonInstId, 'lead@horizon.edu', horizonPasswordHash, 'Prof. Marcus Vance (Dean of Career & WIL)', 'INSTITUTION_ADMIN']
+    [instId, 'lead@apex.edu', horizonPasswordHash, 'Prof. Marcus Vance (Dean of Career & WIL)', 'INSTITUTION_ADMIN']
   );
 
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
-    [horizonInstId, 'admin@horizon.edu', horizonPasswordHash, 'Horizon University Administrator', 'INSTITUTION_ADMIN']
+    [instId, 'admin@apex.edu', horizonPasswordHash, 'Metropolitan Apex University Career Admin', 'INSTITUTION_ADMIN']
   );
 
-  // 5. Horizon University Industry Relations & WIL Officer
   await query(
     `INSERT INTO users (institution_id, email, password_hash, name, role)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
-    [horizonInstId, 'industry@horizon.edu', horizonPasswordHash, 'Sarah Jenkins (Director of Corporate Partnerships)', 'CONTRIBUTOR']
+    [instId, 'industry@apex.edu', horizonPasswordHash, 'Sarah Jenkins (Director of Corporate Partnerships)', 'CONTRIBUTOR']
+  );
+
+  // Backward-compat demo logins
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [instId, 'lead@horizon.edu', horizonPasswordHash, 'Prof. Marcus Vance (Dean of Career & WIL)', 'INSTITUTION_ADMIN']
+  );
+  await query(
+    `INSERT INTO users (institution_id, email, password_hash, name, role)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, role = EXCLUDED.role, password_hash = EXCLUDED.password_hash`,
+    [instId, 'admin@horizon.edu', horizonPasswordHash, 'Metropolitan Apex University Career Admin', 'INSTITUTION_ADMIN']
   );
 
   // 6. ECRI External Assessor / Adjudicator
@@ -457,9 +489,9 @@ export async function seed() {
     [null, 'assessor@ecri.org', ecriAssessorHash, 'Dr. Robert Sterling (Lead ECRI Adjudicator)', 'ASSESSOR']
   );
 
-  console.log('Seeded distinct demo users for ARUI (Apex) and ECRI (Horizon).');
+  console.log('Seeded unified demo users for ARUI & ECRI (Metropolitan Apex University).');
 
-  // 5. Seed baseline ARUI Assessment for Apex
+  // 5. Seed baseline ARUI Assessment
   const asmRes = await query(
     `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -468,18 +500,18 @@ export async function seed() {
   );
   const assessmentId = asmRes.rows[0].id;
 
-  // Seed baseline ECRI Assessment for Horizon
+  // Seed baseline ECRI Assessment for Metropolitan Apex University
   const ecriAsmRes = await query(
     `INSERT INTO assessments (product_code, institution_id, methodology_version_id, title, status, stage, current_domain)
      VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING id`,
-    ['ecri', horizonInstId, ecriVersionId, 'ECRI Graduate Employability & Career Readiness Assessment (2026)', 'DRAFT', 'assessment', 'D01']
+    ['ecri', instId, ecriVersionId, 'ECRI Graduate Employability & Career Readiness Assessment (2026)', 'COMPLETED', 'results', 'D11']
   );
   const ecriAssessmentId = ecriAsmRes.rows[0].id;
 
   // Seed profile
   const profileValues = {
-    IP01: 'Apex National University',
+    IP01: 'Metropolitan Apex University',
     IP02: 'Comprehensive University',
     IP03: 'State Private / Autonomous',
     IP04: 'Karnataka',
@@ -505,7 +537,7 @@ export async function seed() {
     IP24: 'Co-educational Residential Campus',
     IP25: 'Global Collaborations with Top 100 QS Institutions',
     // Legacy aliases
-    IP01_INST_NAME: 'Apex National University',
+    IP01_INST_NAME: 'Metropolitan Apex University',
     IP02_INST_TYPE: 'comprehensive',
     IP03_MANDATE: 'balanced',
     IP04_STATE: 'Karnataka',
@@ -606,18 +638,112 @@ export async function seed() {
     ]
   );
   const ecriEv1Id = ecriEv1.rows[0].id;
-  // Seed Benchmark Consents & Engine Entitlements
-  for (const iId of [instId, horizonInstId]) {
-    await query(
-      `INSERT INTO benchmark_consents (institution_id, product_code, participation_level, is_consented)
-       VALUES ($1, 'arui', 'ANONYMOUS_BENCHMARK', true), ($1, 'ecri', 'ANONYMOUS_BENCHMARK', true)
-       ON CONFLICT (institution_id, product_code) DO NOTHING`,
-      [iId]
-    );
+
+  // 6. Seed Metric Assessments for all 132 ECRI metrics with canonical 74.8% calibration
+  await query(`DELETE FROM metric_assessments WHERE assessment_id = $1`, [ecriAssessmentId]);
+  const targetDimensionScores: Record<string, number> = {
+    D01: 78.5,
+    D02: 76.0,
+    D03: 74.0,
+    D04: 82.0,
+    D05: 75.0,
+    D06: 72.5,
+    D07: 73.0,
+    D08: 70.0,
+    D09: 80.5,
+    D10: 68.0,
+    D11: 73.3,
+  };
+
+  const domainScoreRuns: Record<string, any> = {};
+
+  const metricResults: Record<string, any> = {};
+
+  for (let d = 1; d <= 11; d++) {
+    const dCode = `D${d.toString().padStart(2, '0')}`;
+    const targetScore = targetDimensionScores[dCode] || 74.8;
+    const baseM = Math.min(5, Math.max(1, Math.round((targetScore / 100) * 5)));
+    const baseI = Math.min(5, Math.max(1, Math.round(((targetScore - 2) / 100) * 5)));
+    const baseO = Math.min(5, Math.max(1, Math.round(((targetScore + 2) / 100) * 5)));
+
+    domainScoreRuns[dCode] = {
+      domainCode: dCode,
+      score: targetScore,
+      assessedMetricsCount: 12,
+      totalMetricsCount: 12,
+      currentMaturity: baseM,
+      requiredMaturity: Math.min(5, baseM + 1),
+      transformationDistance: Math.max(0, Math.min(5, baseM + 1) - baseM),
+    };
+
+    for (let m = 1; m <= 12; m++) {
+      const mNum = m.toString().padStart(2, '0');
+      const mFullCode = `${dCode}-M${mNum}`;
+      const metricScore = targetScore + ((m % 5) - 2) * 1.5;
+      const mVal = Math.min(5, Math.max(1, Math.round((metricScore / 100) * 5)));
+      const iVal = Math.min(5, Math.max(1, Math.round(((metricScore - 1) / 100) * 5)));
+      const oVal = Math.min(5, Math.max(1, Math.round(((metricScore + 1) / 100) * 5)));
+
+      metricResults[mFullCode] = {
+        metricCode: mFullCode,
+        domainCode: dCode,
+        maturity: mVal,
+        implementation: iVal,
+        outcomes: oVal,
+        score: metricScore,
+        status: 'EVALUATED',
+        finding: `Demonstrates structured capability with verified evidence for ${mFullCode}.`,
+        recommendation: `Continue institutionalization to reach Level ${Math.min(5, mVal + 1)}.`,
+      };
+
+      await query(
+        `INSERT INTO metric_assessments (assessment_id, metric_full_code, domain_code, maturity, implementation, outcomes, score, rationale)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         ON CONFLICT (assessment_id, metric_full_code) DO UPDATE SET
+           maturity = EXCLUDED.maturity,
+           implementation = EXCLUDED.implementation,
+           outcomes = EXCLUDED.outcomes,
+           score = EXCLUDED.score,
+           rationale = EXCLUDED.rationale`,
+        [
+          ecriAssessmentId,
+          mFullCode,
+          dCode,
+          mVal,
+          iVal,
+          oVal,
+          metricScore,
+          `Demonstrates structured capability with verified evidence for ${mFullCode}. Continue institutionalization to reach Level ${Math.min(5, mVal + 1)}.`
+        ]
+      );
+    }
   }
 
-  // Seed Multi-Engine Entitlements (Instructions #56-#80)
-  // Apex Institute has both ARUI and ECRI active
+  // Seed Canonical Score Run (74.8%)
+  await query(`DELETE FROM score_runs WHERE assessment_id = $1`, [ecriAssessmentId]);
+  await query(
+    `INSERT INTO score_runs (assessment_id, methodology_version_id, run_number, input_hash, overall_score, domain_results_json, metric_results_json, context_results_json, cross_domain_results_json, is_locked)
+     VALUES ($1, $2, 1, 'canonical_ecri_baseline_2026_hash', 74.8, $3, $4, $5, $6, true)`,
+    [
+      ecriAssessmentId,
+      ecriVersionId,
+      JSON.stringify(domainScoreRuns),
+      JSON.stringify(metricResults),
+      JSON.stringify({ Rd: 1.0, institutionType: 'comprehensive', riskLevel: 'low' }),
+      JSON.stringify([])
+    ]
+  );
+
+  // Seed Benchmark Consents & Engine Entitlements
+  await query(
+    `INSERT INTO benchmark_consents (institution_id, product_code, participation_level, is_consented)
+     VALUES ($1, 'arui', 'ANONYMOUS_BENCHMARK', true), ($1, 'ecri', 'ANONYMOUS_BENCHMARK', true)
+     ON CONFLICT (institution_id, product_code) DO NOTHING`,
+    [instId]
+  );
+
+  // Seed Multi-Engine Entitlements
+  // Metropolitan Apex University has both ARUI and ECRI active
   await query(
     `INSERT INTO engine_entitlements (institution_id, product_code, status, cycle, activated_at)
      VALUES 
@@ -627,25 +753,14 @@ export async function seed() {
     [instId]
   );
 
-  // Horizon State University has ARUI active, ECRI not purchased
-  await query(
-    `INSERT INTO engine_entitlements (institution_id, product_code, status, cycle, activated_at)
-     VALUES 
-       ($1, 'arui', 'ACTIVE', '2026-2027', NOW()),
-       ($1, 'ecri', 'NOT_PURCHASED', '2026-2027', NULL)
-     ON CONFLICT (institution_id, product_code, cycle) DO UPDATE SET status = EXCLUDED.status`,
-    [horizonInstId]
-  );
-
   // Seed sample payments
   await query(
     `INSERT INTO payments (institution_id, product_code, amount, currency, payment_method, transaction_reference, status, invoice_number)
      VALUES 
        ($1, 'arui', 4999.00, 'USD', 'CARD', 'tx_arui_apex_2026', 'SUCCESS', 'INV-ARUI-2026-001'),
-       ($1, 'ecri', 4999.00, 'USD', 'CARD', 'tx_ecri_apex_2026', 'SUCCESS', 'INV-ECRI-2026-001'),
-       ($2, 'arui', 4999.00, 'USD', 'WIRE_TRANSFER', 'tx_arui_horizon_2026', 'SUCCESS', 'INV-ARUI-2026-002')
+       ($1, 'ecri', 4999.00, 'USD', 'CARD', 'tx_ecri_apex_2026', 'SUCCESS', 'INV-ECRI-2026-001')
      ON CONFLICT (transaction_reference) DO NOTHING`,
-    [instId, horizonInstId]
+    [instId]
   );
 
   const defaultPeerGroups = [

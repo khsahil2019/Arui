@@ -66,6 +66,8 @@ export async function migrate() {
       code VARCHAR(10) NOT NULL,
       full_code VARCHAR(20) NOT NULL,
       name VARCHAR(255) NOT NULL,
+      display_name VARCHAR(255),
+      explanation TEXT,
       what_measured TEXT,
       measurement_method TEXT,
       exposure VARCHAR(50) DEFAULT 'Medium',
@@ -105,6 +107,11 @@ export async function migrate() {
       code VARCHAR(100) NOT NULL,
       card_code VARCHAR(100),
       prompt TEXT NOT NULL,
+      display_prompt TEXT,
+      what_we_are_asking TEXT,
+      what_should_i_provide TEXT,
+      evidence_examples JSONB DEFAULT '[]',
+      why_this_matters TEXT,
       input_type VARCHAR(100) DEFAULT 'single',
       presentation_kind VARCHAR(100) DEFAULT 'single_choice',
       role VARCHAR(100) DEFAULT 'Diagnostic',
@@ -132,6 +139,9 @@ export async function migrate() {
       domain_code VARCHAR(10) NOT NULL,
       code VARCHAR(20) NOT NULL,
       title VARCHAR(255) NOT NULL,
+      display_title VARCHAR(255),
+      display_instruction TEXT,
+      examples_json JSONB DEFAULT '[]',
       quantity VARCHAR(100),
       requirement VARCHAR(100),
       metric_link VARCHAR(100)
@@ -582,6 +592,39 @@ CREATE TABLE IF NOT EXISTS brand_configs (
       END IF;
       IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='designation') THEN
         ALTER TABLE users ADD COLUMN designation VARCHAR(255);
+      END IF;
+      -- Questions plain-language display fields
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='display_prompt') THEN
+        ALTER TABLE questions ADD COLUMN display_prompt TEXT;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='what_we_are_asking') THEN
+        ALTER TABLE questions ADD COLUMN what_we_are_asking TEXT;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='what_should_i_provide') THEN
+        ALTER TABLE questions ADD COLUMN what_should_i_provide TEXT;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='evidence_examples') THEN
+        ALTER TABLE questions ADD COLUMN evidence_examples JSONB DEFAULT '[]';
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='questions' AND column_name='why_this_matters') THEN
+        ALTER TABLE questions ADD COLUMN why_this_matters TEXT;
+      END IF;
+      -- Evidence requirements display fields
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='evidence_requirements' AND column_name='display_title') THEN
+        ALTER TABLE evidence_requirements ADD COLUMN display_title VARCHAR(255);
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='evidence_requirements' AND column_name='display_instruction') THEN
+        ALTER TABLE evidence_requirements ADD COLUMN display_instruction TEXT;
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='evidence_requirements' AND column_name='examples_json') THEN
+        ALTER TABLE evidence_requirements ADD COLUMN examples_json JSONB DEFAULT '[]';
+      END IF;
+      -- Metrics display fields
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='metrics' AND column_name='display_name') THEN
+        ALTER TABLE metrics ADD COLUMN display_name VARCHAR(255);
+      END IF;
+      IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='metrics' AND column_name='explanation') THEN
+        ALTER TABLE metrics ADD COLUMN explanation TEXT;
       END IF;
     END $$;
 

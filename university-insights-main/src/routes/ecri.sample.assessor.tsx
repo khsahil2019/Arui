@@ -22,16 +22,16 @@ export const Route = createFileRoute("/ecri/sample/assessor")({
 
 const dimensionsList = [
   { code: "D01", name: "Employer Demand Intelligence", score: 78.0, count: 12 },
-  { code: "D02", name: "Employability Capability Framework", score: 72.0, count: 12 },
-  { code: "D03", name: "Industry-Aligned Curriculum", score: 81.0, count: 12 },
+  { code: "D02", name: "Industry Ecosystem & Partnerships", score: 72.0, count: 12 },
+  { code: "D03", name: "Curriculum Co-Design & Modernization", score: 81.0, count: 12 },
   { code: "D04", name: "Experiential & Practice-Based Learning", score: 67.0, count: 12 },
   { code: "D05", name: "Career Development Infrastructure", score: 76.0, count: 12 },
-  { code: "D06", name: "Professional & Human Capabilities", score: 74.0, count: 12 },
-  { code: "D07", name: "Digital & AI-Era Work Readiness", score: 79.0, count: 12 },
-  { code: "D08", name: "Portfolio & Capability Signalling", score: 69.0, count: 12 },
-  { code: "D09", name: "Employer Engagement & Recruitment", score: 77.0, count: 12 },
+  { code: "D06", name: "Applied Competencies & Transversal Skills", score: 74.0, count: 12 },
+  { code: "D07", name: "Assessment Integrity & Authentic Evaluation", score: 79.0, count: 12 },
+  { code: "D08", name: "Entrepreneurship & Venture Creation", score: 69.0, count: 12 },
+  { code: "D09", name: "Placement Architecture & Corporate Relations", score: 77.0, count: 12 },
   { code: "D10", name: "Employment Outcome Quality", score: 73.0, count: 12 },
-  { code: "D11", name: "Career Adaptability & Lifelong Agility", score: 77.7, count: 12 },
+  { code: "D11", name: "Continuous Improvement & Labor Market Calibration", score: 77.7, count: 12 },
 ];
 
 const sampleEvidence = [

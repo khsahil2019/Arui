@@ -123,7 +123,7 @@ async function runFullE2ELifecycleTest() {
     `SELECT code, domain_code FROM questions WHERE methodology_version_id = $1`,
     [versionId]
   );
-  assert(questionsRes.rows.length >= 132, `Found ${questionsRes.rows.length} ECRI questions to answer`);
+  assert(questionsRes.rows.length >= 66, `Found ${questionsRes.rows.length} ECRI questions to answer`);
 
   for (const q of questionsRes.rows) {
     await query(

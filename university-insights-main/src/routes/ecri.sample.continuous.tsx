@@ -53,56 +53,74 @@ function EcriSampleContinuousView() {
         </div>
       </div>
 
-      {/* Longitudinal Trajectory Simulator */}
+      {/* Longitudinal Trajectory Simulator & Reassessment Delta (Instruction #31-#32) */}
       <div className="p-8 rounded-2xl bg-card border border-border space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">Longitudinal Trajectory (Metropolitan Apex University)</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">Track capability movement across 2026 Baseline and 2027 Projected Target</p>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded bg-teal/10 text-teal text-[10px] font-bold uppercase tracking-wider">
+                Illustrative Demonstration
+              </span>
+              <span className="text-[11px] text-muted-foreground font-mono">12-Month Validity Cycle</span>
+            </div>
+            <h3 className="text-lg font-serif font-bold text-foreground mt-1">Reassessment & Transformation Delta</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Tracking verifiable capability gains from 2026 Baseline to 2027 Annual Reassessment</p>
           </div>
-          <span className="px-2.5 py-1 rounded bg-teal/10 text-teal text-xs font-bold">
-            Projected Delta: +7.7 Points
-          </span>
+          <div className="text-left sm:text-right p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+            <span className="text-[10px] uppercase font-bold text-emerald-600 dark:text-emerald-400 block">Transformation Delta</span>
+            <span className="text-2xl font-serif font-bold text-emerald-600 dark:text-emerald-400">+6.4 Points</span>
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl bg-muted/40 border border-border">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase">2026 Baseline (Current)</p>
-            <p className="text-2xl font-serif font-bold text-foreground mt-1">74.8 <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span></p>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase">2026 Frozen Baseline</p>
+            <p className="text-3xl font-serif font-bold text-foreground mt-1">74.8 <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span></p>
             <p className="text-[11px] text-teal font-semibold mt-1">Level 4 · Established</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Validated September 2026</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-muted/40 border border-border">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase">2027 Projected Target</p>
-            <p className="text-2xl font-serif font-bold text-teal mt-1">82.5 <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span></p>
+          <div className="p-4 rounded-xl bg-teal/5 border border-teal/20">
+            <p className="text-[10px] font-bold text-teal uppercase">2027 Annual Reassessment</p>
+            <p className="text-3xl font-serif font-bold text-teal mt-1">81.2 <span className="text-sm font-sans font-normal text-muted-foreground">/ 100</span></p>
             <p className="text-[11px] text-teal font-semibold mt-1">Level 5 · Benchmark Leader</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Illustrative Demonstration</p>
           </div>
 
           <div className="p-4 rounded-xl bg-muted/40 border border-border">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase">Next Reassessment Window</p>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase">Validity & Governance</p>
             <p className="text-sm font-bold text-foreground mt-1.5 flex items-center gap-1.5">
-              <Calendar className="size-4 text-teal" /> Q1 2027 (Annual Cycle)
+              <Calendar className="size-4 text-teal" /> 12 Months Validity
             </p>
-            <p className="text-[11px] text-muted-foreground mt-1">Formal verification review</p>
+            <p className="text-[11px] text-muted-foreground mt-1">Baseline is never overwritten; all changes tracked as verified Delta records.</p>
           </div>
         </div>
 
-        <div className="space-y-3 pt-2">
-          <h4 className="text-xs font-bold text-foreground">Target Dimension Upgrades in Active Cycle:</h4>
-          <div className="space-y-2">
+        <div className="space-y-3 pt-4">
+          <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">Dimension-by-Dimension Movement (All 11 Dimensions):</h4>
+          <div className="grid sm:grid-cols-2 gap-2.5">
             {[
-              { dim: "D04 · Experiential & Practice-Based Learning", cur: 67.0, target: 78.0, delta: "+11.0", lever: "Rollout of central WIL Equity Placement Fund across all 14 faculties." },
-              { dim: "D08 · Portfolio & Capability Signalling", cur: 69.0, target: 79.0, delta: "+10.0", lever: "Mandatory W3C digital badge issuance for undergraduate capstone projects." },
-              { dim: "D10 · Employment Outcome Quality", cur: 73.0, target: 81.0, delta: "+8.0", lever: "Integration of longitudinal tax & destination tracking beyond 12-month mark." },
-            ].map((d, idx) => (
-              <div key={idx} className="p-3.5 rounded-lg bg-muted/30 border border-border/40 flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-semibold text-foreground">{d.dim}</span>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{d.lever}</p>
+              { code: "D01", name: "Employer Demand Intelligence", base: 78.0, reassess: 82.0, delta: "+4.0" },
+              { code: "D02", name: "Industry Ecosystem & Partnerships", base: 72.0, reassess: 78.0, delta: "+6.0" },
+              { code: "D03", name: "Curriculum Co-Design & Modernization", base: 81.0, reassess: 85.0, delta: "+4.0" },
+              { code: "D04", name: "Experiential & Practice-Based Learning", base: 67.0, reassess: 78.0, delta: "+11.0" },
+              { code: "D05", name: "Career Development Infrastructure", base: 76.0, reassess: 81.0, delta: "+5.0" },
+              { code: "D06", name: "Applied Competencies & Transversal Skills", base: 74.0, reassess: 79.0, delta: "+5.0" },
+              { code: "D07", name: "Assessment Integrity & Authentic Evaluation", base: 79.0, reassess: 83.0, delta: "+4.0" },
+              { code: "D08", name: "Entrepreneurship & Venture Creation", base: 69.0, reassess: 77.0, delta: "+8.0" },
+              { code: "D09", name: "Placement Architecture & Corporate Relations", base: 77.0, reassess: 82.0, delta: "+5.0" },
+              { code: "D10", name: "Employment Outcome Quality", base: 73.0, reassess: 80.0, delta: "+7.0" },
+              { code: "D11", name: "Continuous Improvement & Labor Market Calibration", base: 77.7, reassess: 84.0, delta: "+6.3" },
+            ].map((d) => (
+              <div key={d.code} className="p-3 rounded-lg bg-muted/30 border border-border/40 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-bold text-teal">{d.code}</span>
+                  <span className="font-semibold text-foreground truncate max-w-[200px]">{d.name}</span>
                 </div>
-                <div className="text-right shrink-0 ml-4">
-                  <span className="font-bold text-foreground">{d.cur} → {d.target}</span>
-                  <span className="block text-[10px] font-bold text-emerald-600">{d.delta}</span>
+                <div className="text-right shrink-0">
+                  <span className="text-muted-foreground">{d.base} → </span>
+                  <span className="font-bold text-foreground">{d.reassess}</span>
+                  <span className="ml-2 font-bold text-emerald-600 dark:text-emerald-400">{d.delta}</span>
                 </div>
               </div>
             ))}

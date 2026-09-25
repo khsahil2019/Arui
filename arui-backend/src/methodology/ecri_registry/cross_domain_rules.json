@@ -1,82 +1,82 @@
 [
   {
-    "ruleId": "ECRI-CD01",
-    "fromMetric": "D01-I12",
-    "toMetric": "D02-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-01",
+    "fromMetric": "D09-M01",
+    "toMetric": "D02-M01",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD02",
-    "fromMetric": "D02-I12",
-    "toMetric": "D03-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-02",
+    "fromMetric": "D04-M01",
+    "toMetric": "D03-M01",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 25,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD03",
-    "fromMetric": "D03-I12",
-    "toMetric": "D04-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-03",
+    "fromMetric": "D09-M05",
+    "toMetric": "D01-M01",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD04",
-    "fromMetric": "D04-I12",
-    "toMetric": "D05-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-04",
+    "fromMetric": "D07-M01",
+    "toMetric": "D06-M01",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD05",
-    "fromMetric": "D05-I12",
-    "toMetric": "D06-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-05",
+    "fromMetric": "D08-M01",
+    "toMetric": "D02-M05",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD06",
-    "fromMetric": "D06-I12",
-    "toMetric": "D07-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-06",
+    "fromMetric": "D10-M01",
+    "toMetric": "D09-M01",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD07",
-    "fromMetric": "D07-I12",
-    "toMetric": "D08-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-07",
+    "fromMetric": "D11-M01",
+    "toMetric": "D01-M05",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD08",
-    "fromMetric": "D08-I12",
-    "toMetric": "D09-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-08",
+    "fromMetric": "D05-M01",
+    "toMetric": "D04-M01",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD09",
-    "fromMetric": "D09-I12",
-    "toMetric": "D10-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-09",
+    "fromMetric": "D03-M05",
+    "toMetric": "D02-M01",
+    "fromScoreThreshold": 80,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   },
   {
-    "ruleId": "ECRI-CD10",
-    "fromMetric": "D10-I12",
-    "toMetric": "D11-I01",
-    "fromScoreThreshold": 80.0,
-    "toScoreThreshold": 20.0,
-    "fromRequiredR": 3
+    "ruleId": "CD-ECRI-10",
+    "fromMetric": "D06-M05",
+    "toMetric": "D07-M05",
+    "fromScoreThreshold": 85,
+    "toScoreThreshold": 30,
+    "fromRequiredR": 4
   }
 ]

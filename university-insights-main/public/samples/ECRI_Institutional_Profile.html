@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECRI Institutional Profile — Metropolitan Apex University</title>
+  <meta name="description" content="Verified Employability & Career Readiness Index (ECRI) Institutional Profile for Metropolitan Apex University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card: #111726;
+      --card-border: #1e293b;
+      --teal: #0d9488;
+      --teal-light: #14b8a6;
+      --teal-glow: rgba(13, 148, 136, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --gold: #f59e0b;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 32px 16px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .profile-container {
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: var(--teal-glow);
+      border: 1px solid rgba(13, 148, 136, 0.3);
+      color: var(--teal-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 34px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+    .inst-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .score-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 24px 0;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      margin: 24px 0;
+    }
+    .score-display {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .score-val {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--teal-light);
+      line-height: 1;
+    }
+    .score-max {
+      font-size: 20px;
+      color: var(--text-dim);
+    }
+    .score-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .meta-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px 16px;
+    }
+    .meta-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+    .meta-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 4px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .dimension-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    @media (min-width: 640px) {
+      .dimension-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .dim-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .dim-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dim-code {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--teal-light);
+      background: var(--teal-glow);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .dim-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .dim-score {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal-light);
+    }
+    .insights-box {
+      background: rgba(13, 148, 136, 0.05);
+      border: 1px solid rgba(13, 148, 136, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .insights-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .insights-list li {
+      font-size: 13px;
+      color: var(--text-muted);
+      position: relative;
+      padding-left: 20px;
+    }
+    .insights-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--teal-light);
+      font-weight: 800;
+    }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      padding: 16px 0;
+      border-top: 1px solid var(--card-border);
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="card">
+      <div class="header-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Verified Institutional ECRI Profile
+      </div>
+      <h1>Metropolitan Apex University</h1>
+      <p class="inst-subtitle">Comprehensive Multidisciplinary Research University · 24,500 Students · 14 Faculties</p>
+
+      <div class="score-hero">
+        <div>
+          <div class="meta-label">Overall Employability Index</div>
+          <div class="score-display">
+            <span class="score-val">74.8</span>
+            <span class="score-max">/ 100</span>
+          </div>
+          <div class="score-badge">Gold Benchmark — Institutional Employability Leader</div>
+        </div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <div class="meta-label">Current Maturity</div>
+            <div class="meta-val">Level 4 · Integrated</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Evidence Veracity</div>
+            <div class="meta-val">E3+ (91.2% Confirmed)</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Validity Cycle</div>
+            <div class="meta-val">2026 – 2027 (12 Months)</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Methodology</div>
+            <div class="meta-val">ECRI v6.0 Canonical</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>11-Dimension Capability Balance (132 Metrics)</span>
+        <span style="font-size: 12px; font-weight: 600; color: var(--teal-light);">Baseline Assessment</span>
+      </div>
+
+      <div class="dimension-grid">
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D01</span>
+            <span class="dim-name">Employer Demand Intelligence</span>
+          </div>
+          <span class="dim-score">78.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D02</span>
+            <span class="dim-name">Industry Ecosystem & Partnerships</span>
+          </div>
+          <span class="dim-score">72.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D03</span>
+            <span class="dim-name">Curriculum Co-Design & Modernization</span>
+          </div>
+          <span class="dim-score">81.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D04</span>
+            <span class="dim-name">Experiential & Practice-Based Learning</span>
+          </div>
+          <span class="dim-score">67.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D05</span>
+            <span class="dim-name">Career Development Infrastructure</span>
+          </div>
+          <span class="dim-score">76.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D06</span>
+            <span class="dim-name">Applied Competencies & Transversal Skills</span>
+          </div>
+          <span class="dim-score">74.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D07</span>
+            <span class="dim-name">Assessment Integrity & Authentic Evaluation</span>
+          </div>
+          <span class="dim-score">79.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D08</span>
+            <span class="dim-name">Entrepreneurship & Venture Creation</span>
+          </div>
+          <span class="dim-score">69.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D09</span>
+            <span class="dim-name">Placement Architecture & Corporate Relations</span>
+          </div>
+          <span class="dim-score">77.0%</span>
+        </div>
+        <div class="dim-row">
+          <div class="dim-info">
+            <span class="dim-code">D10</span>
+            <span class="dim-name">Employment Outcome Quality</span>
+          </div>
+          <span class="dim-score">73.0%</span>
+        </div>
+        <div class="dim-row" style="grid-column: 1 / -1;">
+          <div class="dim-info">
+            <span class="dim-code">D11</span>
+            <span class="dim-name">Continuous Improvement & Labor Market Calibration</span>
+          </div>
+          <span class="dim-score">77.7%</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 24px;" class="insights-box">
+        <div style="font-weight: 700; color: #ffffff; font-size: 14px;">Key Institutional Highlights</div>
+        <ul class="insights-list">
+          <li><strong>Curriculum Co-Design (81.0%):</strong> Active departmental industry advisory councils in 12 of 14 faculties co-signing syllabus modernization.</li>
+          <li><strong>Work-Integrated Learning (67.0%):</strong> 84% student cohort completion of credit-bearing internships with verified employer mentor evaluations.</li>
+          <li><strong>Digital Workplace Readiness (79.0%):</strong> Embedded professional micro-credentials (AWS, Microsoft, Google) across tech and business degrees.</li>
+          <li><strong>Placement Governance (77.0%):</strong> Transparent audited placement ledger with 420+ repeat corporate recruiters.</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--text-dim);">
+        <span>Assessment ID: ECRI-2026-MAU-001</span>
+        <span>Lead Adjudicator: Dr. Robert Sterling</span>
+        <span>Status: Corroborated & Certified</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Certified by the Employability & Career Readiness Index (ECRI) Global Advisory Board.</p>
+      <p style="margin-top: 4px;">© 2026 ECRI. Generated from canonical institutional assessment record.</p>
+    </div>
+  </div>
+</body>
+</html>

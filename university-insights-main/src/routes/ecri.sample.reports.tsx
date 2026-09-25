@@ -121,6 +121,54 @@ function EcriSampleReportsView() {
             </div>
           </div>
         ))}
+
+        {/* 6. First-Class Public HTML Institutional Profile Deliverable (Instruction #33-#37) */}
+        <div className="p-6 rounded-2xl bg-gradient-to-br from-card to-teal/5 border-2 border-teal/40 space-y-4 shadow-md">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded bg-teal text-white text-[10px] font-bold uppercase tracking-wider">
+                  Digital Web Deliverable
+                </span>
+                <span className="text-[11px] font-mono text-muted-foreground">RPT-ECRI-HTML-006</span>
+              </div>
+              <h3 className="text-xl font-serif font-bold text-foreground mt-1.5 flex items-center gap-2">
+                <Globe className="size-5 text-teal" /> Public ECRI Institutional Profile
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed max-w-2xl">
+                Receive a ready-to-publish, certified institutional HTML profile that can be placed directly on your university website or student admission portal to showcase verified employability leadership.
+              </p>
+              <div className="flex flex-wrap items-center gap-4 mt-3 text-[11px] text-muted-foreground">
+                <span><strong>Format:</strong> Standalone Responsive HTML5 + Full Web Package (.zip)</span>
+                <span>•</span>
+                <span><strong>Audience:</strong> Prospective Students, Corporate Recruiters, Regulators & Public</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0">
+              <Link
+                to="/ecri/sample/profile"
+                className="px-4 py-2 rounded-lg bg-teal text-white text-xs font-semibold flex items-center gap-1.5 hover:bg-teal/90 transition-colors shadow-sm"
+              >
+                <Eye className="size-3.5" /> Preview Profile
+              </Link>
+              <a
+                href="/samples/ECRI_Institutional_Profile.html"
+                download="ECRI_Institutional_Profile.html"
+                className="px-4 py-2 rounded-lg bg-card border border-border hover:border-teal/50 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              >
+                <Download className="size-3.5 text-teal" /> Download HTML
+              </a>
+              <a
+                href="/samples/ECRI_Website_Package.zip"
+                download="ECRI_Website_Package.zip"
+                className="px-4 py-2 rounded-lg bg-card border border-border hover:border-teal/50 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+              >
+                <Download className="size-3.5 text-teal" /> Website Package (.zip)
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

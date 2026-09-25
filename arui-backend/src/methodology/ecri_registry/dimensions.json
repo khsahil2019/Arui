@@ -2,89 +2,166 @@
   {
     "code": "D01",
     "name": "Employer Demand Intelligence",
-    "purpose": "Comprehensive institutional evaluation of Employer Demand Intelligence (D01) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Industry Relations / Institutional Planning",
-    "metricCount": 12
+    "simpleName": "Employer Demand Intelligence",
+    "plainQuestion": "Does your university regularly track what employers need and use this to guide strategy and budgets?",
+    "whyItMatters": "Ensures university leadership and faculties actively align program offerings and funding with evolving market and industry skill requirements.",
+    "whatIsExamined": "Methods for capturing employer feedback, leadership accountability, dedicated career budgets, and regular review cadences.",
+    "evidenceExamples": [
+      "Board or Senate minutes on employability strategy",
+      "Dedicated career services budget ledger",
+      "Annual employer demand survey report",
+      "Faculty KPI alignment documentation"
+    ],
+    "provisionalWeight": 0.1
   },
   {
     "code": "D02",
-    "name": "Employability Capability Framework",
-    "purpose": "Comprehensive institutional evaluation of Employability Capability Framework (D02) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.08,
-    "constructOwner": "Academic Affairs / Curriculum Office / Career Services",
-    "metricCount": 12
+    "name": "Industry Ecosystem & Partnerships",
+    "simpleName": "Industry Partnerships & Employer Network",
+    "plainQuestion": "How actively does your university collaborate with industry partners, advisory boards, and corporate recruiters?",
+    "whyItMatters": "Strong corporate partnerships translate directly into internships, co-designed programs, research funding, and direct hiring pipelines for students.",
+    "whatIsExamined": "Active MoUs, Departmental Industry Advisory Boards, corporate labs, executive-in-residence programs, and recurring recruiter summits.",
+    "evidenceExamples": [
+      "Active corporate MoUs with verified activity reports",
+      "Departmental Advisory Board minutes with employer notes",
+      "Co-branded industry lab agreements",
+      "Employer summit attendance records"
+    ],
+    "provisionalWeight": 0.11
   },
   {
     "code": "D03",
-    "name": "Industry-Aligned Curriculum",
-    "purpose": "Comprehensive institutional evaluation of Industry-Aligned Curriculum (D03) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.09,
-    "constructOwner": "Academic Affairs / Deans / Programme Heads",
-    "metricCount": 12
+    "name": "Curriculum Co-Design & Modernization",
+    "simpleName": "Industry-Aligned Curriculum",
+    "plainQuestion": "Are course syllabi co-designed with industry experts to reflect modern technologies and skills?",
+    "whyItMatters": "Prevents graduates from entering the job market with outdated theoretical knowledge by embedding industry-relevant competencies directly into academic credit.",
+    "whatIsExamined": "External industry involvement in Board of Studies, syllabus modernization cadences, agile elective rollouts, and multi-disciplinary skill pathways.",
+    "evidenceExamples": [
+      "Board of Studies curriculum approval records with industry member signatures",
+      "Recent syllabus updates reflecting emerging tools",
+      "Industry co-designed module course outlines",
+      "Annual curriculum review cycle reports"
+    ],
+    "provisionalWeight": 0.11
   },
   {
     "code": "D04",
     "name": "Experiential & Practice-Based Learning",
-    "purpose": "Comprehensive institutional evaluation of Experiential & Practice-Based Learning (D04) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.1,
-    "constructOwner": "Academic Affairs / Experiential Learning / Career Services",
-    "metricCount": 12
+    "simpleName": "Internships & Practice-Based Learning",
+    "plainQuestion": "Do all students complete mandatory, supervised, credit-bearing internships and live industry projects?",
+    "whyItMatters": "Work-Integrated Learning (WIL) bridges academic knowledge and workplace reality, significantly increasing post-graduation hiring rates.",
+    "whatIsExamined": "Mandatory internship credit policies, student cohort coverage (>80%), industry capstone projects, employer mentor feedback, and clinical/field rotations.",
+    "evidenceExamples": [
+      "Mandatory credit-bearing internship academic policy",
+      "Cohort internship completion logs with company names",
+      "Employer supervisor evaluation rubrics",
+      "Live industry capstone project reports"
+    ],
+    "provisionalWeight": 0.12
   },
   {
     "code": "D05",
     "name": "Career Development Infrastructure",
-    "purpose": "Comprehensive institutional evaluation of Career Development Infrastructure (D05) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Student Affairs",
-    "metricCount": 12
+    "simpleName": "Career Services & Student Mentorship",
+    "plainQuestion": "Does the university provide professional 1-on-1 career guidance, resume masterclasses, and industry mentorship?",
+    "whyItMatters": "Empowers students with career self-efficacy, tailored career navigation, and structured interview preparation across all academic disciplines.",
+    "whatIsExamined": "Staff-to-student counseling ratio, 1-on-1 career navigation software, interview clinics, industry mentorship networks, and student tracking.",
+    "evidenceExamples": [
+      "Career center staffing structure & counselor ratios",
+      "1-on-1 student career counseling log / CRM records",
+      "Industry mentorship program roster",
+      "Interview masterclass schedule and feedback"
+    ],
+    "provisionalWeight": 0.1
   },
   {
     "code": "D06",
-    "name": "Professional & Human Capabilities",
-    "purpose": "Comprehensive institutional evaluation of Professional & Human Capabilities (D06) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.09,
-    "constructOwner": "Academic Affairs / Faculty / Student Development",
-    "metricCount": 12
+    "name": "Applied Competencies & Transversal Skills",
+    "simpleName": "Digital & Professional Human Skills",
+    "plainQuestion": "Are critical thinking, professional communication, and modern digital tools integrated into graduation requirements?",
+    "whyItMatters": "Employers prioritize transversal capabilities (adaptability, problem-solving, collaboration) and digital fluencies alongside technical degree knowledge.",
+    "whatIsExamined": "Communication and presentation mastery modules, data analytics/AI literacy for non-tech majors, design thinking workshops, and ethical leadership courses.",
+    "evidenceExamples": [
+      "Transversal skill assessment rubrics",
+      "Digital literacy and AI tool syllabus requirements",
+      "Student project presentations evaluation sheets",
+      "Critical thinking / problem-solving course modules"
+    ],
+    "provisionalWeight": 0.1
   },
   {
     "code": "D07",
-    "name": "Digital & AI-Era Work Readiness",
-    "purpose": "Comprehensive institutional evaluation of Digital & AI-Era Work Readiness (D07) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.08,
-    "constructOwner": "Academic Affairs / Digital Learning / Career Services",
-    "metricCount": 12
+    "name": "Assessment Integrity & Authentic Evaluation",
+    "simpleName": "Authentic Assessment & Certification",
+    "plainQuestion": "Do student evaluations use real-world industry tasks, oral defenses, and recognized micro-credentials?",
+    "whyItMatters": "Authentic assessments demonstrate tangible competency to employers far better than conventional rote memorization examinations.",
+    "whatIsExamined": "Performance-based evaluations, oral defenses/pitches, external industry exam moderators, embedded vendor certifications (AWS, Google, Microsoft, CFA, etc.).",
+    "evidenceExamples": [
+      "Real-world case study exam papers",
+      "Oral defense / client pitch evaluation scorecards",
+      "Embedded industry micro-credential completion logs",
+      "External industry moderator review reports"
+    ],
+    "provisionalWeight": 0.09
   },
   {
     "code": "D08",
-    "name": "Portfolio & Capability Signalling",
-    "purpose": "Comprehensive institutional evaluation of Portfolio & Capability Signalling (D08) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Academic Affairs / Student Development",
-    "metricCount": 12
+    "name": "Entrepreneurship & Venture Creation",
+    "simpleName": "Innovation & Startup Incubator",
+    "plainQuestion": "Does the university support student startups with incubation facilities, seed funding, and founder mentoring?",
+    "whyItMatters": "Fosters job creation, entrepreneurial mindset, technology commercialization, and alternative career pathways for graduates.",
+    "whatIsExamined": "Incubator/FabLab facilities, student seed grant funds, patent/IP support, founder-in-residence mentorship, and startup survival tracking.",
+    "evidenceExamples": [
+      "TBI / Incubator registration and facility documentation",
+      "Student seed funding disbursement records",
+      "List of active student startup ventures and revenue",
+      "Patent/IP filing documentation for student/faculty projects"
+    ],
+    "provisionalWeight": 0.08
   },
   {
     "code": "D09",
-    "name": "Employer Engagement & Recruitment Ecosystem",
-    "purpose": "Comprehensive institutional evaluation of Employer Engagement & Recruitment Ecosystem (D09) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.1,
-    "constructOwner": "Industry Relations / Career Services / Placement Office",
-    "metricCount": 12
+    "name": "Placement Architecture & Corporate Relations",
+    "simpleName": "Campus Recruitment & Placements",
+    "plainQuestion": "How robust is the campus placement machinery in securing verified, high-quality, diversified employer offers?",
+    "whyItMatters": "Measures immediate graduate employment success, median compensation trajectories, employer diversity, and fair placement governance.",
+    "whatIsExamined": "Audited placement ledger, median CTC growth, employer repeat-hiring rates, dream offer conversion, and unplaced student support clinics.",
+    "evidenceExamples": [
+      "Audited annual placement report with salary distributions",
+      "Recruiter roster with sector diversification",
+      "Placement policy and code of conduct document",
+      "Unplaced student intervention clinic records"
+    ],
+    "provisionalWeight": 0.11
   },
   {
     "code": "D10",
     "name": "Employment Outcome Quality",
-    "purpose": "Comprehensive institutional evaluation of Employment Outcome Quality (D10) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.12,
-    "constructOwner": "Career Services / Registrar / Institutional Research",
-    "metricCount": 12
+    "simpleName": "Alumni Network & Career Tracking",
+    "plainQuestion": "Does the university systematically track graduate career progression at 3, 5, and 10 years and engage alumni as mentors?",
+    "whyItMatters": "Longitudinal career trajectory data validates the lifelong value of the degree and provides a powerful mentoring and hiring network for current students.",
+    "whatIsExamined": "Alumni career database, longitudinal fast-track promotion studies, alumni-led hiring circles, and alumni representation on academic boards.",
+    "evidenceExamples": [
+      "3/5/10-year alumni career tracking database extract",
+      "Alumni mentorship network directory",
+      "Alumni Board of Studies meeting records",
+      "Alumni career milestone and outcome survey report"
+    ],
+    "provisionalWeight": 0.04
   },
   {
     "code": "D11",
-    "name": "Career Adaptability, Lifelong Readiness & Employability Intelligence",
-    "purpose": "Comprehensive institutional evaluation of Career Adaptability, Lifelong Readiness & Employability Intelligence (D11) across graduate employability, industry alignment, and career readiness.",
-    "provisionalWeight": 0.1,
-    "constructOwner": "Alumni Relations / Career Services / Institutional Research",
-    "metricCount": 12
+    "name": "Continuous Improvement & Labor Market Calibration",
+    "simpleName": "Continuous Improvement & Market Analytics",
+    "plainQuestion": "Does the institution conduct annual employer satisfaction audits and use data to continuously improve all programs?",
+    "whyItMatters": "Transforms employability from an ad-hoc placement effort into an institutionalized, continuous quality improvement loop.",
+    "whatIsExamined": "Annual Employer Satisfaction Index (ESI) surveys, department-level remediation plans, peer benchmarking, and evidence integrity audits.",
+    "evidenceExamples": [
+      "Annual Employer Satisfaction Index (ESI) audit report",
+      "Dean-level employability improvement plans",
+      "Longitudinal underemployment analytics study",
+      "Comprehensive 3-year employability impact review"
+    ],
+    "provisionalWeight": 0.04
   }
 ]

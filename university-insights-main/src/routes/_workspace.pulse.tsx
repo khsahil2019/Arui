@@ -67,7 +67,8 @@ function PulsePage() {
   }
 
   const prompt = prompts[index] || prompts[0];
-  const existing = (screening?.responses || []).find((r) => r.promptId === prompt?.id) ?? null;
+  if (!prompt) return null;
+  const existing = (screening?.responses || []).find((r) => r.promptId === prompt.id) ?? null;
   const captured = screening?.responses?.length || 0;
 
   const next = () => {

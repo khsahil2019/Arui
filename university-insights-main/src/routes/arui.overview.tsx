@@ -59,7 +59,7 @@ function AruiOverviewPage() {
     <PageContainer>
       <PageHeader
         eyebrow="ARUI Framework · Institutional Dashboard"
-        title={status.institutionName || "Apex National University"}
+        title={status.institutionName || "Metropolitan Apex University"}
         lede="Comprehensive executive scoreboard evaluating whole-institution AI resilience across 11 critical domains and 143 calibrated metrics."
         meta={
           <div className="flex items-center gap-2">

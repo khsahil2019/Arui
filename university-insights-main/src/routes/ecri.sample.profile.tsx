@@ -57,20 +57,20 @@ function EcriSamplePublicProfileView() {
 
         {/* 11 Dimensions Verified Scores */}
         <div className="space-y-3">
-          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Verified 11-Dimension Capability Assessment</h3>
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">Verified 11-Dimension Capability Assessment (132 Metrics)</h3>
           <div className="grid sm:grid-cols-2 gap-3">
             {[
-              { code: "D01", name: "Employer Demand Intelligence", score: "78.0 / 100", status: "Level 4" },
-              { code: "D02", name: "Employability Capability Framework", score: "72.0 / 100", status: "Level 4" },
-              { code: "D03", name: "Industry-Aligned Curriculum", score: "81.0 / 100", status: "Level 4" },
-              { code: "D04", name: "Experiential & Practice-Based Learning", score: "67.0 / 100", status: "Level 3" },
-              { code: "D05", name: "Career Development Infrastructure", score: "76.0 / 100", status: "Level 4" },
-              { code: "D06", name: "Professional & Human Capabilities", score: "74.0 / 100", status: "Level 4" },
-              { code: "D07", name: "Digital & AI-Era Work Readiness", score: "79.0 / 100", status: "Level 4" },
-              { code: "D08", name: "Portfolio & Capability Signalling", score: "69.0 / 100", status: "Level 3" },
-              { code: "D09", name: "Employer Engagement & Recruitment", score: "77.0 / 100", status: "Level 4" },
-              { code: "D10", name: "Employment Outcome Quality", score: "73.0 / 100", status: "Level 3" },
-              { code: "D11", name: "Career Adaptability & Lifelong Mobility", score: "77.7 / 100", status: "Level 3" },
+              { code: "D01", name: "Employer Demand Intelligence", score: "78.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D02", name: "Industry Ecosystem & Partnerships", score: "72.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D03", name: "Curriculum Co-Design & Modernization", score: "81.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D04", name: "Experiential & Practice-Based Learning", score: "67.0 / 100", status: "Level 3 · Repeatable" },
+              { code: "D05", name: "Career Development Infrastructure", score: "76.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D06", name: "Applied Competencies & Transversal Skills", score: "74.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D07", name: "Assessment Integrity & Authentic Evaluation", score: "79.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D08", name: "Entrepreneurship & Venture Creation", score: "69.0 / 100", status: "Level 3 · Repeatable" },
+              { code: "D09", name: "Placement Architecture & Corporate Relations", score: "77.0 / 100", status: "Level 4 · Integrated" },
+              { code: "D10", name: "Employment Outcome Quality", score: "73.0 / 100", status: "Level 3 · Repeatable" },
+              { code: "D11", name: "Continuous Improvement & Labor Market Calibration", score: "77.7 / 100", status: "Level 3 · Repeatable" },
             ].map((d) => (
               <div key={d.code} className="p-3 rounded-lg bg-muted/40 border border-border/50 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
@@ -86,21 +86,43 @@ function EcriSamplePublicProfileView() {
           </div>
         </div>
 
-        {/* Verification Statement */}
-        <div className="p-5 rounded-xl bg-muted/30 border border-border/60 space-y-2 text-xs text-muted-foreground">
-          <p className="font-semibold text-foreground flex items-center gap-1.5">
-            <ShieldCheck className="size-4 text-teal" /> Assessor Verification & Cryptographic Provenance
-          </p>
-          <p className="leading-relaxed">
-            This certified baseline was evaluated by independent ECRI adjudicators against the <strong>ECRI v6.0 Methodology</strong>.
-            All capability claims above Level 2 have been corroborated with audited institutional artifacts under strict anti-gaming governance protocols.
-          </p>
-          <div className="flex flex-wrap items-center gap-4 pt-2 text-[11px] text-muted-foreground font-mono">
-            <span>Cycle: 2026 Academic Baseline</span>
-            <span>•</span>
-            <span>Audited Metrics: 132 of 132</span>
-            <span>•</span>
-            <span>Evidence Level: E3+ Corroborated</span>
+        {/* Verification Statement & Export Actions */}
+        <div className="p-5 rounded-xl bg-muted/30 border border-border/60 space-y-4 text-xs text-muted-foreground">
+          <div className="space-y-2">
+            <p className="font-semibold text-foreground flex items-center gap-1.5">
+              <ShieldCheck className="size-4 text-teal" /> Assessor Verification & Cryptographic Provenance
+            </p>
+            <p className="leading-relaxed">
+              This certified baseline was evaluated by independent ECRI adjudicators against the <strong>ECRI v6.0 Methodology</strong>.
+              All capability claims above Level 2 have been corroborated with audited institutional artifacts under strict anti-gaming governance protocols.
+            </p>
+            <div className="flex flex-wrap items-center gap-4 pt-2 text-[11px] text-muted-foreground font-mono">
+              <span>Cycle: 2026 Academic Baseline</span>
+              <span>•</span>
+              <span>Audited Metrics: 132 of 132</span>
+              <span>•</span>
+              <span>Evidence Level: E3+ Corroborated</span>
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-border/60 flex flex-wrap items-center justify-between gap-3">
+            <span className="text-xs font-semibold text-foreground">Publish to University Website:</span>
+            <div className="flex items-center gap-2">
+              <a
+                href="/samples/ECRI_Institutional_Profile.html"
+                download="ECRI_Institutional_Profile.html"
+                className="px-3.5 py-1.5 rounded-lg bg-teal text-white font-semibold text-xs flex items-center gap-1.5 hover:bg-teal/90 transition-colors shadow-sm"
+              >
+                <FileText className="size-3.5" /> Download HTML File
+              </a>
+              <a
+                href="/samples/ECRI_Website_Package.zip"
+                download="ECRI_Website_Package.zip"
+                className="px-3.5 py-1.5 rounded-lg bg-card border border-border hover:border-teal/50 font-semibold text-xs flex items-center gap-1.5 transition-colors"
+              >
+                <Globe className="size-3.5 text-teal" /> Download Website Package (.zip)
+              </a>
+            </div>
           </div>
         </div>
       </div>

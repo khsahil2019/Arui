@@ -1,55 +1,59 @@
 [
   {
     "productCode": "ecri",
-    "code": "ECRI_EMPLOYABILITY_EXCELLENCE",
-    "name": "ECRI Employability Excellence Badge",
-    "meaning": "Awarded to institutions demonstrating Level 4+ maturity across Employer Demand, Industry Curriculum, and Outcome Quality.",
+    "code": "ECRI_SECTOR_LEADER_PLATINUM",
+    "name": "Platinum Benchmark — Global Employability Excellence",
+    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 85.0 with zero critical dimension vulnerabilities.",
     "difficulty": "Platinum",
     "criteriaJson": {
-      "minScore": 85.0,
-      "minDimensionsLevel4": 8
+      "minOverallScore": 85,
+      "minDimensionScore": 70,
+      "requiredEvidenceLevel": "E3"
     },
     "requirementsJson": {
-      "evidenceVerified": true,
-      "zeroAntiGamingFlags": true
+      "auditedPlacementRate": 90,
+      "mandatoryInternshipCoverage": 95
     },
-    "awardRule": "Overall Score >= 85.0 and D10 Employment Outcome >= Level 4",
+    "awardRule": "Overall ECRI >= 85 and all 11 Dimensions >= 70.",
     "validityMonths": 24,
-    "icon": "award"
+    "icon": "trophy-gold"
   },
   {
     "productCode": "ecri",
-    "code": "ECRI_INDUSTRY_ALIGNED_CURRICULUM",
-    "name": "Industry-Aligned Curriculum Pioneer",
-    "meaning": "Recognizes exceptional co-design, experiential learning, and employer advisory governance.",
+    "code": "ECRI_GOLD_STANDARD",
+    "name": "Gold Benchmark — Institutional Employability Leader",
+    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 75.0 with strong industry integration across all faculties.",
     "difficulty": "Gold",
     "criteriaJson": {
-      "minD03Score": 80.0,
-      "minD04Score": 80.0
+      "minOverallScore": 75,
+      "minDimensionScore": 60,
+      "requiredEvidenceLevel": "E2"
     },
     "requirementsJson": {
-      "advisoryMinutesProvided": true
+      "auditedPlacementRate": 80,
+      "mandatoryInternshipCoverage": 85
     },
-    "awardRule": "D03 >= 80% and D04 >= 80%",
-    "validityMonths": 12,
-    "icon": "book-open"
+    "awardRule": "Overall ECRI >= 75 and all 11 Dimensions >= 60.",
+    "validityMonths": 24,
+    "icon": "medal-gold"
   },
   {
     "productCode": "ecri",
-    "code": "ECRI_CAREER_ADAPTABILITY_LEADER",
-    "name": "Career Readiness & Adaptability Benchmark",
-    "meaning": "Awarded for outstanding digital readiness, human capability development, and lifelong employability tracking.",
-    "difficulty": "Gold",
+    "code": "ECRI_SILVER_PROGRESSION",
+    "name": "Silver Benchmark — Structured Employability System",
+    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 65.0 with structured Work-Integrated Learning framework.",
+    "difficulty": "Silver",
     "criteriaJson": {
-      "minD06Score": 80.0,
-      "minD07Score": 80.0,
-      "minD11Score": 80.0
+      "minOverallScore": 65,
+      "minDimensionScore": 50,
+      "requiredEvidenceLevel": "E2"
     },
     "requirementsJson": {
-      "alumniTrackingActive": true
+      "auditedPlacementRate": 70,
+      "mandatoryInternshipCoverage": 75
     },
-    "awardRule": "D06 >= 80%, D07 >= 80%, and D11 >= 80%",
+    "awardRule": "Overall ECRI >= 65 and all 11 Dimensions >= 50.",
     "validityMonths": 12,
-    "icon": "shield-check"
+    "icon": "medal-silver"
   }
 ]
