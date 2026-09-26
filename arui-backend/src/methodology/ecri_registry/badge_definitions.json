@@ -1,59 +1,32 @@
 [
   {
-    "productCode": "ecri",
-    "code": "ECRI_SECTOR_LEADER_PLATINUM",
-    "name": "Platinum Benchmark — Global Employability Excellence",
-    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 85.0 with zero critical dimension vulnerabilities.",
-    "difficulty": "Platinum",
-    "criteriaJson": {
-      "minOverallScore": 85,
-      "minDimensionScore": 70,
-      "requiredEvidenceLevel": "E3"
-    },
-    "requirementsJson": {
-      "auditedPlacementRate": 90,
-      "mandatoryInternshipCoverage": 95
-    },
-    "awardRule": "Overall ECRI >= 85 and all 11 Dimensions >= 70.",
-    "validityMonths": 24,
-    "icon": "trophy-gold"
+    "code": "LEVEL_5_LEADER",
+    "label": "Level 5 · Sector Leader",
+    "description": "Top decile benchmark score with comprehensive E3/E4 evidence across all 11 dimensions.",
+    "minScore": 90
   },
   {
-    "productCode": "ecri",
-    "code": "ECRI_GOLD_STANDARD",
-    "name": "Gold Benchmark — Institutional Employability Leader",
-    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 75.0 with strong industry integration across all faculties.",
-    "difficulty": "Gold",
-    "criteriaJson": {
-      "minOverallScore": 75,
-      "minDimensionScore": 60,
-      "requiredEvidenceLevel": "E2"
-    },
-    "requirementsJson": {
-      "auditedPlacementRate": 80,
-      "mandatoryInternshipCoverage": 85
-    },
-    "awardRule": "Overall ECRI >= 75 and all 11 Dimensions >= 60.",
-    "validityMonths": 24,
-    "icon": "medal-gold"
+    "code": "LEVEL_4_TRANSFORMATIVE",
+    "label": "Level 4 · Transformative & Scaling",
+    "description": "High-performing institutional capability with verified integration across core faculties.",
+    "minScore": 75
   },
   {
-    "productCode": "ecri",
-    "code": "ECRI_SILVER_PROGRESSION",
-    "name": "Silver Benchmark — Structured Employability System",
-    "meaning": "Awarded to institutions achieving an overall ECRI Index >= 65.0 with structured Work-Integrated Learning framework.",
-    "difficulty": "Silver",
-    "criteriaJson": {
-      "minOverallScore": 65,
-      "minDimensionScore": 50,
-      "requiredEvidenceLevel": "E2"
-    },
-    "requirementsJson": {
-      "auditedPlacementRate": 70,
-      "mandatoryInternshipCoverage": 75
-    },
-    "awardRule": "Overall ECRI >= 65 and all 11 Dimensions >= 50.",
-    "validityMonths": 12,
-    "icon": "medal-silver"
+    "code": "LEVEL_3_ESTABLISHED",
+    "label": "Level 3 · Established & Repeatable",
+    "description": "Structured institutional policies and repeatable operating mechanisms in place.",
+    "minScore": 60
+  },
+  {
+    "code": "LEVEL_2_EMERGING",
+    "label": "Level 2 · Emerging & Developing",
+    "description": "Emerging initiatives active in selected departments with baseline capability.",
+    "minScore": 40
+  },
+  {
+    "code": "LEVEL_1_REACTIVE",
+    "label": "Level 1 · Reactive Baseline",
+    "description": "Initial awareness with isolated practices and early-stage formalization.",
+    "minScore": 20
   }
 ]

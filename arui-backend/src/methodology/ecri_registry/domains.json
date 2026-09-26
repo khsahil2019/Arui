@@ -2,89 +2,100 @@
   {
     "code": "D01",
     "name": "Employer Demand Intelligence",
-    "purpose": "Comprehensive institutional evaluation of Employer Demand Intelligence (D01) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Demand Intelligence",
     "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Industry Relations / Institutional Planning",
-    "metricCount": 12
+    "purpose": "Labour market forecasting, employer demand sensing, and strategic industry intelligence.",
+    "description": "Labour market forecasting, employer demand sensing, and strategic industry intelligence.",
+    "focusArea": "Institutional alignment with market demands, skill forecasting and occupational intelligence."
   },
   {
     "code": "D02",
     "name": "Employability Capability Framework",
-    "purpose": "Comprehensive institutional evaluation of Employability Capability Framework (D02) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Capability Framework",
     "provisionalWeight": 0.08,
-    "constructOwner": "Academic Affairs / Curriculum Office / Career Services",
-    "metricCount": 12
+    "purpose": "Institutional capability taxonomy, learning outcomes, and graduate attribute articulation.",
+    "description": "Institutional capability taxonomy, learning outcomes, and graduate attribute articulation.",
+    "focusArea": "Institutional taxonomy of employability skills, capability definitions and progression tracking."
   },
   {
     "code": "D03",
     "name": "Industry-Aligned Curriculum",
-    "purpose": "Comprehensive institutional evaluation of Industry-Aligned Curriculum (D03) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Industry Curriculum",
     "provisionalWeight": 0.09,
-    "constructOwner": "Academic Affairs / Deans / Programme Heads",
-    "metricCount": 12
+    "purpose": "Industry advisory boards, syllabus co-creation, emerging industry skills, and modular course design.",
+    "description": "Industry advisory boards, syllabus co-creation, emerging industry skills, and modular course design.",
+    "focusArea": "Industry co-design of curricula, modern skill integration, and flexible learning architecture."
   },
   {
     "code": "D04",
     "name": "Experiential & Practice-Based Learning",
-    "purpose": "Comprehensive institutional evaluation of Experiential & Practice-Based Learning (D04) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Experiential Learning",
     "provisionalWeight": 0.1,
-    "constructOwner": "Academic Affairs / Experiential Learning / Career Services",
-    "metricCount": 12
+    "purpose": "Work-Integrated Learning (WIL), structured credit-bearing internships, live industry capstones, and workplace labs.",
+    "description": "Work-Integrated Learning (WIL), structured credit-bearing internships, live industry capstones, and workplace labs.",
+    "focusArea": "Authentic project exposure, supervised clinical/workplace practice, and experiential problem-solving."
   },
   {
     "code": "D05",
     "name": "Career Development Infrastructure",
-    "purpose": "Comprehensive institutional evaluation of Career Development Infrastructure (D05) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Career Infrastructure",
     "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Student Affairs",
-    "metricCount": 12
+    "purpose": "Institutional career services, multi-year pathways, personalized navigation, and mentoring systems.",
+    "description": "Institutional career services, multi-year pathways, personalized navigation, and mentoring systems.",
+    "focusArea": "Career counseling, job-search readiness, navigation systems, and alumni mentorship infrastructure."
   },
   {
     "code": "D06",
     "name": "Professional & Human Capabilities",
-    "purpose": "Comprehensive institutional evaluation of Professional & Human Capabilities (D06) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Professional Capabilities",
     "provisionalWeight": 0.09,
-    "constructOwner": "Academic Affairs / Faculty / Student Development",
-    "metricCount": 12
+    "purpose": "Leadership, critical enquiry, teamwork, ethical reasoning, cross-cultural communication, and adaptability.",
+    "description": "Leadership, critical enquiry, teamwork, ethical reasoning, cross-cultural communication, and adaptability.",
+    "focusArea": "Inquiry, critical thinking, evidence judgement, ethical reasoning, and transversal workplace competencies."
   },
   {
     "code": "D07",
     "name": "Digital & AI-Era Work Readiness",
-    "purpose": "Comprehensive institutional evaluation of Digital & AI-Era Work Readiness (D07) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Digital Work Readiness",
     "provisionalWeight": 0.08,
-    "constructOwner": "Academic Affairs / Digital Learning / Career Services",
-    "metricCount": 12
+    "purpose": "Digital fluency, workflow automation, modern tech toolkits, AI tools for domain problems, and data literacy.",
+    "description": "Digital fluency, workflow automation, modern tech toolkits, AI tools for domain problems, and data literacy.",
+    "focusArea": "Digital toolkits, applied AI productivity, data literacy, and technological adaptability."
   },
   {
     "code": "D08",
     "name": "Portfolio & Capability Signalling",
-    "purpose": "Comprehensive institutional evaluation of Portfolio & Capability Signalling (D08) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Capability Signalling",
     "provisionalWeight": 0.08,
-    "constructOwner": "Career Services / Academic Affairs / Student Development",
-    "metricCount": 12
+    "purpose": "Evidence-backed portfolios, verified digital credentials, authentic project artifacts, and capability profiles.",
+    "description": "Evidence-backed portfolios, verified digital credentials, authentic project artifacts, and capability profiles.",
+    "focusArea": "Artifact-backed portfolios, micro-credential signals, verified work samples, and employer-facing profiles."
   },
   {
     "code": "D09",
     "name": "Employer Engagement & Recruitment Ecosystem",
-    "purpose": "Comprehensive institutional evaluation of Employer Engagement & Recruitment Ecosystem (D09) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Employer Ecosystem",
     "provisionalWeight": 0.1,
-    "constructOwner": "Industry Relations / Career Services / Placement Office",
-    "metricCount": 12
+    "purpose": "Corporate recruitment networks, talent days, high-trust employer partnerships, and hiring conversion.",
+    "description": "Corporate recruitment networks, talent days, high-trust employer partnerships, and hiring conversion.",
+    "focusArea": "Recruitment partnerships, advisory board engagement, industry co-creation, and hiring networks."
   },
   {
     "code": "D10",
     "name": "Employment Outcome Quality",
-    "purpose": "Comprehensive institutional evaluation of Employment Outcome Quality (D10) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Outcome Quality",
     "provisionalWeight": 0.12,
-    "constructOwner": "Career Services / Registrar / Institutional Research",
-    "metricCount": 12
+    "purpose": "Verified graduate employment rates, compensation quality, role relevance, and employer retention.",
+    "description": "Verified graduate employment rates, compensation quality, role relevance, and employer retention.",
+    "focusArea": "Graduate employment telemetry, compensation benchmark, time-to-employment, and career trajectory quality."
   },
   {
     "code": "D11",
     "name": "Career Adaptability, Lifelong Readiness & Employability Intelligence",
-    "purpose": "Comprehensive institutional evaluation of Career Adaptability, Lifelong Readiness & Employability Intelligence (D11) across graduate employability, industry alignment, and career readiness.",
+    "shortName": "Career Adaptability",
     "provisionalWeight": 0.1,
-    "constructOwner": "Alumni Relations / Career Services / Institutional Research",
-    "metricCount": 12
+    "purpose": "Longitudinal alumni career trajectories, lifelong reskilling, and continuous institutional employability intelligence.",
+    "description": "Longitudinal alumni career trajectories, lifelong reskilling, and continuous institutional employability intelligence.",
+    "focusArea": "Lifelong adaptability, alumni destination intelligence, feedback loops, and continuous institutional transformation."
   }
 ]

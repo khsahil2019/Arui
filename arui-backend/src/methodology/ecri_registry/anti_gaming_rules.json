@@ -1,106 +1,23 @@
 [
   {
-    "code": "AG-ECRI-01",
-    "riskPattern": "Inflated Placement Percentage Claim without verifiable offer letters or salary tax receipts.",
-    "detectionLogic": "Claimed placement > 95% while median salary documentation is missing or unverified.",
-    "evidenceSignal": "Offer letters lacking corporate HR signatures.",
-    "action": "Flag for mandatory lead assessor audit; score capped at Level 2 until corroborated.",
-    "scoringProtection": "Prevents unverified placement marketing claims from distorting D09 scores."
+    "ruleId": "AG-01",
+    "name": "No High Maturity Without Corroborated Evidence",
+    "condition": "maturity >= 3 AND evidenceLevel IN (\"E0\", \"E1\")",
+    "action": "CAP_MATURITY_AT_2",
+    "reason": "Maturity levels 3, 4, and 5 require structured, verifiable operational evidence (E2–E4)."
   },
   {
-    "code": "AG-ECRI-02",
-    "riskPattern": "Superficial MoU Accumulation without operational activity or student placements.",
-    "detectionLogic": "High number of active corporate MoUs (>50) but <5% of students engaged in joint programs.",
-    "evidenceSignal": "MoUs lacking joint annual progress reports.",
-    "action": "Invalidate inactive MoUs from partner score calculation in D02.",
-    "scoringProtection": "Ensures only active, credit-bearing partnerships contribute to institutional score."
+    "ruleId": "AG-02",
+    "name": "Strict NA Gating",
+    "condition": "response = \"NOT_APPLICABLE\" AND metric.naPermitted = false",
+    "action": "REJECT_NA",
+    "reason": "Core canonical employability metrics cannot be marked N/A without explicit contextual exemption."
   },
   {
-    "code": "AG-ECRI-03",
-    "riskPattern": "Unsupervised or Sub-Standard Internships counted toward mandatory graduation requirement.",
-    "detectionLogic": "Internship duration < 6 weeks or absence of formal employer supervisor evaluation.",
-    "evidenceSignal": "Generic participation certificates without competency assessment rubric.",
-    "action": "Exclude unverified internships from D04 coverage calculation.",
-    "scoringProtection": "Safeguards authentic Work-Integrated Learning standards."
-  },
-  {
-    "code": "AG-ECRI-04",
-    "riskPattern": "Recycled Curriculum Syllabi masquerading as modernized courses.",
-    "detectionLogic": "Curriculum update date recent but course topics unchanged for >5 years.",
-    "evidenceSignal": "Outdated textbook references and legacy tool stacks.",
-    "action": "Downgrade D03 modernization rating.",
-    "scoringProtection": "Ensures genuine curriculum updates."
-  },
-  {
-    "code": "AG-ECRI-05",
-    "riskPattern": "Paper-only Advisory Boards with zero meeting frequency.",
-    "detectionLogic": "Advisory board listed but no meeting minutes recorded in past 18 months.",
-    "evidenceSignal": "Missing quorum logs or meeting attendance records.",
-    "action": "Zero out D02 advisory board metric.",
-    "scoringProtection": "Protects governance integrity."
-  },
-  {
-    "code": "AG-ECRI-06",
-    "riskPattern": "Selective Cohort Reporting omitting lower-performing departments.",
-    "detectionLogic": "Placement and WIL data submitted for computing/management only while university has 5+ faculties.",
-    "evidenceSignal": "Enrollment totals mismatch institutional profile.",
-    "action": "Cap coverage factor at proportional cohort size.",
-    "scoringProtection": "Enforces whole-institution scope."
-  },
-  {
-    "code": "AG-ECRI-07",
-    "riskPattern": "Fabricated Student Startup Revenue or Valuation Claims.",
-    "detectionLogic": "High venture valuation claimed without external investor term sheets or audited accounts.",
-    "evidenceSignal": "Self-reported valuation lacking bank receipts.",
-    "action": "Require third-party audit for D08 venture points.",
-    "scoringProtection": "Prevents incubation hype."
-  },
-  {
-    "code": "AG-ECRI-08",
-    "riskPattern": "Unverified Alumni Employment Claims.",
-    "detectionLogic": "High alumni median salary reported without LinkedIn or employer corroboration.",
-    "evidenceSignal": "Survey sample size < 5% of graduating class.",
-    "action": "Apply sample-size confidence discount in D10.",
-    "scoringProtection": "Ensures representative alumni tracking."
-  },
-  {
-    "code": "AG-ECRI-09",
-    "riskPattern": "Generic Soft Skills Workshops counted as integrated transversal proficiency.",
-    "detectionLogic": "One-off 2-hour webinar claimed as comprehensive transversal competency.",
-    "evidenceSignal": "Lack of embedded assessment rubrics in academic credits.",
-    "action": "Limit D06 rating to Level 1.",
-    "scoringProtection": "Upholds credit-bearing skill standards."
-  },
-  {
-    "code": "AG-ECRI-10",
-    "riskPattern": "Missing Evidence for Level 5 Adaptive Claims.",
-    "detectionLogic": "Maturity Level 5 claimed without multi-year longitudinal impact evidence.",
-    "evidenceSignal": "Single-year operational snapshot.",
-    "action": "Cap at Level 3 until multi-year data provided.",
-    "scoringProtection": "Reserves Level 5 for true sector benchmarks."
-  },
-  {
-    "code": "AG-ECRI-11",
-    "riskPattern": "Conflicted Internal Assessor Sign-Off.",
-    "detectionLogic": "Evidence review signed off exclusively by same faculty running the program.",
-    "evidenceSignal": "Lack of external or independent IQAC review.",
-    "action": "Trigger secondary independent assessor audit.",
-    "scoringProtection": "Ensures objectivity."
-  },
-  {
-    "code": "AG-ECRI-12",
-    "riskPattern": "Unaccredited Micro-credentials presented as industry certifications.",
-    "detectionLogic": "In-house attendance certificate labeled as recognized global vendor credential.",
-    "evidenceSignal": "Absence of vendor verification badge/ID.",
-    "action": "Disallow vendor certification points in D07.",
-    "scoringProtection": "Maintains credential authenticity."
-  },
-  {
-    "code": "AG-ECRI-13",
-    "riskPattern": "Inconsistent Response Patterns across Adjacent Dimensions.",
-    "detectionLogic": "Score of 95% in Placement (D09) alongside 10% in Employer Demand (D01) and Industry Integration (D02).",
-    "evidenceSignal": "Extreme variance between foundational capability and reported placement.",
-    "action": "Apply cross-domain dissonance penalty.",
-    "scoringProtection": "Detects artificial placement reporting."
+    "ruleId": "AG-03",
+    "name": "Numerical Register Verification",
+    "condition": "hasNumericClaim = true AND evidenceContainsUnderlyingData = false",
+    "action": "FLAG_POTENTIAL_MISMATCH",
+    "reason": "Numerical claims must be substantiated by underlying datasets, registers or audit logs, not only summary assertions."
   }
 ]

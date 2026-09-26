@@ -1,1058 +1,431 @@
 [
   {
     "domainCode": "D01",
-    "code": "D01-CARD01",
-    "name": "Is graduate employability an explicit institutional priority with Board oversight? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M01"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD02",
-    "name": "Does the university have a dedicated annual budget for employability and career infrastructure? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M02"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD03",
-    "name": "Are faculty appraisals linked to industry engagement and student career outcomes? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M03"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD04",
-    "name": "Is there a cross-faculty leadership council coordinating career readiness across departments? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M04"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD05",
-    "name": "Does the university have documented SOPs and policies governing student employability? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M05"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD06",
-    "name": "Does a university-level Industry Advisory Board regularly advise executive leadership? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M06"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD07",
-    "name": "Does the university invest in modern career management software and interview tech labs? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M07"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD08",
-    "name": "Are career services and high-value placements equally accessible to all student demographics? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M08"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD09",
-    "name": "Do faculty members participate in industry sabbaticals and corporate upskilling? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M09"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD10",
-    "name": "Does the university offer a clear Student Employability Charter or Service Level Agreement? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M10"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD11",
-    "name": "Does the university identify at-risk student cohorts early to provide targeted career interventions? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M11"
-  },
-  {
-    "domainCode": "D01",
-    "code": "D01-CARD12",
-    "name": "Does the Governing Board review verified graduate outcome data on a scheduled quarterly/annual basis? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D01-M12"
+    "domainName": "Employer Demand Intelligence",
+    "cards": [
+      {
+        "id": "D01-C1",
+        "title": "Demand Intelligence Foundations & Governance",
+        "metricCodes": [
+          "D01-I01",
+          "D01-I02",
+          "D01-I03",
+          "D01-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for employer demand intelligence."
+      },
+      {
+        "id": "D01-C2",
+        "title": "Demand Intelligence Operational Execution",
+        "metricCodes": [
+          "D01-I05",
+          "D01-I06",
+          "D01-I07",
+          "D01-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D01-C3",
+        "title": "Demand Intelligence Outcomes & Transformation",
+        "metricCodes": [
+          "D01-I09",
+          "D01-I10",
+          "D01-I11",
+          "D01-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D02",
-    "code": "D02-CARD01",
-    "name": "Does the university maintain active, productive MoUs with leading corporate employers? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M01"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD02",
-    "name": "Does every department have an active Industry Advisory Council meeting regularly? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M02"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD03",
-    "name": "Are there on-campus industry-sponsored technology labs and specialized centers? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M03"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD04",
-    "name": "Do industry executives and practitioners teach accredited courses as adjunct faculty? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M04"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD05",
-    "name": "Does the university receive industry funding for applied research involving students? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M05"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD06",
-    "name": "Does the university host annual industry skill summits to debate hiring trends? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M06"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD07",
-    "name": "Does the university actively partner with high-growth startups and SMEs for student jobs? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M07"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD08",
-    "name": "Are there established recruitment ties with government, public sector, and impact organizations? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M08"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD09",
-    "name": "Does the university have relationships with international and overseas recruiters? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M09"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD10",
-    "name": "Do corporate partners directly mentor and evaluate final-year student capstone projects? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M10"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD11",
-    "name": "Does the university track corporate partner retention and engagement depth over multiple years? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M11"
-  },
-  {
-    "domainCode": "D02",
-    "code": "D02-CARD12",
-    "name": "Is employer feedback systematically routed to academic deans to drive structural improvements? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D02-M12"
+    "domainName": "Employability Capability Framework",
+    "cards": [
+      {
+        "id": "D02-C1",
+        "title": "Capability Framework Foundations & Governance",
+        "metricCodes": [
+          "D02-I01",
+          "D02-I02",
+          "D02-I03",
+          "D02-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for employability capability framework."
+      },
+      {
+        "id": "D02-C2",
+        "title": "Capability Framework Operational Execution",
+        "metricCodes": [
+          "D02-I05",
+          "D02-I06",
+          "D02-I07",
+          "D02-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D02-C3",
+        "title": "Capability Framework Outcomes & Transformation",
+        "metricCodes": [
+          "D02-I09",
+          "D02-I10",
+          "D02-I11",
+          "D02-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D03",
-    "code": "D03-CARD01",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M01"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD02",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M02"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD03",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M03"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD04",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M04"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD05",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M05"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD06",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M06"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD07",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M07"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD08",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M08"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD09",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M09"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD10",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M10"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD11",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M11"
-  },
-  {
-    "domainCode": "D03",
-    "code": "D03-CARD12",
-    "name": "How effectively does the university operationalize industry-aligned curriculum component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D03-M12"
+    "domainName": "Industry-Aligned Curriculum",
+    "cards": [
+      {
+        "id": "D03-C1",
+        "title": "Industry Curriculum Foundations & Governance",
+        "metricCodes": [
+          "D03-I01",
+          "D03-I02",
+          "D03-I03",
+          "D03-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for industry-aligned curriculum."
+      },
+      {
+        "id": "D03-C2",
+        "title": "Industry Curriculum Operational Execution",
+        "metricCodes": [
+          "D03-I05",
+          "D03-I06",
+          "D03-I07",
+          "D03-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D03-C3",
+        "title": "Industry Curriculum Outcomes & Transformation",
+        "metricCodes": [
+          "D03-I09",
+          "D03-I10",
+          "D03-I11",
+          "D03-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D04",
-    "code": "D04-CARD01",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M01"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD02",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M02"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD03",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M03"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD04",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M04"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD05",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M05"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD06",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M06"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD07",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M07"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD08",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M08"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD09",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M09"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD10",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M10"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD11",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M11"
-  },
-  {
-    "domainCode": "D04",
-    "code": "D04-CARD12",
-    "name": "How effectively does the university operationalize internships & practice-based learning component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D04-M12"
+    "domainName": "Experiential & Practice-Based Learning",
+    "cards": [
+      {
+        "id": "D04-C1",
+        "title": "Experiential Learning Foundations & Governance",
+        "metricCodes": [
+          "D04-I01",
+          "D04-I02",
+          "D04-I03",
+          "D04-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for experiential & practice-based learning."
+      },
+      {
+        "id": "D04-C2",
+        "title": "Experiential Learning Operational Execution",
+        "metricCodes": [
+          "D04-I05",
+          "D04-I06",
+          "D04-I07",
+          "D04-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D04-C3",
+        "title": "Experiential Learning Outcomes & Transformation",
+        "metricCodes": [
+          "D04-I09",
+          "D04-I10",
+          "D04-I11",
+          "D04-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D05",
-    "code": "D05-CARD01",
-    "name": "How effectively does the university operationalize career services & student mentorship component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M01"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD02",
-    "name": "How effectively does the university operationalize career services & student mentorship component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M02"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD03",
-    "name": "How effectively does the university operationalize career services & student mentorship component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M03"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD04",
-    "name": "How effectively does the university operationalize career services & student mentorship component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M04"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD05",
-    "name": "How effectively does the university operationalize career services & student mentorship component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M05"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD06",
-    "name": "How effectively does the university operationalize career services & student mentorship component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M06"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD07",
-    "name": "How effectively does the university operationalize career services & student mentorship component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M07"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD08",
-    "name": "How effectively does the university operationalize career services & student mentorship component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M08"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD09",
-    "name": "How effectively does the university operationalize career services & student mentorship component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M09"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD10",
-    "name": "How effectively does the university operationalize career services & student mentorship component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M10"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD11",
-    "name": "How effectively does the university operationalize career services & student mentorship component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M11"
-  },
-  {
-    "domainCode": "D05",
-    "code": "D05-CARD12",
-    "name": "How effectively does the university operationalize career services & student mentorship component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D05-M12"
+    "domainName": "Career Development Infrastructure",
+    "cards": [
+      {
+        "id": "D05-C1",
+        "title": "Career Infrastructure Foundations & Governance",
+        "metricCodes": [
+          "D05-I01",
+          "D05-I02",
+          "D05-I03",
+          "D05-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for career development infrastructure."
+      },
+      {
+        "id": "D05-C2",
+        "title": "Career Infrastructure Operational Execution",
+        "metricCodes": [
+          "D05-I05",
+          "D05-I06",
+          "D05-I07",
+          "D05-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D05-C3",
+        "title": "Career Infrastructure Outcomes & Transformation",
+        "metricCodes": [
+          "D05-I09",
+          "D05-I10",
+          "D05-I11",
+          "D05-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D06",
-    "code": "D06-CARD01",
-    "name": "How effectively does the university operationalize digital & professional human skills component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M01"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD02",
-    "name": "How effectively does the university operationalize digital & professional human skills component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M02"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD03",
-    "name": "How effectively does the university operationalize digital & professional human skills component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M03"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD04",
-    "name": "How effectively does the university operationalize digital & professional human skills component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M04"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD05",
-    "name": "How effectively does the university operationalize digital & professional human skills component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M05"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD06",
-    "name": "How effectively does the university operationalize digital & professional human skills component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M06"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD07",
-    "name": "How effectively does the university operationalize digital & professional human skills component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M07"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD08",
-    "name": "How effectively does the university operationalize digital & professional human skills component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M08"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD09",
-    "name": "How effectively does the university operationalize digital & professional human skills component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M09"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD10",
-    "name": "How effectively does the university operationalize digital & professional human skills component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M10"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD11",
-    "name": "How effectively does the university operationalize digital & professional human skills component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M11"
-  },
-  {
-    "domainCode": "D06",
-    "code": "D06-CARD12",
-    "name": "How effectively does the university operationalize digital & professional human skills component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D06-M12"
+    "domainName": "Professional & Human Capabilities",
+    "cards": [
+      {
+        "id": "D06-C1",
+        "title": "Professional Capabilities Foundations & Governance",
+        "metricCodes": [
+          "D06-I01",
+          "D06-I02",
+          "D06-I03",
+          "D06-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for professional & human capabilities."
+      },
+      {
+        "id": "D06-C2",
+        "title": "Professional Capabilities Operational Execution",
+        "metricCodes": [
+          "D06-I05",
+          "D06-I06",
+          "D06-I07",
+          "D06-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D06-C3",
+        "title": "Professional Capabilities Outcomes & Transformation",
+        "metricCodes": [
+          "D06-I09",
+          "D06-I10",
+          "D06-I11",
+          "D06-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D07",
-    "code": "D07-CARD01",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M01"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD02",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M02"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD03",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M03"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD04",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M04"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD05",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M05"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD06",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M06"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD07",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M07"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD08",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M08"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD09",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M09"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD10",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M10"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD11",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M11"
-  },
-  {
-    "domainCode": "D07",
-    "code": "D07-CARD12",
-    "name": "How effectively does the university operationalize authentic assessment & certification component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D07-M12"
+    "domainName": "Digital & AI-Era Work Readiness",
+    "cards": [
+      {
+        "id": "D07-C1",
+        "title": "Digital Work Readiness Foundations & Governance",
+        "metricCodes": [
+          "D07-I01",
+          "D07-I02",
+          "D07-I03",
+          "D07-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for digital & ai-era work readiness."
+      },
+      {
+        "id": "D07-C2",
+        "title": "Digital Work Readiness Operational Execution",
+        "metricCodes": [
+          "D07-I05",
+          "D07-I06",
+          "D07-I07",
+          "D07-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D07-C3",
+        "title": "Digital Work Readiness Outcomes & Transformation",
+        "metricCodes": [
+          "D07-I09",
+          "D07-I10",
+          "D07-I11",
+          "D07-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D08",
-    "code": "D08-CARD01",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M01"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD02",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M02"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD03",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M03"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD04",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M04"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD05",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M05"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD06",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M06"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD07",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M07"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD08",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M08"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD09",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M09"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD10",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M10"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD11",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M11"
-  },
-  {
-    "domainCode": "D08",
-    "code": "D08-CARD12",
-    "name": "How effectively does the university operationalize innovation & startup incubator component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D08-M12"
+    "domainName": "Portfolio & Capability Signalling",
+    "cards": [
+      {
+        "id": "D08-C1",
+        "title": "Capability Signalling Foundations & Governance",
+        "metricCodes": [
+          "D08-I01",
+          "D08-I02",
+          "D08-I03",
+          "D08-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for portfolio & capability signalling."
+      },
+      {
+        "id": "D08-C2",
+        "title": "Capability Signalling Operational Execution",
+        "metricCodes": [
+          "D08-I05",
+          "D08-I06",
+          "D08-I07",
+          "D08-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D08-C3",
+        "title": "Capability Signalling Outcomes & Transformation",
+        "metricCodes": [
+          "D08-I09",
+          "D08-I10",
+          "D08-I11",
+          "D08-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D09",
-    "code": "D09-CARD01",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M01"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD02",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M02"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD03",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M03"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD04",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M04"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD05",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M05"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD06",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M06"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD07",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M07"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD08",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M08"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD09",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M09"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD10",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M10"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD11",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M11"
-  },
-  {
-    "domainCode": "D09",
-    "code": "D09-CARD12",
-    "name": "How effectively does the university operationalize campus recruitment & placements component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D09-M12"
+    "domainName": "Employer Engagement & Recruitment Ecosystem",
+    "cards": [
+      {
+        "id": "D09-C1",
+        "title": "Employer Ecosystem Foundations & Governance",
+        "metricCodes": [
+          "D09-I01",
+          "D09-I02",
+          "D09-I03",
+          "D09-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for employer engagement & recruitment ecosystem."
+      },
+      {
+        "id": "D09-C2",
+        "title": "Employer Ecosystem Operational Execution",
+        "metricCodes": [
+          "D09-I05",
+          "D09-I06",
+          "D09-I07",
+          "D09-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D09-C3",
+        "title": "Employer Ecosystem Outcomes & Transformation",
+        "metricCodes": [
+          "D09-I09",
+          "D09-I10",
+          "D09-I11",
+          "D09-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D10",
-    "code": "D10-CARD01",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M01"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD02",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M02"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD03",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M03"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD04",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M04"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD05",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M05"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD06",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M06"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD07",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M07"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD08",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M08"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD09",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M09"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD10",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M10"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD11",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M11"
-  },
-  {
-    "domainCode": "D10",
-    "code": "D10-CARD12",
-    "name": "How effectively does the university operationalize alumni network & career tracking component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D10-M12"
+    "domainName": "Employment Outcome Quality",
+    "cards": [
+      {
+        "id": "D10-C1",
+        "title": "Outcome Quality Foundations & Governance",
+        "metricCodes": [
+          "D10-I01",
+          "D10-I02",
+          "D10-I03",
+          "D10-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for employment outcome quality."
+      },
+      {
+        "id": "D10-C2",
+        "title": "Outcome Quality Operational Execution",
+        "metricCodes": [
+          "D10-I05",
+          "D10-I06",
+          "D10-I07",
+          "D10-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D10-C3",
+        "title": "Outcome Quality Outcomes & Transformation",
+        "metricCodes": [
+          "D10-I09",
+          "D10-I10",
+          "D10-I11",
+          "D10-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   },
   {
     "domainCode": "D11",
-    "code": "D11-CARD01",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 01? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M01"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD02",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 02? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M02"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD03",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 03? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M03"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD04",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 04? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M04"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD05",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 05? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M05"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD06",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 06? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M06"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD07",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 07? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M07"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD08",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 08? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M08"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD09",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 09? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M09"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD10",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 10? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M10"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD11",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 11? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M11"
-  },
-  {
-    "domainCode": "D11",
-    "code": "D11-CARD12",
-    "name": "How effectively does the university operationalize continuous improvement & market analytics component 12? Assessment Card",
-    "format": "Structured Diagnostic Card",
-    "respondentAction": "Provide operational status and verified institutional records.",
-    "metricLink": "D11-M12"
+    "domainName": "Career Adaptability, Lifelong Readiness & Employability Intelligence",
+    "cards": [
+      {
+        "id": "D11-C1",
+        "title": "Career Adaptability Foundations & Governance",
+        "metricCodes": [
+          "D11-I01",
+          "D11-I02",
+          "D11-I03",
+          "D11-I04"
+        ],
+        "description": "Core policies, governance structures, and baseline processes for career adaptability, lifelong readiness & employability intelligence."
+      },
+      {
+        "id": "D11-C2",
+        "title": "Career Adaptability Operational Execution",
+        "metricCodes": [
+          "D11-I05",
+          "D11-I06",
+          "D11-I07",
+          "D11-I08"
+        ],
+        "description": "Implementation consistency, institutional coverage, and stakeholder engagement."
+      },
+      {
+        "id": "D11-C3",
+        "title": "Career Adaptability Outcomes & Transformation",
+        "metricCodes": [
+          "D11-I09",
+          "D11-I10",
+          "D11-I11",
+          "D11-I12"
+        ],
+        "description": "Measurable student capability outcomes, continuous feedback loops, and sector excellence."
+      }
+    ]
   }
 ]

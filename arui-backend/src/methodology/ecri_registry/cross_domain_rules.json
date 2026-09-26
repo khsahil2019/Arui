@@ -1,82 +1,44 @@
 [
   {
-    "ruleId": "CD-ECRI-01",
-    "fromMetric": "D09-M01",
-    "toMetric": "D02-M01",
-    "fromScoreThreshold": 80,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D03-I01",
+    "toMetric": "D04-I01",
+    "relation": "PREREQUISITE",
+    "narrative": "Industry-informed curriculum outcomes directly feed authentic project design in experiential learning."
   },
   {
-    "ruleId": "CD-ECRI-02",
-    "fromMetric": "D04-M01",
-    "toMetric": "D03-M01",
-    "fromScoreThreshold": 85,
-    "toScoreThreshold": 25,
-    "fromRequiredR": 4
+    "fromMetric": "D04-I02",
+    "toMetric": "D06-I03",
+    "relation": "CORROBORATING",
+    "narrative": "Work-integrated learning coverage corroborates observed workplace problem-solving capability."
   },
   {
-    "ruleId": "CD-ECRI-03",
-    "fromMetric": "D09-M05",
-    "toMetric": "D01-M01",
-    "fromScoreThreshold": 80,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D06-I04",
+    "toMetric": "D07-I04",
+    "relation": "SYNERGISTIC",
+    "narrative": "Critical thinking capability underpins rigorous AI verification and judgement."
   },
   {
-    "ruleId": "CD-ECRI-04",
-    "fromMetric": "D07-M01",
-    "toMetric": "D06-M01",
-    "fromScoreThreshold": 85,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D07-I03",
+    "toMetric": "D08-I02",
+    "relation": "DEMONSTRATIVE",
+    "narrative": "AI productivity capability is demonstrated through verified digital work-sample quality."
   },
   {
-    "ruleId": "CD-ECRI-05",
-    "fromMetric": "D08-M01",
-    "toMetric": "D02-M05",
-    "fromScoreThreshold": 80,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D08-I01",
+    "toMetric": "D09-I06",
+    "relation": "ENABLING",
+    "narrative": "Verified student portfolio signalling accelerates recruitment ecosystem conversion and employer placement."
   },
   {
-    "ruleId": "CD-ECRI-06",
-    "fromMetric": "D10-M01",
-    "toMetric": "D09-M01",
-    "fromScoreThreshold": 85,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D09-I01",
+    "toMetric": "D10-I02",
+    "relation": "DIRECT_OUTCOME",
+    "narrative": "Broad employer partner networks directly drive relevant employment rate and quality offers."
   },
   {
-    "ruleId": "CD-ECRI-07",
-    "fromMetric": "D11-M01",
-    "toMetric": "D01-M05",
-    "fromScoreThreshold": 80,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
-  },
-  {
-    "ruleId": "CD-ECRI-08",
-    "fromMetric": "D05-M01",
-    "toMetric": "D04-M01",
-    "fromScoreThreshold": 85,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
-  },
-  {
-    "ruleId": "CD-ECRI-09",
-    "fromMetric": "D03-M05",
-    "toMetric": "D02-M01",
-    "fromScoreThreshold": 80,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
-  },
-  {
-    "ruleId": "CD-ECRI-10",
-    "fromMetric": "D06-M05",
-    "toMetric": "D07-M05",
-    "fromScoreThreshold": 85,
-    "toScoreThreshold": 30,
-    "fromRequiredR": 4
+    "fromMetric": "D10-I01",
+    "toMetric": "D11-I06",
+    "relation": "FEEDBACK_LOOP",
+    "narrative": "Verified graduate employment telemetry feeds longitudinal alumni career intelligence and curriculum review."
   }
 ]

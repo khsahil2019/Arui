@@ -58,7 +58,7 @@ const reportCards = [
     pageCount: "4 Pages (Exact Physical Count)",
     purpose:
       "Audit trail report demonstrating multi-source artifact corroboration, cryptographic verification hashes, and anti-gaming safeguards.",
-    audience: "Quality Assurance Units, Accreditation Bodies & Lead Adjudicators",
+    audience: "Quality Assurance Units, Accreditation Teams & Institutional Leadership",
     url: "/samples/ECRI_Sample_Evidence_Integrity_Dossier.pdf",
     badge: "Audit & Traceability",
   },

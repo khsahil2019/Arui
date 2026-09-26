@@ -3,13 +3,13 @@
     "domainCode": "D01",
     "code": "C01",
     "fullCode": "D01-C01",
-    "name": "Employer Demand Intelligence Strategy & Institutional Governance"
+    "name": "Employer Demand Intelligence Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D01",
     "code": "C02",
     "fullCode": "D01-C02",
-    "name": "Employer Demand Intelligence Operational Execution & Student Delivery"
+    "name": "Employer Demand Intelligence Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D01",
@@ -21,31 +21,31 @@
     "domainCode": "D02",
     "code": "C01",
     "fullCode": "D02-C01",
-    "name": "Industry Partnerships & Employer Network Strategy & Institutional Governance"
+    "name": "Employability Capability Framework Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D02",
     "code": "C02",
     "fullCode": "D02-C02",
-    "name": "Industry Partnerships & Employer Network Operational Execution & Student Delivery"
+    "name": "Employability Capability Framework Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D02",
     "code": "C03",
     "fullCode": "D02-C03",
-    "name": "Industry Partnerships & Employer Network Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Employability Capability Framework Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D03",
     "code": "C01",
     "fullCode": "D03-C01",
-    "name": "Industry-Aligned Curriculum Strategy & Institutional Governance"
+    "name": "Industry-Aligned Curriculum Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D03",
     "code": "C02",
     "fullCode": "D03-C02",
-    "name": "Industry-Aligned Curriculum Operational Execution & Student Delivery"
+    "name": "Industry-Aligned Curriculum Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D03",
@@ -57,144 +57,144 @@
     "domainCode": "D04",
     "code": "C01",
     "fullCode": "D04-C01",
-    "name": "Internships & Practice-Based Learning Strategy & Institutional Governance"
+    "name": "Experiential & Practice-Based Learning Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D04",
     "code": "C02",
     "fullCode": "D04-C02",
-    "name": "Internships & Practice-Based Learning Operational Execution & Student Delivery"
+    "name": "Experiential & Practice-Based Learning Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D04",
     "code": "C03",
     "fullCode": "D04-C03",
-    "name": "Internships & Practice-Based Learning Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Experiential & Practice-Based Learning Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D05",
     "code": "C01",
     "fullCode": "D05-C01",
-    "name": "Career Services & Student Mentorship Strategy & Institutional Governance"
+    "name": "Career Development Infrastructure Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D05",
     "code": "C02",
     "fullCode": "D05-C02",
-    "name": "Career Services & Student Mentorship Operational Execution & Student Delivery"
+    "name": "Career Development Infrastructure Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D05",
     "code": "C03",
     "fullCode": "D05-C03",
-    "name": "Career Services & Student Mentorship Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Career Development Infrastructure Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D06",
     "code": "C01",
     "fullCode": "D06-C01",
-    "name": "Digital & Professional Human Skills Strategy & Institutional Governance"
+    "name": "Professional & Human Capabilities Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D06",
     "code": "C02",
     "fullCode": "D06-C02",
-    "name": "Digital & Professional Human Skills Operational Execution & Student Delivery"
+    "name": "Professional & Human Capabilities Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D06",
     "code": "C03",
     "fullCode": "D06-C03",
-    "name": "Digital & Professional Human Skills Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Professional & Human Capabilities Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D07",
     "code": "C01",
     "fullCode": "D07-C01",
-    "name": "Authentic Assessment & Certification Strategy & Institutional Governance"
+    "name": "Digital & AI-Era Work Readiness Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D07",
     "code": "C02",
     "fullCode": "D07-C02",
-    "name": "Authentic Assessment & Certification Operational Execution & Student Delivery"
+    "name": "Digital & AI-Era Work Readiness Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D07",
     "code": "C03",
     "fullCode": "D07-C03",
-    "name": "Authentic Assessment & Certification Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Digital & AI-Era Work Readiness Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D08",
     "code": "C01",
     "fullCode": "D08-C01",
-    "name": "Innovation & Startup Incubator Strategy & Institutional Governance"
+    "name": "Portfolio & Capability Signalling Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D08",
     "code": "C02",
     "fullCode": "D08-C02",
-    "name": "Innovation & Startup Incubator Operational Execution & Student Delivery"
+    "name": "Portfolio & Capability Signalling Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D08",
     "code": "C03",
     "fullCode": "D08-C03",
-    "name": "Innovation & Startup Incubator Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Portfolio & Capability Signalling Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D09",
     "code": "C01",
     "fullCode": "D09-C01",
-    "name": "Campus Recruitment & Placements Strategy & Institutional Governance"
+    "name": "Employer Engagement & Recruitment Ecosystem Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D09",
     "code": "C02",
     "fullCode": "D09-C02",
-    "name": "Campus Recruitment & Placements Operational Execution & Student Delivery"
+    "name": "Employer Engagement & Recruitment Ecosystem Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D09",
     "code": "C03",
     "fullCode": "D09-C03",
-    "name": "Campus Recruitment & Placements Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Employer Engagement & Recruitment Ecosystem Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D10",
     "code": "C01",
     "fullCode": "D10-C01",
-    "name": "Alumni Network & Career Tracking Strategy & Institutional Governance"
+    "name": "Employment Outcome Quality Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D10",
     "code": "C02",
     "fullCode": "D10-C02",
-    "name": "Alumni Network & Career Tracking Operational Execution & Student Delivery"
+    "name": "Employment Outcome Quality Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D10",
     "code": "C03",
     "fullCode": "D10-C03",
-    "name": "Alumni Network & Career Tracking Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Employment Outcome Quality Verifiable Outcomes, Integrity & Continuous Calibration"
   },
   {
     "domainCode": "D11",
     "code": "C01",
     "fullCode": "D11-C01",
-    "name": "Continuous Improvement & Market Analytics Strategy & Institutional Governance"
+    "name": "Career Adaptability, Lifelong Readiness & Employability Intelligence Strategy, Governance & Capability Architecture"
   },
   {
     "domainCode": "D11",
     "code": "C02",
     "fullCode": "D11-C02",
-    "name": "Continuous Improvement & Market Analytics Operational Execution & Student Delivery"
+    "name": "Career Adaptability, Lifelong Readiness & Employability Intelligence Operational Execution, Curriculum & Student Delivery"
   },
   {
     "domainCode": "D11",
     "code": "C03",
     "fullCode": "D11-C03",
-    "name": "Continuous Improvement & Market Analytics Verifiable Outcomes, Integrity & Continuous Calibration"
+    "name": "Career Adaptability, Lifelong Readiness & Employability Intelligence Verifiable Outcomes, Integrity & Continuous Calibration"
   }
 ]

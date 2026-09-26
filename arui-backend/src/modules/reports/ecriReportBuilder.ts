@@ -450,7 +450,7 @@ export class EcriVectorReportBuilder {
     d.fillColor(PALETTE.CHARCOAL).fontSize(7).font('Helvetica').text(dData.assessorObservation, 48, y + 6, { width: 495, lineGap: 1.5 });
   }
 
-  // Draw Standard Sample Closing Page (Section 27 of spec)
+  // Draw Standard Sample Closing Page (Section 36 of spec)
   drawSampleClosingPage(version: string = 'ECRI v6.0') {
     this.doc.addPage();
     const d = this.doc;
@@ -462,32 +462,33 @@ export class EcriVectorReportBuilder {
       y
     );
 
-    d.roundedRect(40, y, 515, 220, 6).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
-    d.rect(40, y, 5, 220).fill(PALETTE.TEAL);
+    d.roundedRect(40, y, 515, 230, 6).fillAndStroke(PALETTE.LIGHT_BG, PALETTE.BORDER);
+    d.rect(40, y, 5, 230).fill(PALETTE.TEAL);
 
     let cy = y + 22;
     d.fillColor(PALETTE.NAVY_TEXT).fontSize(14).font('Times-Bold').text('END OF ILLUSTRATIVE SAMPLE', 60, cy);
-    cy += 22;
+    cy += 24;
 
     d.fillColor(PALETTE.CHARCOAL)
       .fontSize(9)
       .font('Helvetica')
       .text(
-        'This report demonstrates the structure, analytical depth and presentation of an authoritative ECRI institutional assessment.\n\n' +
-        'The institution, scores, evidence records and strategic findings shown in this sample are illustrative/synthetic and do not represent a real institutional assessment or official public ranking.\n\n' +
-        'A complete institutional assessment report is generated from the institution\'s own calibrated diagnostic responses, corroborating evidence dossier, assessor review, and verified deterministic score run.',
+        'This report demonstrates the structure, analytical depth and presentation of an ECRI institutional assessment.\n\n' +
+        'The institution, scores, evidence and findings shown are synthetic and illustrative.\n\n' +
+        'A complete institutional report is generated from the institution\'s own assessment responses, evidence record, AI-assisted evidence analysis and verified score run.\n\n' +
+        'Because standard ECRI does not require an assessor, do not imply mandatory human assessor approval.',
         60,
         cy,
         { width: 470, lineGap: 3.5 }
       );
-    cy += 95;
+    cy += 105;
 
     d.rect(60, cy, 470, 0.5).fill(PALETTE.BORDER);
     cy += 14;
 
     d.fillColor(PALETTE.TEAL).fontSize(9.5).font('Helvetica-Bold').text(`${version} · Employability & Career Readiness Intelligence`, 60, cy);
     cy += 13;
-    d.fillColor(PALETTE.MUTED).fontSize(8).font('Helvetica-Oblique').text('Illustrative Demonstration Only · Confidential Advisory Model', 60, cy);
+    d.fillColor(PALETTE.MUTED).fontSize(8).font('Helvetica-Oblique').text('Illustrative Demonstration Only · Synthetic Assessment Data Model', 60, cy);
   }
 
   // Finalize PDF Stream and apply all Headers & Footers across buffered pages

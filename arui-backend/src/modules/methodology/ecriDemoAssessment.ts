@@ -126,8 +126,28 @@ export interface EcriDemoAssessment {
   };
 }
 
-// Load canonical dimensions and metrics
-const ecriRegistryPath = path.resolve(process.cwd(), 'src/methodology/ecri_registry');
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load canonical dimensions and metrics from ecri_registry
+function resolveEcriRegistryPath(): string {
+  const candidatePaths = [
+    path.resolve(__dirname, '../../methodology/ecri_registry'),
+    path.resolve(__dirname, '../methodology/ecri_registry'),
+    path.resolve(process.cwd(), 'arui-backend/src/methodology/ecri_registry'),
+    path.resolve(process.cwd(), 'src/methodology/ecri_registry'),
+  ];
+  for (const p of candidatePaths) {
+    if (fs.existsSync(path.join(p, 'dimensions.json'))) {
+      return p;
+    }
+  }
+  throw new Error(`Could not resolve ECRI registry path from candidate locations: ${candidatePaths.join(', ')}`);
+}
+
+const ecriRegistryPath = resolveEcriRegistryPath();
 const rawDimensions = JSON.parse(fs.readFileSync(path.join(ecriRegistryPath, 'dimensions.json'), 'utf8'));
 const rawMetrics = JSON.parse(fs.readFileSync(path.join(ecriRegistryPath, 'metrics.json'), 'utf8'));
 

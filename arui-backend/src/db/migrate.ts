@@ -379,6 +379,27 @@ CREATE TABLE IF NOT EXISTS brand_configs (
       UNIQUE(evidence_id, metric_full_code)
     );
 
+    -- Persistent Claim-Evidence Reconciliation Record for Auditability & Mismatch Handling
+    CREATE TABLE IF NOT EXISTS reconciliation_records (
+      id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+      assessment_id UUID NOT NULL REFERENCES assessments(id) ON DELETE CASCADE,
+      metric_code VARCHAR(50) NOT NULL,
+      question_id VARCHAR(50),
+      institution_claim TEXT NOT NULL,
+      evidence_id UUID REFERENCES evidence_items(id) ON DELETE SET NULL,
+      evidence_file_name VARCHAR(255),
+      extracted_facts JSONB DEFAULT '[]',
+      extracted_values JSONB DEFAULT '{}',
+      extraction_confidence NUMERIC(5,4) DEFAULT 1.0000,
+      reconciliation_status VARCHAR(50) DEFAULT 'SUPPORTED', -- SUPPORTED, POTENTIAL_MISMATCH, INCONCLUSIVE, UNSUPPORTED, AWAITING_EVIDENCE, NOT_READABLE, INSUFFICIENT_EVIDENCE, AI_ANALYSIS_PENDING
+      detected_variance TEXT,
+      reconciliation_explanation TEXT,
+      institution_clarification TEXT,
+      closed_by_institution BOOLEAN DEFAULT false,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
     -- Evidence Reviews by Assessors
     CREATE TABLE IF NOT EXISTS evidence_reviews (
       id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),

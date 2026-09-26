@@ -65,8 +65,7 @@ export async function generateEcriExecutiveReport(outputPath: string): Promise<v
     ['Methodology version', meta.methodologyVersion],
     ['Score run', meta.scoreRun],
     ['Scope', '11 Dimensions · 132 Canonical Metrics · Comprehensive Scope'],
-    ['Contributors', 'Institution Admin: Office of the Vice-Chancellor; Contributor: Dean of Career & WIL;\nContributor: Director of Corporate Partnerships & Work-Integrated Learning'],
-    ['Assessors', 'Lead Assessor: Dr. Robert Sterling (Lead ECRI Adjudicator); Second Assessor: Prof. Elizabeth Vance'],
+    ['Assessment Engine', 'Deterministic ECRI v6.0 Scoring Engine & AI Evidence Intelligence Service'],
     ['Confidentiality', 'Confidential — prepared for institutional leadership. Illustrative demonstration sample.'],
   ];
 
@@ -81,7 +80,7 @@ export async function generateEcriExecutiveReport(outputPath: string): Promise<v
   d.fillColor(PALETTE.NAVY_TEXT).fontSize(9.5).font('Times-Bold').text('How to read this report', 40, y);
   y += 13;
   d.fillColor(PALETTE.CHARCOAL).fontSize(7.5).font('Helvetica').text(
-    'Current maturity is the level the institution demonstrates today on a 0–5 scale, scored by assessors against domain-specific anchors. Required maturity is derived from mandate, employer exposure, and disciplinary consequence. Transformation distance is required minus current (diagnostic gap). Evidence confidence describes corroboration quality.',
+    'Current maturity is the level the institution demonstrates today on a 0–5 scale, evaluated against domain-specific anchors and corroborated with evidence. Required maturity is derived from mandate, employer exposure, and disciplinary consequence. Transformation distance is required minus current (diagnostic gap). Evidence confidence describes corroboration quality.',
     40, y, { width: 515, lineGap: 2 }
   );
   y += 36;
